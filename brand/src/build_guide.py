@@ -56,7 +56,7 @@ def misuse():
          '<g filter="url(#sh)">%s</g>' % body, C["fog"]),
         ("Do not place it on low-contrast colors", fogfg, C["spruce"]),
         ("Do not retype it in another font",
-         '<text x="0" y="62" font-size="74" font-family="Georgia, serif" font-style="italic" fill="%s">Generation Maine</text>'
+         '<text x="0" y="62" font-size="74" font-family="Georgia, serif" fill="%s">Generation Maine</text>'
          % C["spruce"], C["fog"]),
     ]
     out = ""

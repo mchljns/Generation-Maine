@@ -10,7 +10,6 @@ const exe = fs.existsSync('/opt/pw-browsers/chromium-1194/chrome-linux/chrome') 
 const b64 = (f) => `url(data:font/woff2;base64,${fs.readFileSync(path.join(fw, f)).toString('base64')})`;
 const css = `
 @font-face{font-family:'Instrument Sans';font-weight:400 700;src:${b64('instrument-sans.woff2')}}
-@font-face{font-family:'Instrument Serif';font-style:italic;src:${b64('instrument-serif-italic.woff2')}}
 @font-face{font-family:Anton;src:${b64('anton-400.woff2')}}
 @font-face{font-family:'IBM Plex Mono';font-weight:400 700;src:${b64('plex-mono-500.woff2')}}
 html,body{margin:0;background:transparent}svg{display:block}`;

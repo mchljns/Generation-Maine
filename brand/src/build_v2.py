@@ -14,7 +14,7 @@ import math
 import os
 
 from gmlib import ROOT, write
-from v2marks import (A2, B2, ANTON, a2_lockup_h, a2_lockup_stacked, a2_symbol, b2_cancel_lines,
+from v2marks import (A2, B2, ANTON, a2_symbol, badge, fl_lockup_h, fl_lockup_stacked, b2_postmark_maine, sunrise_state, b2_cancel_lines,
                      b2_lockup, b2_postmark, b2_small, f)
 
 OUT = "brand/v2"
@@ -35,7 +35,7 @@ def placed(body, x, y, scale):
 
 
 SANS = "font-family:'Instrument Sans',Arial,sans-serif"
-SERIF = "font-family:'Instrument Serif',Georgia,serif;font-style:italic"
+EMPH = "font-family:'Instrument Sans',Arial,sans-serif"
 ANT = "font-family:Anton,'Arial Narrow',sans-serif"
 MONO = "font-family:'IBM Plex Mono',Menlo,monospace"
 
@@ -85,29 +85,33 @@ def build_a2():
     a = A2
     d = OUT + "/first-light"
     variants = {
-        "": (a["granite"], a["signal"], a["spruce"]),
-        "-reversed": (a["fog"], a["signal"], a["fog"]),
-        "-black": ("#000", "#000", "#000"),
-        "-white": ("#fff", "#fff", "#fff"),
+        "": (a["granite"], a["signal"]),
+        "-reversed": (a["fog"], a["signal"]),
+        "-black": ("#000", "#000"),
+        "-white": ("#fff", "#fff"),
     }
-    for suf, (fg, sun, ring) in variants.items():
-        b, w, h = a2_lockup_h(fg, sun, ring)
+    for suf, (fg, disc) in variants.items():
+        b, w, h = fl_lockup_h(fg, disc)
         write("%s/logo/horizontal%s.svg" % (d, suf), svg(w, h, b, "Generation Maine"))
-        b, w, h = a2_lockup_stacked(fg, sun, ring)
+        b, w, h = fl_lockup_stacked(fg, disc)
         write("%s/logo/stacked%s.svg" % (d, suf), svg(w, h, b, "Generation Maine"))
-        write("%s/logo/symbol%s.svg" % (d, suf), svg(200, 200, a2_symbol(0, 0, 200, ring, sun), "Generation Maine"))
-    write(d + "/logo/app-icon.svg", svg(512, 512, rect(512, 512, a["spruce"], rx=112)
-                                        + a2_symbol(116, 116, 280, a["fog"], a["signal"]), "Generation Maine"))
+        write("%s/logo/symbol%s.svg" % (d, suf), svg(200, 200, badge(0, 0, 200, disc), "Generation Maine"))
+    write(d + "/logo/app-icon.svg", svg(512, 512, rect(512, 512, a["signal"], rx=112)
+                                        + badge(0, 0, 512, a["signal"], a["pine"]), "Generation Maine"))
+    # Alternates kept for reference: the v2 G-sunrise and the Sunrise State mark.
+    write(d + "/logo/alt-g-sunrise.svg", svg(200, 200, a2_symbol(0, 0, 200, a["spruce"], a["signal"]), "G-sunrise alternate"))
+    ss, ssw = sunrise_state(0, 0, 200, a["spruce"], a["signal"])
+    write(d + "/logo/alt-sunrise-state.svg", svg(ssw + 2, 200, ss, "Sunrise State alternate"))
 
     s = {}
     # Avatar
-    s["avatar-1080"] = svg(1080, 1080, rect(1080, 1080, a["spruce"]) + a2_symbol(250, 250, 580, a["fog"], a["signal"]),
+    s["avatar-1080"] = svg(1080, 1080, rect(1080, 1080, a["signal"]) + badge(0, 0, 1080, a["signal"], a["pine"]),
                            "Generation Maine avatar")
     # End card
     b = rect(1080, 1920, a["spruce"])
     b += t(540, 250, "Generation Maine", 30, a["dawn"], SANS, 600, "middle", 0.22, True)
-    b += a2_symbol(390, 420, 300, a["fog"], a["signal"])
-    b += t(540, 930, "Follow along", 128, a["fog"], SERIF, 400, "middle")
+    b += badge(390, 420, 300, a["signal"], a["spruce"])
+    b += t(540, 930, "Follow along", 128, a["fog"], EMPH, 600, "middle")
     rows = [("Instagram", "[@handle]"), ("TikTok", "[@handle]"), ("YouTube", "[@handle]"), ("Substack", "[name].substack.com")]
     y = 1100
     for label, handle in rows:
@@ -120,33 +124,32 @@ def build_a2():
     # Thumbnail
     b = rect(1280, 720, a["pine"])
     b += silhouette(660, 0, 620, 720, "#0F3A2B", "#1A5640", "[Creator photo]", a["dawn"])
-    b += a2_symbol(64, 60, 76, a["fog"], a["signal"])
+    b += badge(64, 60, 76, a["signal"], a["pine"])
     b += t(64, 390, "[What rent]", 104, a["fog"], SANS, 700, ls=-0.02)
-    b += t(64, 505, "[costs here]", 116, a["dawn"], SERIF, 400)
+    b += t(64, 505, "[costs here]", 116, a["dawn"], EMPH, 600)
     b += horizon_rule(64, 560, 620, a["moss"], a["signal"])
     s["youtube-thumbnail-1280x720"] = svg(1280, 720, b, "Generation Maine thumbnail")
     # Lower third
     b = rect(820, 172, a["fog"], 96, 812, 26)
-    b += a2_symbol(126, 848, 100, a["spruce"], a["signal"])
+    b += badge(126, 848, 100, a["signal"], a["fog"])
     b += t(254, 896, "[Creator name]", 60, a["granite"], SANS, 600, ls=-0.01)
-    b += t(256, 952, "[Hometown], Maine", 46, a["moss"], SERIF, 400)
+    b += t(256, 952, "[Hometown], Maine", 46, a["moss"], EMPH, 600)
     s["lower-third-1920x1080"] = svg(1920, 1080, b, "Generation Maine lower third")
     # Open Graph
     b = rect(1200, 630, a["spruce"])
-    b += '<g opacity="0.22">%s</g>' % a2_symbol(760, 150, 620, a["moss"], a["moss"])
-    lk, lw, lh = a2_lockup_h(a["fog"], a["signal"], a["fog"])
-    b += placed(lk, 80, 190, 820 / lw)
+    b += badge(820, 170, 560, a["signal"], a["spruce"])
+    lk, lw, lh = fl_lockup_h(a["fog"], a["signal"])
+    b += placed(lk, 80, 150, 660 / lw)
     b += ('<text x="84" y="420" font-size="46" fill="%s" style="%s;font-weight:500">Young Mainers on building a life '
-          '<tspan style="%s;font-weight:400" fill="%s" font-size="52">here.</tspan></text>' % (a["fog"], SANS, SERIF, a["dawn"]))
+          '<tspan style="%s;font-weight:600" fill="%s">here.</tspan></text>' % (a["fog"], SANS, EMPH, a["dawn"]))
     b += t(84, 560, "An initiative of Maine Policy Institute", 26, a["fog"], SANS, 500, ls=0.02)
     s["og-share-card-1200x630"] = svg(1200, 630, b, "Generation Maine")
     # YouTube banner
     b = rect(2560, 1440, a["spruce"])
-    b += '<g opacity="0.18">%s</g>' % a2_symbol(1900, -260, 1100, a["moss"], a["moss"])
-    lk, lw, lh = a2_lockup_h(a["fog"], a["signal"], a["fog"])
+    lk, lw, lh = fl_lockup_h(a["fog"], a["signal"])
     b += placed(lk, 1280 - 1000 / 2, 560, 1000 / lw)
     b += ('<text x="1280" y="840" font-size="60" text-anchor="middle" fill="%s" style="%s;font-weight:500">Young Mainers on building a life '
-          '<tspan style="%s;font-weight:400" fill="%s" font-size="68">here.</tspan></text>' % (a["fog"], SANS, SERIF, a["dawn"]))
+          '<tspan style="%s;font-weight:600" fill="%s">here.</tspan></text>' % (a["fog"], SANS, EMPH, a["dawn"]))
     s["youtube-banner-2560x1440"] = svg(2560, 1440, b, "Generation Maine banner")
     for k, v in s.items():
         write("%s/social/%s.svg" % (d, k), v)
@@ -159,23 +162,24 @@ def build_b2():
     d = OUT + "/postmark"
     for suf, (ink, accent) in {"": (b2["blueberry"], None), "-ink": (b2["ink"], None), "-white": ("#fff", None),
                                "-black": ("#000", None)}.items():
-        write("%s/logo/postmark%s.svg" % (d, suf), svg(200, 200, b2_postmark(100, 100, 100, ink), "Generation Maine"))
+        write("%s/logo/postmark%s.svg" % (d, suf), svg(200, 200, b2_postmark_maine(100, 100, 100, ink), "Generation Maine"))
+        write("%s/logo/postmark-me%s.svg" % (d, suf), svg(200, 200, b2_postmark(100, 100, 100, ink), "Generation Maine"))
         body, w, h = b2_lockup(ink)
         write("%s/logo/lockup%s.svg" % (d, suf), svg(w, h, body, "Generation Maine"))
         write("%s/logo/small%s.svg" % (d, suf), svg(200, 200, b2_small(100, 100, 100, ink), "Generation Maine"))
     write(d + "/logo/app-icon.svg", svg(512, 512, rect(512, 512, b2["blueberry"], rx=112)
                                         + b2_small(256, 256, 170, b2["newsprint"]), "Generation Maine"))
-    towns = [("LEWISTON", "POSTED 11.2026"), ("BANGOR", "POSTED 11.2026"), ("CARIBOU", "POSTED 12.2026"), ("BIDDEFORD", "POSTED 12.2026")]
+    towns = [("Lewiston", "POSTED 11.2026"), ("Bangor", "POSTED 11.2026"), ("Caribou", "POSTED 12.2026"), ("Biddeford", "POSTED 12.2026")]
     for town, sub in towns:
         write("%s/logo/creator-stamp-%s.svg" % (d, town.lower()),
-              svg(200, 200, b2_postmark(100, 100, 100, b2["ink"], center_text=town, center_sub=sub), "Generation Maine, " + town.title()))
+              svg(200, 200, b2_postmark_maine(100, 100, 100, b2["ink"], town=town, sub=sub, dot=b2["yellow"]), "Generation Maine, " + town))
 
     s = {}
     s["avatar-1080"] = svg(1080, 1080, rect(1080, 1080, b2["blueberry"]) + b2_small(540, 540, 330, b2["newsprint"]),
                            "Generation Maine avatar")
     # End card
     b = rect(1080, 1920, b2["newsprint"])
-    b += '<g transform="rotate(-6 400 640)">%s%s</g>' % (b2_postmark(400, 640, 290, b2["blueberry"]),
+    b += '<g transform="rotate(-6 400 640)">%s%s</g>' % (b2_postmark_maine(400, 640, 290, b2["blueberry"]),
                                                           b2_cancel_lines(400 + 290 * 0.95, 640, 900, 290, b2["blueberry"]))
     b += '<rect x="100" y="1090" width="700" height="120" fill="%s" transform="rotate(-2 450 1150)"/>' % b2["yellow"]
     b += t(120, 1190, "FOLLOW ALONG", 120, b2["ink"], ANT, 400, ls=0.02)
@@ -190,7 +194,7 @@ def build_b2():
     b = rect(1280, 720, b2["newsprint"])
     mid = silhouette(70, 70, 520, 580, b2["blueberry"], "#5B50E0", "[Creator photo]", b2["newsprint"], MONO)
     b += perforated(70, 70, 520, 580, b2["blueberry"], mid=mid, bg=b2["newsprint"])
-    b += '<g transform="rotate(-8 560 600)">%s</g>' % b2_postmark(560, 600, 105, b2["ink"])
+    b += '<g transform="rotate(-8 560 600)">%s</g>' % b2_postmark_maine(560, 600, 105, b2["ink"])
     b += '<rect x="650" y="362" width="580" height="112" fill="%s" transform="rotate(-1.5 930 414)"/>' % b2["yellow"]
     b += t(664, 330, "[WHAT RENT]", 104, b2["ink"], ANT, 400, ls=0.01)
     b += t(664, 452, "[COSTS HERE]", 104, b2["ink"], ANT, 400, ls=0.01)
@@ -204,7 +208,7 @@ def build_b2():
     s["lower-third-1920x1080"] = svg(1920, 1080, b, "Generation Maine lower third")
     # OG
     b = rect(1200, 630, b2["newsprint"])
-    b += '<g transform="rotate(-6 250 300)">%s%s</g>' % (b2_postmark(250, 300, 175, b2["blueberry"]),
+    b += '<g transform="rotate(-6 250 300)">%s%s</g>' % (b2_postmark_maine(250, 300, 175, b2["blueberry"]),
                                                           b2_cancel_lines(250 + 175 * 0.95, 300, 1000, 175, b2["blueberry"]))
     b += '<rect x="500" y="446" width="620" height="76" fill="%s"/>' % b2["yellow"]
     b += t(512, 505, "YOUNG MAINERS, OWN WORDS", 58, b2["ink"], ANT, 400, ls=0.01)
@@ -212,7 +216,7 @@ def build_b2():
     s["og-share-card-1200x630"] = svg(1200, 630, b, "Generation Maine")
     # Banner
     b = rect(2560, 1440, b2["newsprint"])
-    b += '<g transform="rotate(-6 820 720)">%s%s</g>' % (b2_postmark(820, 720, 250, b2["blueberry"]),
+    b += '<g transform="rotate(-6 820 720)">%s%s</g>' % (b2_postmark_maine(820, 720, 250, b2["blueberry"]),
                                                           b2_cancel_lines(820 + 250 * 0.95, 720, 1100, 250, b2["blueberry"]))
     b += t(1180, 950, "[@handle]  /  GENERATIONMAINE.ORG", 40, b2["ink"], MONO, 500, ls=0.04)
     s["youtube-banner-2560x1440"] = svg(2560, 1440, b, "Generation Maine banner")
@@ -233,30 +237,32 @@ def font64(name):
 
 def build_presentation(sa, sb):
     a, b2 = A2, B2
-    # animated symbol: the sun rises from behind the horizon, then blinks like a record light
-    s_anim = a2_symbol(0, 0, 200, a["fog"], a["signal"]).replace(
-        '<circle ', '<circle class="sun" ', 1)
+    # animated brandmark: the sun disc appears, Maine rises into it, then the disc blinks like a record light
+    bd = badge(0, 0, 200, a["signal"], a["spruce"])
+    disc, land = bd.split('<path', 1)
     s_anim = ('<svg viewBox="0 0 200 200" class="anim-a" role="img" aria-label="First Light brandmark, animated">'
-              '<defs><clipPath id="above"><rect x="0" y="-60" width="200" height="160"/></clipPath></defs>'
-              + s_anim.replace('<circle class="sun"', '<circle clip-path="url(#above)" class="sun"') + '</svg>')
+              '<defs><clipPath id="discclip"><circle cx="100" cy="100" r="100"/></clipPath></defs>'
+              '<g class="disc">%s</g><g clip-path="url(#discclip)"><g class="land"><path%s</g></g></svg>' % (disc, land))
     pm_anim = ('<svg viewBox="-20 -20 700 240" class="anim-b" role="img" aria-label="Postmark brandmark, animated">'
                '<g class="stamp">%s</g><g class="lines">%s</g></svg>' % (
-                   b2_postmark(100, 100, 100, b2["blueberry"]), b2_cancel_lines(195, 100, 440, 100, b2["blueberry"])))
+                   b2_postmark_maine(100, 100, 100, b2["blueberry"]), b2_cancel_lines(195, 100, 440, 100, b2["blueberry"])))
 
     def logo(path):
         with open(os.path.join(ROOT, path)) as fh:
             return inner(fh.read())
 
     # construction diagram for A2
-    cons = a2_symbol(0, 0, 200, a["spruce"], a["signal"])
-    cons_diag = ('<svg viewBox="-50 -34 300 290" class="cons" role="img" aria-label="Construction of the First Light brandmark">'
-                 '<circle cx="100" cy="100" r="100" fill="none" stroke="#9AA4B2" stroke-dasharray="3 4"/>'
-                 '<circle cx="100" cy="100" r="74" fill="none" stroke="#9AA4B2" stroke-dasharray="3 4"/>'
-                 '<line x1="-20" y1="100" x2="220" y2="100" stroke="%s" stroke-width="1"/>' % a["signal"]
+    cons = badge(0, 0, 200, a["signal"], "#fff")
+    cons_diag = ('<svg viewBox="-110 -30 420 280" class="cons" role="img" aria-label="Construction of the First Light brandmark">'
                  + cons +
-                 '<text x="-48" y="94" font-size="9" fill="#6B7380" style="%s">horizon</text>' % SANS +
-                 '<text x="168" y="30" font-size="9" fill="#6B7380" style="%s">sun / record light</text>' % SANS +
-                 '<text x="100" y="236" text-anchor="middle" font-size="9" fill="#6B7380" style="%s">ring 100 · stroke 26 · sun 21 · gap 9</text></svg>' % SANS)
+                 '<circle cx="100" cy="100" r="100" fill="none" stroke="#9AA4B2" stroke-dasharray="3 4"/>'
+                 '<rect x="45" y="34" width="%s" height="132" fill="none" stroke="#9AA4B2" stroke-dasharray="3 4"/>' % f(132 * 0.6608654867907804) +
+                 '<text x="-8" y="104" text-anchor="end" font-size="9" fill="#6B7380" style="%s">sun / record light</text>' % SANS +
+                 '<text x="206" y="70" font-size="9" fill="#6B7380" style="%s">Maine, cut out</text>' % SANS +
+                 '<text x="100" y="228" text-anchor="middle" font-size="9" fill="#6B7380" style="%s">disc 200 · Maine 132 tall · outline simplified to 94 points</text></svg>' % SANS)
+    alt_g = logo(OUT + "/first-light/logo/alt-g-sunrise.svg")
+    alt_ss = logo(OUT + "/first-light/logo/alt-sunrise-state.svg")
+    alt_me = logo(OUT + "/postmark/logo/postmark-me.svg")
 
     towns = "".join('<figure>%s<figcaption>%s</figcaption></figure>' % (
         logo("brand/v2/postmark/logo/creator-stamp-%s.svg" % tn), tn.title()) for tn in ["lewiston", "bangor", "caribou", "biddeford"])
@@ -266,8 +272,8 @@ def build_presentation(sa, sb):
 
     html = TEMPLATE
     rep = {
-        "{{F_SANS}}": font64("instrument-sans.woff2"), "{{F_SERIF_I}}": font64("instrument-serif-italic.woff2"),
-        "{{F_SERIF}}": font64("instrument-serif.woff2"), "{{F_ANTON}}": font64("anton-400.woff2"),
+        "{{F_SANS}}": font64("instrument-sans.woff2"), "{{F_ANTON}}": font64("anton-400.woff2"),
+        "{{ALT_G}}": alt_g, "{{ALT_SS}}": alt_ss, "{{ALT_ME}}": alt_me,
         "{{F_MONO}}": font64("plex-mono-500.woff2"),
         "{{A_ANIM}}": s_anim, "{{B_ANIM}}": pm_anim, "{{A_CONS}}": cons_diag,
         "{{A_H}}": logo(OUT + "/first-light/logo/horizontal.svg"),
@@ -311,15 +317,13 @@ TEMPLATE = r"""<!doctype html>
 <title>Generation Maine identity v2</title>
 <style>
 @font-face{font-family:'Instrument Sans';src:url(data:font/woff2;base64,{{F_SANS}}) format("woff2");font-weight:400 700}
-@font-face{font-family:'Instrument Serif';font-style:italic;src:url(data:font/woff2;base64,{{F_SERIF_I}}) format("woff2")}
-@font-face{font-family:'Instrument Serif';font-style:normal;src:url(data:font/woff2;base64,{{F_SERIF}}) format("woff2")}
 @font-face{font-family:Anton;src:url(data:font/woff2;base64,{{F_ANTON}}) format("woff2")}
 @font-face{font-family:'IBM Plex Mono';src:url(data:font/woff2;base64,{{F_MONO}}) format("woff2");font-weight:400 700}
 :root{--pad:clamp(20px,5vw,72px)}
 *{box-sizing:border-box}
 html{-webkit-font-smoothing:antialiased}
 body{margin:0;background:#fff;color:{{A.granite}};font:17px/1.6 'Instrument Sans',system-ui,sans-serif}
-em,.serif{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400}
+.hi{font-style:normal}
 section{padding:clamp(56px,9vw,128px) var(--pad);position:relative}
 .wrap{max-width:1240px;margin:0 auto}
 .label{font:600 12px/1 'Instrument Sans';letter-spacing:.2em;text-transform:uppercase;margin:0 0 20px;opacity:.75}
@@ -338,7 +342,7 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
 
 /* intro */
 .intro{background:#0D0F12;color:#EDF0F4}
-.intro h1 em{color:#FFC7A6}
+.intro h1 .hi,.intro h2 .hi{color:#FFC7A6}
 .intro .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px}
 @media (max-width:860px){.intro .cols{grid-template-columns:1fr}}
 .intro .cols div{border-top:1px solid rgba(237,240,244,.22);padding-top:18px}
@@ -348,7 +352,10 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
 /* A2 */
 .a-hero{background:{{A.spruce}};color:{{A.fog}};overflow:hidden}
 .a-hero .anim-a{width:min(420px,70vw)}
-.a-hero h2 em{color:{{A.dawn}}}
+.a-hero h2 .hi{color:{{A.dawn}}}
+.alts{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+@media (max-width:860px){.alts{grid-template-columns:1fr}}
+.alts .tile svg{max-height:180px;width:auto}
 .a-light{background:{{A.fog}}}
 .a-dark{background:{{A.pine}};color:{{A.fog}}}
 .tile{background:#fff;border-radius:20px;padding:clamp(24px,4vw,48px);display:grid;place-items:center;min-height:220px}
@@ -380,7 +387,7 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
 .web .nav span{font-size:13px;opacity:.85;margin-left:22px}
 .web .body{display:grid;grid-template-columns:1.3fr 1fr;align-items:end;padding:40px 32px 0;gap:20px;position:relative}
 .web .body h3{font:600 clamp(34px,4.6vw,64px)/.98 'Instrument Sans';letter-spacing:-.03em;margin:14px 0 14px}
-.web .body h3 em{color:{{A.dawn}}}
+.web .body h3 .hi{color:{{A.dawn}}}
 .web .body .eb{font:600 11px/1 'Instrument Sans';letter-spacing:.2em;text-transform:uppercase;color:{{A.dawn}}}
 .web .btn{display:inline-block;background:{{A.signal}};color:{{A.granite}};font-weight:600;font-size:14px;padding:12px 20px;border-radius:99px;margin:8px 8px 34px 0}
 .web .btn.o{background:transparent;color:{{A.fog}};box-shadow:inset 0 0 0 1.5px {{A.fog}}}
@@ -407,15 +414,17 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
 .btile.blue{background:{{B.blueberry}}}
 
 /* motion */
-.anim-a .sun{animation:rise 3.2s cubic-bezier(.2,.7,.2,1) both, rec 1.6s ease-in-out 3.4s 3}
-@keyframes rise{from{transform:translateY(64px)}to{transform:translateY(0)}}
+.anim-a .disc{transform-origin:100px 100px;animation:pop .6s cubic-bezier(.3,1.4,.5,1) both, rec 1.6s ease-in-out 2.8s 3}
+.anim-a .land{animation:rise 1.8s cubic-bezier(.2,.7,.2,1) .4s both}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes rise{from{transform:translateY(150px)}to{transform:translateY(0)}}
 @keyframes rec{0%,100%{opacity:1}50%{opacity:.25}}
 .anim-b .stamp{transform-origin:100px 100px;animation:stamp .7s cubic-bezier(.3,1.6,.5,1) both}
 .anim-b .lines path{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 1.2s ease-out .55s forwards}
 @keyframes stamp{from{transform:scale(1.35) rotate(-14deg);opacity:0}to{transform:scale(1) rotate(-6deg);opacity:1}}
 @keyframes draw{to{stroke-dashoffset:0}}
 .replay{font:600 12px/1 'Instrument Sans';letter-spacing:.14em;text-transform:uppercase;background:none;border:1px solid currentColor;color:inherit;border-radius:99px;padding:10px 16px;cursor:pointer;margin-top:18px}
-@media (prefers-reduced-motion:reduce){.anim-a .sun,.anim-b .stamp,.anim-b .lines path{animation:none!important;stroke-dashoffset:0!important;transform:rotate(-6deg)}}
+@media (prefers-reduced-motion:reduce){.anim-a .disc,.anim-a .land,.anim-b .stamp,.anim-b .lines path{animation:none!important;stroke-dashoffset:0!important;transform:rotate(-6deg)}}
 .anim-b .stamp{transform:rotate(-6deg)}
 .pick{display:inline-block;background:{{A.signal}};color:{{A.granite}};font:600 11px/1 'Instrument Sans';letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border-radius:99px;margin-bottom:18px}
 </style>
@@ -424,11 +433,11 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
 
 <section class="intro"><div class="wrap">
   <p class="label">Generation Maine · Identity v2 · September 2026</p>
-  <h1>From a logo to a <em>system</em>.</h1>
-  <p class="lede" style="margin-top:28px">Version 1 set the name in a nice typeface and added an orange dot. Version 2 gives each direction a real brandmark with an idea inside it, a type pairing with range, and a set of rules a small team can repeat. v1 is saved in brand/archive/v1.</p>
+  <h1>From a logo to a <span class="hi">system</span>.</h1>
+  <p class="lede" style="margin-top:28px">Version 1 set the name in a nice typeface and added an orange dot. Version 2 gives each direction a real brandmark built on the outline of Maine, disciplined type with no italics, and a set of rules a small team can repeat. v1 is saved in brand/archive/v1.</p>
   <div class="cols">
     <div><b>A real brandmark</b><p>A symbol that means something, works at 16 px, and can move.</p></div>
-    <div><b>Typographic contrast</b><p>A precise grotesk paired with an expressive second voice. Fewer weights, more restraint.</p></div>
+    <div><b>Disciplined type</b><p>One main family per direction, a small set of sizes, and no italics. Emphasis comes from color.</p></div>
     <div><b>Repeatable devices</b><p>One or two graphic devices used the same way everywhere. That consistency is what reads as premium.</p></div>
   </div>
 </div></section>
@@ -438,10 +447,10 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
   <div>
     <span class="pick">Recommended</span>
     <p class="label" style="color:{{A.dawn}}">Direction A, v2</p>
-    <h2>First <em>Light</em></h2>
-    <p class="lede">Maine is known as one of the first places in the country to see the sunrise (to verify: Cadillac Mountain, part of the year). The brandmark is a G whose open mouth holds a rising sun. The crossbar is the horizon. The sun is also the red light on a camera that says it is recording.</p>
-    <p>A new generation, just coming up. Stories, recorded as they happen.</p>
-    <button class="replay" onclick="var s=document.querySelector('.anim-a .sun');s.style.animation='none';s.offsetHeight;s.style.animation=''">Replay</button>
+    <h2>First <span class="hi">Light</span></h2>
+    <p class="lede">The brandmark is the outline of Maine, cut out of a rising sun. The same orange disc is the red light a camera shows while it records.</p>
+    <p>Maine is known as one of the first places in the country to see the sunrise (to verify: Cadillac Mountain, part of the year). A new generation, coming up. Stories, recorded as they happen.</p>
+    <button class="replay" onclick="document.querySelectorAll('.anim-a .disc,.anim-a .land').forEach(function(e){e.style.animation='none';e.offsetHeight;e.style.animation=''})">Replay</button>
   </div>
   <div style="display:grid;place-items:center">{{A_ANIM}}</div>
 </div></section>
@@ -451,9 +460,9 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
   <div class="grid2">
     <div class="tile">{{A_CONS}}</div>
     <div>
-      <h2>A letter, a horizon, a <em>record light</em>.</h2>
-      <p>Built from a circle, one straight bar and one dot. No gradients and no fine detail, so it holds at 16 px and on a phone screen at arm's length.</p>
-      <p>The G stays green or white. The sun is always Signal orange in color versions. Nothing else in the system uses a filled orange circle, so the dot always points back to the brand.</p>
+      <h2>A state, a sun, a <span class="hi">record light</span>.</h2>
+      <p>One orange disc with Maine cut out of it. The outline comes from Natural Earth public-domain map data, simplified to 94 points so the coast still reads as Maine without fine detail that would fill in at small sizes.</p>
+      <p>The cutout is transparent, so whatever sits behind the mark shows through Maine. The disc is always Signal orange in color versions. Nothing else in the system uses a filled orange circle.</p>
       <div class="smalls">{{A_SMALLS}}</div>
     </div>
   </div>
@@ -471,9 +480,9 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
       <p class="label">Type</p>
       <h2 style="margin-bottom:6px">Instrument Sans</h2>
       <p>For names, headlines and everything functional. Set tight, semibold, sentence case.</p>
-      <h2 style="margin:26px 0 6px"><em>Instrument Serif Italic</em></h2>
-      <p>The second voice. One or two words at most: a place, a feeling, the word that matters. It is what makes a headline sound like a person.</p>
-      <p style="font-size:13px;opacity:.7">Both under the SIL Open Font License.</p>
+      <h2 style="margin:26px 0 6px">No italics</h2>
+      <p>Emphasis comes from color, never from slanted type. One or two words at most go in Dawn on dark backgrounds or Signal Deep on light ones.</p>
+      <p style="font-size:13px;opacity:.7">Instrument Sans is under the SIL Open Font License.</p>
     </div>
     <div>
       <p class="label">Color</p>
@@ -492,6 +501,17 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
   </div>
 </div></section>
 
+<section class="a-light" style="padding-top:0"><div class="wrap">
+  <div class="hr" style="margin-top:0"></div>
+  <p class="label">Other marks explored</p>
+  <div class="alts">
+    <figure><div class="tile">{{ALT_G}}</div><figcaption>v2 G-sunrise (no silhouette)</figcaption></figure>
+    <figure><div class="tile">{{ALT_SS}}</div><figcaption>Sunrise State: sun rising off Lubec</figcaption></figure>
+    <figure><div class="tile" style="background:{{A.spruce}}">{{A_SYM_REV}}</div><figcaption>Chosen: Maine cut from the sun</figcaption></figure>
+  </div>
+  <p style="margin-top:18px">Sunrise State tells the "first sunrise" story most literally, but the sun separates from the coast and turns into two small shapes at avatar size. The cutout holds together as one shape at every size.</p>
+</div></section>
+
 <section class="a-dark"><div class="wrap">
   <p class="label" style="color:{{A.dawn}}">Applications</p>
   <h2>The horizon rule</h2>
@@ -507,7 +527,7 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
     <div class="body">
       <div>
         <span class="eb">An initiative of Maine Policy Institute</span>
-        <h3>Young Mainers on building a life <em>here.</em></h3>
+        <h3>Young Mainers on building a life <span class="hi">here.</span></h3>
         <p style="opacity:.9;max-width:36ch">Short videos by young Maine creators about the rules that shape their lives.</p>
         <span class="btn">Meet the creators</span><span class="btn o">Follow along</span>
       </div>
@@ -523,8 +543,8 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
   <div>
     <p class="label">Direction B, v2</p>
     <h2>Postmark</h2>
-    <p>Every story is sent from somewhere. The brandmark is a postmark with "ME" at its center: the postal code for Maine, and the first-person voice of every creator. Cancellation lines run off the edge like sound waves.</p>
-    <p>It turns into a system on its own. Each creator gets a postmark with their town in the center.</p>
+    <p>Every story is sent from somewhere. The brandmark is a postmark with the outline of Maine at its center. Cancellation lines run off the edge like sound waves.</p>
+    <p>It turns into a system on its own. Each creator gets a postmark with a dot on their town. At small sizes the mark switches to ME, the state's postal code and the first-person voice of every creator.</p>
     <button class="replay" onclick="var g=document.querySelectorAll('.anim-b .stamp,.anim-b .lines path');g.forEach(function(e){e.style.animation='none';e.offsetHeight;e.style.animation=''})">Replay</button>
   </div>
   <div>{{B_ANIM}}</div>
@@ -536,7 +556,7 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
     <div class="btile">{{B_PM}}</div>
     <div>
       <h2>Posted from <span class="hl">Maine</span></h2>
-      <p>Ring text in Anton: GENERATION MAINE across the top, YOUNG MAINERS across the bottom. A single ink color, like a real rubber stamp. At small sizes it drops the ring text and keeps the circle and ME.</p>
+      <p>Ring text in Anton: GENERATION MAINE across the top, YOUNG MAINERS across the bottom. Maine in the center. A single ink color, like a real rubber stamp. At small sizes it drops the ring text and becomes a circle with ME.</p>
       <div class="smalls">{{B_SMALLS}}</div>
     </div>
   </div>
@@ -549,7 +569,7 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
   <div class="hr"></div>
   <p class="label">Creator postmarks</p>
   <h2>One stamp per <span class="hl">town</span></h2>
-  <p>Town names are examples only. Each creator's postmark carries their hometown and the month they joined. It goes on their lower third, their profile card and their first video.</p>
+  <p>Town names are examples only. Each creator's postmark marks their hometown on the map, with the name and the month they joined underneath. It goes on their lower third, their profile card and their first video.</p>
   <div class="towns" style="margin-top:28px">{{B_TOWNS}}</div>
 </div></section>
 
@@ -564,7 +584,7 @@ figcaption{font:500 12px/1.4 'Instrument Sans';letter-spacing:.08em;text-transfo
 
 <section class="intro"><div class="wrap">
   <p class="label">Recommendation</p>
-  <h2>Lead with <em>First Light</em>.</h2>
+  <h2>Lead with <span class="hi">First Light</span>.</h2>
   <p class="lede">It has the strongest single idea, it reads as polished next to a policy institute's name, and it stays calm enough to let the creators' faces lead. Postmark is the more playful option and has the best built-in system for featuring each creator. Its creator stamps could also live inside First Light as a campaign device.</p>
 </div></section>
 
