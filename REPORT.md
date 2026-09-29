@@ -22,7 +22,7 @@ I picked it because it stays clear as a 32 px avatar, looks calm enough to let t
 ## Assumptions
 
 - **The repo was empty.** The prompt described an existing `generation-maine/` theme with `README.md`, `PROJECT.md`, `inc/creators.php`, patterns and an SEO file. The GitHub repo had no commits at all. I built the whole theme from scratch to match that description: a private Creators post type, the `[gm_creators]` shortcode, a server-rendered Creators Grid block, five section patterns and `inc/seo.php`. There was no newer "public profiles" version to revert.
-- **Branch name.** This session is set up to push only to `claude/generation-maine-setup-6s8g2r`, so the work is on that branch instead of `brand-and-splash`. The repo had no default branch, so I created `main` with one empty commit to give the pull request a base.
+- **Branch and pull request.** This session is set up to push only to `claude/generation-maine-setup-6s8g2r`, so the work is on that branch instead of `brand-and-splash`. The repo had no other branch, so there was no base to open a pull request against. Creating a `main` branch needs Mike's go-ahead, so no pull request is open yet.
 - **Maine Policy Institute URL.** I used `https://mainepolicy.org/`. It needs confirmation.
 - **Channel buttons** link to `#follow` until real URLs exist.
 - **Footer copyright** reads "© 2026 Generation Maine." The client may want Maine Policy Institute as the holder.
