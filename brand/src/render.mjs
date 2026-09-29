@@ -41,8 +41,17 @@ for (const f of fs.readdirSync(logoDir).filter((f) => f.endsWith('.svg'))) {
 for (const w of [16, 32, 48, 192, 512]) await render(path.join(logoDir, 'icon.svg'), path.join(logoDir, `favicon-${w}.png`), w);
 
 const socialDir = path.join(root, 'brand', 'social');
-for (const f of fs.readdirSync(socialDir).filter((f) => f.endsWith('.svg'))) {
+for (const f of fs.readdirSync(socialDir).filter((f) => f.endsWith('.svg') && !f.includes('-blank'))) {
   await render(path.join(socialDir, f), path.join(socialDir, f.replace('.svg', '.png')));
+  // Blank background for Canva and CapCut: same file with every [placeholder] text slot removed.
+  const src = fs.readFileSync(path.join(socialDir, f), 'utf8');
+  if (src.includes('>[')) {
+    const blank = src.replace(/<text[^>]*>\[[^<]*<\/text>/g, '');
+    const tmp = path.join(socialDir, f.replace('.svg', '-blank.svg'));
+    fs.writeFileSync(tmp, blank);
+    await render(tmp, path.join(socialDir, f.replace('.svg', '-blank.png')));
+    fs.unlinkSync(tmp);
+  }
 }
 
 // Theme fallback favicon and apple touch icon.
