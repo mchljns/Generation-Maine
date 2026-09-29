@@ -1,0 +1,122 @@
+/*
+Theme Name: Generation Maine
+Theme URI: https://generationmaine.org
+Author: Green Falls for Maine Policy Institute
+Description: One-page splash site for Generation Maine, an initiative of Maine Policy Institute. Block theme with a private Creators post type and a Creators Grid block.
+Version: 1.0.0
+Requires at least: 6.5
+Tested up to: 6.8
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: generation-maine
+*/
+
+/* Base styles live in theme.json. This file holds the few things theme.json cannot express. */
+
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: clip; }
+img, svg { max-width: 100%; height: auto; }
+.wp-site-blocks > * + * { margin-block-start: 0; }
+
+.gm-skip-link { position: absolute; left: -9999px; top: 0; z-index: 1000; background: var(--wp--preset--color--accent); color: var(--wp--preset--color--contrast); padding: 0.75rem 1rem; font-weight: 600; }
+.gm-skip-link:focus { left: 1rem; top: 1rem; }
+
+/* ---------- Header ---------- */
+.gm-header-part { position: sticky; top: 0; z-index: 50; }
+.admin-bar .gm-header-part { top: var(--wp-admin--admin-bar--height, 32px); }
+.gm-header .gm-logo { display: block; line-height: 0; color: var(--wp--preset--color--base); }
+.gm-header .gm-logo svg { width: clamp(136px, 22vw, 190px); height: auto; }
+.gm-nav { display: flex; gap: clamp(0.875rem, 3vw, 2rem); list-style: none; margin: 0; padding: 0; }
+.gm-nav a { color: var(--wp--preset--color--base); text-decoration: none; font-weight: 600; font-size: var(--wp--preset--font-size--small); padding: 0.5rem 0; display: inline-block; }
+.gm-nav a:hover, .gm-nav a:focus-visible { text-decoration: underline; text-decoration-color: var(--wp--preset--color--accent); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+.gm-logo .gm-dot, .gm-footer-logo .gm-dot { fill: var(--wp--preset--color--accent); }
+
+/* ---------- Hero ---------- */
+.gm-hero { position: relative; overflow: hidden; }
+.gm-hero::before {
+	content: ""; position: absolute; inset: 0; pointer-events: none;
+	background-color: var(--wp--preset--color--secondary);
+	-webkit-mask: url(assets/img/contours.svg) center / cover no-repeat;
+	mask: url(assets/img/contours.svg) center / cover no-repeat;
+	opacity: 0.9; z-index: 1;
+}
+.gm-hero:has(.wp-block-cover__image-background)::before { display: none; }
+.gm-hero .wp-block-cover__inner-container { position: relative; z-index: 2; }
+.gm-hero h1 { max-width: 13ch; text-wrap: balance; }
+.gm-hero .gm-hero-sub { max-width: 34ch; }
+.gm-dot-after::after {
+	content: ""; display: inline-block; width: 0.19em; height: 0.19em; margin-left: 0.06em;
+	border-radius: 50%; background: var(--wp--preset--color--accent); vertical-align: baseline;
+}
+
+.gm-eyebrow { text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+
+/* ---------- Sections ---------- */
+.gm-section h2 { text-wrap: balance; }
+.gm-about p { max-width: 60ch; }
+
+.gm-topics { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.gm-topics li { border: 2px solid color-mix(in srgb, var(--wp--preset--color--base) 40%, transparent); border-radius: 999px; padding: 0.375rem 0.875rem; font-weight: 600; font-size: var(--wp--preset--font-size--small); }
+.gm-topics li:first-child { border-color: var(--wp--preset--color--accent); }
+
+/* ---------- Follow ---------- */
+.gm-channels .wp-block-button__link { min-width: 9.5rem; text-align: center; }
+.gm-substack { border-radius: 24px; position: relative; overflow: hidden; }
+
+/* ---------- Creators grid ---------- */
+.gm-creators { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: clamp(1rem, 3vw, 1.75rem); margin: 0; padding: 0; list-style: none; }
+.gm-creator { background: var(--wp--preset--color--white); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(10, 26, 20, 0.08); }
+.gm-creator__photo { aspect-ratio: 4 / 5; background: var(--wp--preset--color--primary); position: relative; overflow: hidden; }
+.gm-creator__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gm-creator__initials { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--wp--preset--font-family--display); font-weight: 800; font-size: 3.5rem; color: var(--wp--preset--color--base); }
+.gm-creator__photo--empty::before {
+	content: ""; position: absolute; inset: 0; background-color: var(--wp--preset--color--secondary);
+	-webkit-mask: url(assets/img/contours.svg) center / cover no-repeat; mask: url(assets/img/contours.svg) center / cover no-repeat;
+}
+.gm-creator__body { padding: 1.125rem 1.25rem 1.375rem; display: flex; flex-direction: column; gap: 0.375rem; flex: 1; }
+.gm-creator__name { font-size: var(--wp--preset--font-size--x-large); margin: 0; }
+.gm-creator__town { margin: 0; font-size: var(--wp--preset--font-size--small); font-weight: 600; color: var(--wp--preset--color--secondary); }
+.gm-creator__bio { margin: 0.25rem 0 0; font-size: var(--wp--preset--font-size--small); line-height: 1.55; }
+.gm-creator__links { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin: auto 0 0; padding: 0.5rem 0 0; list-style: none; font-size: var(--wp--preset--font-size--small); font-weight: 600; }
+.gm-creator__links a { color: var(--wp--preset--color--accent-text); }
+.gm-creator--placeholder { outline: 2px dashed var(--wp--preset--color--secondary); outline-offset: -2px; }
+.gm-badge { align-self: flex-start; font-size: var(--wp--preset--font-size--caption); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: var(--wp--preset--color--highlight); color: var(--wp--preset--color--contrast); border-radius: 999px; padding: 0.2rem 0.6rem; }
+
+.gm-coming-soon { background: var(--wp--preset--color--primary); color: var(--wp--preset--color--base); border-radius: 24px; padding: clamp(1.75rem, 5vw, 3rem); position: relative; overflow: hidden; }
+.gm-coming-soon::before {
+	content: ""; position: absolute; inset: 0; background-color: var(--wp--preset--color--secondary); opacity: 0.8;
+	-webkit-mask: url(assets/img/contours.svg) right center / cover no-repeat; mask: url(assets/img/contours.svg) right center / cover no-repeat;
+}
+.gm-coming-soon > * { position: relative; }
+.gm-coming-soon h3 { margin: 0 0 0.5rem; font-size: var(--wp--preset--font-size--xx-large); color: var(--wp--preset--color--base); }
+.gm-coming-soon p { margin: 0; max-width: 46ch; }
+.gm-slots { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.5rem; margin-top: 1.5rem; max-width: 22rem; }
+.gm-slots span { aspect-ratio: 4 / 5; border-radius: 8px; border: 2px dashed color-mix(in srgb, var(--wp--preset--color--base) 45%, transparent); }
+.gm-slots span:first-child { background: var(--wp--preset--color--accent); border-color: var(--wp--preset--color--accent); }
+
+/* ---------- Footer ---------- */
+.gm-footer-logo { color: var(--wp--preset--color--base); line-height: 0; display: block; }
+.gm-footer-logo svg { width: 200px; height: auto; }
+.gm-footer a { color: var(--wp--preset--color--base); }
+
+@media (max-width: 599px) {
+	.gm-creators { gap: 0.75rem; }
+	.gm-creator { flex-direction: row; }
+	.gm-creator__photo { flex: 0 0 104px; aspect-ratio: auto; min-height: 130px; }
+	.gm-creator__initials { font-size: 2rem; }
+	.gm-creator__body { padding: 0.875rem 1rem 1rem; }
+	.gm-creator__name { font-size: var(--wp--preset--font-size--large); }
+	.gm-creator__bio { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+}
+
+@media (max-width: 480px) {
+	.gm-header .gm-logo svg { width: 128px; }
+	.gm-nav { gap: 0.875rem; }
+	.gm-hero .wp-block-buttons { flex-direction: column; align-items: stretch; }
+	.gm-hero .wp-block-button { width: 100%; }
+	.gm-hero .wp-block-button__link { width: 100%; }
+}
+
+.screen-reader-text { border: 0; clip: rect(1px, 1px, 1px, 1px); clip-path: inset(50%); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; word-wrap: normal !important; }

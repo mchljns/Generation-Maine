@@ -96,6 +96,12 @@ def build_logos():
     body, w, h = lockup_horizontal(C["spruce"], C["signal"], 100, 0)
     write("generation-maine/assets/img/wordmark.svg", svg(round(w), round(h), body, "Generation Maine"))
     write("generation-maine/assets/img/icon.svg", icon_svg("color"))
+    # Inline version for the header and footer: letters follow currentColor, dot follows the accent color.
+    body, w, h = lockup_horizontal("currentColor", "DOT", 100, 0)
+    body = body.replace('fill="DOT"', 'class="gm-dot" fill="#FF5B24"')
+    write("generation-maine/assets/img/wordmark-inline.svg",
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" width="%d" height="%d" role="img" '
+          'aria-label="Generation Maine" focusable="false">%s</svg>' % (round(w), round(h), round(w), round(h), body))
 
 
 # ---------- Social kit ----------
@@ -205,7 +211,6 @@ def build_pattern_tile():
     """Hero background art for the theme: contour rings on transparent, drawn in moss."""
     body = pattern_bg(1600, 1000, 1350, 250, 20, 48, C["moss"], 2.5, 0.75, seed=11, r0=40)
     body += pattern_bg(1600, 1000, 150, 900, 12, 48, C["moss"], 2.5, 0.75, seed=5, r0=40)
-    body += '<circle cx="1350" cy="250" r="22" fill="%s"/>' % C["signal"]
     write("generation-maine/assets/img/contours.svg",
           svg(1600, 1000, body, "").replace('role="img" aria-labelledby="t"><title id="t"></title>',
                                             'aria-hidden="true" preserveAspectRatio="xMidYMid slice">'))

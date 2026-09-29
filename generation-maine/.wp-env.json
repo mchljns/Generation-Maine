@@ -1,0 +1,8 @@
+{
+	"core": null,
+	"themes": [ "." ],
+	"config": { "WP_DEBUG": true, "WP_DEBUG_DISPLAY": true },
+	"lifecycleScripts": {
+		"afterStart": "npx wp-env run cli wp theme activate generation-maine && npx wp-env run cli wp rewrite structure '/%postname%/'"
+	}
+}

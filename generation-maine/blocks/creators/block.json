@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "generation-maine/creators",
+	"title": "Creators Grid",
+	"category": "widgets",
+	"icon": "groups",
+	"description": "Shows every published creator as a card. Shows a \"coming soon\" message when there are none. Add creators under Creators in the dashboard.",
+	"keywords": [ "creators", "team", "grid" ],
+	"textdomain": "generation-maine",
+	"attributes": {
+		"limit": { "type": "number", "default": 24 }
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"anchor": true
+	},
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}
