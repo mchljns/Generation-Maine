@@ -2,3 +2,4 @@ node_modules/
 .DS_Store
 *.log
 qa/php-errors.log
+__pycache__/
