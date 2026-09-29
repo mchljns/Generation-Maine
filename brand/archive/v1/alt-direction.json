@@ -1,0 +1,62 @@
+{
+	"$schema": "https://schemas.wp.org/wp/6.8/theme.json",
+	"version": 3,
+	"title": "Paper Route (alternate direction)",
+	"settings": {
+		"color": {
+			"palette": [
+				{ "slug": "base", "name": "Newsprint (page background)", "color": "#ECECE6" },
+				{ "slug": "contrast", "name": "Ink (body text)", "color": "#141414" },
+				{ "slug": "primary", "name": "Blueberry (brand dark)", "color": "#3D2FD1" },
+				{ "slug": "secondary", "name": "Blueberry Light (lines and pattern)", "color": "#6A5FE6" },
+				{ "slug": "accent", "name": "Highlighter (buttons)", "color": "#FFD23F" },
+				{ "slug": "accent-text", "name": "Blueberry (links on light)", "color": "#3D2FD1" },
+				{ "slug": "highlight", "name": "Highlighter (accent text on dark)", "color": "#FFD23F" },
+				{ "slug": "white", "name": "White", "color": "#FFFFFF" }
+			]
+		},
+		"typography": {
+			"fontFamilies": [
+				{
+					"slug": "display",
+					"name": "Anton",
+					"fontFamily": "Anton, \"Arial Narrow\", sans-serif",
+					"fontFace": [
+						{
+							"fontFamily": "Anton",
+							"fontWeight": "400 900",
+							"fontStyle": "normal",
+							"fontDisplay": "swap",
+							"src": ["file:./assets/fonts/anton-400.woff2"]
+						}
+					]
+				},
+				{
+					"slug": "body",
+					"name": "IBM Plex Mono",
+					"fontFamily": "\"IBM Plex Mono\", ui-monospace, Menlo, monospace",
+					"fontFace": [
+						{
+							"fontFamily": "IBM Plex Mono",
+							"fontWeight": "400 700",
+							"fontStyle": "normal",
+							"fontDisplay": "swap",
+							"src": ["file:./assets/fonts/plex-mono-500.woff2"]
+						}
+					]
+				}
+			]
+		}
+	},
+	"styles": {
+		"typography": { "fontSize": "var(--wp--preset--font-size--small)" },
+		"elements": {
+			"heading": {
+				"typography": { "textTransform": "uppercase", "letterSpacing": "0.005em", "lineHeight": "0.95" }
+			},
+			"button": {
+				"border": { "radius": "0" }
+			}
+		}
+	}
+}
