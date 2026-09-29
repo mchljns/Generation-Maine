@@ -71,7 +71,7 @@ def build():
     pat_demo = contour_group(contours(420, 160, 14, 20, 30, 7), C["moss"], 2, 0.8)
     pat_small = contour_group(contours(200, 110, 8, 14, 24, 5), C["moss"], 2, 0.9)
 
-    pairs = [("ink", "fog"), ("spruce", "fog"), ("fog", "spruce"), ("lichen", "spruce"), ("ink", "signal"),
+    pairs = [("ink", "fog"), ("spruce", "fog"), ("fog", "spruce"), ("dawn", "spruce"), ("ink", "signal"),
              ("signal_deep", "fog"), ("moss", "white"), ("signal", "spruce"), ("signal", "fog")]
     rows = ""
     for fg, bg in pairs:
@@ -122,9 +122,9 @@ body{font:15px/1.55 GMB,system-ui,sans-serif;color:{{ink}}}
 @media print{html,body{background:none}.page{margin:0;box-shadow:none}}
 .page.dark{background:{{spruce}};color:{{fog}}}
 .num{position:absolute;right:.7in;bottom:.35in;font-size:11px;color:{{moss}}}
-.dark .num{color:{{lichen}}}
+.dark .num{color:{{dawn}}}
 .kicker{font:600 12px/1 GMB;letter-spacing:.1em;text-transform:uppercase;color:{{moss}};margin:0 0 10px}
-.dark .kicker{color:{{lichen}}}
+.dark .kicker{color:{{dawn}}}
 h1,h2,h3{font-family:GMD;font-weight:800;letter-spacing:-.012em;margin:0}
 h2{font-size:40px;line-height:1.05;margin-bottom:18px}
 h3{font-size:19px;margin:0 0 6px}
@@ -283,13 +283,13 @@ code{font-size:12px;background:rgba(10,26,20,.07);padding:1px 5px;border-radius:
         <div class="sw" style="background:{{signal}};color:{{ink}}"><b>Signal</b>{{signal}}</div>
         <div class="sw" style="background:{{ink}};color:{{fog}}"><b>Ink</b>{{ink}}</div>
         <div class="sw" style="background:{{moss}};color:#fff"><b>Moss</b>{{moss}}</div>
-        <div class="sw" style="background:{{lichen}};color:{{ink}}"><b>Lichen</b>{{lichen}}</div>
+        <div class="sw" style="background:{{dawn}};color:{{ink}}"><b>Dawn</b>{{dawn}}</div>
         <div class="sw" style="background:{{signal_deep}};color:#fff"><b>Signal Deep</b>{{signal_deep}}</div>
         <div class="sw" style="background:#fff;color:{{ink}};border:1px solid #ccd"><b>White</b>#FFFFFF</div>
       </div>
       <h3 style="margin-top:18px">Usage ratio</h3>
       <div class="ratio"><span style="flex:50;background:{{spruce}}"></span><span style="flex:30;background:#fff"></span><span style="flex:10;background:{{ink}}"></span><span style="flex:7;background:{{moss}}"></span><span style="flex:3;background:{{signal}}"></span></div>
-      <p class="cap">Spruce 50 · Fog and White 30 · Ink 10 · Moss and Lichen 7 · Signal 3. Signal is a spark, not a fill.</p>
+      <p class="cap">Spruce 50 · Fog and White 30 · Ink 10 · Moss and Dawn 7 · Signal 3. Signal is a spark, not a fill.</p>
     </div>
     <div>
       <h3>Text pairs (WCAG 2.1, calculated)</h3>
@@ -426,7 +426,7 @@ code{font-size:12px;background:rgba(10,26,20,.07);padding:1px 5px;border-radius:
     <div>
       <h3>Set up Canva once</h3>
       <ol class="steps">
-        <li>Open Brand Kit and add the colors: {{spruce}}, {{fog}}, {{signal}}, {{ink}}, {{moss}}, {{lichen}}.</li>
+        <li>Open Brand Kit and add the colors: {{spruce}}, {{fog}}, {{signal}}, {{ink}}, {{moss}}, {{dawn}}.</li>
         <li>Upload <code>BricolageGrotesque-ExtraBold.ttf</code> and the two Inter files from <code>brand/fonts/</code> (font upload needs Canva Pro). Without Pro, pick Inter from Canva's font list and a bold sans-serif for headlines.</li>
         <li>Upload the logo PNGs from <code>brand/logo/</code> to the Brand Kit logos.</li>
         <li>Upload the <code>-blank.png</code> backgrounds from <code>brand/social/</code>.</li>

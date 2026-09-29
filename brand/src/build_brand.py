@@ -127,7 +127,7 @@ def pattern_bg(w, h, cx, cy, rings, gap, stroke, width, opacity=1, seed=3, r0=60
 
 
 def build_social():
-    fog, spruce, signal, moss, lichen = C["fog"], C["spruce"], C["signal"], C["moss"], C["lichen"]
+    fog, spruce, signal, moss, dawn = C["fog"], C["spruce"], C["signal"], C["moss"], C["dawn"]
     attrib = "An initiative of Maine Policy Institute"
 
     # Avatar 1080: icon, circle-safe (all content inside a 760px circle).
@@ -143,7 +143,7 @@ def build_social():
     wm, w, h = lockup_horizontal(fog, signal, 100)
     sc = 1100 / w
     body += placed(wm, w, h, 507 + (1546 - 1100) / 2, 560, sc)
-    body += text(1280, 820, "Young Mainers on building a life here.", 58, lichen, anchor="middle", weight=600)
+    body += text(1280, 820, "Young Mainers on building a life here.", 58, dawn, anchor="middle", weight=600)
     body += text(1280, 900, "[@handle]  ·  GenerationMaine.org", 40, fog, anchor="middle")
     body += ('<rect x="507" y="508.5" width="1546" height="423" fill="none" stroke="%s" '
              'stroke-dasharray="12 12" stroke-width="2" opacity="0" id="safe-area-guide"/>' % fog)
@@ -168,7 +168,7 @@ def build_social():
     wm, w, h = lockup_stacked(fog, signal, 100)
     sc = 760 / w
     body += placed(wm, w, h, 160, 520, sc)
-    body += text(160, 1020, "Follow Generation Maine", 64, lichen, disp=True)
+    body += text(160, 1020, "Follow Generation Maine", 64, dawn, disp=True)
     rows = [("Instagram", "[@handle]"), ("TikTok", "[@handle]"), ("YouTube", "[@handle]"), ("Substack", "[name].substack.com")]
     y = 1140
     for label, handle in rows:
@@ -202,7 +202,7 @@ def build_social():
     wm, w, h = lockup_horizontal(fog, signal, 100)
     sc = 860 / w
     body += placed(wm, w, h, 80, 210, sc)
-    body += text(84, 400, "Young Mainers on building a life here.", 44, lichen, weight=600)
+    body += text(84, 400, "Young Mainers on building a life here.", 44, dawn, weight=600)
     body += text(84, 560, attrib, 28, fog)
     write("brand/social/og-share-card-1200x630.svg", svg(1200, 630, body, "Generation Maine"))
 

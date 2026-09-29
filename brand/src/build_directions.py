@@ -13,11 +13,11 @@ B = {
     "ink": "#141414",
     "newsprint": "#ECECE6",
     "blueberry": "#3D2FD1",
-    "highlighter": "#E6F03F",
+    "highlighter": "#FFD23F",
     "white": "#FFFFFF",
 }
 
-COND = Face(os.path.join(ROOT, "brand/fonts/alt/Archivo-CondensedBlack.ttf"))
+COND = Face(os.path.join(ROOT, "brand/fonts/alt/Anton-Regular.ttf"))
 
 
 def lum(h):
@@ -32,7 +32,7 @@ def ratio(a, b):
     return (la + 0.05) / (lb + 0.05)
 
 
-PAIRS_A = [("ink", "fog"), ("spruce", "fog"), ("fog", "spruce"), ("lichen", "spruce"),
+PAIRS_A = [("ink", "fog"), ("spruce", "fog"), ("fog", "spruce"), ("dawn", "spruce"),
            ("ink", "signal"), ("signal_deep", "fog"), ("signal", "spruce"), ("signal", "fog")]
 PAIRS_B = [("ink", "newsprint"), ("blueberry", "newsprint"), ("white", "blueberry"),
            ("ink", "highlighter"), ("blueberry", "highlighter"), ("highlighter", "newsprint")]
@@ -88,11 +88,11 @@ def build():
     body += contour_group(contours(900, 1700, 18, 50, 52, 4), a["moss"], 3, 0.6)
     wm, w, h = lockup_stacked(a["fog"], a["signal"], 100)
     body += '<g transform="translate(160 560) scale(%.3f)">%s</g>' % (760 / w, wm)
-    wm2, w2, h2 = lockup_horizontal(a["lichen"], a["lichen"], 100)
+    wm2, w2, h2 = lockup_horizontal(a["dawn"], a["dawn"], 100)
     body += ('<text x="160" y="1060" font-size="64" fill="%s" style="font-family:GMDisplay">Follow Generation Maine</text>'
              '<text x="160" y="1150" font-size="44" fill="%s" style="font-family:GMBody">[@handle] on Instagram, TikTok, YouTube</text>'
              '<text x="160" y="1520" font-size="34" fill="%s" style="font-family:GMBody">An initiative of Maine Policy Institute</text>'
-             % (a["lichen"], a["fog"], a["fog"]))
+             % (a["dawn"], a["fog"], a["fog"]))
     a_end = svgwrap(1080, 1920, body, "Direction A end card")
     a_contours = contour_group(contours(640, 60, 14, 30, 38, 11), a["moss"], 2, 0.8)
 
@@ -120,13 +120,13 @@ def build():
     repl = {
         "{{FONT_DISPLAY}}": font64("bricolage-grotesque-800.woff2"),
         "{{FONT_BODY}}": font64("inter-var.woff2"),
-        "{{FONT_COND}}": font64("archivo-condensed-900.woff2"),
+        "{{FONT_COND}}": font64("anton-400.woff2"),
         "{{FONT_MONO}}": font64("plex-mono-500.woff2"),
         "{{A_AVATAR}}": a_avatar, "{{A_END}}": a_end, "{{B_AVATAR}}": b_avatar, "{{B_END}}": b_end,
         "{{A_WORDMARK}}": svgwrap(round(wa), round(ha), wm_a, "Generation Maine"),
         "{{A_CONTOURS}}": a_contours,
         "{{B_LOGO}}": svgwrap(round(blw) + 20, 200, '<g transform="translate(10 8)">%s</g>' % b_hero_logo, "Generation Maine"),
-        "{{A_SWATCHES}}": swatches(a, ["spruce", "fog", "signal", "moss", "lichen", "ink", "signal_deep"]),
+        "{{A_SWATCHES}}": swatches(a, ["spruce", "fog", "signal", "moss", "dawn", "ink", "signal_deep"]),
         "{{B_SWATCHES}}": swatches(b, ["ink", "newsprint", "blueberry", "highlighter"]),
         "{{A_PAIRS}}": pair_rows(a, PAIRS_A), "{{B_PAIRS}}": pair_rows(b, PAIRS_B),
     }
@@ -155,7 +155,7 @@ TEMPLATE = r"""<!doctype html>
 <style>
 @font-face{font-family:GMDisplay;src:url(data:font/woff2;base64,{{FONT_DISPLAY}}) format("woff2");font-weight:800}
 @font-face{font-family:GMBody;src:url(data:font/woff2;base64,{{FONT_BODY}}) format("woff2");font-weight:400 700}
-@font-face{font-family:GMCond;src:url(data:font/woff2;base64,{{FONT_COND}}) format("woff2");font-weight:900}
+@font-face{font-family:GMCond;src:url(data:font/woff2;base64,{{FONT_COND}}) format("woff2");font-weight:400 900}
 @font-face{font-family:GMMono;src:url(data:font/woff2;base64,{{FONT_MONO}}) format("woff2");font-weight:500}
 :root{--page:#f6f6f3;--text:#161616;--muted:#555}
 *{box-sizing:border-box}
@@ -182,7 +182,7 @@ h3{font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin:24px 0 8p
 .heroA .pat{position:absolute;inset:0;width:100%;height:100%}
 .heroA .in{position:relative}
 .heroA .wm{width:150px;display:block;margin-bottom:26px}
-.heroA .eyebrow{font:600 11px/1 GMBody;letter-spacing:.08em;text-transform:uppercase;color:{{A.lichen}}}
+.heroA .eyebrow{font:600 11px/1 GMBody;letter-spacing:.08em;text-transform:uppercase;color:{{A.dawn}}}
 .heroA .h{font:800 28px/1.02 GMDisplay;margin:8px 0 10px;max-width:14ch}
 .heroA .sub{font-size:13px;max-width:34ch;margin:0 0 14px}
 .btnA{display:inline-block;background:{{A.signal}};color:{{A.ink}};font:600 13px/1 GMBody;padding:10px 14px;border-radius:99px}
@@ -261,7 +261,7 @@ footer{max-width:1320px;margin:0 auto;padding:8px 24px 48px;color:var(--muted);f
   <h3>Logo approach</h3>
   <p>Stacked wordmark in condensed capitals with a highlighter swipe behind "MAINE". The avatar is a "GM" sticker set at a slight angle. It relies on type and a single gesture, so it is easy to copy in Canva.</p>
   <h3>Type</h3>
-  <div class="typeB"><div class="d">Archivo Condensed</div><div class="b">IBM Plex Mono for captions. Both under the SIL Open Font License 1.1.</div></div>
+  <div class="typeB"><div class="d">Anton</div><div class="b">IBM Plex Mono for captions. Both under the SIL Open Font License 1.1.</div></div>
   <h3>Palette</h3>
   <div class="sws">{{B_SWATCHES}}</div>
   <h3>Contrast (calculated)</h3>

@@ -65,7 +65,7 @@ add_action( 'wp_head', 'gm_favicon_fallback', 5 );
  * Theme color for mobile browser chrome.
  */
 function gm_theme_color() {
-	echo '<meta name="theme-color" content="#0E3B2E">' . "\n";
+	echo '<meta name="theme-color" content="#0B4A34">' . "\n";
 }
 add_action( 'wp_head', 'gm_theme_color', 6 );
 

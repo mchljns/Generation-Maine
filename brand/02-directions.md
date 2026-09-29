@@ -25,26 +25,26 @@ Contrast ratios below were calculated with the WCAG 2.1 relative luminance formu
 
 | Name | Hex | Use |
 | --- | --- | --- |
-| Spruce | #0E3B2E | Main brand color, dark backgrounds |
-| Fog | #EEF2EC | Light backgrounds, text on Spruce |
+| Spruce | #0B4A34 | Main brand color, dark backgrounds |
+| Fog | #EDF0F4 | Light backgrounds (a cool, blue-gray white), text on Spruce |
 | Signal | #FF5B24 | The dot, buttons, small highlights |
-| Moss | #2F6B4F | Contour lines, eyebrow text on white |
-| Lichen | #C7DB6E | Accent text on Spruce |
-| Ink | #0A1A14 | Body text, text on Signal |
+| Moss | #34795A | Contour lines, eyebrow text on white |
+| Dawn | #FFC7A6 | Accent text on Spruce |
+| Ink | #121417 | Body text, text on Signal |
 | Signal Deep | #C43D0E | Orange links and small text on light backgrounds |
 
 **Contrast (calculated).**
 
 | Text on background | Ratio | Result |
 | --- | --- | --- |
-| Ink on Fog | 15.84:1 | Passes AA |
-| Spruce on Fog | 11.02:1 | Passes AA |
-| Fog on Spruce | 11.02:1 | Passes AA |
-| Lichen on Spruce | 8.19:1 | Passes AA |
-| Ink on Signal | 5.79:1 | Passes AA (button text) |
-| Signal Deep on Fog | 4.61:1 | Passes AA |
-| Signal on Spruce | 4.02:1 | Large text only (3:1) |
-| Signal on Fog | 2.74:1 | Fails. Use for shapes only, never text |
+| Ink on Fog | 16.14:1 | Passes AA |
+| Spruce on Fog | 8.99:1 | Passes AA |
+| Fog on Spruce | 8.99:1 | Passes AA |
+| Dawn on Spruce | 6.84:1 | Passes AA |
+| Ink on Signal | 5.95:1 | Passes AA (button text) |
+| Signal Deep on Fog | 4.57:1 | Passes AA |
+| Signal on Spruce | 3.32:1 | Large text only (3:1) |
+| Signal on Fog | 2.71:1 | Fails. Use for shapes only, never text |
 
 **Risk.** Green and orange is a friendly outdoors pairing. Without discipline it could drift toward an outfitter or state park look. The contour lines and the record dot have to show up consistently to keep it tied to storytelling.
 
@@ -62,7 +62,7 @@ Contrast ratios below were calculated with the WCAG 2.1 relative luminance formu
 
 | Role | Font | License |
 | --- | --- | --- |
-| Display, logo, headlines | Archivo Condensed Black (width 62, weight 900) | SIL Open Font License 1.1 |
+| Display, logo, headlines | Anton | SIL Open Font License 1.1 |
 | Body and captions | IBM Plex Mono Medium | SIL Open Font License 1.1 |
 
 **Palette.**
@@ -72,7 +72,7 @@ Contrast ratios below were calculated with the WCAG 2.1 relative luminance formu
 | Ink | #141414 | Text, logo |
 | Newsprint | #ECECE6 | Background |
 | Blueberry | #3D2FD1 | Brand color, links, dark sections |
-| Highlighter | #E6F03F | Swipes, buttons behind dark text |
+| Highlighter | #FFD23F | Swipes, buttons behind dark text |
 
 **Contrast (calculated).**
 
@@ -81,13 +81,24 @@ Contrast ratios below were calculated with the WCAG 2.1 relative luminance formu
 | Ink on Newsprint | 15.53:1 | Passes AA |
 | Blueberry on Newsprint | 7.01:1 | Passes AA |
 | White on Blueberry | 8.31:1 | Passes AA |
-| Ink on Highlighter | 14.83:1 | Passes AA |
-| Blueberry on Highlighter | 6.69:1 | Passes AA |
-| Highlighter on Newsprint | 1.05:1 | Fails. Decoration only |
+| Ink on Highlighter | 12.76:1 | Passes AA |
+| Blueberry on Highlighter | 5.76:1 | Passes AA |
+| Highlighter on Newsprint | 1.22:1 | Fails. Decoration only |
 
 **Risk.** Zine styling is common in youth media and may look dated in two years. Next to a policy institute's name it can also read as a costume, which feeds the exact criticism the brand needs to avoid. Monospace body text is harder to read in long passages.
 
 ---
+
+## Separation from Green Falls Co.
+
+Green Falls Co. (greenfalls.co, the agency building this) uses a charcoal green (#202F2B), a lime accent it calls "lichen" (#C7D83F), green-tinted whites (#F8FAF7, #E4E9E6), a teal (#14758C) and Archivo with Libre Franklin. On September 29, 2026 I checked both directions against that site and changed four things so the client's brand does not look like the agency's house style:
+
+- Direction A's accent moved from a lime "Lichen" (#C7DB6E, nearly identical to Green Falls' lichen) to a peach "Dawn" (#FFC7A6).
+- Direction A's background moved from a green-tinted white to a cool, blue-gray Fog (#EDF0F4).
+- Direction A's Spruce moved to a clearer green (#0B4A34), further from Green Falls' charcoal green. Ink moved to a neutral near-black.
+- Direction B's display font moved from Archivo Condensed (Green Falls' display family) to Anton. Its highlighter moved from a lime-yellow (#E6F03F) to a warm yellow (#FFD23F).
+
+Neither direction now uses lime, teal, a green-tinted neutral or any of Green Falls' fonts. Green Falls has no orange, and neither direction shares its logo shapes.
 
 ## The pick: Direction A
 

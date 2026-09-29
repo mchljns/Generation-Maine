@@ -18,12 +18,12 @@ FONTS = os.path.join(ROOT, "brand", "fonts")
 
 # Direction A: "Spruce & Signal" (chosen)
 A = {
-    "spruce": "#0E3B2E",
-    "fog": "#EEF2EC",
+    "spruce": "#0B4A34",
+    "fog": "#EDF0F4",
     "signal": "#FF5B24",
-    "moss": "#2F6B4F",
-    "lichen": "#C7DB6E",
-    "ink": "#0A1A14",
+    "moss": "#34795A",
+    "dawn": "#FFC7A6",
+    "ink": "#121417",
     "signal_deep": "#C43D0E",
     "white": "#FFFFFF",
 }

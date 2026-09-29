@@ -29,6 +29,7 @@ Descriptions below come from general knowledge of each outlet's look. Items mark
 | PragerU | Studio-produced explainers with a host and a strong brand bar. Blue and white. (to verify) | Content made by the people it is about |
 | NowThis | Bold captions over footage, bright color bars, national topics. (to verify) | Maine-specific stories and faces |
 | Other youth policy media (for example Young Voices and similar groups) | Usually op-ed or podcast formats with national framing. (to verify) | Short vertical video from small Maine towns |
+| Green Falls Co. (the agency) | Charcoal green, lime accent, green-tinted whites, Archivo and Libre Franklin. Checked on greenfalls.co on September 29, 2026 | The client brand must not look like the agency's house style. See "Separation from Green Falls Co." in `02-directions.md` |
 
 **The open space:** no one owns short, youth-made video about daily economic life in Maine. The national outlets are not local. The Maine outlets are text-first and written for adults. Generation Maine can own "young Mainers on building a life here."
 

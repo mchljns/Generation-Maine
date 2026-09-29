@@ -33,6 +33,15 @@ I picked it because it stays clear as a 32 px avatar, looks calm enough to let t
 - **Tooling.** wordpress.org is blocked on this machine's network, so Playground ran WordPress 6.8.3 cloned from the official WordPress GitHub mirror. Blueprints were also blocked, so a small QA plugin (`qa/mu-plugins/gm-qa.php`) activated the theme, set pretty permalinks and seeded creators.
 - **Your mid-session link list** (Motion, React Spring, KokonutUI and similar). Most of those are React animation libraries. They would add a build step and front-end JavaScript to a theme the brief says must be fast with no build step, so I did not use them. The contour backgrounds are generated SVG, similar in spirit to Haikei.
 
+## Separation from Green Falls Co.
+
+I checked both directions against greenfalls.co on September 29, 2026. Green Falls uses a charcoal green, a lime accent it calls "lichen" (#C7D83F), green-tinted whites, a teal, and Archivo with Libre Franklin. The first version of Direction A shared a near-identical lime (also named Lichen) and a green-tinted white. Direction B used Archivo. I changed:
+
+- Direction A: Lichen #C7DB6E became Dawn #FFC7A6 (peach), Fog became a cool #EDF0F4, Spruce became #0B4A34, Moss became #34795A and Ink became a neutral #121417.
+- Direction B: Archivo Condensed became Anton (OFL), and the highlighter became a warm yellow #FFD23F.
+
+All text pairs still pass WCAG AA (see `brand/02-directions.md`). Every logo, social file, the directions page, the brand guide, the theme and the zip were rebuilt. A side-by-side is in `qa/screenshots/greenfalls-comparison.png`.
+
 ## Blocked or unfinished
 
 - Nothing in scope is blocked.

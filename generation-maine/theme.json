@@ -12,13 +12,13 @@
 			"custom": false,
 			"customGradient": false,
 			"palette": [
-				{ "slug": "base", "name": "Fog (page background)", "color": "#EEF2EC" },
-				{ "slug": "contrast", "name": "Ink (body text)", "color": "#0A1A14" },
-				{ "slug": "primary", "name": "Spruce (brand dark)", "color": "#0E3B2E" },
-				{ "slug": "secondary", "name": "Moss (lines and pattern)", "color": "#2F6B4F" },
+				{ "slug": "base", "name": "Fog (page background)", "color": "#EDF0F4" },
+				{ "slug": "contrast", "name": "Ink (body text)", "color": "#121417" },
+				{ "slug": "primary", "name": "Spruce (brand dark)", "color": "#0B4A34" },
+				{ "slug": "secondary", "name": "Moss (lines and pattern)", "color": "#34795A" },
 				{ "slug": "accent", "name": "Signal (buttons, the dot)", "color": "#FF5B24" },
 				{ "slug": "accent-text", "name": "Signal Deep (small orange text on light)", "color": "#C43D0E" },
-				{ "slug": "highlight", "name": "Lichen (accent text on dark)", "color": "#C7DB6E" },
+				{ "slug": "highlight", "name": "Dawn (accent text on dark)", "color": "#FFC7A6" },
 				{ "slug": "white", "name": "White", "color": "#FFFFFF" }
 			]
 		},
