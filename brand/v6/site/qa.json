@@ -1,0 +1,15 @@
+{
+  "violations": 0,
+  "details": [
+    {
+      "name": "desktop",
+      "overflow": 0,
+      "res": []
+    },
+    {
+      "name": "mobile",
+      "overflow": 0,
+      "res": []
+    }
+  ]
+}
