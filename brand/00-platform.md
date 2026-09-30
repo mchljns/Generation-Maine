@@ -22,7 +22,7 @@ We made seven rounds of marks from seven different ideas. That happens when the 
 
 **Personality.** Local, straightforward, curious, warm. Never preachy, partisan, glossy, nostalgic or gloomy.
 
-**Voice.** Plain words, one idea per sentence, stories instead of positions. No hype. The full rules are in the project README.
+**Voice.** Plain words, one idea per sentence, stories instead of positions. Short headlines. No hype, no em dashes, no italics, and no invented facts.
 
 ## Where the identity actually lives
 
