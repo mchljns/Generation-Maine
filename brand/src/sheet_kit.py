@@ -31,3 +31,31 @@ y = 120 + a.height + b.height
 sheet.paste(wa, (40, y)); sheet.paste(wb, (60 + wa.width, y))
 sheet.save(os.path.join(ROOT, "brand", "kit", "signature-before-after.png"))
 print("sheet", sheet.size)
+
+
+# Signature round two (s-) against Offset (o-), row by row, with labels.
+from PIL import ImageFont
+
+F = ImageFont.truetype(os.path.join(ROOT, "brand", "fonts", "Inter-SemiBold.ttf"), 30)
+FS = ImageFont.truetype(os.path.join(ROOT, "brand", "fonts", "Inter-Regular.ttf"), 22)
+LABELS = ["Video, first seconds", "Lower third", "End card", "Profile grid", "Substack", "Collab post"]
+rs, ro = row("s-"), row("o-")
+ws, wo = tile("s-web", 560), tile("o-web", 560)
+gs, go = tile("s-grid", 900), tile("o-grid", 900)
+L = 220
+W = L + max(rs.width, ws.width + wo.width + 20, gs.width + go.width + 20) + 40
+H = 40 + 40 + rs.height + 30 + ro.height + 70 + ws.height + 70 + gs.height + 40
+cmp = Image.new("RGB", (W, H), "#E9E5DA")
+d = ImageDraw.Draw(cmp)
+x = L
+for lab, t in zip(LABELS, [tile("s-" + i, 640) for i in IDS]):
+    d.text((x, 40), lab, font=FS, fill="#5E6A63"); x += t.width + 20
+y = 80
+d.text((40, y + 8), "Signature", font=F, fill="#104836"); cmp.paste(rs, (L, y)); y += rs.height + 30
+d.text((40, y + 8), "Offset", font=F, fill="#104836"); cmp.paste(ro, (L, y)); y += ro.height + 70
+d.text((L, y - 34), "Website hero: Signature, then Offset", font=FS, fill="#5E6A63")
+cmp.paste(ws, (L, y)); cmp.paste(wo, (L + ws.width + 20, y)); y += ws.height + 70
+d.text((L, y - 34), "Profile grid, larger: Signature, then Offset", font=FS, fill="#5E6A63")
+cmp.paste(gs, (L, y)); cmp.paste(go, (L + gs.width + 20, y))
+cmp.save(os.path.join(ROOT, "brand", "kit", "signature-vs-offset.png"))
+print("compare", cmp.size)
