@@ -12,6 +12,7 @@ import os
 from gmlib import ROOT, write
 from build_v4 import wordmark_one_line, wordmark_stacked, g_icon, placed, rect, text, svg, f
 from build_v6 import C, ratio
+import build_kit_d
 
 OUT = "brand/kit"
 MPI = "An initiative of Maine Policy Institute"
@@ -675,6 +676,7 @@ PAGE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name
   </table>
 </div></section>
 
+{{DSECTION}}
 <section><div class="w">
   <p class="k">New concept, in progress</p>
   <h2>Concept C: Offset</h2>
@@ -740,6 +742,8 @@ def build_kit(m):
     q, q_web = quiet_mockups(m)
     sg, s_web = sig_mockups(m)
     oc, o_web = offset_mockups(m)
+    dm = build_kit_d.build_logos()
+    dc, d_web = build_kit_d.mockups(dm, {"inl": inl, "artboard": artboard, "ui_overlay": ui_overlay, "MPI": MPI, "TOWNS": TOWNS, "TOPICS": TOPICS})
     css = CSS
     for k, v in {"{{F800}}": font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2"),
                  "{{F700}}": font64("brand/v6/fonts-web/bricolage-grotesque-700.woff2"),
@@ -748,12 +752,12 @@ def build_kit(m):
         css = css.replace(k, v)
     for k, v in C.items():
         css = css.replace("{{%s}}" % k, v)
-    html = PAGE.replace("{{CSS}}", css)
+    html = PAGE.replace("{{DSECTION}}", build_kit_d.SECTION).replace("{{CSS}}", css + build_kit_d.css())
     rep = {"{{WM}}": m["wordmark"], "{{WM_REV}}": m["wordmark-reversed"], "{{ST}}": m["stacked"], "{{ICON_BARE}}": inl(m["icon-bare"]),
            "{{ICON_L}}": m["icon-light"], "{{ICON_M}}": m["icon-marigold"], "{{ENDORSED_REV}}": m["endorsed-reversed"],
            "{{AVATARS}}": avatars(m), "{{OVERLAYS}}": overlays(m), "{{A}}": a, "{{A_WEB}}": a_web, "{{B}}": b, "{{B_WEB}}": b_web, "{{Q}}": "".join(q), "{{Q_WEB}}": q_web,
            "{{PAIRS}}": before_after(q, sg), "{{S_WEB_BEFORE}}": q_web.replace("q-web", "q-web-b").replace("<figcaption>", "<figcaption>Before · "),
-           "{{S_WEB}}": s_web.replace("<figcaption>", "<figcaption>After · "), "{{SOVER}}": sig_overlays(m), "{{O}}": "".join(oc), "{{O_WEB}}": o_web, "{{O_SCORE}}": O_SCORE}
+           "{{S_WEB}}": s_web.replace("<figcaption>", "<figcaption>After · "), "{{SOVER}}": sig_overlays(m), "{{O}}": "".join(oc), "{{O_WEB}}": o_web, "{{O_SCORE}}": O_SCORE, "{{D}}": "".join(dc), "{{D_WEB}}": d_web}
     for k, v in rep.items():
         html = html.replace(k, v)
     write(OUT + "/kit.html", html)

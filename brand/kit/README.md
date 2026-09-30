@@ -6,7 +6,13 @@ Recommended direction: **Signature, round two** (mockups starting with `s-`). Ro
 
 Sample lines and sample towns in the mockups are for layout only. Real lines and towns come from the creators.
 
-## Concept C: Offset (in progress)
+## Concept D: Bark & Sky (second direction for the client)
+
+Mockups start with `d-`. Logo files are in `assets/logo-d/`. Contact sheet: `concept-d-sheet.png`. Side by side with Signature: `signature-vs-bark-sky.png`.
+
+A fully separate direction. Sky #CFE3F0, Bark #2B211C, Paper #FFFFFF, Mist #EEF4F8 and Clay #6B5A4E. Fraunces Regular (OFL) for the lowercase wordmark and centered titles, and Instrument Sans (OFL) for everything else. The avatar is a lowercase gm. It shares only the name, the audience and the Maine Policy Institute line with Signature.
+
+## Concept C: Offset (a Signature variant, set aside)
 
 Mockups start with `o-`. Contact sheet: `offset-sheet.png`. Side by side with Signature: `signature-vs-offset.png`. Every frame breaks at two thirds of its height. Above the line sits footage or a field in the order Spruce, Moss, Pine, with Marigold every ninth post. Below it sits a Birch band with the creator's name and town. In a profile grid the bands line up into one stripe. It keeps the master brand and every Signature type rule.
 
