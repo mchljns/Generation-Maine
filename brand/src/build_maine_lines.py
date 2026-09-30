@@ -276,6 +276,91 @@ def mark_room2(x, y, s, fg, mark, small=False):
     return out
 
 
+# ------------------------------------------------------------------ gold in the mural
+def mark_gap_gold(x, y, s, fg, mark, small=False, tol=0.08):
+    """The field of lines that stop at the shape. Where a line meets the coast, its last stretch is gold."""
+    n = 9 if small else 19
+    w = s * (0.045 if small else 0.024)
+    pad = s * 0.05
+    pts = outline(x + s * 0.24, y + s * 0.08, s * 0.52, s * 0.84, tol)
+    clear = s * (0.045 if small else 0.03)
+    glow = s * (0.11 if small else 0.08)
+    out = ""
+    steps = 160
+    for i in range(n):
+        t = i / (n - 1)
+        y0 = y + pad + (s - 2 * pad) * t
+        runs, run = [], []
+        for k in range(steps + 1):
+            px = x + pad + (s - 2 * pad) * k / steps
+            hits = vertical_hits(pts, px)
+            blocked = inside_interval(hits, y0) is not None or any(abs(h - y0) < clear for h in hits)
+            if not blocked:
+                for ddx in (-clear, clear):
+                    if inside_interval(vertical_hits(pts, px + ddx), y0) is not None:
+                        blocked = True
+            if blocked:
+                if run: runs.append(run)
+                run = []
+            else:
+                run.append((px, y0))
+        if run: runs.append(run)
+        for r in runs:
+            x0, x1 = r[0][0], r[-1][0]
+            touches_left = x0 > x + pad + s * 0.01     # the run starts at the coast
+            touches_right = x1 < x + s - pad - s * 0.01
+            if x1 - x0 < glow * 1.2 or not (touches_left or touches_right):
+                out += polyline(r, fg, w); continue
+            a, b = x0, x1
+            if touches_left:
+                out += polyline([(a, y0), (a + glow, y0)], mark, w); a += glow
+            if touches_right:
+                out += polyline([(b - glow, y0), (b, y0)], mark, w); b -= glow
+            if b > a:
+                out += polyline([(a, y0), (b, y0)], fg, w)
+    return out
+
+
+def mark_room_gold(x, y, s, fg, mark, small=False, tol=0.08):
+    """Lines flowing around the shape, gold where they bend."""
+    n = 9 if small else 21
+    w = s * (0.04 if small else 0.02)
+    pad = s * 0.05
+    pts = outline(x + s * 0.24, y + s * 0.1, s * 0.52, s * 0.8, tol)
+    clear = s * (0.05 if small else 0.035)
+    out = ""
+    steps = 120
+    for i in range(n):
+        t = i / (n - 1)
+        y0 = y + pad + (s - 2 * pad) * t
+        xs = [x + pad + (s - 2 * pad) * k / steps for k in range(steps + 1)]
+        ys = []
+        for px in xs:
+            hits = vertical_hits(pts, px)
+            iv = inside_interval(hits, y0)
+            py = y0
+            if iv:
+                top, bot = iv
+                py = (top - clear) if (y0 - top) < (bot - y0) else (bot + clear)
+            else:
+                for h in hits:
+                    if abs(h - y0) < clear:
+                        py = h - clear if y0 < h else h + clear
+            ys.append(py)
+        ys = smooth(ys, 5 if small else 7)
+        P = list(zip(xs, ys))
+        run, gold = [], None
+        for (px, py) in P:
+            g = abs(py - y0) > s * 0.012
+            if gold is None or g == gold:
+                run.append((px, py))
+            else:
+                out += polyline(run, mark if gold else fg, w); run = [run[-1], (px, py)]
+            gold = g
+        out += polyline(run, mark if gold else fg, w)
+    return out
+
+
 def build():
     out = {}
     cases = [
@@ -286,6 +371,8 @@ def build():
         ("gap", mark_gap),
         ("grain2", mark_grain2),
         ("room2", mark_room2),
+        ("gap-gold", mark_gap_gold),
+        ("room-gold", mark_room_gold),
     ]
     for key, fn in cases:
         m = {}

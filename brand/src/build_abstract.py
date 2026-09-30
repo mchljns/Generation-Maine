@@ -269,12 +269,110 @@ def mark_bend5(x, y, s, fg, mark, small=False):
     return bend_lines(x, y, s, fg, mark, 21, s * 0.016, s * 0.022, 1.7, dot_k=0.1)
 
 
+# ------------------------------------------------------------------ gold in the lines, not a dot
+def mix(a, b, t):
+    a = tuple(int(a[i:i + 2], 16) for i in (1, 3, 5)); b = tuple(int(b[i:i + 2], 16) for i in (1, 3, 5))
+    return "#%02X%02X%02X" % tuple(round(a[i] + (b[i] - a[i]) * t) for i in range(3))
+
+
+def bend_field(x, y, s, n, w_lo, w_hi, clear, anchor=ANCHOR, pad_k=0.06, steps=72):
+    """Returns, for each line, its points and its per-point displacement as a fraction of clear."""
+    cx, cy = x + anchor[0] * s, y + anchor[1] * s
+    pad = s * pad_k
+    lines = []
+    for i in range(n):
+        t = i / (n - 1)
+        y0 = y + pad + (s - 2 * pad) * t
+        w = w_lo + (w_hi - w_lo) * t
+        dy0 = y0 - cy
+        ady = abs(dy0)
+        sign = 1 if dy0 >= 0 else -1
+        if ady < clear:
+            amp, sig = clear - ady, clear * 0.75
+        else:
+            amp, sig = 0.42 * clear * math.exp(-((ady - clear) / (0.55 * clear)) ** 2), clear * 0.95
+        pts, offs = [], []
+        for k in range(steps + 1):
+            px = x + pad + (s - 2 * pad) * k / steps
+            dx = px - cx
+            off = amp * math.exp(-(dx / sig) ** 2)
+            if ady < clear and abs(dx) < clear:
+                off = max(off, math.sqrt(clear * clear - dx * dx) - ady)
+            pts.append((px, y0 + sign * off)); offs.append(off / clear)
+        lines.append((pts, offs, w, amp / clear))
+    return lines, (cx, cy)
+
+
+def segments(pts, offs, w, color_of):
+    """Draw a line as short segments, each colored by its displacement."""
+    out = ""
+    for i in range(len(pts) - 1):
+        c = color_of((offs[i] + offs[i + 1]) / 2)
+        out += polyline([pts[i], pts[i + 1]], c, w)
+    return out
+
+
+def mark_gold_soft(x, y, s, fg, mark, small=False):
+    """Lines that turn gold where they bend. The room stays empty."""
+    n, wl, wh = (6, s * 0.03, s * 0.075) if small else (15, s * 0.012, s * 0.05)
+    clear = s * (0.19 if small else 0.15)
+    lines, _ = bend_field(x, y, s, n, wl, wh, clear)
+    out = ""
+    for pts, offs, w, a in lines:
+        if a < 0.04:
+            out += polyline(pts, fg, w)
+        else:
+            out += segments(pts, offs, w, lambda o: mix(fg, mark, min(1, o * 1.6) ** 0.8))
+    return out
+
+
+def mark_gold_flat(x, y, s, fg, mark, small=False):
+    """The same, in two flat colors. The bent part of each line is gold, the rest is Spruce."""
+    n, wl, wh = (6, s * 0.03, s * 0.075) if small else (15, s * 0.012, s * 0.05)
+    clear = s * (0.19 if small else 0.15)
+    lines, _ = bend_field(x, y, s, n, wl, wh, clear)
+    out = ""
+    for pts, offs, w, a in lines:
+        if a < 0.08:
+            out += polyline(pts, fg, w); continue
+        run, gold = [], None
+        for p, o in zip(pts, offs):
+            g = o > 0.12
+            if gold is None or g == gold:
+                run.append(p)
+            else:
+                out += polyline(run, mark if gold else fg, w); run = [run[-1], p]
+            gold = g
+        out += polyline(run, mark if gold else fg, w)
+    return out
+
+
+def mark_gold_line(x, y, s, fg, mark, small=False):
+    """One line of the field is gold: the one that bends the most."""
+    n, wl, wh = (6, s * 0.03, s * 0.075) if small else (15, s * 0.012, s * 0.05)
+    clear = s * (0.19 if small else 0.15)
+    lines, _ = bend_field(x, y, s, n, wl, wh, clear)
+    top = max(range(len(lines)), key=lambda i: lines[i][3])
+    return "".join(polyline(pts, mark if i == top else fg, w) for i, (pts, offs, w, a) in enumerate(lines))
+
+
+def mark_gold_dash(x, y, s, fg, mark, small=False):
+    """The lines make room for a short gold line: one voice among the others."""
+    n, wl, wh = (6, s * 0.03, s * 0.075) if small else (15, s * 0.012, s * 0.05)
+    clear = s * (0.17 if small else 0.14)
+    lines, (cx, cy) = bend_field(x, y, s, n, wl, wh, clear)
+    out = "".join(polyline(pts, fg, w) for pts, offs, w, a in lines)
+    dw = s * (0.07 if small else 0.045)
+    out += polyline([(cx - clear * 0.62, cy), (cx + clear * 0.62, cy)], mark, dw)
+    return out
+
+
 CANDIDATES = [
-    ("bend2", "Bend, even", mark_bend2, "Thirteen lines of one weight. The dot low left. Smooth shoulders."),
-    ("bend3", "Bend, weighted", mark_bend3, "Fifteen lines that thicken toward the bottom, like type anchored low."),
-    ("bend4", "Bend, disc", mark_bend4, "The same field cut to a disc, so the mark has a round silhouette."),
-    ("bend5", "Bend, fine", mark_bend5, "Twenty-one fine lines and a larger dot. The most intricate cut."),
-    ("threads", "Threads", mark_threads, "Vertical lines, one interrupted by the dot. Kept for comparison."),
+    ("gold-soft", "Gold where it bends, soft", mark_gold_soft, "Lines turn gold where they bend. The room stays empty for the person."),
+    ("gold-flat", "Gold where it bends, flat", mark_gold_flat, "The same in two flat colors. The bent part is gold, the straight part is Spruce."),
+    ("gold-line", "One gold line", mark_gold_line, "One line of the field is gold, the one that bends the most."),
+    ("gold-dash", "Gold dash", mark_gold_dash, "The lines make room for a short gold line, one voice among the others."),
+    ("bend3", "Bend with the dot", mark_bend3, "For comparison."),
 ]
 
 
