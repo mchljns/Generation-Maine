@@ -6,11 +6,11 @@ Contrast ratios below were calculated with the WCAG 2.1 relative luminance formu
 
 ---
 
-## Direction A: Spruce & Signal (recommended)
+## Direction A: Spruce & Lupine (recommended)
 
-**Concept.** Maine's working landscape, drawn as clean contour lines like a trail map, with one bright orange dot that reads as a camera's record light. It feels local and current without a single postcard cliché.
+**Concept.** Maine's working landscape, drawn as clean contour lines like a trail map, with one bright pink dot that reads as a camera's record light. It feels local and current without a single postcard cliché.
 
-**Moodboard (words).** Trail map contour lines. Spruce woods at dusk. The orange of a hunter's cap, a buoy line or a trail blaze. Fog over a harbor town at 7 a.m. Phone footage shot in a kitchen, a garage workshop or a first apartment. Clean sans-serif type on a flat green field.
+**Moodboard (words).** Trail map contour lines. Spruce woods at dusk. The pink of roadside lupines in June. Fog over a harbor town at 7 a.m. Phone footage shot in a kitchen, a garage workshop or a first apartment. Clean sans-serif type on a flat green field.
 
 **Logo approach.** A wordmark plus a small symbol. The full wordmark matters because the project is new and people need to learn the name. The dot on the i in "Maine" is replaced with an orange circle that works as a record light. The same dot sits beside a bold G to make the icon for avatars and favicons, where the full name would be too small to read.
 
@@ -27,11 +27,11 @@ Contrast ratios below were calculated with the WCAG 2.1 relative luminance formu
 | --- | --- | --- |
 | Spruce | #0B4A34 | Main brand color, dark backgrounds |
 | Fog | #EDF0F4 | Light backgrounds (a cool, blue-gray white), text on Spruce |
-| Signal | #FF5B24 | The dot, buttons, small highlights |
+| Lupine | #F0509A | The dot, buttons, small highlights |
 | Moss | #34795A | Contour lines, eyebrow text on white |
-| Dawn | #FFC7A6 | Accent text on Spruce |
-| Ink | #121417 | Body text, text on Signal |
-| Signal Deep | #C43D0E | Orange links and small text on light backgrounds |
+| Blossom | #FFC2DD | Accent text on Spruce |
+| Ink | #121417 | Body text, text on Lupine |
+| Lupine Deep | #AD1F62 | Pink links and small text on light backgrounds |
 
 **Contrast (calculated).**
 
@@ -40,13 +40,13 @@ Contrast ratios below were calculated with the WCAG 2.1 relative luminance formu
 | Ink on Fog | 16.14:1 | Passes AA |
 | Spruce on Fog | 8.99:1 | Passes AA |
 | Fog on Spruce | 8.99:1 | Passes AA |
-| Dawn on Spruce | 6.84:1 | Passes AA |
-| Ink on Signal | 5.95:1 | Passes AA (button text) |
-| Signal Deep on Fog | 4.57:1 | Passes AA |
-| Signal on Spruce | 3.32:1 | Large text only (3:1) |
-| Signal on Fog | 2.71:1 | Fails. Use for shapes only, never text |
+| Blossom on Spruce | 6.86:1 | Passes AA |
+| Ink on Lupine | 5.55:1 | Passes AA (button text) |
+| Lupine Deep on Fog | 5.83:1 | Passes AA |
+| Lupine on Spruce | 3.09:1 | Large text only (3:1) |
+| Lupine on Fog | 2.91:1 | Fails. Use for shapes only, never text |
 
-**Risk.** Green and orange is a friendly outdoors pairing. Without discipline it could drift toward an outfitter or state park look. The contour lines and the record dot have to show up consistently to keep it tied to storytelling.
+**Risk.** Green and pink is an unusual pairing for a Maine brand, which keeps it clear of the orange-and-ridgeline look breweries and outfitters use. Without discipline it could read as floral. Earlier this risk note warned the orange version could drift toward an outfitter or state park look. The contour lines and the record dot have to show up consistently to keep it tied to storytelling.
 
 ---
 
@@ -98,15 +98,27 @@ Green Falls Co. (greenfalls.co, the agency building this) uses a charcoal green 
 - Direction A's Spruce moved to a clearer green (#0B4A34), further from Green Falls' charcoal green. Ink moved to a neutral near-black.
 - Direction B's display font moved from Archivo Condensed (Green Falls' display family) to Anton. Its highlighter moved from a lime-yellow (#E6F03F) to a warm yellow (#FFD23F).
 
-Neither direction now uses lime, teal, a green-tinted neutral or any of Green Falls' fonts. Green Falls has no orange, and neither direction shares its logo shapes.
+Neither direction now uses lime, teal, a green-tinted neutral or any of Green Falls' fonts. Green Falls has no pink (the orange accent was later replaced for Baxter reasons), and neither direction shares its logo shapes.
+
+## Separation from Baxter Brewing Co.
+
+Baxter Brewing (Lewiston) was checked against its live site on September 30, 2026. Its identity uses an orange-red (#F04F2C), a lockup of an orange sun above the Katahdin ridgeline, an orange Maine silhouette printed on every can, and Knockout and DDC Hardware type. Anchour built that brand, so a resemblance would be noticed.
+
+The first version of Direction A used a near-identical orange (#FF5B24, delta E 9.2 from Baxter's) and, in identity v2, an orange disc with Maine cut out of it. Changes:
+
+- Every orange in Direction A is now Lupine pink: Lupine #F0509A, Lupine Deep #AD1F62 for text on light, Blossom #FFC2DD for accent text on dark (replacing the peach Dawn). The nearest neighbor color is now more than delta E 45 away.
+- The "Sunrise State" alternate (the silhouette with a sun beside it) was dropped because it echoes Baxter's sun-over-ridgeline lockup.
+- The sample creator stamp for Lewiston, Baxter's hometown, was replaced with Portland.
+
+What still overlaps: both brands use a Maine silhouette. Baxter's is a small orange icon on cans; ours is a transparent cutout in a pink disc. State outlines are common, but the silhouette should never appear in orange or on its own without the disc.
 
 ## The pick: Direction A
 
-I built everything on Spruce & Signal for four reasons.
+I built everything on Spruce & Lupine for four reasons.
 
-1. **It works at avatar size.** The G and the orange dot stay clear at 32 px. Direction B's angled sticker loses its highlighter edge at small sizes.
+1. **It works at avatar size.** The G and the pink dot stay clear at 32 px. Direction B's angled sticker loses its highlighter edge at small sizes.
 2. **It supports the credibility stance.** Direction A looks calm and confident, so the creators' faces can lead. Direction B's handmade style could look like an adult organization imitating youth culture.
-3. **It is clearly different from 76crew.com.** There is no navy, no brick red and no stars. The only warm color is one orange dot.
-4. **It is easy for a small team.** One dark color, one light color and one orange dot cover most social posts. The contour pattern is a ready-made PNG.
+3. **It is clearly different from 76crew.com.** There is no navy, no brick red and no stars. The only warm color is one pinge dot.
+4. **It is easy for a small team.** One dark color, one light color and one pink dot cover most social posts. The contour pattern is a ready-made PNG.
 
 **Switching later.** Direction B is packaged as a WordPress style variation. In the Site Editor, open Styles, browse styles and choose "Paper Route (alternate direction)". Colors, fonts, heading style and button shape all change with one click. The same tokens live in `brand/alt-direction.json`. The logo files and social kit would still need to be rebuilt in Direction B (the website wordmark keeps Direction A's letterforms until then).

@@ -16,15 +16,15 @@ from fontTools.ttLib import TTFont
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 FONTS = os.path.join(ROOT, "brand", "fonts")
 
-# Direction A: "Spruce & Signal" (chosen)
+# Direction A: "Spruce & Lupine" (chosen)
 A = {
     "spruce": "#0B4A34",
     "fog": "#EDF0F4",
-    "signal": "#FF5B24",
+    "lupine": "#F0509A",
     "moss": "#34795A",
-    "dawn": "#FFC7A6",
+    "blossom": "#FFC2DD",
     "ink": "#121417",
-    "signal_deep": "#C43D0E",
+    "lupine_deep": "#AD1F62",
     "white": "#FFFFFF",
 }
 

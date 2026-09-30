@@ -43,9 +43,9 @@ def icon_svg(name):
 
 
 def misuse():
-    body, w, h = lockup_horizontal(C["spruce"], C["signal"], 100)
+    body, w, h = lockup_horizontal(C["spruce"], C["lupine"], 100)
     blue, _, _ = lockup_horizontal(C["spruce"], "#2B59C3", 100)
-    fogfg, _, _ = lockup_horizontal(C["moss"], C["signal"], 100)
+    fogfg, _, _ = lockup_horizontal(C["moss"], C["lupine"], 100)
     W, H = round(w), round(h)
     cases = [
         ("Do not stretch or squash it", '<g transform="scale(1 1.6) translate(0 -14)">%s</g>' % body, C["fog"]),
@@ -71,8 +71,8 @@ def build():
     pat_demo = contour_group(contours(420, 160, 14, 20, 30, 7), C["moss"], 2, 0.8)
     pat_small = contour_group(contours(200, 110, 8, 14, 24, 5), C["moss"], 2, 0.9)
 
-    pairs = [("ink", "fog"), ("spruce", "fog"), ("fog", "spruce"), ("dawn", "spruce"), ("ink", "signal"),
-             ("signal_deep", "fog"), ("moss", "white"), ("signal", "spruce"), ("signal", "fog")]
+    pairs = [("ink", "fog"), ("spruce", "fog"), ("fog", "spruce"), ("blossom", "spruce"), ("ink", "lupine"),
+             ("lupine_deep", "fog"), ("moss", "white"), ("lupine", "spruce"), ("lupine", "fog")]
     rows = ""
     for fg, bg in pairs:
         r = ratio(C[fg], C[bg])
@@ -85,16 +85,16 @@ def build():
     html = TEMPLATE
     rep = {
         "{{F1}}": f64("bricolage-grotesque-800.woff2"), "{{F2}}": f64("inter-var.woff2"),
-        "{{COVER_LOGO}}": logo("stacked", C["fog"], C["signal"]), "{{PAT_COVER}}": pat_cover,
+        "{{COVER_LOGO}}": logo("stacked", C["fog"], C["lupine"]), "{{PAT_COVER}}": pat_cover,
         "{{PAT_DEMO}}": pat_demo, "{{PAT_SMALL}}": pat_small,
-        "{{P_COLOR}}": logo("primary", C["spruce"], C["signal"]), "{{P_REV}}": logo("primary", C["fog"], C["signal"]),
+        "{{P_COLOR}}": logo("primary", C["spruce"], C["lupine"]), "{{P_REV}}": logo("primary", C["fog"], C["lupine"]),
         "{{P_BLACK}}": logo("primary", "#000", "#000"), "{{P_WHITE}}": logo("primary", "#fff", "#fff"),
-        "{{S_COLOR}}": logo("stacked", C["spruce"], C["signal"]), "{{S_REV}}": logo("stacked", C["fog"], C["signal"]),
+        "{{S_COLOR}}": logo("stacked", C["spruce"], C["lupine"]), "{{S_REV}}": logo("stacked", C["fog"], C["lupine"]),
         "{{I_COLOR}}": svg(512, 512, '<rect width="512" height="512" rx="96" fill="%s"/>' % C["spruce"]
-                           + icon_mark(256, 256, 400, C["fog"], C["signal"]), "Icon"),
+                           + icon_mark(256, 256, 400, C["fog"], C["lupine"]), "Icon"),
         "{{I_BLACK}}": logo("icon", "#000", "#000"),
         "{{I_CIRCLE}}": svg(512, 512, '<circle cx="256" cy="256" r="256" fill="%s"/>' % C["spruce"]
-                            + icon_mark(256, 256, 360, C["fog"], C["signal"]), "Icon in a circle crop"),
+                            + icon_mark(256, 256, 360, C["fog"], C["lupine"]), "Icon in a circle crop"),
         "{{MISUSE}}": misuse(), "{{PAIRS}}": rows, "{{ICONS}}": icons,
     }
     for k, v in rep.items():
@@ -122,9 +122,9 @@ body{font:15px/1.55 GMB,system-ui,sans-serif;color:{{ink}}}
 @media print{html,body{background:none}.page{margin:0;box-shadow:none}}
 .page.dark{background:{{spruce}};color:{{fog}}}
 .num{position:absolute;right:.7in;bottom:.35in;font-size:11px;color:{{moss}}}
-.dark .num{color:{{dawn}}}
+.dark .num{color:{{blossom}}}
 .kicker{font:600 12px/1 GMB;letter-spacing:.1em;text-transform:uppercase;color:{{moss}};margin:0 0 10px}
-.dark .kicker{color:{{dawn}}}
+.dark .kicker{color:{{blossom}}}
 h1,h2,h3{font-family:GMD;font-weight:800;letter-spacing:-.012em;margin:0}
 h2{font-size:40px;line-height:1.05;margin-bottom:18px}
 h3{font-size:19px;margin:0 0 6px}
@@ -147,10 +147,10 @@ th{font-weight:700}
 .lg .tile.sq svg{width:96px}
 .cap{font-size:12px;color:{{moss}};margin-top:6px}
 .cs{position:relative;background:#fff;border-radius:14px;padding:40px;display:inline-block}
-.cs .box{position:relative;padding:28px;outline:2px dashed {{signal}}}
+.cs .box{position:relative;padding:28px;outline:2px dashed {{lupine}}}
 .cs svg{width:420px;display:block}
-.cs .lbl{position:absolute;font-size:11px;color:{{signal_deep}};font-weight:700}
-.dotx{display:inline-block;width:14px;height:14px;border-radius:50%;background:{{signal}};vertical-align:-2px}
+.cs .lbl{position:absolute;font-size:11px;color:{{lupine_deep}};font-weight:700}
+.dotx{display:inline-block;width:14px;height:14px;border-radius:50%;background:{{lupine}};vertical-align:-2px}
 .mins{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
 .mins .card svg{display:block;margin:8px 0}
 .misgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -226,7 +226,7 @@ code{font-size:12px;background:rgba(10,26,20,.07);padding:1px 5px;border-radius:
 <section class="page">
   <p class="kicker">02 · Logo suite</p>
   <h2>One wordmark, one dot</h2>
-  <p style="max-width:70ch">The dot on the i in "Maine" is a record light. It is always round, always Signal orange in the full-color logo and never moves. The icon pairs a bold G with the same dot for avatars and favicons.</p>
+  <p style="max-width:70ch">The dot on the i in "Maine" is a record light. It is always round, always Lupine pink in the full-color logo and never moves. The icon pairs a bold G with the same dot for avatars and favicons.</p>
   <div class="lg" style="margin-top:12px">
     <div><div class="tile" style="background:#fff">{{P_COLOR}}</div><div class="cap">Primary, full color</div></div>
     <div><div class="tile" style="background:{{spruce}}">{{P_REV}}</div><div class="cap">Primary, reversed on Spruce</div></div>
@@ -248,7 +248,7 @@ code{font-size:12px;background:rgba(10,26,20,.07);padding:1px 5px;border-radius:
     <div>
       <div class="cs"><div class="box">{{P_COLOR}}</div>
         <span class="lbl" style="left:40px;top:14px">2 dots</span><span class="lbl" style="right:12px;top:52px">2 dots</span></div>
-      <p style="margin-top:16px"><b>Clear space rule:</b> keep empty space on every side equal to two diameters of the orange dot <span class="dotx"></span>. No text, edges or other logos inside that space. The same rule applies to the stacked logo and the icon.</p>
+      <p style="margin-top:16px"><b>Clear space rule:</b> keep empty space on every side equal to two diameters of the pink dot <span class="dotx"></span>. No text, edges or other logos inside that space. The same rule applies to the stacked logo and the icon.</p>
     </div>
     <div>
       <h3>Minimum sizes</h3>
@@ -274,22 +274,22 @@ code{font-size:12px;background:rgba(10,26,20,.07);padding:1px 5px;border-radius:
 
 <section class="page">
   <p class="kicker">05 · Color</p>
-  <h2>Mostly green, one orange dot</h2>
+  <h2>Mostly green, one pink dot</h2>
   <div class="cols">
     <div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
         <div class="sw" style="background:{{spruce}};color:{{fog}}"><b>Spruce</b>{{spruce}}</div>
         <div class="sw" style="background:{{fog}};color:{{ink}};border:1px solid #ccd"><b>Fog</b>{{fog}}</div>
-        <div class="sw" style="background:{{signal}};color:{{ink}}"><b>Signal</b>{{signal}}</div>
+        <div class="sw" style="background:{{lupine}};color:{{ink}}"><b>Lupine</b>{{lupine}}</div>
         <div class="sw" style="background:{{ink}};color:{{fog}}"><b>Ink</b>{{ink}}</div>
         <div class="sw" style="background:{{moss}};color:#fff"><b>Moss</b>{{moss}}</div>
-        <div class="sw" style="background:{{dawn}};color:{{ink}}"><b>Dawn</b>{{dawn}}</div>
-        <div class="sw" style="background:{{signal_deep}};color:#fff"><b>Signal Deep</b>{{signal_deep}}</div>
+        <div class="sw" style="background:{{blossom}};color:{{ink}}"><b>Blossom</b>{{blossom}}</div>
+        <div class="sw" style="background:{{lupine_deep}};color:#fff"><b>Lupine Deep</b>{{lupine_deep}}</div>
         <div class="sw" style="background:#fff;color:{{ink}};border:1px solid #ccd"><b>White</b>#FFFFFF</div>
       </div>
       <h3 style="margin-top:18px">Usage ratio</h3>
-      <div class="ratio"><span style="flex:50;background:{{spruce}}"></span><span style="flex:30;background:#fff"></span><span style="flex:10;background:{{ink}}"></span><span style="flex:7;background:{{moss}}"></span><span style="flex:3;background:{{signal}}"></span></div>
-      <p class="cap">Spruce 50 · Fog and White 30 · Ink 10 · Moss and Dawn 7 · Signal 3. Signal is a spark, not a fill.</p>
+      <div class="ratio"><span style="flex:50;background:{{spruce}}"></span><span style="flex:30;background:#fff"></span><span style="flex:10;background:{{ink}}"></span><span style="flex:7;background:{{moss}}"></span><span style="flex:3;background:{{lupine}}"></span></div>
+      <p class="cap">Spruce 50 · Fog and White 30 · Ink 10 · Moss and Blossom 7 · Lupine 3. Lupine is a spark, not a fill.</p>
     </div>
     <div>
       <h3>Text pairs (WCAG 2.1, calculated)</h3>
@@ -333,7 +333,7 @@ code{font-size:12px;background:rgba(10,26,20,.07);padding:1px 5px;border-radius:
     </div>
     <div class="card">
       <h3>The dot</h3>
-      <p style="font-size:13px"><span class="dotx"></span> One Signal dot per composition. Use it as a period at the end of a headline, a record light, or a bullet. Never more than one large dot on a page or screen.</p>
+      <p style="font-size:13px"><span class="dotx"></span> One Lupine dot per composition. Use it as a period at the end of a headline, a record light, or a bullet. Never more than one large dot on a page or screen.</p>
       <h3 style="margin-top:12px">Icons</h3>
       <div class="icons">{{ICONS}}</div>
       <p class="cap">24 px grid, 2 px stroke, round caps and joins, no fills.</p>
@@ -426,7 +426,7 @@ code{font-size:12px;background:rgba(10,26,20,.07);padding:1px 5px;border-radius:
     <div>
       <h3>Set up Canva once</h3>
       <ol class="steps">
-        <li>Open Brand Kit and add the colors: {{spruce}}, {{fog}}, {{signal}}, {{ink}}, {{moss}}, {{dawn}}.</li>
+        <li>Open Brand Kit and add the colors: {{spruce}}, {{fog}}, {{lupine}}, {{ink}}, {{moss}}, {{blossom}}.</li>
         <li>Upload <code>BricolageGrotesque-ExtraBold.ttf</code> and the two Inter files from <code>brand/fonts/</code> (font upload needs Canva Pro). Without Pro, pick Inter from Canva's font list and a bold sans-serif for headlines.</li>
         <li>Upload the logo PNGs from <code>brand/logo/</code> to the Brand Kit logos.</li>
         <li>Upload the <code>-blank.png</code> backgrounds from <code>brand/social/</code>.</li>

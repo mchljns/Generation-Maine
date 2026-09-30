@@ -1,6 +1,6 @@
 """Generation Maine identity v2: brandmark geometry for both directions.
 
-A2 "First Light": the outline of Maine cut out of an orange disc, the rising sun
+A2 "First Light": the outline of Maine cut out of a pink disc, the sun at first light
 and a camera's record light. The earlier G-sunrise symbol is kept as an alternate.
 
 B2 "Postmark": a round postmark with the name set on the ring, Maine in the center
@@ -26,8 +26,8 @@ A2 = {
     "pine": "#07261C",     # deepest background, for night/dark mode and video
     "fog": "#EDF0F4",      # light background
     "paper": "#FFFFFF",
-    "signal": "#FF5B24",   # the sun / record light
-    "dawn": "#FFC7A6",     # warm accent text on dark
+    "lupine": "#F0509A",   # the sun / record light
+    "blossom": "#FFC2DD",     # warm accent text on dark
     "granite": "#121417",  # text
     "moss": "#34795A",     # lines, secondary text on light
 }
@@ -45,7 +45,7 @@ def f(v):
 
 
 # ---------------------------------------------------------------- A2 symbol
-def a2_symbol(x=0, y=0, size=200, ring="#0B4A34", sun="#FF5B24", gap_deg=58):
+def a2_symbol(x=0, y=0, size=200, ring="#0B4A34", sun="#F0509A", gap_deg=58):
     """G-sunrise symbol in a size x size box whose top-left corner is (x, y)."""
     s = size / 200.0
     cx, cy = x + 100 * s, y + 100 * s
@@ -208,7 +208,7 @@ def sunrise_state(x, y, h, land, sun, line=None):
 
 
 def sun_badge(cx, cy, R, sun, land_knock):
-    """Orange disc with Maine knocked out of it (drawn in the background color)."""
+    """Pink disc with Maine knocked out of it (drawn in the background color)."""
     h = R * 1.3
     w = h * ASPECT
     d, _ = maine_shape(cx - w / 2 - R * 0.02, cy - h / 2 + R * 0.02, w, h, TOL, ROUND * h / 200)

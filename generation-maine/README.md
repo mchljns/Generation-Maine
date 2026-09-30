@@ -6,7 +6,7 @@ A one-page block theme for GenerationMaine.org, an initiative of Maine Policy In
 
 | Path | What it does |
 | --- | --- |
-| `theme.json` | Colors, fonts, type scale, spacing and button styles (brand: Spruce & Signal) |
+| `theme.json` | Colors, fonts, type scale, spacing and button styles (brand: Spruce & Lupine) |
 | `styles/paper-route.json` | The alternate brand direction as a one-click style variation |
 | `style.css` | Theme header plus the few styles theme.json cannot express (sticky header, contour pattern, creator cards) |
 | `functions.php` | Loads the stylesheet, preloads the headline font, adds a favicon fallback |
@@ -57,7 +57,7 @@ To test with fake creators: `wp eval-file wp-content/themes/generation-maine/bin
 
 ## Switch to the alternate brand direction
 
-The theme ships with the recommended direction, **Spruce & Signal**. The alternate, **Paper Route**, is a style variation.
+The theme ships with the recommended direction, **Spruce & Lupine**. The alternate, **Paper Route**, is a style variation.
 
 1. Go to **Appearance > Editor > Styles**.
 2. Click **Browse styles** and pick **Paper Route (alternate direction)**.

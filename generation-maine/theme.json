@@ -1,7 +1,7 @@
 {
 	"$schema": "https://schemas.wp.org/wp/6.8/theme.json",
 	"version": 3,
-	"title": "Spruce & Signal",
+	"title": "Spruce & Lupine",
 	"settings": {
 		"appearanceTools": true,
 		"useRootPaddingAwareAlignments": true,
@@ -16,9 +16,9 @@
 				{ "slug": "contrast", "name": "Ink (body text)", "color": "#121417" },
 				{ "slug": "primary", "name": "Spruce (brand dark)", "color": "#0B4A34" },
 				{ "slug": "secondary", "name": "Moss (lines and pattern)", "color": "#34795A" },
-				{ "slug": "accent", "name": "Signal (buttons, the dot)", "color": "#FF5B24" },
-				{ "slug": "accent-text", "name": "Signal Deep (small orange text on light)", "color": "#C43D0E" },
-				{ "slug": "highlight", "name": "Dawn (accent text on dark)", "color": "#FFC7A6" },
+				{ "slug": "accent", "name": "Lupine (buttons, the dot)", "color": "#F0509A" },
+				{ "slug": "accent-text", "name": "Lupine Deep (small pink text on light)", "color": "#AD1F62" },
+				{ "slug": "highlight", "name": "Blossom (accent text on dark)", "color": "#FFC2DD" },
 				{ "slug": "white", "name": "White", "color": "#FFFFFF" }
 			]
 		},

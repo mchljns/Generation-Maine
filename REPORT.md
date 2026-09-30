@@ -13,7 +13,7 @@
 
 ## Chosen direction
 
-**Spruce & Signal.** Spruce green and a pale fog background, with one orange dot. The dot sits on the i in "Maine" and reads as a camera's record light. A contour-line pattern, like a trail map, fills empty space.
+**Spruce & Lupine.** Spruce green and a pale fog background, with one Lupine pink dot. The dot sits on the i in "Maine" and reads as a camera's record light. A contour-line pattern, like a trail map, fills empty space.
 
 I picked it because it stays clear as a 32 px avatar, looks calm enough to let the creators lead, and shares nothing with 76crew.com's navy, red and stars. It is also simple for a small team to repeat in Canva. The full reasoning is in `brand/02-directions.md`.
 
@@ -41,6 +41,17 @@ I checked both directions against greenfalls.co on September 29, 2026. Green Fal
 - Direction B: Archivo Condensed became Anton (OFL), and the highlighter became a warm yellow #FFD23F.
 
 All text pairs still pass WCAG AA (see `brand/02-directions.md`). Every logo, social file, the directions page, the brand guide, the theme and the zip were rebuilt. A side-by-side is in `qa/screenshots/greenfalls-comparison.png`.
+
+## Separation from Baxter Brewing Co.
+
+Checked against baxterbrewing.com on September 30, 2026. Baxter uses orange-red #F04F2C, an orange sun over the Katahdin ridgeline, and an orange Maine silhouette on every can. Our Signal orange was delta E 9.2 from theirs, and the v2 First Light mark was an orange disc with Maine cut out.
+
+- All orange in Direction A (live theme, v1 files and v2 First Light) is now Lupine pink #F0509A, with Lupine Deep #AD1F62 and Blossom #FFC2DD.
+- Dropped the "Sunrise State" alternate, which echoed Baxter's sun-and-ridgeline lockup.
+- Replaced the Lewiston sample creator stamp (Baxter's hometown) with Portland.
+- Remaining overlap: both use a Maine silhouette. Ours is always a cutout in the pink disc, never orange and never on its own.
+
+QA re-run after the change: no PHP errors, no horizontal scroll, 0 axe violations at 375, 768 and 1440 px in both creator states. Side-by-side: `qa/screenshots/baxter-comparison.png`.
 
 ## Blocked or unfinished
 
@@ -104,7 +115,7 @@ Social kit:
 
 ## Questions for the client
 
-1. Which direction do you prefer: Spruce & Signal or Paper Route?
+1. Which direction do you prefer: Spruce & Lupine or Paper Route?
 2. What are the channel handles, and are Instagram, TikTok and YouTube the right three?
 3. What is the Substack URL?
 4. Can you send one sentence describing Maine Policy Institute, and a press contact email?

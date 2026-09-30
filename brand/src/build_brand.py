@@ -9,7 +9,7 @@ DISPLAY = Face("BricolageGrotesque-ExtraBold.ttf")
 TRACK = -12  # tighter than default, in em/1000
 
 C = A
-# The "record dot": the orange tittle on the i in "Maine". It is the signature of the mark.
+# The "record dot": the pink tittle on the i in "Maine". It is the signature of the mark.
 DOT_R = 96      # font units, a bit larger than the real tittle
 DOT_CY = 628    # font units above baseline
 
@@ -65,7 +65,7 @@ def icon_svg(variant):
     n = 512
     if variant == "color":
         body = '<rect width="512" height="512" rx="0" fill="%s"/>' % C["spruce"]
-        body += icon_mark(256, 256, 400, C["fog"], C["signal"])
+        body += icon_mark(256, 256, 400, C["fog"], C["lupine"])
     elif variant == "black":
         body = icon_mark(256, 256, 400, "#000", "#000")
     else:
@@ -74,10 +74,10 @@ def icon_svg(variant):
 
 
 VARIANTS = {
-    "": (C["spruce"], C["signal"]),
+    "": (C["spruce"], C["lupine"]),
     "-black": ("#000", "#000"),
     "-white": ("#fff", "#fff"),
-    "-reversed": (C["fog"], C["signal"]),
+    "-reversed": (C["fog"], C["lupine"]),
 }
 
 
@@ -91,14 +91,14 @@ def build_logos():
     write("brand/logo/icon-black.svg", icon_svg("black"))
     write("brand/logo/icon-white.svg", icon_svg("white"))
     # Theme copies: header uses the reversed wordmark on spruce, favicon uses the color icon.
-    body, w, h = lockup_horizontal(C["fog"], C["signal"], 100, 0)
+    body, w, h = lockup_horizontal(C["fog"], C["lupine"], 100, 0)
     write("generation-maine/assets/img/wordmark-reversed.svg", svg(round(w), round(h), body, "Generation Maine"))
-    body, w, h = lockup_horizontal(C["spruce"], C["signal"], 100, 0)
+    body, w, h = lockup_horizontal(C["spruce"], C["lupine"], 100, 0)
     write("generation-maine/assets/img/wordmark.svg", svg(round(w), round(h), body, "Generation Maine"))
     write("generation-maine/assets/img/icon.svg", icon_svg("color"))
     # Inline version for the header and footer: letters follow currentColor, dot follows the accent color.
     body, w, h = lockup_horizontal("currentColor", "DOT", 100, 0)
-    body = body.replace('fill="DOT"', 'class="gm-dot" fill="#FF5B24"')
+    body = body.replace('fill="DOT"', 'class="gm-dot" fill="#F0509A"')
     write("generation-maine/assets/img/wordmark-inline.svg",
           '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" width="%d" height="%d" role="img" '
           'aria-label="Generation Maine" focusable="false">%s</svg>' % (round(w), round(h), round(w), round(h), body))
@@ -127,7 +127,7 @@ def pattern_bg(w, h, cx, cy, rings, gap, stroke, width, opacity=1, seed=3, r0=60
 
 
 def build_social():
-    fog, spruce, signal, moss, dawn = C["fog"], C["spruce"], C["signal"], C["moss"], C["dawn"]
+    fog, spruce, signal, moss, dawn = C["fog"], C["spruce"], C["lupine"], C["moss"], C["blossom"]
     attrib = "An initiative of Maine Policy Institute"
 
     # Avatar 1080: icon, circle-safe (all content inside a 760px circle).

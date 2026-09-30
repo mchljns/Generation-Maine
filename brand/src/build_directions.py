@@ -32,8 +32,8 @@ def ratio(a, b):
     return (la + 0.05) / (lb + 0.05)
 
 
-PAIRS_A = [("ink", "fog"), ("spruce", "fog"), ("fog", "spruce"), ("dawn", "spruce"),
-           ("ink", "signal"), ("signal_deep", "fog"), ("signal", "spruce"), ("signal", "fog")]
+PAIRS_A = [("ink", "fog"), ("spruce", "fog"), ("fog", "spruce"), ("blossom", "spruce"),
+           ("ink", "lupine"), ("lupine_deep", "fog"), ("lupine", "spruce"), ("lupine", "fog")]
 PAIRS_B = [("ink", "newsprint"), ("blueberry", "newsprint"), ("white", "blueberry"),
            ("ink", "highlighter"), ("blueberry", "highlighter"), ("highlighter", "newsprint")]
 
@@ -83,16 +83,16 @@ def build():
     a, b = A, B
     # Direction A mockups
     a_avatar = svgwrap(512, 512, '<rect width="512" height="512" fill="%s"/>' % a["spruce"]
-                       + icon_mark(256, 256, 360, a["fog"], a["signal"]), "Direction A avatar")
+                       + icon_mark(256, 256, 360, a["fog"], a["lupine"]), "Direction A avatar")
     body = '<rect width="1080" height="1920" fill="%s"/>' % a["spruce"]
     body += contour_group(contours(900, 1700, 18, 50, 52, 4), a["moss"], 3, 0.6)
-    wm, w, h = lockup_stacked(a["fog"], a["signal"], 100)
+    wm, w, h = lockup_stacked(a["fog"], a["lupine"], 100)
     body += '<g transform="translate(160 560) scale(%.3f)">%s</g>' % (760 / w, wm)
-    wm2, w2, h2 = lockup_horizontal(a["dawn"], a["dawn"], 100)
+    wm2, w2, h2 = lockup_horizontal(a["blossom"], a["blossom"], 100)
     body += ('<text x="160" y="1060" font-size="64" fill="%s" style="font-family:GMDisplay">Follow Generation Maine</text>'
              '<text x="160" y="1150" font-size="44" fill="%s" style="font-family:GMBody">[@handle] on Instagram, TikTok, YouTube</text>'
              '<text x="160" y="1520" font-size="34" fill="%s" style="font-family:GMBody">An initiative of Maine Policy Institute</text>'
-             % (a["dawn"], a["fog"], a["fog"]))
+             % (a["blossom"], a["fog"], a["fog"]))
     a_end = svgwrap(1080, 1920, body, "Direction A end card")
     a_contours = contour_group(contours(640, 60, 14, 30, 38, 11), a["moss"], 2, 0.8)
 
@@ -110,7 +110,7 @@ def build():
     b_end = svgwrap(1080, 1920, body, "Direction B end card")
     b_hero_logo, blw = b_logo_stacked(0, 0, 100, b["ink"], b["highlighter"])
 
-    wm_a, wa, ha = lockup_horizontal(a["fog"], a["signal"], 100)
+    wm_a, wa, ha = lockup_horizontal(a["fog"], a["lupine"], 100)
 
     def swatches(pal, names):
         return "".join('<div class="sw"><span style="background:%s"></span><b>%s</b><code>%s</code></div>'
@@ -126,7 +126,7 @@ def build():
         "{{A_WORDMARK}}": svgwrap(round(wa), round(ha), wm_a, "Generation Maine"),
         "{{A_CONTOURS}}": a_contours,
         "{{B_LOGO}}": svgwrap(round(blw) + 20, 200, '<g transform="translate(10 8)">%s</g>' % b_hero_logo, "Generation Maine"),
-        "{{A_SWATCHES}}": swatches(a, ["spruce", "fog", "signal", "moss", "dawn", "ink", "signal_deep"]),
+        "{{A_SWATCHES}}": swatches(a, ["spruce", "fog", "lupine", "moss", "blossom", "ink", "lupine_deep"]),
         "{{B_SWATCHES}}": swatches(b, ["ink", "newsprint", "blueberry", "highlighter"]),
         "{{A_PAIRS}}": pair_rows(a, PAIRS_A), "{{B_PAIRS}}": pair_rows(b, PAIRS_B),
     }
@@ -167,7 +167,7 @@ header.top p{max-width:720px;color:var(--muted);margin:0}
 @media (max-width:980px){.grid{grid-template-columns:1fr}}
 .dir{background:#fff;border-radius:20px;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .tag{display:inline-block;font:600 12px/1 GMBody;letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border-radius:99px;background:#eee}
-.tag.pick{background:{{A.signal}};color:{{A.ink}}}
+.tag.pick{background:{{A.lupine}};color:{{A.ink}}}
 .dir h2{margin:12px 0 4px;font-size:30px;line-height:1.1}
 .dirA h2{font-family:GMDisplay;font-weight:800}
 .dirB h2{font-family:GMCond;font-weight:900;text-transform:uppercase;letter-spacing:.01em;font-size:36px}
@@ -182,10 +182,10 @@ h3{font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin:24px 0 8p
 .heroA .pat{position:absolute;inset:0;width:100%;height:100%}
 .heroA .in{position:relative}
 .heroA .wm{width:150px;display:block;margin-bottom:26px}
-.heroA .eyebrow{font:600 11px/1 GMBody;letter-spacing:.08em;text-transform:uppercase;color:{{A.dawn}}}
+.heroA .eyebrow{font:600 11px/1 GMBody;letter-spacing:.08em;text-transform:uppercase;color:{{A.blossom}}}
 .heroA .h{font:800 28px/1.02 GMDisplay;margin:8px 0 10px;max-width:14ch}
 .heroA .sub{font-size:13px;max-width:34ch;margin:0 0 14px}
-.btnA{display:inline-block;background:{{A.signal}};color:{{A.ink}};font:600 13px/1 GMBody;padding:10px 14px;border-radius:99px}
+.btnA{display:inline-block;background:{{A.lupine}};color:{{A.ink}};font:600 13px/1 GMBody;padding:10px 14px;border-radius:99px}
 .btnA2{display:inline-block;border:2px solid {{A.fog}};color:{{A.fog}};font:600 13px/1 GMBody;padding:8px 14px;border-radius:99px;margin-left:6px}
 .heroB{background:{{B.newsprint}};color:{{B.ink}};padding:22px;border:2px solid {{B.ink}}}
 .heroB .logo svg{height:60px;width:auto;display:block;margin-bottom:18px}
@@ -215,8 +215,8 @@ footer{max-width:1320px;margin:0 auto;padding:8px 24px 48px;color:var(--muted);f
 <main class="grid">
 <section class="dir dirA" aria-labelledby="da">
   <span class="tag pick">Recommended</span>
-  <h2 id="da">A. Spruce &amp; Signal</h2>
-  <p>Maine's working landscape, drawn as clean contour lines, with one bright orange dot that reads as a camera's record light. It feels local and current without using a single postcard cliché.</p>
+  <h2 id="da">A. Spruce &amp; Lupine</h2>
+  <p>Maine's working landscape, drawn as clean contour lines, with one bright pink dot that reads as a camera's record light. It feels local and current without using a single postcard cliché.</p>
   <div class="mocks">
     <div class="avatar">{{A_AVATAR}}<div class="cap">Avatar, circle crop</div></div>
     <div class="endcard">{{A_END}}<div class="cap">9:16 end card</div></div>
@@ -229,9 +229,9 @@ footer{max-width:1320px;margin:0 auto;padding:8px 24px 48px;color:var(--muted);f
     </div>
   </div>
   <h3>Moodboard (words)</h3>
-  <p>Trail map contour lines. Spruce woods at dusk. The orange of a hunter's cap, a buoy line or a trail blaze. Fog over a harbor town at 7 a.m. Phone footage shot in a kitchen, a garage workshop, a first apartment. Clean sans type on a flat green field.</p>
+  <p>Trail map contour lines. Spruce woods at dusk. The pink of roadside lupines in June. Fog over a harbor town at 7 a.m. Phone footage shot in a kitchen, a garage workshop, a first apartment. Clean sans type on a flat green field.</p>
   <h3>Logo approach</h3>
-  <p>Wordmark plus a small symbol. The wordmark says the name in full, which matters for a new project. The orange dot on the i in "Maine" works as a record light and carries into the G icon for avatars.</p>
+  <p>Wordmark plus a small symbol. The wordmark says the name in full, which matters for a new project. The pink dot on the i in "Maine" works as a record light and carries into the G icon for avatars.</p>
   <h3>Type</h3>
   <div class="typeA"><div class="d">Bricolage Grotesque</div><div class="b">Inter for body text. Both under the SIL Open Font License 1.1.</div></div>
   <h3>Palette</h3>
@@ -239,7 +239,7 @@ footer{max-width:1320px;margin:0 auto;padding:8px 24px 48px;color:var(--muted);f
   <h3>Contrast (calculated)</h3>
   <table>{{A_PAIRS}}</table>
   <h3>Risk</h3>
-  <p>Green and orange is a friendly, outdoorsy pairing and could drift toward an outfitter or a state park look. The contour lines and the record dot have to be used consistently to keep it tied to storytelling.</p>
+  <p>Green and pink is an unusual pairing for Maine brands, which keeps it clear of the orange and ridgeline look breweries and outfitters use. It needs discipline so it does not read as floral. The contour lines and the record dot have to be used consistently to keep it tied to storytelling.</p>
 </section>
 <section class="dir dirB" aria-labelledby="db">
   <span class="tag">Alternate</span>
