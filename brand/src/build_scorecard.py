@@ -61,7 +61,7 @@ IDS = [
         "path": "Swap Anton for a wide or rounded face, drop the yellow for a second ink color, and keep the badge flat and minimal.",
     },
     {
-        "key": "spruce-lupine", "name": "Spruce & Lupine", "tag": "v1 · Direction A (live site)", "rec": False,
+        "key": "spruce-lupine", "name": "Spruce & Lupine", "tag": "v1 revised · Direction A (live site)", "rec": False,
         "logo": "../logo/primary.svg", "logo_bg": "#FFFFFF",
         "avatar": "../social/avatar-1080.png", "small": "../logo/icon.svg",
         "end": "../social/end-card-1080x1920.png",
@@ -71,7 +71,7 @@ IDS = [
         "path": "Superseded by First Light, which keeps its colors and adds a real mark.",
     },
     {
-        "key": "paper-route", "name": "Paper Route", "tag": "v1 · Direction B", "rec": False,
+        "key": "paper-route", "name": "Paper Route", "tag": "v1 revised · Direction B", "rec": False,
         "logo": "assets/paper-route-logo.png", "logo_bg": "#ECECE6",
         "avatar": "assets/paper-route-avatar.png", "small": "assets/paper-route-avatar.png",
         "end": "assets/paper-route-endcard.png",
@@ -79,6 +79,26 @@ IDS = [
         "plus": ["Energetic and youthful", "Easy to imitate in Canva"],
         "minus": ["Zine styling is common and dates fast", "Can read as a costume next to a think tank", "Condensed caps and yellow echo Baxter cans"],
         "path": "Superseded by Postmark, which keeps the handmade spirit with more structure.",
+    },
+    {
+        "key": "orig-a", "name": "Spruce & Signal", "tag": "v1 original · Direction A (retired)", "rec": False,
+        "logo": "assets/orig-primary.svg", "logo_bg": "#FFFFFF",
+        "avatar": "assets/orig-avatar-1080.png", "small": "assets/orig-icon.svg",
+        "end": "assets/orig-end-card-1080x1920.png",
+        "scores": [5, 3, 7, 5, 8, 9, 6],
+        "plus": ["Calm and credible", "Simplest to use"],
+        "minus": ["Orange #FF5B24 was delta E 9 from Baxter's, with an orange sun-like dot", "Lime accent and green-tinted white matched Green Falls", "A styled font, not a brandmark"],
+        "path": "Became Spruce & Lupine: orange to pink, lime to blossom, green-white to cool fog.",
+    },
+    {
+        "key": "orig-b", "name": "Paper Route", "tag": "v1 original · Direction B (retired)", "rec": False,
+        "logo": "assets/orig-paper-route-logo.png", "logo_bg": "#ECECE6",
+        "avatar": "assets/orig-paper-route-avatar.png", "small": "assets/orig-paper-route-avatar.png",
+        "end": "assets/orig-paper-route-endcard.png",
+        "scores": [5, 3, 5, 4, 4, 7, 5],
+        "plus": ["Energetic and youthful", "Easy to imitate in Canva"],
+        "minus": ["Archivo is Green Falls' display font", "Lime highlighter matched Green Falls' lime", "Condensed caps echo Baxter cans; GM recalls General Motors"],
+        "path": "Became Paper Route revised (Anton, warm yellow), then Postmark.",
     },
 ]
 
@@ -155,7 +175,7 @@ h1{font:700 40px/1 IS;letter-spacing:-.02em;margin:0 0 10px}
 .top p{margin:0;max-width:90ch;color:#4A515C}
 .crit{display:flex;flex-wrap:wrap;gap:8px 20px;list-style:none;padding:0;margin:16px 0 0;font-size:12px}
 .crit span{color:#6B7380;margin-left:6px}
-.grid{display:grid;grid-template-columns:repeat(5,minmax(260px,1fr));gap:16px;padding:20px 32px 40px;max-width:1900px;margin:0 auto;overflow-x:auto}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(260px,1fr));gap:16px;padding:20px 32px 40px;max-width:1900px;margin:0 auto;overflow-x:auto}
 .col{background:#fff;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
 .col.rec{outline:3px solid #F0509A;outline-offset:-3px}
 header .tag{font:600 11px/1 IS;letter-spacing:.12em;text-transform:uppercase;color:#6B7380}
@@ -182,7 +202,7 @@ ul{margin:0;padding-left:18px;font-size:12.5px}
 </style></head><body>
 <section class="top">
   <h1>Brand scorecard</h1>
-  <p>All five Generation Maine identities, graded on the same criteria after the Green Falls, Baxter Brewing and no-italics changes. Scores are 1 to 10; the grade is the weighted average (A 8.5+, A- 8.0, B+ 7.5, B 7.0, B- 6.5, C+ 6.0, C 5.5, C- 5.0, D below). Sorted best first. Scores are a design judgment, not a survey.</p>
+  <p>All seven Generation Maine identities, graded on the same criteria: the two original v1 directions as first built on September 29, the revised v1 pair (after the Green Falls and Baxter Brewing changes), and the v2 marks. Scores are 1 to 10; the grade is the weighted average (A 8.5+, A- 8.0, B+ 7.5, B 7.0, B- 6.5, C+ 6.0, C 5.5, C- 5.0, D below). Sorted best first. Scores are a design judgment, not a survey.</p>
   <ul class="crit">{{CRIT}}</ul>
 </section>
 <main class="grid">{{COLS}}</main>
