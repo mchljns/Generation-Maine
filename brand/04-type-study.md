@@ -112,3 +112,23 @@ The brief changed: a face with a lot of character that is not overused in AI-mad
 | Ancizar Serif, Universidad Nacional de Colombia, 2025 | Sturdy and warm | Less character than the others |
 
 **Recommendation: Labrada.** It has the most character that still reads as credible. It works at 800 on a cover and at 400 in a Substack paragraph, and the G holds at 32 px. If the client wants a sans, Commissioner with flair and volume at 100 is the pick.
+
+## Round three: all lowercase, for Concept D
+
+The brief: keep Commissioner and Bricolage in play for Signature, and find a face that works all in lowercase for Concept D (Bark & Sky).
+
+In lowercase a few letters carry the whole look: the g, the a, the e, the t and the dot on the i. We set 39 faces in lowercase in Concept D's Sky and Bark (`type-study/lowercase-screen.png`), with Bricolage, Commissioner and Fraunces as baselines. The four best were then set as Concept D's wordmark, covers, avatar and body text (`type-study/lowercase-finalists.png`).
+
+| Face | In lowercase | Fit for Concept D |
+| --- | --- | --- |
+| Familjen Grotesk, Familjen STHLM, 2022 | Single-story a and g. Friendly and human, and the gm avatar is the strongest of the set | Best. It adds the energy on TikTok that Concept D lacked, and looks nothing like Signature |
+| Hedvig Letters Serif, with Hedvig Letters Sans, 2023 | Calm and literary. The best like-for-like swap for Fraunces | Good for Substack. One weight only, so covers stay quiet |
+| Epunda Slab, Typofactur, 2025 | Warm, with a round a that charms in lowercase | Good, but it sits between the two directions |
+| Commissioner, flair on | Holds up well in lowercase | Works, but it is the sans proposed for Signature, so the two directions would blur |
+
+**Recommendation: Familjen Grotesk for Concept D**, in lowercase at 600 for the wordmark and titles and 400 for text. It fixes Concept D's weak spot, energy on TikTok, and keeps the two directions clearly apart:
+
+- Signature: Bricolage, or Commissioner with flair and volume at 100
+- Concept D: Familjen Grotesk, all lowercase
+
+If the client wants Concept D to stay a serif, use Hedvig Letters Serif with Hedvig Letters Sans.
