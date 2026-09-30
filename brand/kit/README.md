@@ -2,6 +2,8 @@
 
 Built from `brand/00-platform.md`. Open `kit.html` in a browser to see everything in place.
 
+Recommended direction: **Signature** (mockups starting with `q-`). Routes A (`a-`) and B (`b-`) are kept as the record of what was tested.
+
 Sample lines and sample towns in the mockups are for layout only. Real lines and towns come from the creators.
 
 ## Master brand (both routes)
@@ -16,7 +18,15 @@ Sample lines and sample towns in the mockups are for layout only. Real lines and
 | `assets/social/favicon-*.png` | 16, 32, 180 and 512 px |
 | `assets/video/ov-bug.png` | Transparent 1080 x 1920 overlay. Top left of the first seconds of every video |
 
-## Route overlays
+## Signature rules
+
+1. One idea per frame.
+2. Big, tight type anchored low left.
+3. Full color fields in a fixed order: Spruce, Birch, Pine, with Marigold once in a set of nine.
+4. Marigold once per frame, usually as the dot that ends a headline.
+5. Creator name and town as plain text, no box or device.
+
+## Route overlays (tested, not recommended)
 
 | File | Use |
 | --- | --- |

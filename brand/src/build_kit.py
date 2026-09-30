@@ -149,6 +149,49 @@ def route_mockups(r, m):
     return "".join(out), web
 
 
+def ttl(t, cls=""):
+    """Signature headline: big, tight, sentence case, ending on the Marigold dot."""
+    head, _, last = t.rpartition(" ")
+    return '<p class="ttl %s">%s<b class="nw">%s<i class="d"></i></b></p>' % (cls, (head + " ") if head else "", last)
+
+
+def plain(name="[Creator name]", town="[Hometown]"):
+    return '<p class="plain"><b>%s</b><span>%s, Maine</span></p>' % (name, town)
+
+
+def quiet_mockups(m):
+    icon = inl(m["icon-bare"], "gi")
+    wm_rev = inl(m["wordmark-reversed"], "wm")
+    wm = inl(m["wordmark"], "wm")
+    first = '<div class="foot"></div>%s%s' % (bug(icon), ui_overlay())
+    lower = '<div class="foot"></div>%s<div class="ql3">%s</div>%s' % (bug(icon), plain(town="Skowhegan"), ui_overlay())
+    end = ('<div class="qend"><p class="qk">Generation Maine</p>%s<ul class="hl q"><li><b>Instagram</b>[@handle]</li><li><b>TikTok</b>[@handle]</li>'
+           '<li><b>YouTube</b>[@handle]</li><li><b>Substack</b>[name].substack.com</li></ul><p class="mpi">%s</p></div>') % (ttl("Follow along", "xl"), MPI)
+    fields = ["sp", "bi", "pi", "bi", "sp", "mg", "pi", "sp", "bi"]
+    covers = "".join('<div class="cov q %s"><p class="ep">EP %02d</p>%s<p class="cn">%s</p></div>' % (fields[i], i + 1, ttl(TOPICS[i], "cv"), "[Creator name]")
+                     for i in range(9))
+    grid = ('<div class="prof"><div class="ph"><span class="pav">%s</span><div><b>Generation Maine</b><span>[@handle]</span></div></div>'
+            '<p class="bio">Young Mainers on building a life here. %s.</p><div class="grid9">%s</div></div>') % (inl(m["icon"], "pa"), MPI, covers)
+    substack = ('<div class="subst q"><div class="qsh">%s</div><div class="sb"><p class="kick">Episode 06</p><h3>[Post title in plain words]</h3>'
+                '<p class="by">[Creator name] · [Hometown], Maine</p><p>Short videos and this newsletter are made by young Maine creators about the rules that shape their lives.</p>'
+                '<p>[Body of the post continues in the creator\'s own words.]</p><p>[Body continues.]</p></div><p class="sfoot">%s</p></div>') % (wm, MPI)
+    hero = ('<div class="web q"><div class="wn">%s<nav><span>About</span><span>Creators</span><span>Follow</span></nav></div>'
+            '<div class="qh"><p class="wl">%s</p><h1>Young Mainers on building a life here<i class="d"></i></h1>'
+            '<div class="qrow"><p class="wlede">Short videos by young Maine creators about the rules that shape their lives.</p>'
+            '<p class="wbtn"><span class="b1">Meet the creators</span><span class="b2">Follow along</span></p></div></div>'
+            '<div class="qnext"><span>01</span> What it is</div></div>') % (wm_rev, MPI)
+    post = '<div class="pimg"><div class="foot"></div>%s<div class="ql3 p">%s</div></div>' % (bug(icon), plain(town="Machias"))
+    collab = ('<div class="feed"><div class="fh"><i class="cav">C</i><div><b>[creator.handle] and generationmaine</b><span>Paid partnership with Generation Maine</span></div></div>'
+              '%s<div class="fa"><i></i><i></i><i></i></div><p class="fc"><b>[creator.handle]</b> [Caption in the creator\'s words]</p></div>') % post
+    out = [artboard("q-first", "ph9", first, "S1 · Video, first seconds. Only the bug.", 360, 640),
+           artboard("q-lower", "ph9", lower, "S2 · Name and town, plain", 360, 640),
+           artboard("q-end", "ph9", end, "S3 · End card", 360, 640),
+           artboard("q-grid", "ph9 light", grid, "S4 · Profile grid of nine covers", 360, 640),
+           artboard("q-substack", "light", substack, "S6 · Substack header and email", 480, 640),
+           artboard("q-collab", "ph9 light", collab, "S8 · Collab post on a creator's own account", 360, 640)]
+    return "".join(out), artboard("q-web", "", hero, "S7 · Website hero, no photo", 1200, 680)
+
+
 def overlays(m):
     icon = inl(m["icon-bare"], "gi")
     o = []
@@ -324,6 +367,35 @@ figcaption{font:600 12px/1.4 Inter;letter-spacing:.06em;text-transform:uppercase
 .checks td,.checks th{border-bottom:1px solid #D6D0C2;padding:9px 8px;text-align:left;vertical-align:top}
 .checks th{font:600 11px Inter;letter-spacing:.08em;text-transform:uppercase;color:var(--stone)}
 .note{font-size:13px;color:var(--stone)}
+
+/* Signature */
+.ttl{margin:0;font:800 30px/.95 Bric;letter-spacing:-.03em;color:var(--bi)}
+.ttl .nw{font-weight:inherit;white-space:nowrap}
+.ttl .d{display:inline-block;width:.2em;height:.2em;border-radius:50%;background:var(--mg);margin-left:.05em}
+.ttl.xl{font-size:74px;line-height:.9}
+.plain{margin:0;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.45)}
+.plain b{display:block;font:700 19px/1.15 Bric;letter-spacing:-.01em}
+.plain span{display:block;font:600 11px/1.5 Inter;letter-spacing:.06em;text-transform:uppercase;opacity:.92}
+.ql3{position:absolute;left:14px;bottom:196px}
+.ql3.p{bottom:18px}
+.qend{position:absolute;inset:0;background:var(--sp);padding:48px 24px 28px;display:flex;flex-direction:column;justify-content:flex-end}
+.qend .qk{position:absolute;top:48px;left:24px;margin:0;font:600 11px Inter;letter-spacing:.1em;text-transform:uppercase;color:var(--sage)}
+.qend .ttl{margin-bottom:22px}
+.hl.q li{border-color:#2A5F4B}
+.qend .mpi{margin-top:26px}
+.cov.q .ttl{position:absolute;left:8px;right:6px;bottom:22px;font-size:21px}
+.cov.q.bi .ttl{color:var(--sp)}.cov.q.mg .ttl{color:var(--ink)}.cov.q.mg .ttl .d{background:var(--ink)}
+.cov.q.sp .ep,.cov.q.pi .ep{color:var(--sage)}.cov.q.bi .ep,.cov.q.mg .ep{color:var(--ink)}
+.cov.q.pi{background:var(--pine)}
+.qsh{padding:30px 32px 22px;border-bottom:1px solid #E1DBCC}
+.qsh .wm{width:230px;height:auto;display:block}
+.subst.q .sb h3{font:800 32px/1 Bric;letter-spacing:-.025em}
+.web.q .qh{padding:70px 56px 0;position:relative;z-index:2}
+.web.q h1{font-size:112px;line-height:.9;max-width:11ch;margin:18px 0 34px}
+.qrow{display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
+.qrow .wlede{margin:0}
+.qnext{position:absolute;left:0;right:0;bottom:0;height:64px;background:var(--bi);color:var(--moss);font:600 12px Inter;letter-spacing:.08em;text-transform:uppercase;padding:24px 56px}
+.qnext span{color:var(--stone);margin-right:8px}
 """
 
 
@@ -349,7 +421,15 @@ PAGE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name
 </div></section>
 
 <section><div class="w">
-  <p class="k">Route A</p>
+  <p class="k">Recommended direction</p>
+  <h2>Signature</h2>
+  <p>No metaphor. The name already says young and Maine, so the look adds confidence instead of repeating it. Five rules carry everything: one idea per frame; big, tight type anchored low left; full color fields in a fixed order; Marigold once per frame, usually as the dot that ends a headline; and the creator's name and town as plain information, never a device.</p>
+  <div class="cards">{{Q}}</div>
+  <div class="cards">{{Q_WEB}}</div>
+</div></section>
+
+<section><div class="w">
+  <p class="k">Tested and set aside: Route A</p>
   <h2>In their words</h2>
   <p>The creator's own sentence is the graphic element. It is set in Birch caption blocks, like the captions people already read on short video, and every sentence ends on the Marigold dot from the wordmark. The brand looks like people talking.</p>
   <div class="cards">{{A}}</div>
@@ -357,7 +437,7 @@ PAGE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name
 </div></section>
 
 <section><div class="w">
-  <p class="k">Route B</p>
+  <p class="k">Tested and set aside: Route B</p>
   <h2>Hometown</h2>
   <p>The creator's town is the graphic element, set big in condensed capitals, the way a jersey carries a city. A season becomes a list of real Maine towns. With no photos, the list itself is the texture.</p>
   <div class="cards">{{B}}</div>
@@ -367,17 +447,17 @@ PAGE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name
 <section><div class="w">
   <p class="k">Against the test</p>
   <h2>How each route scores</h2>
-  <table class="checks"><tr><th>Criterion</th><th>Route A: In their words</th><th>Route B: Hometown</th></tr>
-  <tr><td>1 Signs, does not cover</td><td>Pass. The bug is 26 px in the top corner.</td><td>Pass. Same bug.</td></tr>
-  <tr><td>2 Survives the crop</td><td>Pass. Shared G and dot avatar.</td><td>Pass. Shared avatar.</td></tr>
-  <tr><td>3 Carries a person</td><td>Pass. Their sentence is the biggest thing on screen.</td><td>Partial. Their town is the biggest thing; their name comes second.</td></tr>
-  <tr><td>4 Neutral</td><td>Depends on the lines chosen. Needs an editing rule.</td><td>Pass. A town name takes no side.</td></tr>
-  <tr><td>5 Both audiences</td><td>Strong on TikTok. Needs the dateline on Substack to feel editorial.</td><td>Strong on both. Towns read as local news and as hometown pride.</td></tr>
-  <tr><td>6 Stands without photos</td><td>Pass. Sentences fill covers and the hero.</td><td>Pass. The list of towns is the texture.</td></tr>
-  <tr><td>7 Ownable</td><td>Partial. Caption blocks are common; the dot period helps.</td><td>Pass. A season of Maine town names belongs to this project.</td></tr>
-  <tr><td>8 Easy to make</td><td>Pass. One text box with a highlight.</td><td>Pass. One text box in one font.</td></tr>
+  <table class="checks"><tr><th>Criterion</th><th>Signature</th><th>Route A: In their words</th><th>Route B: Hometown</th></tr>
+  <tr><td>1 Signs, does not cover</td><td>Pass. The bug is the only mark on footage.</td><td>Pass. The bug is 26 px in the top corner.</td><td>Pass. Same bug.</td></tr>
+  <tr><td>2 Survives the crop</td><td>Pass. Shared avatar.</td><td>Pass. Shared G and dot avatar.</td><td>Pass. Shared avatar.</td></tr>
+  <tr><td>3 Carries a person</td><td>Pass. Name and town are the only words on their video.</td><td>Pass. Their sentence is the biggest thing on screen.</td><td>Partial. Their town is the biggest thing; their name comes second.</td></tr>
+  <tr><td>4 Neutral</td><td>Pass. No device, no claim.</td><td>Depends on the lines chosen. Needs an editing rule.</td><td>Pass. A town name takes no side.</td></tr>
+  <tr><td>5 Both audiences</td><td>Pass. Reads as editorial on Substack, confident on TikTok.</td><td>Strong on TikTok. Needs the dateline on Substack to feel editorial.</td><td>Strong on both. Towns read as local news and as hometown pride.</td></tr>
+  <tr><td>6 Stands without photos</td><td>Pass. Type and color fields carry the page.</td><td>Pass. Sentences fill covers and the hero.</td><td>Pass. The list of towns is the texture.</td></tr>
+  <tr><td>7 Ownable</td><td>Partial. Owned through consistency over time, not a device. The dot period helps.</td><td>Partial. Caption blocks are common; the dot period helps.</td><td>Pass. A season of Maine town names belongs to this project.</td></tr>
+  <tr><td>8 Easy to make</td><td>Pass. One title, one color field, one rule.</td><td>Pass. One text box with a highlight.</td><td>Pass. One text box in one font.</td></tr>
   </table>
-  <p class="note" style="margin-top:14px">Recommendation: Route B as the frame, with Route A's caption style kept for quotes inside videos and posts. The two work together because both use the same wordmark, colors and dot. The creator calls in the platform should confirm that creators like seeing their town that big.</p>
+  <p class="note" style="margin-top:14px">Recommendation: Signature. Routes A and B both restate the brief, which is what made them feel on the nose. Signature gives up a clever device and wins on restraint, which is also what makes creators comfortable posting it. Its one partial, ownability, comes from using the same rules every time. Caption blocks from Route A stay available inside videos as a content tool, not as the brand.</p>
 </div></section>
 </body></html>"""
 
@@ -385,6 +465,7 @@ PAGE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name
 def build_kit(m):
     a, a_web = route_mockups("a", m)
     b, b_web = route_mockups("b", m)
+    q, q_web = quiet_mockups(m)
     css = CSS
     for k, v in {"{{F800}}": font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2"),
                  "{{F700}}": font64("brand/v6/fonts-web/bricolage-grotesque-700.woff2"),
@@ -396,7 +477,7 @@ def build_kit(m):
     html = PAGE.replace("{{CSS}}", css)
     rep = {"{{WM}}": m["wordmark"], "{{WM_REV}}": m["wordmark-reversed"], "{{ST}}": m["stacked"], "{{ICON_BARE}}": inl(m["icon-bare"]),
            "{{ICON_L}}": m["icon-light"], "{{ICON_M}}": m["icon-marigold"], "{{ENDORSED_REV}}": m["endorsed-reversed"],
-           "{{AVATARS}}": avatars(m), "{{OVERLAYS}}": overlays(m), "{{A}}": a, "{{A_WEB}}": a_web, "{{B}}": b, "{{B_WEB}}": b_web}
+           "{{AVATARS}}": avatars(m), "{{OVERLAYS}}": overlays(m), "{{A}}": a, "{{A_WEB}}": a_web, "{{B}}": b, "{{B_WEB}}": b_web, "{{Q}}": q, "{{Q_WEB}}": q_web}
     for k, v in rep.items():
         html = html.replace(k, v)
     write(OUT + "/kit.html", html)

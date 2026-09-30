@@ -89,6 +89,24 @@ Both keep the wordmark base from v1 and v5 and the Spruce and Marigold palette. 
 7. The website hero with no photo
 8. A collab post on a creator's own account
 
+## The on-the-nose test
+
+Describe any new element in one sentence. If the sentence restates the name or the brief, it is on the nose and it goes. The name already says young and Maine. The look adds confidence, not a picture of the name.
+
+Every earlier round failed this test: the record dot said "video," the doorway and the farm said "building a life," the ledger said "economic rules," Route A said "their words" and Route B said "Maine."
+
+## Round one result: Signature
+
+Routes A and B were built on the mockups (`brand/kit/`). Both passed most criteria and both restated the brief. The recommended direction is Signature, which has no metaphor and runs on five rules:
+
+1. One idea per frame.
+2. Big, tight type anchored low left.
+3. Full color fields in a fixed order: Spruce, Birch, Pine, with Marigold as a field once in a set of nine.
+4. Marigold appears once per frame, usually as the dot that ends a headline.
+5. The creator's name and town are plain information, never a device.
+
+Its one partial score is ownability. That comes from using the same rules every time. Caption blocks from Route A stay available inside videos as a content tool, not as the brand.
+
 ## Research before design
 
 We cannot talk to people ourselves, so these scripts are ready for someone on the team to run.
@@ -115,5 +133,5 @@ We cannot talk to people ourselves, so these scripts are ready for someone on th
 ## Decisions needed
 
 1. Approve this platform as the test for all future design.
-2. Confirm we stop exploring new symbols and build routes A and B on the eight mockups.
+2. Approve Signature as the direction, so it can be applied to the theme, templates and guide.
 3. Name who will run the creator calls and the gut check.
