@@ -107,6 +107,10 @@ Routes A and B were built on the mockups (`brand/kit/`). Both passed most criter
 
 Its one partial score is ownability. That comes from using the same rules every time. Caption blocks from Route A stay available inside videos as a content tool, not as the brand.
 
+## Round two: Signature, tightened
+
+Signature was checked against real editorial and mission-led screens on Refero (`03-pressure-test.md`). Nothing new was added. The five rules now have numbers: a fixed margin, a fixed color order, one job for Marigold and one style for the credit line. The bug is the wordmark alone. Ownability is still partial, and closer.
+
 ## Research before design
 
 We cannot talk to people ourselves, so these scripts are ready for someone on the team to run.

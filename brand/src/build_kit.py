@@ -189,7 +189,78 @@ def quiet_mockups(m):
            artboard("q-grid", "ph9 light", grid, "S4 · Profile grid of nine covers", 360, 640),
            artboard("q-substack", "light", substack, "S6 · Substack header and email", 480, 640),
            artboard("q-collab", "ph9 light", collab, "S8 · Collab post on a creator's own account", 360, 640)]
-    return "".join(out), artboard("q-web", "", hero, "S7 · Website hero, no photo", 1200, 680)
+    return out, artboard("q-web", "", hero, "S7 · Website hero, no photo", 1200, 680)
+
+
+# ------------------------------------------------------------------ Signature, round two
+# Changes from the pressure test (brand/03-pressure-test.md):
+#  - one margin unit M = frame width / 15; headline baseline sits on the bottom safe line
+#  - the bug is the wordmark alone, so there is one lockup to learn
+#  - covers carry one headline and one plain credit line, no episode numbers
+#  - field order is Spruce, Birch, Pine; every ninth post Marigold takes Pine's place
+#  - outside the wordmark, Marigold appears once: the headline dot or the Marigold field
+#  - labels are sentence case, Inter 400 and 600 only; Bricolage 800 only
+#  - the disclosure sentence never changes and sits in the same place on every surface
+ORDER = ["sp", "bi", "pi", "sp", "bi", "pi", "sp", "bi", "mg"]
+
+
+def sbug(m):
+    return '<div class="sbug">%s</div>' % inl(m["wordmark-reversed"], "wm")
+
+
+def credit(name="[Creator name]", town="[Hometown]", cls=""):
+    return '<p class="credit %s"><b>%s</b> %s, Maine</p>' % (cls, name, town)
+
+
+def sig_mockups(m):
+    wm_rev = inl(m["wordmark-reversed"], "wm")
+    first = '<div class="foot"></div>%s%s' % (sbug(m), ui_overlay())
+    lower = '<div class="foot"></div>%s<div class="sl3">%s</div>%s' % (sbug(m), credit(town="Skowhegan", cls="lg"), ui_overlay())
+    end = ('<div class="send">%s<div class="slow">%s<ul class="hl s"><li><b>Instagram</b>[@handle]</li><li><b>TikTok</b>[@handle]</li>'
+           '<li><b>YouTube</b>[@handle]</li><li><b>Substack</b>[name].substack.com</li></ul></div><p class="disc">%s</p></div>') % (wm_rev, ttl("Follow along", "xl"), MPI)
+    covers = "".join('<div class="cov s %s">%s%s</div>' % (ORDER[i], credit(town=TOWNS[i], cls="cv"), ttl(TOPICS[i], "cv"))
+                     for i in range(9))
+    grid = ('<div class="prof"><div class="ph"><span class="pav">%s</span><div><b>Generation Maine</b><span>[@handle]</span></div></div>'
+            '<p class="bio">Young Mainers on building a life here. %s.</p><div class="grid9">%s</div></div>') % (inl(m["icon"], "pa"), MPI, covers)
+    substack = ('<div class="subst s"><div class="ssh">%s</div><p class="sdisc">%s</p><div class="sb"><h3>[Post title in plain words]</h3>'
+                '%s<p>[First paragraph in the creator\'s own words.]</p>'
+                '<p>[Body continues.]</p><p>[Body continues.]</p></div>'
+                '<p class="sfoot">Short videos and this newsletter are made by young Maine creators. %s.</p></div>') % (
+        wm_rev, MPI, credit(town="Belfast", cls="by"), MPI)
+    hero = ('<div class="web s"><div class="wn">%s<nav><span>About</span><span>Creators</span><span>Follow</span></nav></div>'
+            '<p class="sdisc w">%s</p>'
+            '<div class="sh1"><h1>Young Mainers on building a life here<i class="d"></i></h1>'
+            '<div class="sside"><p class="wlede">Short videos by young Maine creators about the rules that shape their lives.</p>'
+            '<p class="wbtn"><span class="b1">Meet the creators</span><span class="b2">Follow along</span></p></div></div>'
+            '<div class="qnext s">What it is</div></div>') % (wm_rev, MPI)
+    post = '<div class="pimg"><div class="foot"></div>%s<div class="sl3 p">%s</div></div>' % (sbug(m), credit(town="Machias", cls="lg"))
+    collab = ('<div class="feed"><div class="fh"><i class="cav">C</i><div><b>[creator.handle] and generationmaine</b><span>Paid partnership with Generation Maine</span></div></div>'
+              '%s<div class="fa"><i></i><i></i><i></i></div><p class="fc"><b>[creator.handle]</b> [Caption in the creator\'s words]</p></div>') % post
+    out = [artboard("s-first", "ph9", first, "S1 · Video, first seconds. The wordmark is the bug.", 360, 640),
+           artboard("s-lower", "ph9", lower, "S2 · Name and town, plain, on the safe line", 360, 640),
+           artboard("s-end", "ph9", end, "S3 · End card", 360, 640),
+           artboard("s-grid", "ph9 light", grid, "S4 · Profile grid of nine covers", 360, 640),
+           artboard("s-substack", "light", substack, "S6 · Substack header and email", 480, 640),
+           artboard("s-collab", "ph9 light", collab, "S8 · Collab post on a creator's own account", 360, 640)]
+    return out, artboard("s-web", "", hero, "S7 · Website hero, no photo", 1200, 680)
+
+
+CHANGES = [
+    ("Video, first seconds", "Before: a G icon plus spaced capitals, a third lockup to learn. After: the wordmark alone, one margin in from the left."),
+    ("Lower third", "Before: a Bricolage name over tracked capitals. After: name in Inter SemiBold, town in sentence case, on the safe line above the app's captions."),
+    ("End card", "Before: the name in small capitals and no wordmark. After: the wordmark at half the frame width, top left. Headline and handles sit low left. The disclosure sits on the bottom margin."),
+    ("Profile grid", "Before: episode numbers and a loose color order. After: Spruce, Birch and Pine fall into columns. Marigold takes the ninth slot. One credit line top left, one headline low left."),
+    ("Substack", "Before: a white header, with the disclosure only at the foot. After: a Spruce masthead with the wordmark low left and the disclosure right under it. The byline sits above the text on a hairline."),
+    ("Collab post", "After: the wordmark bug and the sentence-case credit, the same as in the video."),
+]
+
+
+def before_after(q, s):
+    rows = ""
+    for (title, note), a, b in zip(CHANGES, q, s):
+        rows += ('<div class="pair"><div class="pn"><p class="k">%s</p><p>%s</p></div><div class="cards tight">%s%s</div></div>'
+                 % (title, note, a.replace("<figcaption>", "<figcaption>Before · "), b.replace("<figcaption>", "<figcaption>After · ")))
+    return rows
 
 
 def overlays(m):
@@ -199,6 +270,11 @@ def overlays(m):
     o.append(artboard("ov-a-lower", "clear", '<div class="l3a">%s%s</div>' % (say("[One line in the creator's words]", "md"), who()), "Route A lower third, transparent", 360, 640))
     o.append(artboard("ov-b-lower", "clear", '<div class="l3b"><p class="t">[Hometown]</p><p class="n">[Creator name]<span>Episode 00 · [Topic]</span></p></div>', "Route B lower third, transparent", 360, 640))
     return "".join(o)
+
+
+def sig_overlays(m):
+    return (artboard("ov-s-bug", "clear", sbug(m), "Round two bug: the wordmark, transparent", 360, 640)
+            + artboard("ov-s-lower", "clear", '<div class="sl3">%s</div>' % credit(cls="lg"), "Round two name and town, transparent", 360, 640))
 
 
 def avatars(m):
@@ -396,6 +472,55 @@ figcaption{font:600 12px/1.4 Inter;letter-spacing:.06em;text-transform:uppercase
 .qrow .wlede{margin:0}
 .qnext{position:absolute;left:0;right:0;bottom:0;height:64px;background:var(--bi);color:var(--moss);font:600 12px Inter;letter-spacing:.08em;text-transform:uppercase;padding:24px 56px}
 .qnext span{color:var(--stone);margin-right:8px}
+
+
+.pair{display:grid;grid-template-columns:260px 1fr;gap:28px;padding:26px 0;border-top:1px solid #D6D0C2}
+.pair .pn p:last-child{font-size:14px;color:#34413A;margin:0}
+.cards.tight{margin-top:0}
+.find{width:100%;border-collapse:collapse;margin-top:18px;font-size:14px}
+.find td,.find th{border-bottom:1px solid #D6D0C2;padding:9px 8px;text-align:left;vertical-align:top}
+.find th{font:600 11px Inter;letter-spacing:.08em;text-transform:uppercase;color:var(--stone)}
+.rules{margin:18px 0 0;padding-left:22px;max-width:80ch}.rules li{margin:0 0 8px}
+
+/* Signature, round two. M = frame width / 15 (24 px on a 360 px frame, 72 px at 1080). */
+.ab{--M:24px}
+.sbug{position:absolute;top:44px;left:var(--M)}
+.sbug .wm{width:118px;height:auto;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
+.credit{margin:0;font:400 11px/1.35 Inter;color:inherit}
+.credit b{font-weight:600}
+.credit.lg{font-size:15px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.45)}
+.credit.lg b{display:block;font-size:20px;line-height:1.2;letter-spacing:-.005em}
+.sl3{position:absolute;left:var(--M);bottom:196px}
+.sl3.p{bottom:var(--M)}
+.send{position:absolute;inset:0;background:var(--sp);padding:44px var(--M) var(--M);display:flex;flex-direction:column;justify-content:space-between}
+.send .wm{width:180px;height:auto;display:block}
+.send .ttl{margin-bottom:20px}
+.hl.s{margin:0}.hl.s li{border-color:#2A5F4B}
+.disc{margin:0;font:600 13px/1.35 Inter;color:var(--bi)}
+.cov.s{color:var(--bi)}
+.cov.s.bi{color:var(--ink)}.cov.s.mg{color:var(--ink)}
+.cov.s .credit{position:absolute;left:8px;top:8px;right:6px;font-size:7.5px;line-height:1.3}
+.cov.s .credit b{display:block}
+.cov.s .ttl{position:absolute;left:8px;right:6px;bottom:9px;font-size:21px}
+.cov.s.bi .ttl{color:var(--sp)}.cov.s.mg .ttl{color:var(--pine)}.cov.s.mg .ttl .d{background:var(--pine)}
+.subst.s{background:#fff}
+.ssh{background:var(--sp);height:128px;padding:0 32px 22px;display:flex;align-items:flex-end}
+.ssh .wm{width:220px;height:auto;display:block}
+.sdisc{margin:0;padding:10px 32px;font:600 12px/1.3 Inter;color:var(--moss);background:var(--bi)}
+.subst.s .sb{padding-top:28px}
+.subst.s .sb h3{font:800 34px/.98 Bric;letter-spacing:-.03em;margin:0 0 14px}
+.credit.by{font-size:13px;color:var(--stone);margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid #E1DBCC}
+.credit.by b{color:var(--ink)}
+.subst.s .sfoot{right:32px;line-height:1.4}
+.web.s .wn{padding:24px 56px}
+.sdisc.w{background:none;padding:0 56px;color:var(--sage);position:relative;z-index:2}
+.sh1{position:absolute;left:56px;right:56px;bottom:112px;display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
+.web.s h1{font:800 112px/.9 Bric;letter-spacing:-.03em;margin:0;max-width:11ch}
+.sside{flex:none;width:380px;padding-bottom:10px}
+.web.s .wbtn span{white-space:nowrap}
+.sside .wlede{margin:0 0 22px;font-size:18px}
+.web.s .b1{background:var(--bi);color:var(--ink)}
+.qnext.s{color:var(--stone);letter-spacing:0;text-transform:none;font:600 14px Inter;padding:22px 56px;border-top:0}
 """
 
 
@@ -421,8 +546,46 @@ PAGE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name
 </div></section>
 
 <section><div class="w">
-  <p class="k">Recommended direction</p>
-  <h2>Signature</h2>
+  <p class="k">Recommended direction, round two</p>
+  <h2>Signature, tightened</h2>
+  <p>We checked round one against two sets of real screens on Refero. The first set was editorial and creator-led media. The second was quiet, mission-led brands. Refero has few true nonprofits, so the second set leans on civic-minded companies and impact reports. We borrowed principles, not looks. The full notes are in <code>brand/03-pressure-test.md</code>.</p>
+  <table class="find"><tr><th>What we saw</th><th>Where</th><th>What Signature does with it</th></tr>
+  <tr><td>Covers in a series vary, but the title and the brand tag sit in the same place every time</td><td>The Athletic podcast grid</td><td>Fixed slots. One credit line top left, one headline low left, nothing else. Episode numbers come off the covers.</td></tr>
+  <tr><td>The byline sits in the same place and style on every story</td><td>The New Yorker, The New York Times</td><td>Name and town are one plain line in the same spot on every surface, in sentence case.</td></tr>
+  <tr><td>One accent color with one job</td><td>The New Yorker's labels, Anthropic's single dark button</td><td>Marigold has two jobs only: the dot and the ninth field. Buttons and labels lose it.</td></tr>
+  <tr><td>Premium comes from space and hairlines, not decoration</td><td>Wealthsimple Magazine, Anthropic, Aesop</td><td>Hairline under the byline. Plain labels. No boxes around text.</td></tr>
+  <tr><td>Contact or disclosure sits right under the title</td><td>Handshake newsroom</td><td>"An initiative of Maine Policy Institute" sits under the masthead on Substack and under the nav on the site, as well as in the footer.</td></tr>
+  <tr><td>Big, tight, low-left sans on a full field is common</td><td>Dopper impact report, Bloomberg Businessweek</td><td>The anchor alone is not ownable. The dot, the column order and the credit line together have to carry it.</td></tr>
+  <tr><td>Trend shapes, mascots and hand lettering</td><td>The Leap, Duolingo, Mailchimp</td><td>Kept out. They date fast and read as marketing.</td></tr>
+  </table>
+  <p class="k" style="margin-top:34px">The five rules, now measurable</p>
+  <ol class="rules">
+    <li>One idea per frame. A cover carries one headline of four words or fewer and one credit line.</li>
+    <li>Big, tight type anchored low left. Bricolage ExtraBold, line height 0.9, tracking minus 3 percent, three lines at most. The margin is one fifteenth of the frame width, 72 px on a 1080 px frame.</li>
+    <li>Full color fields in a fixed order: Spruce, Birch, Pine, then again. Every ninth post, Marigold takes Pine's place. In a three-across grid the colors fall into columns.</li>
+    <li>Marigold once per frame, outside the wordmark. It is the dot that ends the headline, or it is the field. On a Marigold field the dot turns Pine.</li>
+    <li>The creator's name and town are one plain line: name in Inter SemiBold, town in Inter Regular, sentence case. In video it sits on the safe line, 30 percent up from the bottom.</li>
+  </ol>
+  <p class="note">Type is Bricolage ExtraBold for headlines and the wordmark, and Inter Regular and SemiBold for everything else. The bug is the wordmark alone. The dot stays round, flat and still. It never winks, bounces or changes shape.</p>
+  {{PAIRS}}
+  <div class="pair"><div class="pn"><p class="k">Website hero</p><p>Before: Marigold in the label, the dot and the button, and a headline floating mid-frame. After: Marigold only in the dot and the logo. The button is Birch. The headline sits on the bottom margin. The disclosure sits in sentence case under the nav.</p></div><div>{{S_WEB_BEFORE}}<div style="height:24px"></div>{{S_WEB}}</div></div>
+  <div class="pair"><div class="pn"><p class="k">Overlays</p><p>Transparent files for CapCut and Canva, built to the new rules.</p></div><div class="cards tight">{{SOVER}}</div></div>
+  <p class="k" style="margin-top:34px">Against the test, round two</p>
+  <table class="checks"><tr><th>Criterion</th><th>Round one</th><th>Round two</th></tr>
+  <tr><td>1 Signs, does not cover</td><td>Pass</td><td>Pass. The bug is the wordmark at a third of the frame width, in the top left, and nothing else.</td></tr>
+  <tr><td>2 Survives the crop</td><td>Pass</td><td>Pass. The avatar is unchanged.</td></tr>
+  <tr><td>3 Carries a person</td><td>Pass</td><td>Pass, and stronger. Every cover now names the creator and the town.</td></tr>
+  <tr><td>4 Neutral</td><td>Pass</td><td>Pass. No device, no claim, no red or blue.</td></tr>
+  <tr><td>5 Both audiences</td><td>Pass</td><td>Pass, and stronger on Substack. The masthead, the disclosure and the byline read as editorial.</td></tr>
+  <tr><td>6 Stands without photos</td><td>Pass</td><td>Pass. Type and color fields carry every surface.</td></tr>
+  <tr><td>7 Ownable</td><td>Partial</td><td>Partial, but closer. The low-left anchor is common on its own. The dot period, the column order and the credit line are ours together. This becomes a pass only after a season of consistent use.</td></tr>
+  <tr><td>8 Easy to make</td><td>Pass</td><td>Pass, and fewer choices. No episode numbers, one bug file, and the color order is written down.</td></tr>
+  </table>
+</div></section>
+
+<section><div class="w">
+  <p class="k">Round one, kept for the record</p>
+  <h2>Signature, round one</h2>
   <p>No metaphor. The name already says young and Maine, so the look adds confidence instead of repeating it. Five rules carry everything: one idea per frame; big, tight type anchored low left; full color fields in a fixed order; Marigold once per frame, usually as the dot that ends a headline; and the creator's name and town as plain information, never a device.</p>
   <div class="cards">{{Q}}</div>
   <div class="cards">{{Q_WEB}}</div>
@@ -466,6 +629,7 @@ def build_kit(m):
     a, a_web = route_mockups("a", m)
     b, b_web = route_mockups("b", m)
     q, q_web = quiet_mockups(m)
+    sg, s_web = sig_mockups(m)
     css = CSS
     for k, v in {"{{F800}}": font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2"),
                  "{{F700}}": font64("brand/v6/fonts-web/bricolage-grotesque-700.woff2"),
@@ -477,7 +641,9 @@ def build_kit(m):
     html = PAGE.replace("{{CSS}}", css)
     rep = {"{{WM}}": m["wordmark"], "{{WM_REV}}": m["wordmark-reversed"], "{{ST}}": m["stacked"], "{{ICON_BARE}}": inl(m["icon-bare"]),
            "{{ICON_L}}": m["icon-light"], "{{ICON_M}}": m["icon-marigold"], "{{ENDORSED_REV}}": m["endorsed-reversed"],
-           "{{AVATARS}}": avatars(m), "{{OVERLAYS}}": overlays(m), "{{A}}": a, "{{A_WEB}}": a_web, "{{B}}": b, "{{B_WEB}}": b_web, "{{Q}}": q, "{{Q_WEB}}": q_web}
+           "{{AVATARS}}": avatars(m), "{{OVERLAYS}}": overlays(m), "{{A}}": a, "{{A_WEB}}": a_web, "{{B}}": b, "{{B_WEB}}": b_web, "{{Q}}": "".join(q), "{{Q_WEB}}": q_web,
+           "{{PAIRS}}": before_after(q, sg), "{{S_WEB_BEFORE}}": q_web.replace("q-web", "q-web-b").replace("<figcaption>", "<figcaption>Before · "),
+           "{{S_WEB}}": s_web.replace("<figcaption>", "<figcaption>After · "), "{{SOVER}}": sig_overlays(m)}
     for k, v in rep.items():
         html = html.replace(k, v)
     write(OUT + "/kit.html", html)
