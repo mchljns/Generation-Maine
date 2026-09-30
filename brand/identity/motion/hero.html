@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generation Maine, the field in motion</title>
+<style>
+  @font-face{font-family:Bric;src:url("../../../generation-maine/assets/fonts/bricolage-grotesque-800.woff2") format("woff2");font-weight:800}
+  @font-face{font-family:Inter;src:url("../../../generation-maine/assets/fonts/inter-var.woff2") format("woff2");font-weight:100 900}
+  :root{--sp:#104836;--pine:#0B2B21;--bi:#F4F0E6;--ink:#1E2621;--mg:#EFB443;--sage:#DDE5DA;--moss:#3D6F58;--stone:#5E6A63}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bi);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  /* hero */
+  .hero{position:relative;height:100vh;min-height:620px;background:var(--sp);color:var(--bi);overflow:hidden}
+  .hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .hero .in{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;padding:26px 56px 44px}
+  .top{display:flex;justify-content:space-between;align-items:center}
+  .wm{font:800 26px/1 Bric;letter-spacing:-.02em}
+  nav{display:flex;gap:40px;font:600 15px Inter}
+  .mpi{margin:16px 0 0;font:500 12px/1.4 Inter;color:var(--sage)}
+  .body{margin-top:auto;display:grid;grid-template-columns:1fr 380px;align-items:end;gap:48px}
+  h1{margin:0;font:800 clamp(56px,7.6vw,104px)/.9 Bric;letter-spacing:-.03em;max-width:12ch;opacity:0;transform:translateY(14px);transition:opacity .9s cubic-bezier(.2,.7,.2,1) .15s,transform .9s cubic-bezier(.2,.7,.2,1) .15s}
+  h1.on{opacity:1;transform:none}
+  .lede{opacity:0;transition:opacity .8s ease .7s}
+  .lede.on{opacity:1}
+  .lede p{margin:0 0 22px;font:400 17px/1.5 Inter}
+  .btns{display:flex;gap:12px}
+  .btns a{padding:14px 22px;border-radius:3px;font:700 16px Inter;text-decoration:none;color:var(--ink);background:var(--bi)}
+  .btns a.s{background:none;color:var(--bi);box-shadow:inset 0 0 0 1.5px var(--sage)}
+  /* mural */
+  .mural{position:relative;background:var(--bi);padding:96px 56px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;min-height:100vh}
+  .mural h2{margin:0 0 18px;font:800 clamp(40px,4.6vw,64px)/.95 Bric;letter-spacing:-.03em;color:var(--sp)}
+  .mural p{margin:0 0 14px;font:400 18px/1.55 Inter;max-width:44ch}
+  .mural svg{width:100%;height:auto;display:block}
+  .mural svg path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.2s cubic-bezier(.2,.7,.2,1)}
+  .mural.on svg path{stroke-dashoffset:0}
+  .note{font:500 12px/1.4 Inter;color:var(--stone);padding:0 56px 40px;background:var(--bi)}
+  @media (max-width:800px){.hero .in{padding:20px 20px 32px}.body{grid-template-columns:1fr;gap:28px}nav{display:none}.mural{grid-template-columns:1fr;padding:64px 20px}}
+  @media (prefers-reduced-motion:reduce){h1,.lede,.mural svg path{transition:none}}
+</style>
+</head>
+<body>
+<section class="hero" id="hero">
+  <canvas id="field"></canvas>
+  <div class="in">
+    <div class="top"><div class="wm">Generation Maine</div><nav><span>About</span><span>Creators</span><span>Follow</span></nav></div>
+    <p class="mpi">An initiative of Maine Policy Institute</p>
+    <div class="body">
+      <h1 id="h1">Young Mainers on building a life here.</h1>
+      <div class="lede" id="lede"><p>Short videos by young Maine creators about the rules that shape their lives.</p>
+        <div class="btns"><a href="#">Meet the creators</a><a class="s" href="#">Follow along</a></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="mural" id="mural">
+  <div><h2>What it is.</h2>
+    <p>Eight to twelve young creators from across Maine make short videos about the rules that shape their lives. Rent, wages, licenses, the drive to work.</p>
+    <p>Maine Policy Institute supports the project and says so plainly. The creators tell the stories.</p></div>
+  <div id="maine"></div>
+</section>
+<p class="note">Prototype. The field of lines makes room for the words on load and for the pointer as it moves. Where a line bends it turns Marigold. With reduced motion on, the field is drawn once in its final state. The Maine mural draws itself in as it enters the view.</p>
+
+<script id="maine-data" type="application/json">{"rows": [{"y": 17.0, "w": 2.6, "runs": [[333.0, 356.3]]}, {"y": 28.6, "w": 2.69, "runs": [[324.7, 354.6], [432.8, 447.9]]}, {"y": 40.3, "w": 2.78, "runs": [[316.4, 355.2], [408.3, 463.6]]}, {"y": 51.9, "w": 2.87, "runs": [[308.1, 369.2], [380.2, 477.8]]}, {"y": 63.5, "w": 2.97, "runs": [[299.8, 484.8]]}, {"y": 75.1, "w": 3.06, "runs": [[291.6, 496.0]]}, {"y": 86.8, "w": 3.15, "runs": [[283.4, 495.9]]}, {"y": 98.4, "w": 3.24, "runs": [[275.1, 495.9]]}, {"y": 110.0, "w": 3.33, "runs": [[267.1, 495.8]]}, {"y": 121.6, "w": 3.42, "runs": [[258.9, 495.8]]}, {"y": 133.3, "w": 3.52, "runs": [[251.7, 495.8]]}, {"y": 144.9, "w": 3.61, "runs": [[250.0, 495.8]]}, {"y": 156.5, "w": 3.7, "runs": [[248.3, 495.9]]}, {"y": 168.2, "w": 3.79, "runs": [[246.7, 496.1]]}, {"y": 179.8, "w": 3.88, "runs": [[240.1, 496.2]]}, {"y": 191.4, "w": 3.97, "runs": [[228.7, 496.3]]}, {"y": 203.0, "w": 4.06, "runs": [[223.3, 496.3]]}, {"y": 214.7, "w": 4.16, "runs": [[221.2, 496.3]]}, {"y": 226.3, "w": 4.25, "runs": [[223.7, 496.3]]}, {"y": 237.9, "w": 4.34, "runs": [[217.4, 496.3]]}, {"y": 249.5, "w": 4.43, "runs": [[223.9, 496.2]]}, {"y": 261.2, "w": 4.52, "runs": [[221.7, 493.6]]}, {"y": 272.8, "w": 4.61, "runs": [[207.8, 494.6]]}, {"y": 284.4, "w": 4.71, "runs": [[209.3, 495.8]]}, {"y": 296.1, "w": 4.8, "runs": [[189.2, 505.2]]}, {"y": 307.7, "w": 4.89, "runs": [[178.7, 525.2]]}, {"y": 319.3, "w": 4.98, "runs": [[171.7, 535.7]]}, {"y": 330.9, "w": 5.07, "runs": [[179.7, 529.5]]}, {"y": 342.6, "w": 5.16, "runs": [[162.5, 535.0]]}, {"y": 354.2, "w": 5.25, "runs": [[131.2, 145.1], [160.7, 531.1]]}, {"y": 365.8, "w": 5.35, "runs": [[132.1, 534.3]]}, {"y": 377.4, "w": 5.44, "runs": [[132.8, 540.5], [555.6, 566.6]]}, {"y": 389.1, "w": 5.53, "runs": [[133.5, 572.5]]}, {"y": 400.7, "w": 5.62, "runs": [[134.1, 575.3]]}, {"y": 412.3, "w": 5.71, "runs": [[134.9, 580.8]]}, {"y": 423.9, "w": 5.8, "runs": [[135.7, 585.4]]}, {"y": 435.6, "w": 5.89, "runs": [[136.4, 582.6]]}, {"y": 447.2, "w": 5.99, "runs": [[137.0, 570.6]]}, {"y": 458.8, "w": 6.08, "runs": [[137.6, 542.1]]}, {"y": 470.5, "w": 6.17, "runs": [[138.0, 518.6]]}, {"y": 482.1, "w": 6.26, "runs": [[138.5, 446.8], [453.1, 487.5]]}, {"y": 493.7, "w": 6.35, "runs": [[139.1, 360.1], [385.4, 415.0], [435.7, 443.1], [464.5, 478.8]]}, {"y": 505.3, "w": 6.44, "runs": [[139.7, 364.3], [385.0, 408.7], [430.5, 451.0]]}, {"y": 517.0, "w": 6.54, "runs": [[140.1, 358.0], [430.3, 437.2]]}, {"y": 528.6, "w": 6.63, "runs": [[140.5, 353.0]]}, {"y": 540.2, "w": 6.72, "runs": [[140.9, 350.0]]}, {"y": 551.8, "w": 6.81, "runs": [[141.4, 349.7]]}, {"y": 563.5, "w": 6.9, "runs": [[141.8, 337.4]]}, {"y": 575.1, "w": 6.99, "runs": [[142.2, 307.0]]}, {"y": 586.7, "w": 7.08, "runs": [[142.6, 241.1], [250.9, 285.6]]}, {"y": 598.4, "w": 7.18, "runs": [[143.1, 224.4], [268.8, 274.7]]}, {"y": 610.0, "w": 7.27, "runs": [[143.7, 218.6]]}, {"y": 621.6, "w": 7.36, "runs": [[144.4, 222.3]]}, {"y": 633.2, "w": 7.45, "runs": [[146.7, 209.7]]}, {"y": 644.9, "w": 7.54, "runs": [[146.0, 203.3]]}, {"y": 656.5, "w": 7.63, "runs": [[143.7, 199.0]]}, {"y": 668.1, "w": 7.73, "runs": [[150.6, 184.2]]}, {"y": 679.7, "w": 7.82, "runs": [[159.7, 179.5]]}, {"y": 691.4, "w": 7.91, "runs": [[161.6, 177.9]]}, {"y": 703.0, "w": 8.0, "runs": [[165.5, 173.2]]}], "widest": 35}</script>
+<script>
+(() => {
+  const SP = '#104836', MOSS = '#3D6F58', MG = '#EFB443';
+  const hero = document.getElementById('hero'), cv = document.getElementById('field'), ctx = cv.getContext('2d');
+  const h1 = document.getElementById('h1'), lede = document.getElementById('lede');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W = 0, H = 0, dpr = 1, lines = [];
+  const N = 26, STEPS = 220;
+  const ptr = { x: -9999, y: -9999, tx: -9999, ty: -9999, r: 22 };
+  let open = 0, t0 = performance.now();
+
+  function rects() {
+    const hb = hero.getBoundingClientRect();
+    const r1 = h1.getBoundingClientRect(), r2 = lede.getBoundingClientRect();
+    return [
+      { x0: r1.left - hb.left - 6, y0: r1.top - hb.top + 10, x1: r1.right - hb.left + 6, y1: r1.bottom - hb.top - 4, gold: true },
+      { x0: r2.left - hb.left - 6, y0: r2.top - hb.top - 6, x1: r2.right - hb.left + 6, y1: r2.bottom - hb.top + 6, gold: false },
+    ];
+  }
+  function resize() {
+    const b = hero.getBoundingClientRect(); W = b.width; H = b.height; dpr = Math.min(2, devicePixelRatio || 1);
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const top = Math.min(130, H * 0.19), bot = H - 16;
+    lines = [];
+    for (let i = 0; i < N; i++) { const t = i / (N - 1); lines.push({ y: top + (bot - top) * t, w: 1.5 + 2 * t, ys: new Float32Array(STEPS + 1), gold: new Uint8Array(STEPS + 1), cut: new Uint8Array(STEPS + 1) }); }
+  }
+  function smooth(arr, k) {
+    const n = arr.length, out = new Float32Array(n);
+    for (let i = 0; i < n; i++) { let acc = 0, ws = 0; for (let j = Math.max(0, i - 2 * k); j <= Math.min(n - 1, i + 2 * k); j++) { const w = Math.exp(-(((j - i) / k) ** 2) / 2); acc += arr[j] * w; ws += w; } out[i] = acc / ws; }
+    return out;
+  }
+  function frame(now) {
+    const clearMax = Math.min(34, W * 0.028);
+    if (!reduced) { const e = Math.min(1, (now - t0) / 1100); open = 1 - Math.pow(1 - e, 3); } else open = 1;
+    const clear = clearMax * open;
+    ptr.x += (ptr.tx - ptr.x) * 0.14; ptr.y += (ptr.ty - ptr.y) * 0.14;
+    const obs = rects();
+    ctx.clearRect(0, 0, W, H);
+    const pad = 0, x0 = pad, x1 = W - pad, dx = (x1 - x0) / STEPS;
+    const k = Math.max(2, Math.round(STEPS * clearMax / (x1 - x0) * 0.6));
+    for (const L of lines) {
+      const y0 = L.y;
+      for (let s = 0; s <= STEPS; s++) {
+        const px = x0 + s * dx; let py = y0, best = 0, gk = 0, cut = 0;
+        for (const r of obs) {
+          const ddx = px < r.x0 ? r.x0 - px : (px > r.x1 ? px - r.x1 : 0);
+          if (ddx >= clear || clear <= 0) continue;
+          const hh = Math.sqrt(clear * clear - ddx * ddx), top = r.y0 - hh, bot = r.y1 + hh;
+          if (y0 > top && y0 < bot) { cut = 1; continue; }
+          const gap = Math.min(Math.abs(y0 - top), Math.abs(y0 - bot));
+          const bow = 0.55 * clear * Math.exp(-(((gap) / (0.7 * clear)) ** 2));
+          if (bow > best && bow > 0.02 * clear) { best = bow; py = y0 <= top ? y0 - bow : y0 + bow; gk = r.gold && gap < clear * 0.9 ? 1 : 0; }
+        }
+        // the pointer makes a room of its own
+        const R = ptr.r + clear * 0.9, pdx = px - ptr.x, dy0 = y0 - ptr.y, ady = Math.abs(dy0), sign = dy0 >= 0 ? 1 : -1;
+        if (Math.abs(pdx) < R * 1.8 && ptr.x > -100) {
+          let amp, sig; if (ady < R) { amp = R - ady; sig = R * 0.75; } else { amp = 0.42 * R * Math.exp(-(((ady - R) / (0.55 * R)) ** 2)); sig = R * 0.95; }
+          let off = amp * Math.exp(-((pdx / sig) ** 2)); if (ady < R && Math.abs(pdx) < R) off = Math.max(off, Math.sqrt(R * R - pdx * pdx) - ady);
+          if (off > best) { best = off; py = y0 + sign * off; gk = ady < R ? 1 : 0; }
+        }
+        L.ys[s] = py; L.gold[s] = gk; L.cut[s] = cut;
+      }
+      const ys = smooth(L.ys, k);
+      // draw in runs of one colour, breaking where the line is cut
+      ctx.lineWidth = L.w; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      let run = [], isGold = null;
+      const flush = () => { if (run.length > 1) { ctx.strokeStyle = isGold ? MG : MOSS; ctx.beginPath(); ctx.moveTo(run[0][0], run[0][1]); for (let i = 1; i < run.length; i++) ctx.lineTo(run[i][0], run[i][1]); ctx.stroke(); } };
+      for (let s = 0; s <= STEPS; s++) {
+        const px = x0 + s * dx, py = ys[s];
+        if (L.cut[s]) { flush(); run = []; isGold = null; continue; }
+        const g = L.gold[s] && Math.abs(py - y0) > 0.18 * clearMax ? 1 : 0;
+        if (isGold === null || g === isGold) run.push([px, py]); else { flush(); run = [run[run.length - 1], [px, py]]; }
+        isGold = g;
+      }
+      flush();
+    }
+    if (!reduced || ptr.x > -100) requestAnimationFrame(frame);
+  }
+  hero.addEventListener('pointermove', e => { const b = hero.getBoundingClientRect(); ptr.tx = e.clientX - b.left; ptr.ty = e.clientY - b.top; });
+  hero.addEventListener('pointerleave', () => { ptr.tx = -9999; ptr.ty = -9999; });
+  addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(() => { h1.classList.add('on'); lede.classList.add('on'); });
+  requestAnimationFrame(frame);
+
+  // the mural: Maine in lines, drawn from the precise outline, drawing itself in on entry
+  { const d = JSON.parse(document.getElementById('maine-data').textContent);
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg'); svg.setAttribute('viewBox', '0 0 720 720');
+    d.rows.forEach((row, i) => { row.runs.forEach(([a, b]) => { const p = document.createElementNS(svgNS, 'path'); p.setAttribute('d', `M${a} ${row.y} L${b} ${row.y}`); p.setAttribute('stroke', i === d.widest ? MG : SP); p.setAttribute('stroke-width', row.w); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 18) + 'ms'; svg.appendChild(p); }); });
+    document.getElementById('maine').appendChild(svg);
+    const m = document.getElementById('mural');
+    new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }); }, { threshold: 0.25 }).observe(m);
+  }
+})();
+</script>
+</body>
+</html>

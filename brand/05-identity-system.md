@@ -27,3 +27,32 @@ Saved September 30, 2026. Everything below is built as hand-drawn SVG geometry b
 - `brand/identity/marks/` the letter marks and early candidates, kept as the record
 - `brand/identity/*.png` the sheets shown during the exploration, in order
 - `brand/src/maine2.py` and `brand/src/data/maine-census.json` the outline
+
+## Pushing further: four experiments
+
+Built after the save, all on real surfaces. Sheets: `brand/identity/push-1-text-room.png`, `brand/identity/push-2-type-voice-mural.png`. Files: `brand/identity/push/`.
+
+| Experiment | What it is | Verdict |
+| --- | --- | --- |
+| **Text is the room** | The field of lines makes room for the words. Lines that would cross a headline stop at it, the nearest lines bow and turn gold. On the hero, covers and the lower third | Keep. The strongest extension of the mark. The headline sits in a clearing with gold shoulders. On the lower third the band wraps the name, which suits a short band |
+| **Type in grain** | The wordmark and a title drawn in the same horizontal lines as Maine | Set aside as a static treatment. Horizontal lines erase horizontal strokes, so the G's bar and the e's crossbar vanish. It may work as a moment of motion, lines assembling into the word, then the real word taking over |
+| **Lines that bend to a voice** | The field bends to the loudness of the creator's audio, gold where it is loud | Hold. Compelling as a live behaviour on the video player. Too close to a podcast waveform as a static image. Needs real audio to judge |
+| **The mural as a hero** | Maine in sixty fine lines to the right of the headline, the widest line gold | Keep. Quiet, precise, and it puts the state on the page without making it the logo |
+
+## Motion prototype
+
+`brand/identity/motion/hero.html` is a working page. Open it in a browser.
+
+1. On load, the field opens to make room for the headline over about a second, as the headline settles in.
+2. The pointer carves its own room. Lines bend around it and turn gold where they bend. When it leaves, the field closes.
+3. The lede and buttons interrupt the field without gold. Marigold stays with the headline and the pointer.
+4. The Maine mural draws itself in, line by line, as it enters the view.
+5. With reduced motion on, the field is drawn once in its final state and nothing moves.
+
+Recording: `brand/identity/motion/hero-motion.gif` and the frame sheet `hero-motion-sheet.png`. Recorder: `brand/src/record_motion.mjs`.
+
+Rules for motion, drawn from the prototype:
+- One moving idea per view. The field moves, the words do not.
+- Nothing bounces. Ease out, 700 to 1100 ms for the field, 900 ms for type.
+- Gold appears only where a line bends, and only for the headline and the pointer.
+- The field never covers footage. In video it is a band, not a surface.
