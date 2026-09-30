@@ -132,3 +132,5 @@ In lowercase a few letters carry the whole look: the g, the a, the e, the t and 
 - Concept D: Familjen Grotesk, all lowercase
 
 If the client wants Concept D to stay a serif, use Hedvig Letters Serif with Hedvig Letters Sans.
+
+**Decision:** Hedvig Letters Serif, with Hedvig Letters Sans, for Concept D. It is applied in `brand/kit/` (mockups starting with `d-`). The serif is instanced at optical size 24 for display and 12 for small sizes, such as the video bug. Files and license: `brand/fonts/d/`.

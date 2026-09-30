@@ -2,8 +2,11 @@
 
 Nothing is shared with Signature except the name, the audience and the Maine Policy Institute line.
   Palette : Sky #CFE3F0, Bark #2B211C, Paper #FFFFFF, Mist #EEF4F8, Clay #6B5A4E
-  Type    : Fraunces Regular (OFL) for the wordmark and titles, Instrument Sans (OFL) for everything else
-  Layout  : centered and airy. Titles in sentence case, no end dot, no heavy weights.
+  Type    : Hedvig Letters Serif (OFL) for the wordmark, titles and names, Hedvig Letters Sans (OFL) for text.
+            One weight each. The serif is instanced at optical size 24 for display and 12 for small sizes.
+  Case    : the wordmark, titles, names, nav and buttons are all lowercase. Reading text and the
+            Maine Policy Institute line keep normal case, so the institute's name always reads clearly.
+  Layout  : centered and airy. No end dot, no heavy weights.
 
 Called from build_kit.py, which passes in its shared mockup helpers.
 """
@@ -14,8 +17,8 @@ from gmlib import ROOT, Face, write
 from build_v4 import svg, f
 
 D = {"sky": "#CFE3F0", "bark": "#2B211C", "paper": "#FFFFFF", "mist": "#EEF4F8", "clay": "#6B5A4E"}
-SERIF = Face("v3/Fraunces-Regular.ttf")
-SERIF_SB = Face("v3/Fraunces-SemiBold.ttf")
+SERIF = Face("d/HedvigLettersSerif-24.ttf")
+SERIF_SB = Face("d/HedvigLettersSerif-12.ttf")  # sturdier small-size cut, used for the video bug
 OUT = "brand/kit/assets/logo-d"
 
 
@@ -27,10 +30,10 @@ def wordmark(fg, size=100, face=None):
 def monogram(bg, fg, s=200):
     """Lowercase g and m, set tight, centered in a circle-safe square."""
     size = s * 0.5
-    d, w = SERIF_SB.path("gm", size, 0, 0, -30)
+    d, w = SERIF.path("gm", size, 0, 0, -20)
     x = (s - w) / 2
     base = s / 2 + size * 0.2
-    d, w = SERIF_SB.path("gm", size, x, base, -30)
+    d, w = SERIF.path("gm", size, x, base, -20)
     bgr = '<rect width="%s" height="%s" fill="%s"/>' % (s, s, bg) if bg else ""
     return bgr + '<path fill="%s" d="%s"/>' % (fg, d)
 
@@ -55,26 +58,28 @@ def font64(rel):
 
 
 CSS = r"""
-@font-face{font-family:Fraun;src:url(data:font/ttf;base64,{{FR}}) format('truetype');font-weight:400}
-@font-face{font-family:Fraun;src:url(data:font/ttf;base64,{{FRSB}}) format('truetype');font-weight:600}
-@font-face{font-family:ISans;src:url(data:font/ttf;base64,{{IS4}}) format('truetype');font-weight:400}
-@font-face{font-family:ISans;src:url(data:font/ttf;base64,{{IS6}}) format('truetype');font-weight:600}
-.dz{--sky:#CFE3F0;--bark:#2B211C;--paper:#FFFFFF;--mist:#EEF4F8;--clay:#6B5A4E;font-family:ISans,Inter,sans-serif}
+@font-face{font-family:Fraun;src:url(data:font/ttf;base64,{{FR}}) format('truetype');font-weight:100 1000}
+@font-face{font-family:FraunS;src:url(data:font/ttf;base64,{{FRSB}}) format('truetype');font-weight:100 1000}
+@font-face{font-family:ISans;src:url(data:font/ttf;base64,{{IS4}}) format('truetype');font-weight:100 1000}
+.dz{--sky:#CFE3F0;--bark:#2B211C;--paper:#FFFFFF;--mist:#EEF4F8;--clay:#6B5A4E;font-family:ISans,Inter,sans-serif;font-synthesis:none}
+.dz .dt,.dz .dname,.dz .dmeta,.dz .dwn nav,.dz .dbtn,.dz .dhl,.dz .dwh h1,.dz .dsb h3{text-transform:lowercase}
+.dz .dmeta b,.dz .dhl b{font-family:FraunS}
 .dz .dbug{position:absolute;top:42px;left:18px}
 .dz .dbug svg{width:112px;height:auto;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
 .dz .dname{margin:0;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.45)}
 .dz .dname b{display:block;font:400 26px/1.1 Fraun;letter-spacing:-.01em}
 .dz .dname span{display:block;font:400 14px/1.5 ISans}
+.dz .dname b{font-family:Fraun}
 .dz .dl3{position:absolute;left:18px;bottom:196px}
 .dz .dt{margin:0;font:400 30px/1.08 Fraun;letter-spacing:-.015em;color:var(--bark);text-align:center}
 .dz .dmeta{margin:0;font:400 11px/1.4 ISans;color:var(--clay);text-align:center}
-.dz .dmeta b{font-weight:600;color:var(--bark)}
+.dz .dmeta b{font-weight:400;color:var(--bark)}
 .dz .dend{position:absolute;inset:0;background:var(--sky);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:52px 24px 30px;text-align:center}
 .dz .dend .wm{width:190px;height:auto}
 .dz .dend .dt{font-size:46px}
 .dz .dhl{list-style:none;margin:22px 0 0;padding:0;font:400 14px/1 ISans;color:var(--bark)}
-.dz .dhl li{padding:8px 0}.dz .dhl b{font-weight:600;margin-right:8px}
-.dz .ddisc{margin:0;font:600 13px/1.35 ISans;color:var(--bark)}
+.dz .dhl li{padding:8px 0}.dz .dhl b{font-weight:400;margin-right:8px}
+.dz .ddisc{margin:0;font:400 13px/1.35 ISans;color:var(--bark)}
 .dz .grid9{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
 .dz .dcov{position:relative;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center}
 .dz .dcov.sky{background:var(--sky)}.dz .dcov.paper{background:var(--paper);box-shadow:inset 0 0 0 1px #E6E9EC}.dz .dcov.mist{background:var(--mist)}.dz .dcov.bark{background:var(--bark)}
@@ -99,7 +104,7 @@ CSS = r"""
 .dz .dwh h1{font:400 96px/1.0 Fraun;letter-spacing:-.025em;margin:22px auto 22px;max-width:14ch}
 .dz .dwh .lede{font:400 19px/1.55 ISans;max-width:40ch;margin:0 auto 30px}
 .dz .dbtn{display:flex;gap:12px;justify-content:center;margin:0}
-.dz .dbtn span{padding:14px 24px;border-radius:999px;font:600 15px ISans}
+.dz .dbtn span{padding:14px 24px;border-radius:999px;font:400 15px ISans}
 .dz .dbtn .p{background:var(--bark);color:var(--paper)}.dz .dbtn .s{box-shadow:inset 0 0 0 1.5px var(--bark)}
 .dz .dfeed .dl3{bottom:22px}
 .dz .dav{width:110px;height:110px;border-radius:50%;overflow:hidden;flex:none}
@@ -152,8 +157,8 @@ def mockups(m, h):
 
 def css():
     c = CSS
-    for k, v in {"{{FR}}": "brand/fonts/v3/Fraunces-Regular.ttf", "{{FRSB}}": "brand/fonts/v3/Fraunces-SemiBold.ttf",
-                 "{{IS4}}": "brand/fonts/v2/InstrumentSans-Regular.ttf", "{{IS6}}": "brand/fonts/v2/InstrumentSans-SemiBold.ttf"}.items():
+    for k, v in {"{{FR}}": "brand/fonts/d/HedvigLettersSerif-24.ttf", "{{FRSB}}": "brand/fonts/d/HedvigLettersSerif-12.ttf",
+                 "{{IS4}}": "brand/fonts/d/HedvigLettersSans-Regular.ttf"}.items():
         c = c.replace(k, font64(v))
     return c
 
@@ -162,13 +167,14 @@ SECTION = r"""<section><div class="w">
   <p class="k">Second direction, for the client to compare</p>
   <h2>Concept D: Bark &amp; Sky</h2>
   <p>A fully separate direction. It shares only the name, the audience and the Maine Policy Institute line with Signature. Where Signature is dark, heavy and low left, this one is light, soft and centered.</p>
-  <p>The test sentence: soft serif titles, centered on pale blue and white, with brown for type. It says nothing about youth, Maine or economics.</p>
+  <p>The test sentence: lowercase serif titles, centered on pale blue and white, with brown for type. It says nothing about youth, Maine or economics.</p>
   <ol class="rules">
     <li>Paper and Sky make up most of every surface. Bark is for type and one cover in four.</li>
-    <li>Titles are Fraunces Regular, sentence case, centered, with no end mark. Everything else is Instrument Sans.</li>
-    <li>The wordmark is lowercase Fraunces. The avatar is a lowercase gm.</li>
+    <li>Hedvig Letters Serif for the wordmark, titles and names. Hedvig Letters Sans for text. One weight each, so hierarchy comes from size and color alone.</li>
+    <li>The wordmark, titles, names, nav and buttons are all lowercase. Reading text and the Maine Policy Institute line keep normal case, so the institute's name always reads clearly.</li>
+    <li>The avatar is a lowercase gm in the serif.</li>
     <li>The creator's name is set in the serif, the same as a title. Their town sits under it in the sans.</li>
-    <li>Nothing is bold above 600, nothing is boxed, and buttons are fully rounded.</li>
+    <li>No bold anywhere, nothing boxed, and buttons fully rounded.</li>
   </ol>
   <div class="cards">{{D}}</div>
   <div class="cards">{{D_WEB}}</div>
@@ -180,7 +186,7 @@ SECTION = r"""<section><div class="w">
   <tr><td>4 Neutral</td><td>Pass</td><td>Pass. The blue stays pale and sits with brown, never with red.</td></tr>
   <tr><td>5 Both audiences</td><td>Pass</td><td>Pass on Substack and the site, where it reads as literary and calm. Partial on TikTok, where soft covers may not stop the scroll.</td></tr>
   <tr><td>6 Stands without photos</td><td>Pass</td><td>Pass. Space and type carry it.</td></tr>
-  <tr><td>7 Ownable</td><td>Partial</td><td>Partial. Brown with pale blue is unusual in civic and news media. Serif titles on light fields are common in lifestyle brands.</td></tr>
+  <tr><td>7 Ownable</td><td>Partial</td><td>Partial, and closer. Brown with pale blue is unusual in civic and news media. Hedvig is rarely seen, and all-lowercase serif titles are a distinct voice. Lowercase alone is a common move.</td></tr>
   <tr><td>8 Easy to make</td><td>Pass</td><td>Pass. One centered text box on one of four fields.</td></tr>
   </table>
   <p class="note" style="margin-top:14px">Where they split: Signature is louder and better on TikTok. Bark &amp; Sky is warmer and better for the older Substack reader. Both keep the Maine Policy Institute line on every end card, bio and footer.</p>

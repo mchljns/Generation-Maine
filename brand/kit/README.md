@@ -10,7 +10,7 @@ Sample lines and sample towns in the mockups are for layout only. Real lines and
 
 Mockups start with `d-`. Logo files are in `assets/logo-d/`. Contact sheet: `concept-d-sheet.png`. Side by side with Signature: `signature-vs-bark-sky.png`.
 
-A fully separate direction. Sky #CFE3F0, Bark #2B211C, Paper #FFFFFF, Mist #EEF4F8 and Clay #6B5A4E. Fraunces Regular (OFL) for the lowercase wordmark and centered titles, and Instrument Sans (OFL) for everything else. The avatar is a lowercase gm. It shares only the name, the audience and the Maine Policy Institute line with Signature.
+A fully separate direction. Sky #CFE3F0, Bark #2B211C, Paper #FFFFFF, Mist #EEF4F8 and Clay #6B5A4E. Hedvig Letters Serif (OFL) for the wordmark, titles and names, and Hedvig Letters Sans (OFL) for text, one weight each. Font files and license are in `brand/fonts/d/`. The wordmark, titles, names, nav and buttons are all lowercase. Reading text and the Maine Policy Institute line keep normal case. The avatar is a lowercase gm. It shares only the name, the audience and the Maine Policy Institute line with Signature.
 
 ## Concept C: Offset (a Signature variant, set aside)
 

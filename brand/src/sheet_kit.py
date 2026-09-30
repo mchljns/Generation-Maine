@@ -64,3 +64,19 @@ def compare(b, name_b, out):
 
 compare("o-", "Offset", "signature-vs-offset.png")
 compare("d-", "Bark & Sky", "signature-vs-bark-sky.png")
+
+
+def concept_sheet(prefix, ids, out):
+    ts = [tile(prefix + i, 640) for i in ids]
+    w = tile(prefix + "web", 560)
+    W = sum(t.width for t in ts) + 20 * (len(ts) - 1) + 80
+    o = Image.new("RGB", (W, 640 + 560 + 120), "#E9E5DA")
+    x = 40
+    for t in ts:
+        o.paste(t, (x, 40)); x += t.width + 20
+    o.paste(w, (40, 720))
+    o.save(os.path.join(ROOT, "brand", "kit", out))
+
+
+concept_sheet("d-", ["first", "lower", "end", "grid", "substack", "collab", "avatar"], "concept-d-sheet.png")
+concept_sheet("o-", ["first", "lower", "end", "grid", "substack", "collab"], "offset-sheet.png")
