@@ -85,3 +85,30 @@ Its small cut-in details give it energy on TikTok. The risk is that details like
 
 - [CONFIRM: which of these are in Canva's font library]. Canva Pro and Teams can upload any of them to a brand kit, since all are under the Open Font License.
 - Should Signature keep Bricolage and Inter, or move to Schibsted Grotesk? Bricolage is used widely on startup sites since 2023, which works against ownability.
+
+## Round two: character, without the AI look
+
+The brief changed: a face with a lot of character that is not overused in AI-made design.
+
+**What counts as overused.** Fonts that AI site builders and templates reach for again and again: Inter, Space Grotesk, Instrument Serif, Fraunces, DM Sans, Bricolage Grotesque, Syne, Outfit, Plus Jakarta Sans, Manrope, Sora, Geist and Playfair. Bricolage, the current Signature headline face, is on that list.
+
+**The proxy we used.** Families added to Google Fonts since mid 2024 mostly postdate what AI tools learned, so they rarely show up as defaults. We screened every one of them with a heavy weight, plus a few older, little-used faces with real character. That was 68 families. We cut 24 on sight: coding and pixel faces, brand house fonts, national or parks associations, a Caslon (founding era) and single-weight faces. The other 44 were set at heavy weight on Spruce (`type-study/character-screen.png`).
+
+**Cut after the screen:**
+- Too gimmicky for the older reader: Savate, Winky Sans and Winky Rough, Parkinsans.
+- Western wood type: Hepta Slab.
+- Fashion or tech: Kalnia, Science Gothic.
+- An agency's own face: Cossette Titre, named for the Montreal agency Cossette.
+- Too plain to count as character: Strichpunkt Sans, Akt, Host Grotesk and most of the new neutral grotesques.
+
+**Finalists** (`type-study/character-finalists.png`), each shown as the wordmark, three covers, the avatar G and body text with real numbers:
+
+| Face | What it brings | Watch |
+| --- | --- | --- |
+| Labrada, Mercedes Jáuregui, 2023 | Sharp wedge serifs and a confident G. Punchy on covers and calm in body text. Reads as authored and editorial, never bookish | Least seen, so Canva needs an upload |
+| Commissioner, Kostas Bartsokas, 2020, with flair and volume at 100 | A sans with flared, inky strokes. The most energy on TikTok. Our own axis setting can be owned outright | At default settings it is a plain sans, so the setting is the brand |
+| Epunda Slab, Typofactur, 2025 | Chunky, warm, a little playful. Feels like a good local paper | Newest, and the round a can look casual |
+| Piazzolla, Juan Pablo del Peral, 2020 | Lively and sharp | Word spacing collapses at display sizes and needs manual fixes |
+| Ancizar Serif, Universidad Nacional de Colombia, 2025 | Sturdy and warm | Less character than the others |
+
+**Recommendation: Labrada.** It has the most character that still reads as credible. It works at 800 on a cover and at 400 in a Substack paragraph, and the G holds at 32 px. If the client wants a sans, Commissioner with flair and volume at 100 is the pick.
