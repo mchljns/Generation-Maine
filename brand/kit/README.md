@@ -6,6 +6,10 @@ Recommended direction: **Signature, round two** (mockups starting with `s-`). Ro
 
 Sample lines and sample towns in the mockups are for layout only. Real lines and towns come from the creators.
 
+## Concept C: Offset (in progress)
+
+Mockups start with `o-`. Contact sheet: `offset-sheet.png`. Every frame breaks at two thirds of its height. Above the line sits footage or a field in the order Spruce, Moss, Pine, with Marigold every ninth post. Below it sits a Birch band with the creator's name and town. In a profile grid the bands line up into one stripe. It keeps the master brand and every Signature type rule.
+
 ## Master brand (both routes)
 
 | File | Use |

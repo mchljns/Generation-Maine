@@ -263,6 +263,58 @@ def before_after(q, s):
     return rows
 
 
+# ------------------------------------------------------------------ Concept C: Offset
+# Every frame breaks at the same height, two thirds down. Above: footage, or a field in the
+# order Spruce, Moss, Pine, with Marigold every ninth post. Below: a Birch band, always, which
+# carries the plain credit. In a three-across grid the bands line up into one stripe.
+O_ORDER = ["sp", "mo", "pi", "sp", "mo", "pi", "sp", "mo", "mg"]
+
+
+def offset_mockups(m):
+    wm_rev = inl(m["wordmark-reversed"], "wm")
+    wm = inl(m["wordmark"], "wm")
+    first = '<div class="foot"></div>%s%s' % (sbug(m), ui_overlay())
+    lower = '<div class="foot"></div>%s<div class="ol3">%s</div>%s' % (sbug(m), credit(town="Skowhegan", cls="lg"), ui_overlay())
+    end = ('<div class="oend"><div class="otop sp">%s%s</div><div class="oband"><ul class="hl o"><li><b>Instagram</b>[@handle]</li><li><b>TikTok</b>[@handle]</li>'
+           '<li><b>YouTube</b>[@handle]</li><li><b>Substack</b>[name].substack.com</li></ul><p class="disc o">%s</p></div></div>') % (wm_rev, ttl("Follow along", "xl"), MPI)
+    covers = "".join('<div class="cov o"><div class="otop %s">%s</div><div class="oband">%s</div></div>' % (O_ORDER[i], ttl(TOPICS[i], "cv"), credit(town=TOWNS[i], cls="cv"))
+                     for i in range(9))
+    grid = ('<div class="prof"><div class="ph"><span class="pav">%s</span><div><b>Generation Maine</b><span>[@handle]</span></div></div>'
+            '<p class="bio">Young Mainers on building a life here. %s.</p><div class="grid9 o">%s</div></div>') % (inl(m["icon"], "pa"), MPI, covers)
+    substack = ('<div class="subst o"><div class="osh"><div class="otop sp">%s</div><div class="oband"><p>%s</p></div></div><div class="sb"><h3>[Post title in plain words]</h3>'
+                '%s<p>[First paragraph in the creator\'s own words.]</p><p>[Body continues.]</p><p>[Body continues.]</p></div>'
+                '<p class="sfoot">%s</p></div>') % (wm_rev, MPI, credit(town="Belfast", cls="by"), MPI)
+    hero = ('<div class="web o"><div class="otop sp"><div class="wn">%s<nav><span>About</span><span>Creators</span><span>Follow</span></nav></div>'
+            '<h1>Young Mainers on building a life here<i class="d"></i></h1></div>'
+            '<div class="oband"><p class="wlede">Short videos by young Maine creators about the rules that shape their lives.</p>'
+            '<p class="wbtn"><span class="b1">Meet the creators</span><span class="b2">Follow along</span></p><p class="disc o">%s</p></div></div>') % (wm_rev, MPI)
+    post = ('<div class="pimg o"><div class="otop"><div class="foot"></div></div><div class="oband">%s%s</div></div>'
+            % (credit(town="Machias", cls="md"), inl(m["wordmark"], "wm")))
+    collab = ('<div class="feed"><div class="fh"><i class="cav">C</i><div><b>[creator.handle] and generationmaine</b><span>Paid partnership with Generation Maine</span></div></div>'
+              '%s<div class="fa"><i></i><i></i><i></i></div><p class="fc"><b>[creator.handle]</b> [Caption in the creator\'s words]</p></div>') % post
+    out = [artboard("o-first", "ph9", first, "C1 · Video, first seconds. Only the wordmark.", 360, 640),
+           artboard("o-lower", "ph9", lower, "C2 · Name and town sit on the two-thirds line", 360, 640),
+           artboard("o-end", "ph9", end, "C3 · End card", 360, 640),
+           artboard("o-grid", "ph9 light", grid, "C4 · Profile grid: the bands line up", 360, 640),
+           artboard("o-substack", "light", substack, "C6 · Substack header and email", 480, 640),
+           artboard("o-collab", "ph9 light", collab, "C8 · Collab post: the creator's photo over the band", 360, 640)]
+    return out, artboard("o-web", "", hero, "C7 · Website hero, no photo", 1200, 680)
+
+
+O_SCORE = """<p class="k" style="margin-top:34px">Against the test, first pass</p>
+  <table class="checks"><tr><th>Criterion</th><th>Signature, round two</th><th>Offset</th></tr>
+  <tr><td>1 Signs, does not cover</td><td>Pass</td><td>Pass in video, which is the same as Signature. Watch the collab post: the band takes a third of the creator's photo.</td></tr>
+  <tr><td>2 Survives the crop</td><td>Pass</td><td>Pass. Same avatar.</td></tr>
+  <tr><td>3 Carries a person</td><td>Pass</td><td>Pass, and the strongest yet. Every cover and post gives the name its own band.</td></tr>
+  <tr><td>4 Neutral</td><td>Pass</td><td>Pass. Photo over a light band can drift toward an instant-photo look. Square corners and a full-bleed band keep it modern.</td></tr>
+  <tr><td>5 Both audiences</td><td>Pass</td><td>Pass. The site and Substack read as editorial. Covers read as a set.</td></tr>
+  <tr><td>6 Stands without photos</td><td>Pass</td><td>Pass. Field and band carry every surface.</td></tr>
+  <tr><td>7 Ownable</td><td>Partial</td><td>Partial, and the closest yet. The stripe across the grid is unusual and visible at thumbnail size. A layout habit can still be copied.</td></tr>
+  <tr><td>8 Easy to make</td><td>Pass</td><td>Pass. Two boxes in one template: field and band.</td></tr>
+  </table>
+  <p class="note" style="margin-top:14px">Grade so far: Signature B, Offset B plus. Offset keeps every Signature type rule and adds one structural habit. It costs a third of every cover and photo, and headlines get less room.</p>"""
+
+
 def overlays(m):
     icon = inl(m["icon-bare"], "gi")
     o = []
@@ -482,6 +534,46 @@ figcaption{font:600 12px/1.4 Inter;letter-spacing:.06em;text-transform:uppercase
 .find th{font:600 11px Inter;letter-spacing:.08em;text-transform:uppercase;color:var(--stone)}
 .rules{margin:18px 0 0;padding-left:22px;max-width:80ch}.rules li{margin:0 0 8px}
 
+
+/* Concept C: Offset. The break is always at two thirds of the height. */
+.otop{position:relative}
+.otop.sp{background:var(--sp)}.otop.mo{background:var(--moss)}.otop.pi{background:var(--pine)}.otop.mg{background:var(--mg)}
+.oband{background:var(--bi);color:var(--ink)}
+.ol3{position:absolute;left:var(--M);top:calc(66.667% - 52px)}
+.oend{position:absolute;inset:0;display:grid;grid-template-rows:2fr 1fr}
+.oend .otop{padding:44px var(--M) 22px;display:flex;flex-direction:column;justify-content:space-between}
+.oend .wm{width:180px;height:auto;display:block}
+.oend .oband{padding:12px var(--M) var(--M);display:flex;flex-direction:column;justify-content:space-between}
+.hl.o{margin:0;color:var(--ink);font-size:13px}.hl.o li{padding:7px 0;border-color:#DDD6C6}
+.disc.o{color:var(--ink)}
+.grid9.o{gap:2px 2px}
+.cov.o{display:grid;grid-template-rows:2fr 1fr;background:var(--bi)}
+.cov.o .otop{position:relative}
+.cov.o .ttl{position:absolute;left:8px;right:6px;bottom:8px;font-size:19px}
+.cov.o .otop.mg .ttl{color:var(--pine)}.cov.o .otop.mg .ttl .d{background:var(--pine)}
+.cov.o .oband{padding:7px 8px}
+.cov.o .credit{font-size:8px;line-height:1.3;color:var(--ink)}.cov.o .credit b{display:block}
+.osh{height:180px;display:grid;grid-template-rows:2fr 1fr}
+.osh .otop{display:flex;align-items:flex-end;padding:0 32px 16px}
+.osh .wm{width:220px;height:auto;display:block}
+.osh .oband{display:flex;align-items:center;padding:0 32px}
+.osh .oband p{margin:0;font:600 12px Inter;color:var(--ink)}
+.subst.o .sb{padding-top:26px}
+.subst.o .sb h3{font:800 34px/.98 Bric;letter-spacing:-.03em;margin:0 0 14px}
+.web.o{display:grid;grid-template-rows:2fr 1fr;background:var(--bi)}
+.web.o .otop{padding:0 56px 34px;display:flex;flex-direction:column;justify-content:space-between}
+.web.o .wn{padding:24px 0}
+.web.o h1{font:800 104px/.9 Bric;letter-spacing:-.03em;margin:0;max-width:12ch}
+.web.o .oband{display:grid;grid-template-columns:1fr auto;grid-template-rows:1fr auto;column-gap:40px;padding:30px 56px 22px}
+.web.o .wlede{color:var(--ink);margin:0;font-size:19px;max-width:36ch}
+.web.o .wbtn{align-self:start}.web.o .wbtn span{white-space:nowrap}
+.web.o .b1{background:var(--sp);color:var(--bi)}.web.o .b2{box-shadow:inset 0 0 0 1.5px var(--sp);color:var(--sp)}
+.web.o .disc{grid-column:1/-1;font-size:13px;color:var(--stone)}
+.pimg.o{display:grid;grid-template-rows:2fr 1fr;background:var(--bi)}
+.pimg.o .oband{padding:16px 16px;display:flex;justify-content:space-between;align-items:flex-start}
+.credit.md{font-size:13px;color:var(--ink)}.credit.md b{display:block;font-size:18px;letter-spacing:-.005em}
+.pimg.o .wm{width:110px;height:auto;margin-top:4px}
+
 /* Signature, round two. M = frame width / 15 (24 px on a 360 px frame, 72 px at 1080). */
 .ab{--M:24px}
 .sbug{position:absolute;top:44px;left:var(--M)}
@@ -584,6 +676,23 @@ PAGE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name
 </div></section>
 
 <section><div class="w">
+  <p class="k">New concept, in progress</p>
+  <h2>Concept C: Offset</h2>
+  <p>Signature's weak spot is ownability. Its most ownable moment was an accident: in round two, the grid colors fell into columns. Offset makes a structural habit like that deliberate. It adds no symbol and no metaphor, and it keeps the master brand.</p>
+  <p>The test sentence: every frame breaks at the same height, so the grid lines up. It says nothing about youth, Maine or economics.</p>
+  <ol class="rules">
+    <li>Every frame breaks at two thirds of its height. On a 1080 by 1350 cover, the line sits at 900 px.</li>
+    <li>Above the line: the creator's footage or photo, or a field in the order Spruce, Moss, Pine. Every ninth post, Marigold takes Pine's place.</li>
+    <li>Below the line: a Birch band, always. It carries the creator's name and town as one plain line.</li>
+    <li>Marigold once per frame, outside the wordmark: the headline dot or the field.</li>
+    <li>Inside a video, nothing covers the footage. The name and town sit on the two-thirds line, and the line itself stays invisible.</li>
+  </ol>
+  <div class="cards">{{O}}</div>
+  <div class="cards">{{O_WEB}}</div>
+  {{O_SCORE}}
+</div></section>
+
+<section><div class="w">
   <p class="k">Round one, kept for the record</p>
   <h2>Signature, round one</h2>
   <p>No metaphor. The name already says young and Maine, so the look adds confidence instead of repeating it. Five rules carry everything: one idea per frame; big, tight type anchored low left; full color fields in a fixed order; Marigold once per frame, usually as the dot that ends a headline; and the creator's name and town as plain information, never a device.</p>
@@ -630,6 +739,7 @@ def build_kit(m):
     b, b_web = route_mockups("b", m)
     q, q_web = quiet_mockups(m)
     sg, s_web = sig_mockups(m)
+    oc, o_web = offset_mockups(m)
     css = CSS
     for k, v in {"{{F800}}": font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2"),
                  "{{F700}}": font64("brand/v6/fonts-web/bricolage-grotesque-700.woff2"),
@@ -643,7 +753,7 @@ def build_kit(m):
            "{{ICON_L}}": m["icon-light"], "{{ICON_M}}": m["icon-marigold"], "{{ENDORSED_REV}}": m["endorsed-reversed"],
            "{{AVATARS}}": avatars(m), "{{OVERLAYS}}": overlays(m), "{{A}}": a, "{{A_WEB}}": a_web, "{{B}}": b, "{{B_WEB}}": b_web, "{{Q}}": "".join(q), "{{Q_WEB}}": q_web,
            "{{PAIRS}}": before_after(q, sg), "{{S_WEB_BEFORE}}": q_web.replace("q-web", "q-web-b").replace("<figcaption>", "<figcaption>Before · "),
-           "{{S_WEB}}": s_web.replace("<figcaption>", "<figcaption>After · "), "{{SOVER}}": sig_overlays(m)}
+           "{{S_WEB}}": s_web.replace("<figcaption>", "<figcaption>After · "), "{{SOVER}}": sig_overlays(m), "{{O}}": "".join(oc), "{{O_WEB}}": o_web, "{{O_SCORE}}": O_SCORE}
     for k, v in rep.items():
         html = html.replace(k, v)
     write(OUT + "/kit.html", html)
