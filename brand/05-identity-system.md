@@ -6,7 +6,7 @@ Saved September 30, 2026. Everything below is built as hand-drawn SVG geometry b
 
 | Element | Decision | Why |
 | --- | --- | --- |
-| Brandmark | **Bend, flat.** A field of horizontal lines that make room. Where a line bends it turns Marigold. The room stays empty | One sentence, no picture: the field makes room for the person. Holds at 16 px with six lines. Gold belongs to the lines, not a dot placed on them |
+| Brandmark | **The margin room.** Nine horizontal lines, heavier toward the bottom, that part for a round room opening from the left edge. Where a line bends it turns Marigold. The room stays empty | One sentence, no picture: the field makes room at the margin, where every headline sits. Opening the room to the edge removed the eye that an enclosed room always made. Holds at 16 px with six lines. Gold belongs to the lines, not a dot placed on them. Files: `brand/identity/mark/` |
 | Mural | **Grain.** Maine drawn in horizontal lines from the precise Census outline, weight growing toward the bottom, the widest line gold | The strongest single image of the project. Lives at sizes where Maine reads: the website hero and the end card |
 | Relationship | The mark is a crop of the mural where one line is missing. One rule, two scales | Everything seen large is Maine. Everything seen small is the mark |
 | Marigold | Once per frame. In the mark, the bends. In the mural, the widest line. In the wordmark, the dot on the i, but only when the wordmark stands alone | Keeps the rule the platform set and stops gold from spreading |
@@ -56,3 +56,13 @@ Rules for motion, drawn from the prototype:
 - Nothing bounces. Ease out, 700 to 1100 ms for the field, 900 ms for type.
 - Gold appears only where a line bends, and only for the headline and the pointer.
 - The field never covers footage. In video it is a band, not a surface.
+
+## Improving the brandmark, October 1
+
+Three rounds, sheets in `brand/identity/mark-improve-*.png`, result in `mark-before-after.png`.
+
+1. **Rooms.** The circle room with gold only on the two hugging lines, and the room as a headline block, closed and open. The circle, however treated, reads as an eye. Enclosed voids do.
+2. **The open block.** Calmer, and the room becomes the shape the hero uses. It slid into document icon territory at small sizes. A lateral move.
+3. **The room at the margin.** A round room opening from the left edge. Not enclosed, so not an eye. The lines part like a current for something entering from the margin, which is where every headline sits. Nine lines, heavier toward the bottom. Gold on the bends only. This is the mark.
+
+Also fixed: lines can no longer be pushed out of the box. Files: `brand/identity/mark/` (mark, reversed, mono, white, black, small, avatar, avatar on Birch, app icon).

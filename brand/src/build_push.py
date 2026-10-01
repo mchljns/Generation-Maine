@@ -77,7 +77,13 @@ def field(x, y, w, h, n, obstacles, clear, line, gold, w_lo, w_hi, steps=240, go
             broken = False
             for ob in obstacles:
                 if ob[0] == "rect":
-                    _, x0, y0r, x1, y1r, ok = ob
+                    _, x0, y0r, x1, y1r, ok = ob[:6]
+                    rr = ob[6] if len(ob) > 6 else 0
+                    if rr:
+                        # round the right end: shrink the rect's x1 for lines near its top and bottom
+                        cyr = (y0r + y1r) / 2
+                        dyr = min(abs(y0 - cyr), rr)
+                        x1 = x1 - rr + math.sqrt(max(rr * rr - dyr * dyr, 0))
                     dx = 0 if x0 <= px <= x1 else (x0 - px if px < x0 else px - x1)
                     if dx >= clear:
                         continue
@@ -96,7 +102,7 @@ def field(x, y, w, h, n, obstacles, clear, line, gold, w_lo, w_hi, steps=240, go
                         bow = k_bow * clear * math.exp(-((gap) / (0.7 * clear)) ** 2)
                         if bow > best and bow > 0.02 * clear:
                             best, py = bow, (y0 - bow if y0 <= top else y0 + bow)
-                            gk = ok and mode == "gap" and gap < clear * 0.9
+                            gk = bool(ok) and mode == "gap" and gap < clear * 0.9 and (ok != "below" or y0 > bot - clear)
                 else:
                     _, cx, cy, r, ok = ob
                     R = r + clear
@@ -117,6 +123,9 @@ def field(x, y, w, h, n, obstacles, clear, line, gold, w_lo, w_hi, steps=240, go
                         best, py, gk = off, y0 + sign * off, ok and ady < R
             ys.append(py); gold_ok_at.append(gk); cut.append(broken)
         ys = smooth(ys, max(2, int(steps * clear / (w - 2 * pad) * 0.5)))
+        # never push a line out of the box
+        lo, hi = y + pad * 0.4, y + h - pad * 0.4
+        ys = [min(max(v, lo), hi) for v in ys]
         # colour by displacement, and break the line where it is cut
         run, is_gold = [], None
         for px, py, gk, br in zip(xs, ys, gold_ok_at, cut):
