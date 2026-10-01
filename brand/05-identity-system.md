@@ -66,3 +66,15 @@ Three rounds, sheets in `brand/identity/mark-improve-*.png`, result in `mark-bef
 3. **The room at the margin.** A round room opening from the left edge. Not enclosed, so not an eye. The lines part like a current for something entering from the margin, which is where every headline sits. Nine lines, heavier toward the bottom. Gold on the bends only. This is the mark.
 
 Also fixed: lines can no longer be pushed out of the box. Files: `brand/identity/mark/` (mark, reversed, mono, white, black, small, avatar, avatar on Birch, app icon).
+
+## The logos, October 1
+
+One complete logo per concept, in `brand/identity/logo/`. Every file is outlined SVG, including the institute line, so nothing depends on an installed font. Sheet: `logo/logos.png`, built by `brand/src/build_logos.py`.
+
+**Signature** (`logo/signature/`, 32 files). The margin-room mark in Spruce and Marigold, with reversed, one-colour, black and white versions and the six-line small version. The Bricolage wordmark, with the dot on the i only when it stands alone. Lockups: horizontal, stacked, endorsed, each in colour, reversed, one colour, black and white. Avatar on Spruce and on Birch, app icon, 32 px favicon. A large-size variant for 110 px and up where the field of lines is Maine itself, the room opening from the western edge. Clear space is the room's radius, one fifth of the mark's height. Minimum sizes: mark 24 px, horizontal lockup 140 px, endorsed lockup 220 px.
+
+**Bark & Sky** (`logo/bark-sky/`, 21 files). The same rule drawn quieter: seven thin lines of one weight, the bends in Clay on paper and white on Sky or Bark. The lowercase Hedvig wordmark. Lockups horizontal, stacked and endorsed, the stacked and endorsed ones centred. Avatar on Bark and on Sky, app icon, favicon.
+
+Open on the logos:
+- The Maine variant of the Signature mark is rough where the room meets the western border. Keep it as an option for the gut check, not as a default.
+- Bark & Sky's Clay accent is almost invisible on paper. That is in character for the concept, but white on Sky reads better, and the mark sits small against the serif in the horizontal lockup.
