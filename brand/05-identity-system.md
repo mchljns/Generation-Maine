@@ -297,3 +297,7 @@ The fade now finishes earlier: it runs from the first pixel of scroll and is com
 The gap between the creators head and the stage is closed. The pinned block used to be centered in a full screen height before it pinned, which opened an empty half screen. It is now its own height and sits just under the capsule when pinned, with a small margin under the head.
 
 In the creator panel the Marigold period moved from the name to the town. It sits after the location in the eyebrow and pulses like the hero's period, so the dot marks a place in both spots where it appears. The name carries no dot.
+
+## Snow replaces cream on dark fields
+
+The reversed mark was Birch, the kit's cream. Against the page's pure white type and fields it read as yellowed. A new near-white, Snow #F7F8F6, now carries the reversed mark in every logo file, the nav and sheet, the hero type and buttons, the about type before it turns to ink, the footer, and the hero mural. It is white with the smallest lean toward the greens, so it sits with the palette without looking like cream. Birch stays in the kit for light fields and the one Birch-field avatar.

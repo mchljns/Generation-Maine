@@ -25,7 +25,7 @@ def simplified(ring, tol):
     return pts[:-1]
 
 OUT = "brand/identity/logo-maine"
-SP, BI, MG, PI = C["spruce"], C["birch"], C["marigold"], C["pine"]
+SP, BI, MG, PI = C["spruce"], C["snow"], C["marigold"], C["pine"]
 D = {"sky": "#CFE3F0", "bark": "#2B211C", "paper": "#FFFFFF", "clay": "#6B5A4E"}
 MPI = "An initiative of Maine Policy Institute"
 INTER = Face("Inter-SemiBold.ttf")
@@ -139,7 +139,7 @@ def signature():
         t, _ = outlined(INTER, MPI, 27, w / 2, ms + 34 + h + 56, fg, anchor="middle")
         m["lockup-endorsed-stacked" + suf] = svg(w, ms + 34 + h + 70, body + t, "Generation Maine, an initiative of Maine Policy Institute")
     # avatars by size, favicon solid. No Marigold in the mark alone.
-    for name, cut, fg, bg in (("avatar-full", "full", BI, SP), ("avatar-mid", "mid", BI, SP), ("avatar-solid", "solid", BI, SP), ("avatar-birch", "mid", SP, BI)):
+    for name, cut, fg, bg in (("avatar-full", "full", BI, SP), ("avatar-mid", "mid", BI, SP), ("avatar-solid", "solid", BI, SP), ("avatar-birch", "mid", SP, C["birch"])):
         mb, mw = maine_lines(0, 0, 164, fg, fg, cut, gold=False)
         m[name] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % bg + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
     mb, mw = maine_lines(0, 0, 150, BI, BI, "mid", gold=False); m["app-icon"] = svg(240, 240, rect(0, 0, 240, 240, SP, 52) + '<g transform="translate(%s 45)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")

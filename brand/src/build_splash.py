@@ -94,7 +94,7 @@ CSS = r"""
 /* Layout: one column. The page background changes color as sections enter, and every section pairs ink text with a light field.
    Light fields run from white into light green: white, a pale green, a deeper sage. The warm cream is gone from the page. */
 :root{
-  --sp:#104836;--pine:#0B2B21;--bi:#FFFFFF;--ink:#1E2621;--mg:#EFB443;--sage:#D3DDD4;--moss:#3D6F58;--stone:#5E6A63;--sand:#E6EEE8;--white:#FFFFFF;
+  --sp:#104836;--pine:#0B2B21;--bi:#FFFFFF;--ink:#1E2621;--mg:#EFB443;--sage:#D3DDD4;--moss:#3D6F58;--stone:#5E6A63;--sand:#E6EEE8;--white:#FFFFFF;--snow:#F7F8F6;
   --bg:var(--bi);--fg:var(--ink);--muted:#4F5B55;--rule:rgba(30,38,33,.14);--card:#F6F9F6;
   --display:'Bricolage Grotesque',Arial,sans-serif;--body:'DM Sans',system-ui,Arial,sans-serif;
   --M:clamp(16px,4.5vw,64px);
@@ -117,12 +117,12 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .btn{display:inline-block;font:600 15px/1 var(--body);padding:16px 22px;border-radius:6px;text-decoration:none;border:1.5px solid transparent;transition:transform .25s cubic-bezier(.2,.7,.2,1),background .25s}
 .btn:hover{transform:translateY(-2px)}
 .btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--mg);outline-offset:3px}
-.b1{background:var(--bi);color:var(--sp)}.b2{color:var(--bi);border-color:rgba(255,255,255,.55)}.b2:hover{background:rgba(255,255,255,.08)}
-.b3{background:var(--sp);color:#FFFFFF}
+.b1{background:var(--snow);color:var(--sp)}.b2{color:var(--bi);border-color:rgba(255,255,255,.55)}.b2:hover{background:rgba(255,255,255,.08)}
+.b3{background:var(--sp);color:var(--snow)}
 
 /* nav: a transparent bar over the top of the hero. On the first scroll it folds into a floating frosted capsule with a reading line.
    The active section carries the dot. It hides on the way down past the hero and comes back on the way up. */
-.top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:#FFFFFF;transition:color .35s,transform .4s cubic-bezier(.2,.7,.2,1)}
+.top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:var(--snow);transition:color .35s,transform .4s cubic-bezier(.2,.7,.2,1)}
 .top.hide{transform:translateY(-120%)}
 .top .w{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px;max-width:1280px;margin:0 auto;padding-inline:var(--M);border-radius:0;background:rgba(255,255,255,0);
   transition:height .45s cubic-bezier(.2,.7,.2,1),max-width .55s cubic-bezier(.2,.7,.2,1),margin .45s cubic-bezier(.2,.7,.2,1),padding .45s cubic-bezier(.2,.7,.2,1),border-radius .45s cubic-bezier(.2,.7,.2,1),background .35s,box-shadow .45s}
@@ -143,9 +143,9 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .top.scrolled nav{gap:4px}
 .top.scrolled nav a{padding:9px 12px;font-size:13px}
 .top.scrolled nav a:hover{background:rgba(16,72,54,.08)}
-.top.scrolled nav a.on{background:var(--sp);color:#FFFFFF}
+.top.scrolled nav a.on{background:var(--sp);color:var(--snow)}
 .top.scrolled nav a::before{display:none}
-.top.scrolled .cta{padding:10px 14px;font-size:13px;background:var(--sp);color:#FFFFFF;border-color:var(--sp)}
+.top.scrolled .cta{padding:10px 14px;font-size:13px;background:var(--sp);color:var(--snow);border-color:var(--sp)}
 .top.scrolled .menu{margin-right:0}
 @media (max-width:900px){.top.scrolled .w{margin:10px 12px 0;height:48px}}
 .prog{position:absolute;left:0;bottom:0;height:2px;background:var(--sp);width:0;transition:width .15s linear;opacity:0}
@@ -155,10 +155,10 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .menu i{position:absolute;left:11px;width:22px;height:2px;border-radius:1px;background:currentColor;transition:transform .4s cubic-bezier(.2,.7,.2,1),opacity .25s}
 .menu i:nth-child(1){top:15px}.menu i:nth-child(2){top:21px}.menu i:nth-child(3){top:27px}
 .menu[aria-expanded="true"] i:nth-child(1){transform:translateY(6px) rotate(45deg)}.menu[aria-expanded="true"] i:nth-child(2){opacity:0;transform:scaleX(.2)}.menu[aria-expanded="true"] i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
-.top.open{color:#FFFFFF;transform:none!important}
+.top.open{color:var(--snow);transform:none!important}
 .top.open .w{background:rgba(255,255,255,0);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
 .top.open .lk.light{display:block}.top.open .lk.dark{display:none}.top.open .prog{opacity:0}
-.sheet{position:fixed;inset:0;z-index:19;background:var(--sp);color:#FFFFFF;padding:calc(68px + env(safe-area-inset-top,0px)) var(--M) 32px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s .35s}
+.sheet{position:fixed;inset:0;z-index:19;background:var(--sp);color:var(--snow);padding:calc(68px + env(safe-area-inset-top,0px)) var(--M) 32px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s .35s}
 .sheet.open{opacity:1;visibility:visible;transition:opacity .35s}
 .sheet nav{display:flex;flex-direction:column;gap:6px;margin-top:24px}
 .sheet nav a{font:800 clamp(38px,11vw,56px)/1.05 var(--display);letter-spacing:-.03em;text-decoration:none;padding:8px 0;opacity:0;transform:translateY(14px);transition:opacity .45s,transform .55s cubic-bezier(.2,.7,.2,1)}
@@ -169,15 +169,15 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .sheet nav a .d{width:.18em;height:.18em}
 .sheet .foot{margin-top:auto;display:flex;flex-direction:column;gap:14px}
 .sheet .foot a{font:600 16px/1 var(--body);text-decoration:none}
-.sheet .foot .cta{align-self:flex-start;background:#FFFFFF;color:var(--sp);padding:16px 22px;border-radius:6px;font:600 15px/1 var(--body);text-decoration:none}
+.sheet .foot .cta{align-self:flex-start;background:var(--snow);color:var(--sp);padding:16px 22px;border-radius:6px;font:600 15px/1 var(--body);text-decoration:none}
 @media (max-width:900px){.top nav,.top .cta{display:none}.menu{display:block}}
 .hero{padding-top:68px}
 
 /* hero */
-.hero{position:relative;background:var(--sp);color:#FFFFFF;overflow:hidden}
+.hero{position:relative;background:var(--sp);color:var(--snow);overflow:hidden}
 .hero .w{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:32px;padding-block:80px 88px;min-height:620px;align-items:end}
 .hero h1{font-size:clamp(46px,8.2vw,112px);max-width:11ch}
-.hero .lede{font-size:clamp(19px,1.6vw,23px);line-height:1.5;max-width:38ch;margin:28px 0 30px;color:rgba(255,255,255,.9)}
+.hero .lede{font-size:clamp(19px,1.6vw,23px);line-height:1.5;max-width:38ch;margin:28px 0 30px;color:var(--snow);opacity:.92}
 .hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
 .mural{position:relative;justify-self:end;width:min(100%,480px);aspect-ratio:1;max-width:100%}
 .mural svg{width:100%;height:100%;display:block}
@@ -207,7 +207,7 @@ section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 /* about starts on the green with white text. The page scrubs from green to white across the whole first scroll, from the top of the
    page until about has risen into the upper part of the screen (its top at 60% of the height), driven by scroll position so it tracks the hand and reverses the same way.
    The type does not crossfade through grey: it switches to ink in one quick step once the field is light enough. */
-.about{color:#FFFFFF;transition:color .15s}.about.lit{color:var(--ink)}
+.about{color:var(--snow);transition:color .15s}.about.lit{color:var(--ink)}
 body.scrub{transition:none}
 .about .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px}
 .about .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;align-self:end}
@@ -299,7 +299,7 @@ body.scrub{transition:none}
 .follow a:hover .ic{transform:translateY(-2px)}
 .follow .h2{margin-bottom:28px}
 
-.site{background:var(--pine);color:#FFFFFF;padding-block:48px 40px}
+.site{background:var(--pine);color:var(--snow);padding-block:48px 40px}
 .site .w{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:end}
 .site .lk{height:110px;width:auto;display:block}
 .js .site .lk path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .8s cubic-bezier(.2,.7,.2,1)}.js .site.on .lk path{stroke-dashoffset:0}
@@ -403,7 +403,7 @@ def page():
 <script id="maine-data" type="application/json">%(json)s</script>
 <script>
 (() => {
-  const MOSS = '#3D6F58', BI = '#FFFFFF';
+  const MOSS = '#3D6F58', BI = '#F7F8F6';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const h1 = document.getElementById('h1'), lede = document.getElementById('lede'), ctas = document.getElementById('ctas');
   if (!reduced) { [h1, lede, ctas].forEach(el => el.classList.add('pre')); requestAnimationFrame(() => requestAnimationFrame(() => { h1.classList.remove('pre'); setTimeout(() => lede.classList.remove('pre'), 120); setTimeout(() => ctas.classList.remove('pre'), 240); })); }
