@@ -101,8 +101,8 @@ def build_one(i, c):
         # the tag: this is a stand-in
         tag = "PLACEHOLDER"
         tl = d.textlength(tag, font=tag_f)
-        d.rounded_rectangle((W - tl - 30, 14, W - 14, 34), radius=4, fill=(11, 43, 33, 150))
-        d.text((W - tl - 22, 19), tag, font=tag_f, fill=(255, 255, 255, 230))
+        d.rounded_rectangle((W - tl - 34, H - 33, W - 16, H - 15), radius=4, fill=(255, 255, 255, 40))
+        d.text((W - tl - 25, H - 29), tag, font=tag_f, fill=(255, 255, 255, 210))
         frames.append(fr.quantize(colors=72, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE))
     out = os.path.join(MEDIA, "creator-%d.gif" % (i + 1))
     frames[0].save(out, save_all=True, append_images=frames[1:], duration=int(1000 / FPS), loop=0, optimize=True)
