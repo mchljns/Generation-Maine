@@ -275,3 +275,5 @@ The about section is Spruce, white text, white rules. The page itself starts gre
 The hero period's pulse ring now draws behind the letters, so the ring breathes out from under the last letter instead of over it.
 
 Fix: the creators could land on green. The page color was set by two things at once, a scroll rule for the green block and an observer for the sections after it, and during a smooth scroll the observer could fire first and get overwritten. The color is now one calculation on every scroll frame: green while about's top is below the top of the screen, otherwise the color of the last section whose top has passed the middle of the screen, white by default. Checked by slow scroll, fast scroll and the nav jump at four viewport sizes.
+
+Second fix: the page now turns white once the about section reaches the middle of the screen, not its top. About paints its own green, so the earlier switch costs nothing and the creators heading is on white as soon as it appears under the green block.

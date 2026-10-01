@@ -290,10 +290,10 @@ section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 
   // The page background changes as each section passes the middle of the screen.
   // The page color is a function of scroll position, worked out every frame: green under the hero and about,
-  // white once about reaches the top, then whatever the section at the middle of the screen asks for.
+  // white once about reaches the middle of the screen (about paints its own green), then whatever the section at the middle asks for.
   const aboutEl = document.getElementById('about'), bgs = [...document.querySelectorAll('[data-bg]')];
   let bgNow = '';
-  function paint() { let c = 'var(--bi)'; if (aboutEl.getBoundingClientRect().top > 0) c = 'var(--sp)'; else { const mid = innerHeight / 2; for (const el of bgs) { if (el.getBoundingClientRect().top <= mid) c = el.dataset.bg; } } if (c !== bgNow) { bgNow = c; document.body.style.background = c; } }
+  function paint() { let c = 'var(--bi)'; if (aboutEl.getBoundingClientRect().top > innerHeight * .5) c = 'var(--sp)'; else { const mid = innerHeight / 2; for (const el of bgs) { if (el.getBoundingClientRect().top <= mid) c = el.dataset.bg; } } if (c !== bgNow) { bgNow = c; document.body.style.background = c; } }
   paint();
 
   // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Phones get a clip per panel.
