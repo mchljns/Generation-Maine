@@ -4,8 +4,8 @@ The state is one color. Marigold is the dot on the i, and only there (client dec
 
 Three cuts, one drawing, chosen by size:
   full   : 21 lines, weight from 2.1 to 3.4 percent of the height, first row at 6 percent. 72 px and up
-  mid    : 13 heavier lines on a lightly simplified coast. 36 to 72 px
-  solid  : the silhouette alone, simplified so the edge stays clean. Below 36 px
+  mid    : 11 heavier lines on a lightly simplified coast. 32 to 72 px. The cut the horizontal lockups ship with
+  solid  : the silhouette alone, simplified so the edge stays clean. Below 32 px
 
   python3 brand/src/build_logo_maine.py     # writes brand/identity/logo-maine/*.svg
 """
@@ -47,12 +47,12 @@ def maine_lines(x, y, h, fg, mark, cut="full", gold=True):
         return '<path fill="%s" d="%s"/>' % (fg, maine2.path(ring)), maxx - minx
     if cut == "mid":
         ring = simplified(ring, h * 0.006)
-    n, w_lo, w_hi, keep = (21, h * 0.021, h * 0.034, 1.8) if cut == "full" else (13, h * 0.032, h * 0.052, 2.4)
+    # the first row sits on the broad northern border, not on the two bumps at Fort Kent
+    n, w_lo, w_hi, keep, top, span = (21, h * 0.021, h * 0.034, 1.8, 0.06, 0.905) if cut == "full" else (11, h * 0.042, h * 0.056, 2.2, 0.07, 0.88)
     rows = []
     for i in range(n):
         t = i / (n - 1)
-        # the first row sits at 6 percent, on the broad northern border, not on the two bumps at Fort Kent
-        y0 = miny + (maxy - miny) * (0.06 + 0.905 * t)
+        y0 = miny + (maxy - miny) * (top + span * t)
         w = w_lo + (w_hi - w_lo) * t
         xs = maine2.crossings(ring, y0)
         runs = [(a + w / 2, b - w / 2) for a, b in zip(xs[0::2], xs[1::2]) if b - a >= w * keep]
@@ -91,18 +91,25 @@ def signature():
         b2, w2, h2 = wordmark_stacked(fg, MG, "circle", 100)
         m["wordmark-stacked" + suf] = svg(w2, h2, b2, "Generation Maine")
     # lockups. The dot stays Marigold in every color version. Mono, black and white carry no second color.
-    for suf, fg, mk, cut in (("", SP, MG, "full"), ("-reversed", BI, MG, "full"), ("-mono", SP, SP, "full"), ("-black", "#000000", "#000000", "full"), ("-white", "#FFFFFF", "#FFFFFF", "full"), ("-small", SP, MG, "mid")):
+    for suf, fg, mk in (("", SP, MG), ("-reversed", BI, MG), ("-mono", SP, SP), ("-black", "#000000", "#000000"), ("-white", "#FFFFFF", "#FFFFFF")):
+        cut = "full"
         b, w, h = wordmark_one_line(fg, mk, "circle", 100)
         b2, w2, h2 = wordmark_stacked(fg, mk, "circle", 100)
         mh, gap = 96, 26
-        # horizontal: the state stands taller than the capitals, like a flag beside the name
-        mb, mw = maine_lines(0, 74 - mh + 6, mh, fg, fg, cut, gold=False)
-        m["lockup-horizontal" + suf] = svg(w + mw + gap, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + gap), b), "Generation Maine")
+        # horizontal: the state stands taller than the capitals, like a flag beside the name.
+        # The mark is small in this lockup, so it ships with the mid cut. The large version carries the full cut, for 600 px wide and up. The solid version is for under 270 px wide.
+        for lsuf, lcut in (("", "mid"), ("-large", "full"), ("-solid", "solid")):
+            mb, mw = maine_lines(0, 74 - mh + 6, mh, fg, fg, lcut, gold=False)
+            m["lockup-horizontal" + lsuf + suf] = svg(w + mw + gap, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + gap), b), "Generation Maine")
+            body = mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + gap), b) + rect(mw + gap, h + 22, w, 2, fg)
+            t, _ = outlined(INTER, MPI, 27, mw + gap, h + 60, fg)
+            m["lockup-endorsed" + lsuf + suf] = svg(w + mw + gap, h + 72, body + t, "Generation Maine, an initiative of Maine Policy Institute")
+        mb, mw = maine_lines(0, 74 - mh + 6, mh, fg, fg, "mid", gold=False)
         # horizontal, state after the name
         m["lockup-horizontal-right" + suf] = svg(w + mw + gap, h, b + '<g transform="translate(%s 0)">%s</g>' % (f(w + gap), mb), "Generation Maine")
         # compact: the state sits inside the cap height, for bylines and tight bars
         ch, cgap = 66, 20
-        mb, cw = maine_lines(0, 74 - ch, ch, fg, fg, "mid" if cut == "full" else cut, gold=False)
+        mb, cw = maine_lines(0, 74 - ch, ch, fg, fg, "mid", gold=False)
         m["lockup-compact" + suf] = svg(w + cw + cgap, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(cw + cgap), b), "Generation Maine")
         # stacked left: the state over the two-line name
         ms = 170
@@ -115,11 +122,6 @@ def signature():
         th = 150
         mb, mw = maine_lines(0, 8, th, fg, fg, cut, gold=False)
         m["lockup-two-line" + suf] = svg(mw + 30 + w2, h2, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + 30), b2), "Generation Maine")
-        # endorsed horizontal
-        mb, mw = maine_lines(0, 74 - mh + 6, mh, fg, fg, cut, gold=False)
-        body = mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + gap), b) + rect(mw + gap, h + 22, w, 2, fg)
-        t, _ = outlined(INTER, MPI, 27, mw + gap, h + 60, fg)
-        m["lockup-endorsed" + suf] = svg(w + mw + gap, h + 72, body + t, "Generation Maine, an initiative of Maine Policy Institute")
         # endorsed stacked, centered, for the narrow end card and print
         mb, mw = maine_lines((w - ms * maine2.ASPECT) / 2, 0, ms, fg, fg, cut, gold=False)
         body = mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 34), b) + rect(0, ms + 34 + h + 18, w, 2, fg)

@@ -86,8 +86,8 @@ The client's call: the lines with the state of Maine are the logo. Built complet
 
 **Size system.** One drawing, three cuts.
 - Full, 72 px and up: 21 lines, weight from 2.1 to 3.4 percent of the height, first row at 6 percent of the height. Tightened October 1 after the top of the state read as loose dashes in the horizontal lockup.
-- Mid, 36 to 72 px: 13 lines on a coast simplified by 0.6 percent of the height, weight from 3.2 to 5.2 percent.
-- Solid, below 36 px: the silhouette simplified by 1.2 percent of the height. Never Marigold, which keeps us clear of Baxter Brewing's orange Maine.
+- Mid, 32 to 72 px: 11 lines on a coast simplified by 0.6 percent of the height, weight from 4.2 to 5.6 percent. The horizontal, endorsed, compact and right-hand lockups ship with this cut, because in those lockups the mark is 36 to 60 px tall at every common size. A large version of the horizontal and endorsed lockups carries the full cut, for 600 px wide and up, and a solid version is for under 270 px wide, where even 11 lines blur. Set October 1 after the client caught the top of the state blurring in the horizontal lockup.
+- Solid, below 32 px: the silhouette simplified by 1.2 percent of the height. Never Marigold, which keeps us clear of Baxter Brewing's orange Maine.
 
 **Rules.**
 - The wordmark keeps its dot on the i only when it stands alone. With the mark present it is solid, so Marigold appears once.

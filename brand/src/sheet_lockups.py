@@ -13,7 +13,7 @@ from gmlib import ROOT, write
 R = os.path.join(ROOT, "brand", "identity", "logo-maine", "signature")
 ROWS = [
     ("lockup-two-line", "1. Two-line. The primary lockup. The state beside the name on two lines, as tall as both", 190, "A"),
-    ("lockup-horizontal", "2. Horizontal. For short bars: the nav, the video bug, the masthead strip", 150, "A-"),
+    ("lockup-horizontal", "2. Horizontal, mid cut. For short bars: the nav, the video bug, the masthead strip. A large version with the full cut exists for 600 px wide and up", 150, "A-"),
     ("lockup-compact", "3. Compact. The mid cut inside the cap height, for bylines and footers", 150, "B+"),
     ("lockup-horizontal-right", "4. Horizontal, state after the name. In the files, not recommended", 150, "B"),
     ("lockup-stacked", "5. Stacked left. The state over the two-line name, for narrow spaces", 230, "B+"),
@@ -35,11 +35,11 @@ def build():
         rows += ('<div class="row"><p class="lab">%s <b>%s</b></p><div class="g">'
                  '<div class="t bi" style="height:%dpx">%s</div><div class="t sp" style="height:%dpx">%s</div></div></div>'
                  % (lab, grade, h + 60, inl(k), h + 60, inl(k + "-reversed")))
-    sizes = ('<div class="row"><p class="lab">At working sizes. Horizontal at 120 px wide, the smallest allowed. Compact at 100 px. Mid cut lockup at 160 px. Marks at 110, 40 and 16 px.</p>'
+    sizes = ('<div class="row"><p class="lab">At working sizes. Horizontal at 480, 300 and 160 px wide. Compact at 100 px. Marks at 110, 40 and 16 px.</p>'
              '<div class="g wrap"><div class="t w">%s</div><div class="t w">%s</div><div class="t w">%s</div><div class="t w">%s%s%s</div><div class="t w" style="background:#104836">%s%s%s</div></div></div>') % (
-        inl("lockup-horizontal").replace("<svg ", '<svg style="width:120px;height:auto" ', 1),
+        inl("lockup-horizontal").replace("<svg ", '<svg style="width:480px;height:auto" ', 1),
+        inl("lockup-horizontal").replace("<svg ", '<svg style="width:300px;height:auto" ', 1) + inl("lockup-horizontal").replace("<svg ", '<svg style="width:160px;height:auto;margin-top:14px" ', 1),
         inl("lockup-compact").replace("<svg ", '<svg style="width:100px;height:auto" ', 1),
-        inl("lockup-horizontal-small").replace("<svg ", '<svg style="width:160px;height:auto" ', 1),
         inl("avatar-full").replace("<svg ", '<svg style="width:110px;height:110px;border-radius:50%" ', 1),
         inl("avatar-mid").replace("<svg ", '<svg style="width:40px;height:40px;border-radius:50%" ', 1),
         inl("favicon").replace("<svg ", '<svg style="width:16px;height:16px" ', 1),
