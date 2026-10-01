@@ -315,3 +315,7 @@ The position row names the next creator rather than the town, since the section 
 ## Where the redirect lives in WordPress
 
 Settings > Newsletter, a small page in wp-admin. Four fields: the publication's subscribe page URL, open in a new tab, the line shown after submit, and the small print under the form. The URL is checked to be https and to end in /subscribe. A Newsletter Signup block renders the form from those settings, so no template holds the address. With the URL empty the form hides itself and shows an admin-only note pointing at the settings page. The hand-off needs no script; a few lines show the confirmation line in the page after submit.
+
+## Buttons
+
+Every button on the site is a pill. The capsule nav was already a pill and the brand's lines end round, so the squared corners on the hero and form buttons were the odd ones out. Colors: the primary action is Spruce with Snow type on light fields, and Snow with Spruce type on green. The secondary action is an outline in the current color. Hover lifts the button two pixels and deepens the fill one step, Spruce to Pine or Snow to white. The email field is a pill to match its button. Marigold is never a button; it stays the dot. The theme will carry the same rule in theme.json.

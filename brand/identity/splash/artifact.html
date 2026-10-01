@@ -24,11 +24,13 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .d{display:inline-block;width:.2em;height:.2em;border-radius:50%;background:var(--mg);margin-left:.05em;vertical-align:baseline}
 .nw{white-space:nowrap;font-weight:inherit}
 .k{font:600 12px/1.2 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0}
-.btn{display:inline-block;font:600 15px/1 var(--body);padding:16px 22px;border-radius:6px;text-decoration:none;border:1.5px solid transparent;transition:transform .25s cubic-bezier(.2,.7,.2,1),background .25s}
+/* buttons: pills, like the capsule and the round ends of the lines. Primary is Spruce on light fields and Snow on green;
+   secondary is an outline in the current color. Marigold is never a button. */
+.btn{display:inline-block;font:600 15px/1 var(--body);padding:16px 26px;border-radius:999px;text-decoration:none;border:1.5px solid transparent;transition:transform .25s cubic-bezier(.2,.7,.2,1),background .25s}
 .btn:hover{transform:translateY(-2px)}
 .btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--mg);outline-offset:3px}
-.b1{background:var(--snow);color:var(--sp)}.b2{color:var(--bi);border-color:rgba(255,255,255,.55)}.b2:hover{background:rgba(255,255,255,.08)}
-.b3{background:var(--sp);color:var(--snow)}
+.b1{background:var(--snow);color:var(--sp)}.b1:hover{background:#FFFFFF}.b2{color:var(--snow);border-color:rgba(255,255,255,.55)}.b2:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.8)}
+.b3{background:var(--sp);color:var(--snow)}.b3:hover{background:var(--pine)}
 
 /* nav: a transparent bar over the top of the hero. On the first scroll it folds into a floating frosted capsule with a reading line.
    The active section carries the dot. It hides on the way down past the hero and comes back on the way up. */
@@ -79,7 +81,7 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .sheet nav a .d{width:.18em;height:.18em}
 .sheet .foot{margin-top:auto;display:flex;flex-direction:column;gap:14px}
 .sheet .foot a{font:600 16px/1 var(--body);text-decoration:none}
-.sheet .foot .cta{align-self:flex-start;background:var(--snow);color:var(--sp);padding:16px 22px;border-radius:6px;font:600 15px/1 var(--body);text-decoration:none}
+.sheet .foot .cta{align-self:flex-start;background:var(--snow);color:var(--sp);padding:16px 26px;border-radius:999px;font:600 15px/1 var(--body);text-decoration:none}
 @media (max-width:900px){.top nav,.top .cta{display:none}.menu{display:block}}
 .hero{padding-top:68px}
 
@@ -178,7 +180,7 @@ body.scrub{transition:none}
 .news .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
 .news .lede{color:var(--muted);max-width:42ch;margin:18px 0 26px}
 .form{display:flex;gap:10px;flex-wrap:wrap;max-width:520px}
-.form input{flex:1 1 220px;min-width:0;font:16px var(--body);padding:15px 16px;border-radius:6px;border:1.5px solid var(--rule);background:var(--card);color:var(--fg)}
+.form input{flex:1 1 220px;min-width:0;font:16px var(--body);padding:15px 20px;border-radius:999px;border:1.5px solid var(--rule);background:var(--card);color:var(--fg)}
 .form .note{flex-basis:100%;font-size:13px;color:var(--muted);margin:4px 0 0}
 .form .ok{flex-basis:100%;font:600 15px var(--body);color:var(--fg);margin:4px 0 0}
 .posts{display:grid;gap:0;position:relative}
