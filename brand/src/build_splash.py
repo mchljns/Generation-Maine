@@ -83,13 +83,35 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .b1{background:var(--bi);color:var(--sp)}.b2{color:var(--bi);border-color:rgba(244,240,230,.55)}.b2:hover{background:rgba(244,240,230,.08)}
 .b3{background:var(--sp);color:#F4F0E6}
 
-/* nav: the compact lockup sits inside the cap height, so it centers with the links */
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--sp);color:#F4F0E6}
-.top .w{display:flex;align-items:center;justify-content:space-between;gap:24px;height:64px}
+/* nav: transparent over the hero, a frosted Birch bar once the page scrolls. The active section carries the dot. */
+.top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:#F4F0E6;transition:background .35s,color .35s,box-shadow .35s}
+.top .w{display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px;transition:height .35s}
 .top .lk{height:24px;width:auto;display:block}
-.top nav{display:flex;gap:28px;font:600 14px/1 var(--body)}
-.top nav a{text-decoration:none;opacity:.92}.top nav a:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
-@media (max-width:640px){.top .lk{height:21px}.top nav{gap:16px;font-size:13px}.top nav a:nth-child(1),.top nav a:nth-child(2),.top nav a:nth-child(3){display:none}}
+.top .lk.dark{display:none}
+.top nav{display:flex;gap:30px;font:600 14px/1 var(--body);align-items:center}
+.top nav a{position:relative;text-decoration:none;opacity:.88;padding:6px 0}
+.top nav a:hover{opacity:1}
+.top nav a::before{content:"";position:absolute;left:-14px;top:50%%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%%;background:var(--mg);transform:scale(0);transition:transform .3s cubic-bezier(.3,1.4,.4,1)}
+.top nav a.on{opacity:1}.top nav a.on::before{transform:scale(1)}
+.top .cta{font:600 14px/1 var(--body);text-decoration:none;padding:12px 16px;border-radius:6px;border:1.5px solid rgba(244,240,230,.55);transition:background .25s,color .25s,border-color .25s}
+.top .cta:hover{background:rgba(244,240,230,.1)}
+.top.solid{background:rgba(244,240,230,.94);-webkit-backdrop-filter:blur(18px) saturate(1.1);backdrop-filter:blur(18px) saturate(1.1);color:var(--ink);box-shadow:0 1px 0 var(--rule)}
+.top.solid .w{height:60px}
+.top.solid .lk.light{display:none}.top.solid .lk.dark{display:block}
+.top.solid .cta{background:var(--sp);color:#F4F0E6;border-color:var(--sp)}
+.menu{display:none;font:600 14px/1 var(--body);background:none;border:0;color:inherit;padding:10px 0;cursor:pointer}
+.sheet{position:fixed;inset:0;z-index:30;background:var(--sp);color:#F4F0E6;padding:calc(24px + env(safe-area-inset-top,0px)) var(--M) 32px;display:none;flex-direction:column}
+.sheet.open{display:flex}
+.sheet .bar{display:flex;justify-content:space-between;align-items:center;height:44px}
+.sheet .bar .lk{height:24px;width:auto}
+.sheet nav{display:flex;flex-direction:column;gap:6px;margin-top:40px}
+.sheet nav a{font:800 clamp(38px,11vw,56px)/1.05 var(--display);letter-spacing:-.03em;text-decoration:none;padding:8px 0}
+.sheet nav a .d{width:.18em;height:.18em}
+.sheet .foot{margin-top:auto;display:flex;flex-direction:column;gap:14px}
+.sheet .foot a{font:600 16px/1 var(--body);text-decoration:none}
+.sheet .foot .cta{align-self:flex-start;background:#F4F0E6;color:var(--sp);padding:16px 22px;border-radius:6px;font:600 15px/1 var(--body);text-decoration:none}
+@media (max-width:900px){.top nav,.top .cta{display:none}.menu{display:block}}
+.hero{padding-top:68px}
 
 /* hero */
 .hero{position:relative;background:var(--sp);color:#F4F0E6;overflow:hidden}
@@ -128,7 +150,7 @@ section{padding-block:clamp(56px,8vw,112px)}
 .stories-head{padding-bottom:0}
 .stories{padding-top:0}
 .stories .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,72px);align-items:start}
-.stage{position:sticky;top:calc(64px + env(safe-area-inset-top,0px) + 28px);align-self:start;height:min(64vh,560px);display:flex;align-items:center}
+.stage{position:sticky;top:calc(60px + env(safe-area-inset-top,0px) + 28px);align-self:start;height:min(64vh,560px);display:flex;align-items:center}
 .vid{position:relative;aspect-ratio:9/16;height:100%;max-height:620px;width:auto;max-width:100%;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
 .vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .6s ease}
 .vid video.on{opacity:1}
@@ -248,8 +270,12 @@ def page():
                    '<p class="k">Story %02d</p><h2>%s</h2><p class="say">"%s"</p><p class="nm">[Creator name] <span>%s, Maine</span></p>'
                    '<a class="go" href="#">Watch the full video [CONFIRM: link]</a></article>') % (i + 1, i, i + 1, i + 1, dot(topic), cap, town)
     body = r"""
-<header class="top"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s</a>
-<nav aria-label="Page"><a href="#about">About</a><a href="#creators">Creators</a><a href="#words">In their words</a><a href="#news">Newsletter</a></nav></div></header>
+<header class="top" id="topbar"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s%(lock_dark)s</a>
+<nav aria-label="Page"><a href="#about" data-for="about">About</a><a href="#creators" data-for="creators">Stories</a><a href="#words" data-for="words">In their words</a><a href="#follow" data-for="follow">Follow</a></nav>
+<a class="cta" href="#news">Get the newsletter</a><button class="menu" id="menu" aria-expanded="false" aria-controls="sheet">Menu</button></div></header>
+<div class="sheet" id="sheet" aria-hidden="true"><div class="bar">%(lock)s<button class="menu" id="close" style="display:block">Close</button></div>
+<nav aria-label="Page"><a href="#about">About<i class="d"></i></a><a href="#creators">Stories<i class="d"></i></a><a href="#words">In their words<i class="d"></i></a><a href="#follow">Follow<i class="d"></i></a></nav>
+<div class="foot"><a class="cta" href="#news">Get the newsletter</a></div></div>
 
 <section class="hero" id="top"><div class="w">
   <div class="h1"><h1 id="h1" class="rise">%(h1)s</h1>
@@ -337,6 +363,18 @@ def page():
   if (reduced) { stageVids.forEach(v => { v.controls = true; }); panelVids.forEach(v => { v.controls = true; }); }
   else { const mo = new IntersectionObserver(es => es.forEach(e => { if (!wide()) { if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause(); } }), { threshold: .4 }); panelVids.forEach(v => mo.observe(v)); }
 
+  // The bar turns solid once the hero scrolls away, marks the section in view, and opens the phone menu.
+  const bar = document.getElementById('topbar'), heroEl = document.querySelector('.hero');
+  new IntersectionObserver(es => es.forEach(e => bar.classList.toggle('solid', !e.isIntersecting)), { rootMargin: '-68px 0px 0px 0px', threshold: 0 }).observe(heroEl);
+  const links = [...bar.querySelectorAll('nav a')];
+  const ao = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.dataset.for === e.target.id)); }), { rootMargin: '-40%% 0px -55%% 0px', threshold: 0 });
+  ['about', 'creators', 'words', 'follow'].forEach(id => { const el = document.getElementById(id); if (el) ao.observe(el); });
+  const sheet = document.getElementById('sheet'), menu = document.getElementById('menu');
+  const setMenu = o => { sheet.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
+  menu.addEventListener('click', () => setMenu(true)); document.getElementById('close').addEventListener('click', () => setMenu(false));
+  sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
   // Sections: mark them before they enter, release them as they do.
   document.documentElement.classList.add('js');
   const secs = [...document.querySelectorAll('.reveal')]; secs.forEach(sc => sc.classList.add('pre'));
@@ -349,7 +387,7 @@ def page():
 })();
 </script>
 """ % dict(
-        lock=logo("lockup-compact-reversed", "lk"), two=logo("lockup-two-line-reversed", "lk"),
+        lock=logo("lockup-compact-reversed", "lk light"), lock_dark=logo("lockup-compact", "lk dark"), two=logo("lockup-two-line-reversed", "lk"),
         h1=dot("Young Mainers on building a life here"), h2about=dot("Made by the people it is about"), h2cre=dot("The stories"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         stagevids=stagevids, panels=panels, idx=idx, json=json.dumps(rows, separators=(",", ":")))
