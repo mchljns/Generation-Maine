@@ -3,57 +3,61 @@
  * Title: Follow
  * Slug: generation-maine/follow
  * Categories: generation-maine
- * Description: Channel buttons and the Substack card. Replace each # link with the real channel URL.
+ * Description: The four channels. Edit each handle and link. The marks come from the stylesheet.
  *
  * @package generation-maine
  */
 ?>
-<!-- wp:group {"tagName":"section","anchor":"follow","align":"full","className":"gm-section gm-follow","backgroundColor":"primary","textColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}},"layout":{"type":"constrained","contentSize":"1200px"}} -->
-<section id="follow" class="wp-block-group alignfull gm-section gm-follow has-base-color has-primary-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)"><!-- wp:columns {"verticalAlignment":"center","style":{"spacing":{"blockGap":{"left":"var:preset|spacing|60"}}}} -->
-<div class="wp-block-columns are-vertically-aligned-center"><!-- wp:column {"verticalAlignment":"center","width":"55%"} -->
-<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:55%"><!-- wp:heading {"textColor":"base"} -->
-<h2 class="wp-block-heading has-base-color has-text-color">Follow Generation Maine</h2>
+<!-- wp:group {"tagName":"section","anchor":"follow","className":"follow reveal bg-sage","layout":{"type":"default"}} -->
+<section id="follow" class="wp-block-group follow reveal bg-sage"><!-- wp:group {"className":"w","layout":{"type":"default"}} -->
+<div class="wp-block-group w"><!-- wp:heading {"className":"h2 gm-dot"} -->
+<h2 class="wp-block-heading h2 gm-dot">Follow along</h2>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph {"fontSize":"large"} -->
-<p class="has-large-font-size">New videos go up on each channel.</p>
-<!-- /wp:paragraph -->
+<!-- wp:html -->
+<span class="rule" aria-hidden="true"></span>
+<!-- /wp:html -->
 
-<!-- wp:buttons {"className":"gm-channels","style":{"spacing":{"margin":{"top":"var:preset|spacing|40"}}}} -->
-<div class="wp-block-buttons gm-channels" style="margin-top:var(--wp--preset--spacing--40)"><!-- wp:button -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#follow">Instagram</a></div>
-<!-- /wp:button -->
-
-<!-- wp:button -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#follow">TikTok</a></div>
-<!-- /wp:button -->
-
-<!-- wp:button -->
-<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#follow">YouTube</a></div>
-<!-- /wp:button --></div>
-<!-- /wp:buttons --></div>
-<!-- /wp:column -->
-
-<!-- wp:column {"verticalAlignment":"center","width":"45%"} -->
-<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:45%"><!-- wp:group {"className":"gm-substack","backgroundColor":"base","textColor":"contrast","style":{"spacing":{"padding":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|50","left":"var:preset|spacing|50","right":"var:preset|spacing|50"}}},"layout":{"type":"default"}} -->
-<div class="wp-block-group gm-substack has-contrast-color has-base-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--50);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--50);padding-left:var(--wp--preset--spacing--50)"><!-- wp:paragraph {"className":"gm-eyebrow","textColor":"accent-text","fontSize":"small"} -->
-<p class="gm-eyebrow has-accent-text-color has-text-color has-small-font-size">Substack</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading {"level":3,"textColor":"primary"} -->
-<h3 class="wp-block-heading has-primary-color has-text-color">Read the Substack</h3>
+<!-- wp:group {"className":"row","layout":{"type":"default"}} -->
+<div class="wp-block-group row"><!-- wp:group {"className":"row-in instagram","layout":{"type":"default"}} -->
+<div class="wp-block-group row-in instagram"><!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Instagram</h3>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Get new stories from the creators by email.</p>
-<!-- /wp:paragraph -->
+<p><a href="#">[@handle]</a></p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
 
-<!-- wp:buttons -->
-<div class="wp-block-buttons"><!-- wp:button {"backgroundColor":"primary","textColor":"base"} -->
-<div class="wp-block-button"><a class="wp-block-button__link has-base-color has-primary-background-color has-text-color has-background wp-element-button" href="#follow">Subscribe on Substack</a></div>
-<!-- /wp:button --></div>
-<!-- /wp:buttons --></div>
+<!-- wp:group {"className":"row-in tiktok","layout":{"type":"default"}} -->
+<div class="wp-block-group row-in tiktok"><!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">TikTok</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><a href="#">[@handle]</a></p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"row-in youtube","layout":{"type":"default"}} -->
+<div class="wp-block-group row-in youtube"><!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">YouTube</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><a href="#">[@handle]</a></p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+
+<!-- wp:group {"className":"row-in substack","layout":{"type":"default"}} -->
+<div class="wp-block-group row-in substack"><!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Substack</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><a href="#">[name].substack.com</a></p>
+<!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
-<!-- /wp:column --></div>
-<!-- /wp:columns --></section>
+<!-- /wp:group --></div>
+<!-- /wp:group --></section>
 <!-- /wp:group -->

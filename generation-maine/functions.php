@@ -2,7 +2,7 @@
 /**
  * Generation Maine theme setup.
  *
- * Fonts are self-hosted and declared in theme.json. There is no Google Fonts call.
+ * Fonts are self-hosted and declared in theme.json. There is no Google Fonts call, no build step and no plugin.
  *
  * @package generation-maine
  */
@@ -11,11 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'GM_THEME_VERSION', '1.0.0' );
+define( 'GM_THEME_VERSION', '2.0.0' );
 
+require_once get_theme_file_path( 'inc/marks.php' );
 require_once get_theme_file_path( 'inc/creators.php' );
-require_once get_theme_file_path( 'inc/seo.php' );
 require_once get_theme_file_path( 'inc/newsletter.php' );
+require_once get_theme_file_path( 'inc/seo.php' );
 
 /**
  * Theme supports and editor styles.
@@ -25,18 +26,35 @@ function gm_setup() {
 	add_theme_support( 'editor-styles' );
 	add_theme_support( 'post-thumbnails' );
 	add_theme_support( 'responsive-embeds' );
-	add_editor_style( 'style.css' );
 	remove_theme_support( 'core-block-patterns' );
+	register_block_pattern_category( 'generation-maine', array( 'label' => __( 'Generation Maine', 'generation-maine' ) ) );
 }
 add_action( 'after_setup_theme', 'gm_setup' );
 
 /**
- * Front-end stylesheet.
+ * Front-end stylesheet and the page's one script, with the mural data.
  */
 function gm_enqueue() {
 	wp_enqueue_style( 'generation-maine', get_stylesheet_uri(), array(), GM_THEME_VERSION );
+	wp_enqueue_script( 'generation-maine', get_theme_file_uri( 'assets/js/site.js' ), array(), GM_THEME_VERSION, array( 'in_footer' => true ) );
+	$data = array();
+	$file = get_theme_file_path( 'assets/data/mural.json' );
+	if ( file_exists( $file ) ) {
+		$data = json_decode( (string) file_get_contents( $file ), true ); // phpcs:ignore WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
+	}
+	wp_add_inline_script( 'generation-maine', 'window.GMDATA = ' . wp_json_encode( $data ? $data : new stdClass() ) . ';', 'before' );
 }
 add_action( 'wp_enqueue_scripts', 'gm_enqueue' );
+
+/**
+ * The same stylesheet inside the editor canvas, so the page looks in the editor as it does on the site.
+ */
+function gm_editor_assets() {
+	if ( is_admin() ) {
+		wp_enqueue_style( 'generation-maine-editor', get_stylesheet_uri(), array(), GM_THEME_VERSION );
+	}
+}
+add_action( 'enqueue_block_assets', 'gm_editor_assets' );
 
 /**
  * Preload the display font so the headline does not reflow.
@@ -50,6 +68,15 @@ function gm_preload_fonts() {
 add_action( 'wp_head', 'gm_preload_fonts', 1 );
 
 /**
+ * One palette in every theme: the page commits to its own colors.
+ */
+function gm_color_scheme() {
+	echo '<meta name="color-scheme" content="light">' . "\n";
+	echo '<meta name="theme-color" content="#0B2B21">' . "\n";
+}
+add_action( 'wp_head', 'gm_color_scheme', 0 );
+
+/**
  * Favicon fallback. WordPress prints its own tags once a Site Icon is set in Settings > General.
  */
 function gm_favicon_fallback() {
@@ -60,41 +87,25 @@ function gm_favicon_fallback() {
 	printf( '<link rel="icon" href="%s" type="image/svg+xml">' . "\n", esc_url( get_theme_file_uri( 'assets/img/icon.svg' ) ) );
 	printf( '<link rel="apple-touch-icon" href="%s">' . "\n", esc_url( get_theme_file_uri( 'assets/img/icon-180.png' ) ) );
 }
-add_action( 'wp_head', 'gm_favicon_fallback', 5 );
+add_action( 'wp_head', 'gm_favicon_fallback', 2 );
 
 /**
- * Theme color for mobile browser chrome.
- */
-function gm_theme_color() {
-	echo '<meta name="theme-color" content="#0B4A34">' . "\n";
-}
-add_action( 'wp_head', 'gm_theme_color', 6 );
-
-/**
- * Pattern category.
- */
-function gm_pattern_category() {
-	register_block_pattern_category( 'generation-maine', array( 'label' => __( 'Generation Maine', 'generation-maine' ) ) );
-}
-add_action( 'init', 'gm_pattern_category' );
-
-/**
- * Returns the inline SVG wordmark. Letters use currentColor and the dot uses the accent color.
+ * The lockup for the header: both colorways, so the bar can swap as it scrolls.
  *
  * @return string
  */
-function gm_wordmark_svg() {
-	static $svg = null;
-	if ( null === $svg ) {
-		$file = get_theme_file_path( 'assets/img/wordmark-inline.svg' );
-		$svg  = file_exists( $file ) ? (string) file_get_contents( $file ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-	}
-	return $svg;
+function gm_header_lockups() {
+	return gm_logo( 'lockup-compact-reversed', 'lk light' ) . gm_logo( 'lockup-compact', 'lk dark' );
 }
 
 /**
- * Small performance cleanups. None of these are used on a one-page site.
+ * Trim the things a one-page site does not use.
  */
-remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-remove_action( 'wp_print_styles', 'print_emoji_styles' );
-remove_action( 'wp_head', 'wp_generator' );
+function gm_trim_head() {
+	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+	remove_action( 'wp_print_styles', 'print_emoji_styles' );
+	remove_action( 'wp_head', 'wp_generator' );
+	remove_action( 'wp_head', 'rsd_link' );
+	remove_action( 'wp_head', 'wlwmanifest_link' );
+}
+add_action( 'init', 'gm_trim_head' );

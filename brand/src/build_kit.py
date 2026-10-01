@@ -748,7 +748,7 @@ def build_kit(m):
     for k, v in {"{{F800}}": font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2"),
                  "{{F700}}": font64("brand/v6/fonts-web/bricolage-grotesque-700.woff2"),
                  "{{FCOND}}": font64("brand/v4/fonts-web/bricolage-condensed-800.woff2"),
-                 "{{FINTER}}": font64("generation-maine/assets/fonts/inter-var.woff2")}.items():
+                 "{{FINTER}}": font64("brand/fonts/inter-var.woff2")}.items():
         css = css.replace(k, v)
     for k, v in C.items():
         css = css.replace("{{%s}}" % k, v)

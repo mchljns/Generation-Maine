@@ -189,18 +189,92 @@ function gm_register_newsletter_block() {
 }
 add_action( 'init', 'gm_register_newsletter_block' );
 
+
 /**
- * After submit, show the confirmation line in the page. The hand-off itself needs no script.
+ * The publication's feed address, worked out from the subscribe URL in settings. Empty when none is set.
+ *
+ * @return string
  */
-function gm_newsletter_script() {
-	if ( ! has_block( 'generation-maine/newsletter' ) ) {
-		return;
+function gm_newsletter_feed_url() {
+	$url = get_option( 'gm_newsletter_url', '' );
+	if ( '' === $url ) {
+		return '';
 	}
-	wp_add_inline_script(
-		'wp-hooks',
-		"document.querySelectorAll('form.gm-newsletter').forEach(function(f){f.addEventListener('submit',function(){var ok=f.querySelector('.gm-newsletter__ok');if(ok&&f.dataset.confirm){ok.textContent=f.dataset.confirm;ok.hidden=false;}var b=f.querySelector('button');if(b){b.disabled=true;}});});",
-		'after'
-	);
-	wp_enqueue_script( 'wp-hooks' );
+	$parts = wp_parse_url( $url );
+	if ( empty( $parts['host'] ) ) {
+		return '';
+	}
+	return 'https://' . $parts['host'] . '/feed';
 }
-add_action( 'wp_enqueue_scripts', 'gm_newsletter_script' );
+
+/**
+ * The latest posts from the publication, read from its feed and cached for an hour. Placeholders until an address is set
+ * or when the feed cannot be read.
+ *
+ * @param int $count Posts to show.
+ * @return string HTML
+ */
+function gm_render_posts( $count = 3 ) {
+	$count = max( 1, min( 6, (int) $count ) );
+	$items = array();
+	$feed  = gm_newsletter_feed_url();
+	if ( $feed ) {
+		include_once ABSPATH . WPINC . '/feed.php';
+		add_filter( 'wp_feed_cache_transient_lifetime', 'gm_feed_lifetime' );
+		$rss = fetch_feed( $feed );
+		remove_filter( 'wp_feed_cache_transient_lifetime', 'gm_feed_lifetime' );
+		if ( ! is_wp_error( $rss ) ) {
+			foreach ( $rss->get_items( 0, $count ) as $it ) {
+				$author  = $it->get_author();
+				$items[] = array(
+					'title' => $it->get_title(),
+					'line'  => wp_trim_words( wp_strip_all_tags( (string) $it->get_description() ), 22 ),
+					'by'    => $author ? $author->get_name() : '',
+					'date'  => $it->get_date( get_option( 'date_format' ) ),
+					'url'   => $it->get_permalink(),
+				);
+			}
+		}
+	}
+	if ( ! $items ) {
+		$towns = array( 'Belfast', 'Machias', 'Lewiston', 'Rumford', 'Sanford', 'Fort Kent' );
+		for ( $i = 0; $i < $count; $i++ ) {
+			$items[] = array(
+				'title' => '[Post title, plain words]',
+				'line'  => '[One line on what the creator found out.]',
+				'by'    => '[Creator name] ' . $towns[ $i % count( $towns ) ] . ', Maine',
+				'date'  => '[Date]',
+				'url'   => '#',
+			);
+		}
+	}
+	$html = '<span class="rule" aria-hidden="true"></span>';
+	foreach ( $items as $p ) {
+		$html .= '<a class="post row-in" href="' . esc_url( $p['url'] ) . '"' . ( '#' === $p['url'] ? '' : ' target="_blank" rel="noopener"' ) . '><div><h3>' . esc_html( $p['title'] ) . '</h3>';
+		if ( $p['line'] ) {
+			$html .= '<p>' . esc_html( $p['line'] ) . '</p>';
+		}
+		if ( $p['by'] ) {
+			$html .= '<p class="by">' . esc_html( $p['by'] ) . '</p>';
+		}
+		$html .= '</div><span class="dt">' . esc_html( $p['date'] ) . '</span></a>';
+	}
+	return $html;
+}
+
+/**
+ * Cache the feed for an hour.
+ *
+ * @return int
+ */
+function gm_feed_lifetime() {
+	return HOUR_IN_SECONDS;
+}
+
+/**
+ * The posts block.
+ */
+function gm_register_posts_block() {
+	register_block_type( get_theme_file_path( 'blocks/posts' ) );
+}
+add_action( 'init', 'gm_register_posts_block' );

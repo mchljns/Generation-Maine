@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "generation-maine/posts",
+	"title": "Latest Newsletter Posts",
+	"category": "widgets",
+	"icon": "rss",
+	"description": "The latest posts from the Substack publication set under Settings > Newsletter, read from its feed and cached for an hour. Shows placeholders until the address is set.",
+	"keywords": [ "newsletter", "substack", "posts", "feed" ],
+	"textdomain": "generation-maine",
+	"attributes": { "count": { "type": "number", "default": 3 } },
+	"supports": { "html": false, "anchor": true },
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}

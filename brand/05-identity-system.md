@@ -337,3 +337,19 @@ Snow adjusted to #F9F8F6. The first Snow, #F7F8F6, had green as its highest chan
 Snow is pure white, #FFFFFF. Two near-whites were tried on the greens and both read as pale green to the client's eye, so the reversed mark and all type on Spruce, Moss and Pine are white. The token name stays so the files need no renaming.
 
 The nav band is Pine, not Moss. White on the mid-green Moss took on a cast by contrast and read as pale green even at 255,255,255. On Pine, the darkest green, white reads white, the band sits as a shadow line over the hero rather than a stripe, and the page opens on the footer's color. Ink was crisper still but read as browser chrome; Sage capped the hero.
+
+## The WordPress build
+
+The splash page is now a block theme, built so that every piece of copy is a block and every creator is a post.
+
+What the editor can change: every headline, paragraph, link label and button on the page, in the site editor. Section headings carry their Marigold period automatically, so a rewrite keeps the dot. The four platforms in the follow row are small groups with a heading and a link; their marks come from the stylesheet.
+
+What lives on the Creator post: name, bio, avatar as the featured image, handle, hometown, the clip as an upload or a link, its length, and three social links. The Creators block reads every published creator and renders the pinned clip with the creator's avatar and handle on it, their details beside it and the position row under both. With no creators it shows a short note.
+
+What is not editable in the page: colors, type, the pill shape and the motion. They live in theme.json and the stylesheet. The stylesheet is generated from the same CSS as the splash mockup, so the two cannot drift.
+
+The newsletter: one address under Settings > Newsletter drives the signup hand-off and the latest-posts feed. The form hides until the address is set.
+
+Tested in a local WordPress on SQLite: the front page at 375, 768 and 1440 with nine creators and with none, the site editor opening the template with every block valid and the theme's styles in the canvas, the Creator screen, the admin note when no newsletter address is set, PHP lint on every file. The one fault found was a stray brace in the shared CSS that hid the newsletter grid; fixed at the source.
+
+Still open: the funder line. The SEO module still names Maine Policy Institute as the parent organization and the optional About Maine Policy Institute pattern remains available in the inserter. Both wait on the decision.

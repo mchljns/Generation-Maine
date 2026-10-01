@@ -1,39 +1,18 @@
-/* Creators Grid editor script. Plain JS, no build step: the editor shows the same server-rendered output. */
+/* Creators block editor script. Plain JS, no build step: the editor shows the same server-rendered output. */
 ( function ( wp ) {
-	var el = wp.element.createElement;
-	var ServerSideRender = wp.serverSideRender;
-	var InspectorControls = wp.blockEditor.InspectorControls;
-	var useBlockProps = wp.blockEditor.useBlockProps;
-	var PanelBody = wp.components.PanelBody;
-	var RangeControl = wp.components.RangeControl;
-
+	var el = wp.element.createElement, ServerSideRender = wp.serverSideRender, InspectorControls = wp.blockEditor.InspectorControls;
+	var PanelBody = wp.components.PanelBody, RangeControl = wp.components.RangeControl, TextControl = wp.components.TextControl;
 	wp.blocks.registerBlockType( 'generation-maine/creators', {
 		edit: function ( props ) {
-			return el(
-				'div',
-				useBlockProps(),
-				el(
-					InspectorControls,
-					null,
-					el(
-						PanelBody,
-						{ title: 'Settings' },
-						el( RangeControl, {
-							label: 'Most creators to show',
-							min: 1,
-							max: 48,
-							value: props.attributes.limit,
-							onChange: function ( v ) {
-								props.setAttributes( { limit: v } );
-							},
-						} )
-					)
-				),
-				el( ServerSideRender, { block: 'generation-maine/creators', attributes: props.attributes } )
-			);
+			var a = props.attributes, set = props.setAttributes;
+			return el( 'div', wp.blockEditor.useBlockProps(),
+				el( InspectorControls, null, el( PanelBody, { title: 'Settings' },
+					el( RangeControl, { label: 'Most creators to show', min: 1, max: 48, value: a.limit, onChange: function ( v ) { set( { limit: v } ); } } ),
+					el( TextControl, { label: 'Label before the next name', help: 'Default: "Next: "', value: a.next, onChange: function ( v ) { set( { next: v } ); } } ),
+					el( TextControl, { label: 'Label on the last creator', help: 'Default: "Last one"', value: a.last, onChange: function ( v ) { set( { last: v } ); } } )
+				) ),
+				el( ServerSideRender, { block: 'generation-maine/creators', attributes: a } ) );
 		},
-		save: function () {
-			return null;
-		},
+		save: function () { return null; },
 	} );
 } )( window.wp );

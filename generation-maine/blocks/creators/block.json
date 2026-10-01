@@ -2,20 +2,18 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "generation-maine/creators",
-	"title": "Creators Grid",
+	"title": "Creators",
 	"category": "widgets",
 	"icon": "groups",
-	"description": "Shows every published creator as a card. Shows a \"coming soon\" message when there are none. Add creators under Creators in the dashboard.",
-	"keywords": [ "creators", "team", "grid" ],
+	"description": "The creators section: one pinned clip with the creator's avatar and handle, their details beside it, and a position row. Reads every published creator. Add creators under Creators in the dashboard.",
+	"keywords": [ "creators", "stories", "clips" ],
 	"textdomain": "generation-maine",
 	"attributes": {
-		"limit": { "type": "number", "default": 24 }
+		"limit": { "type": "number", "default": 24 },
+		"next": { "type": "string", "default": "" },
+		"last": { "type": "string", "default": "" }
 	},
-	"supports": {
-		"html": false,
-		"align": [ "wide", "full" ],
-		"anchor": true
-	},
+	"supports": { "html": false, "align": [ "full" ], "anchor": true },
 	"editorScript": "file:./index.js",
 	"render": "file:./render.php"
 }

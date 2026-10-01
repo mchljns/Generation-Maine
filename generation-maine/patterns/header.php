@@ -4,18 +4,47 @@
  * Slug: generation-maine/header
  * Categories: generation-maine
  * Inserter: no
+ * Description: The bar. A Pine band over the hero that folds into a floating capsule on the first scroll. Edit the link labels and the button text here.
  *
  * @package generation-maine
  */
 ?>
-<!-- wp:group {"align":"full","className":"gm-header","backgroundColor":"primary","textColor":"base","style":{"spacing":{"padding":{"top":"0.75rem","bottom":"0.75rem"}}},"layout":{"type":"constrained","contentSize":"1200px"}} -->
-<div class="wp-block-group alignfull gm-header has-base-color has-primary-background-color has-text-color has-background" style="padding-top:0.75rem;padding-bottom:0.75rem"><!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
-<div class="wp-block-group"><!-- wp:html -->
-<a class="gm-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php echo gm_wordmark_svg(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
+<!-- wp:group {"tagName":"header","className":"top","anchor":"topbar","layout":{"type":"default"}} -->
+<header id="topbar" class="wp-block-group top"><!-- wp:group {"className":"w","layout":{"type":"default"}} -->
+<div class="wp-block-group w"><!-- wp:html -->
+<a href="#top" aria-label="<?php esc_attr_e( 'Generation Maine, home', 'generation-maine' ); ?>"><?php echo gm_header_lockups(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
 <!-- /wp:html -->
 
-<!-- wp:html -->
-<nav aria-label="<?php esc_attr_e( 'Sections', 'generation-maine' ); ?>"><ul class="gm-nav"><li><a href="#about">About</a></li><li><a href="#creators">Creators</a></li><li><a href="#follow">Follow</a></li></ul></nav>
-<!-- /wp:html --></div>
-<!-- /wp:group --></div>
+<!-- wp:group {"tagName":"nav","ariaLabel":"Page","layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<nav class="wp-block-group" aria-label="Page"><!-- wp:paragraph -->
+<p><a href="#about">About</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><a href="#creators">Creators</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><a href="#words">In their words</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><a href="#follow">Follow</a></p>
+<!-- /wp:paragraph --></nav>
 <!-- /wp:group -->
+
+<!-- wp:buttons {"className":"cta"} -->
+<div class="wp-block-buttons cta"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#news">Get the newsletter</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->
+
+<!-- wp:html -->
+<button class="menu" id="menu" aria-expanded="false" aria-controls="sheet" aria-label="<?php esc_attr_e( 'Menu', 'generation-maine' ); ?>"><i></i><i></i><i></i></button><span class="prog" id="prog" aria-hidden="true"></span>
+<!-- /wp:html --></div>
+<!-- /wp:group --></header>
+<!-- /wp:group -->
+
+<!-- wp:html -->
+<div class="sheet" id="sheet" aria-hidden="true"><nav aria-label="<?php esc_attr_e( 'Page', 'generation-maine' ); ?>"></nav><div class="foot"><a class="cta" href="#news"><?php esc_html_e( 'Get the newsletter', 'generation-maine' ); ?></a></div></div>
+<!-- /wp:html -->

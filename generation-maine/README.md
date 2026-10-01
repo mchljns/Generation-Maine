@@ -1,77 +1,74 @@
 # Generation Maine WordPress theme
 
-A one-page block theme for GenerationMaine.org, an initiative of Maine Policy Institute. It has no page builder, no build step and needs no plugins.
+A one-page block theme for GenerationMaine.org. Every piece of copy on the page is a block the editor can change. Everything about a creator lives on a Creator post. There is no page builder, no build step and no plugin to install.
 
 ## What is in the theme
 
 | Path | What it does |
 | --- | --- |
-| `theme.json` | Colors, fonts, type scale, spacing and button styles (brand: Spruce & Lupine) |
-| `styles/paper-route.json` | The alternate brand direction as a one-click style variation |
-| `style.css` | Theme header plus the few styles theme.json cannot express (sticky header, contour pattern, creator cards) |
-| `functions.php` | Loads the stylesheet, preloads the headline font, adds a favicon fallback |
-| `inc/creators.php` | Private "Creators" post type, its fields and the `[gm_creators]` shortcode |
-| `blocks/creators/` | The server-rendered Creators Grid block (plain JS, no build) |
-| `inc/seo.php` | Title, description, canonical, Open Graph and Organization schema with Maine Policy Institute as parent. Turns itself off if Yoast, Rank Math, SEOPress or AIOSEO is active |
-| `patterns/` | The page sections: header, hero, about, creators, follow, mpi, footer |
-| `templates/` | `front-page.html` (the splash page), `index.html`, `404.html` |
-| `assets/fonts/` | Self-hosted Bricolage Grotesque and Inter (plus the alternate direction's fonts), with OFL license files |
-| `assets/img/` | Wordmark, icon, favicon, contour pattern and share card |
-| `bin/` | Seed script for placeholder creators (not needed on the live site) |
+| `theme.json` | The palette (Spruce, Pine, Moss, Marigold, Sage, Sand, white, ink), the two fonts, the type scale and the pill buttons |
+| `style.css` | The page's stylesheet. Generated from `brand/src/build_theme.py`, which shares its CSS with the splash mockup |
+| `assets/js/site.js` | The page's motion: the mural, the pulsing period, the color fade on scroll, the capsule bar, the creators stepper, the reveals |
+| `assets/data/mural.json` | The sixteen lines of the hero mural, generated from the state outline |
+| `functions.php` | Loads the stylesheet and script, preloads the headline font, a favicon fallback |
+| `inc/creators.php` | The Creators post type, its fields, and the stepper that renders them |
+| `inc/newsletter.php` | Settings > Newsletter, the signup form that hands off to Substack, and the latest-posts feed reader |
+| `inc/marks.php` | The hand-drawn platform marks and placeholder avatar (generated) |
+| `inc/seo.php` | Title, description, canonical, Open Graph and Organization schema. Steps aside if an SEO plugin is active |
+| `blocks/creators/` | The Creators block |
+| `blocks/newsletter/` | The Newsletter Signup block |
+| `blocks/posts/` | The Latest Newsletter Posts block |
+| `patterns/` | The page sections as block patterns: header, hero, about, creators, words, newsletter, follow, footer |
+| `templates/front-page.html` | The page, assembled from the patterns |
+| `assets/fonts/` | Bricolage Grotesque and DM Sans, self-hosted, with their OFL licenses |
+| `assets/img/` | The logo files and icons |
+| `bin/` | A seed script for placeholder creators (not needed on the live site) |
+
+Requires WordPress 6.5 or newer and PHP 7.4 or newer.
 
 ## Install
 
-1. Download `dist/generation-maine.zip` from the repo.
-2. In WordPress, go to **Appearance > Themes > Add New > Upload Theme** and upload the zip.
-3. Activate **Generation Maine**.
-4. Go to **Settings > Reading** and leave "Your homepage displays" on "Your latest posts". The theme's front page template shows the splash page either way.
-5. Go to **Settings > Permalinks** and choose "Post name".
-6. Optional: set a Site Icon in **Settings > General**. Until you do, the theme uses its own favicon.
+1. Upload the theme zip under **Appearance > Themes > Add New > Upload Theme** and activate it.
+2. Under **Settings > Reading** leave "Your homepage displays" on "Your latest posts". The theme's front page template shows the page either way.
+3. Under **Settings > Permalinks** choose "Post name".
+4. Under **Settings > Newsletter** paste the publication's subscribe page address. Until you do, the signup form stays hidden and the posts list shows placeholders.
+5. Optional: set a Site Icon under **Settings > General**.
 
-Requires WordPress 6.5 or newer and PHP 7.4 or newer. Tested on WordPress 6.8.3 with PHP 8.3.
-
-## Edit the page
+## Edit the copy
 
 Open **Appearance > Editor > Templates > Front Page**. Every section is made of normal blocks.
 
-- **Text:** click any heading or paragraph and type.
-- **Channel links:** the Instagram, TikTok, YouTube and Substack buttons point to `#follow` until the real URLs exist. Click each button and paste the link.
-- **Hero photo:** select the hero (a Cover block), then use **Add Media** in the toolbar. With no photo, the hero shows the contour pattern on Spruce green. With a photo, the pattern hides and the overlay keeps text readable (raise the overlay opacity if a photo is busy).
-- **Press email and Maine Policy sentence:** in the "About Maine Policy Institute" section, replace the `[CONFIRM: ...]` text.
-- **Header and footer:** edit under **Patterns > Template Parts**. The logo is inline SVG in a Custom HTML block.
-- **SEO text:** change the title and description in `inc/seo.php`, or install an SEO plugin and the theme steps aside.
+- **Headlines and paragraphs:** click and type. The Marigold period at the end of each section heading is added by the page, so it survives any rewrite. Keep headlines under about ten words.
+- **The bar:** the four link labels and the button text are in the Header template part. The links point at the sections by their anchors, which do not change.
+- **The hero:** headline, lede, one button and one text link.
+- **About:** a heading and three columns, each a small heading and a paragraph.
+- **In their words:** three Quote blocks. The words go in the quote, the name and town in the citation.
+- **Newsletter:** heading and lede are blocks; the form and the posts list come from Settings > Newsletter.
+- **Follow:** four platforms, each a small heading and a link. Paste the real address on each link.
+- **Footer:** a line about the project and the legal line.
 
-## Add creators
+Colors, type, the pill shape and the motion are not editable in the page. That is on purpose. They live in `theme.json` and the stylesheet.
+
+## Add a creator
 
 1. In the dashboard, click **Creators > Add creator**.
-2. **Title** is the creator's name.
-3. The text area is their bio. Two or three sentences work best.
-4. **Portrait** (right sidebar) is their photo. Use a 4:5 photo at least 1000 × 1250 px.
-5. **Creator details** (below the editor) holds hometown and links.
-6. **Page Attributes > Order** sets the order on the page (lower numbers first).
-7. Publish. The creator appears in the grid right away.
+2. **Title** is the creator's name, or their handle if that is how people know them.
+3. The text area is their bio, two or three sentences in their own words.
+4. **Avatar** (right sidebar, "Set avatar") is a square photo. It shows in a circle on the clip.
+5. **Creator details** sits in the Meta Boxes drawer at the bottom of the editor. Click the drawer to open it. It holds the handle, hometown, the clip (upload a short vertical video, or paste a direct link), its length, and the Instagram, TikTok and YouTube links.
+6. **Page Attributes > Order** sets the order on the page. Lower numbers come first.
+7. Publish. The creator appears in the stepper and the position row renames itself.
 
-Creators have no public pages of their own. With no creators published, the grid shows a "Creators coming soon" card. If a creator is marked "This is a placeholder", the card shows a Placeholder label.
+Creators have no public pages of their own. With no creators published, the section shows a short note. A creator marked "Placeholder" renders like any other, so the page can be reviewed before casting.
 
-To test with fake creators: `wp eval-file wp-content/themes/generation-maine/bin/seed-creators.php 12`. Run it with `0` to remove them.
+Clips: 9:16, muted, about ten seconds, under 10 MB. The page loops them and shows the creator's avatar and handle on top, so the clip itself needs no titles.
 
-## Switch to the alternate brand direction
+To fill the page with placeholders: `wp eval-file wp-content/themes/generation-maine/bin/seed-creators.php 9`. Run it with `0` to remove them.
 
-The theme ships with the recommended direction, **Spruce & Lupine**. The alternate, **Paper Route**, is a style variation.
+## The newsletter
 
-1. Go to **Appearance > Editor > Styles**.
-2. Click **Browse styles** and pick **Paper Route (alternate direction)**.
-3. Save.
+The form sends the visitor's address to the publication's subscribe page on Substack, which opens in a new tab, sends the confirmation email and keeps the list. Nothing is stored on this site. The posts list reads the publication's feed and caches it for an hour. Both are driven by the one address under Settings > Newsletter.
 
-That swaps colors, fonts, heading style and button shape. To switch back, pick the default style. The wordmark keeps Direction A's letterforms (it picks up the new colors). If the client chooses Paper Route, the logo files and social kit in `brand/` should be rebuilt for it.
+## Rebuilding the stylesheet
 
-## Local development
-
-- **WordPress Playground:** from the repo root, run `npx @wp-playground/cli@latest server --mount=./generation-maine:/wordpress/wp-content/themes/generation-maine --login`, then activate the theme. `qa/mu-plugins/gm-qa.php` can be mounted too; it activates the theme, sets permalinks and seeds creators at `/?gm_seed=12`.
-- **wp-env:** `cd generation-maine && npx @wordpress/env start`.
-
-## Performance and accessibility notes
-
-- Fonts are self-hosted WOFF2 subsets (about 70 KB total for the default direction) and the headline font is preloaded.
-- No JavaScript loads on the front end except WordPress's own.
-- Colors in the default palette meet WCAG AA for their intended pairings. See `brand/02-directions.md` for the ratios.
+`style.css`, `assets/data/mural.json` and `inc/marks.php` are generated. Change the CSS in `brand/src/build_splash.py` or the WordPress additions in `brand/src/build_theme.py`, then run `python3 brand/src/build_theme.py`.
