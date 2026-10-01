@@ -4,8 +4,8 @@ The state is one color. Marigold is the dot on the i, and only there (client dec
 
 Three cuts, one drawing, chosen by size:
   full   : 16 lines, one for each county, weight from 2.6 to 4.4 percent of the height. 72 px and up
-  mid    : 11 heavier lines on a lightly simplified coast. 32 to 72 px. The cut the horizontal lockups ship with
-  solid  : the silhouette alone, simplified so the edge stays clean. Below 32 px
+  mid    : the same 16 lines, heavier, on a lightly simplified coast. 36 to 72 px. The cut the horizontal lockups ship with
+  solid  : the silhouette alone, simplified so the edge stays clean. Below 36 px
 
   python3 brand/src/build_logo_maine.py     # writes brand/identity/logo-maine/*.svg
 """
@@ -49,7 +49,8 @@ def maine_lines(x, y, h, fg, mark, cut="full", gold=True):
         ring = simplified(ring, h * 0.006)
     # Sixteen lines for Maine's sixteen counties. The first row sits on the crest at Fort Kent, and the
     # northern border is kept as one line, so the top of the state is never cut off or broken into dashes.
-    n, w_lo, w_hi, keep, top, span = (16, h * 0.026, h * 0.044, 1.8, 0.03, 0.94) if cut == "full" else (11, h * 0.042, h * 0.056, 2.2, 0.035, 0.925)
+    # Every lined version has sixteen lines. The mid cut is the same drawing with heavier lines on the simplified coast.
+    n, w_lo, w_hi, keep, top, span = (16, h * 0.026, h * 0.044, 1.8, 0.03, 0.94) if cut == "full" else (16, h * 0.034, h * 0.046, 2.2, 0.03, 0.94)
     rows = []
     for i in range(n):
         t = i / (n - 1)
@@ -101,7 +102,7 @@ def signature():
         b2, w2, h2 = wordmark_stacked(fg, mk, "circle", 100)
         mh, gap = 96, 26
         # horizontal: the state stands taller than the capitals, like a flag beside the name.
-        # The mark is small in this lockup, so it ships with the mid cut. The large version carries the full cut, for 600 px wide and up. The solid version is for under 270 px wide.
+        # The mark is small in this lockup, so it ships with the mid cut. The large version carries the full cut, for 600 px wide and up. The solid version is for under 300 px wide.
         for lsuf, lcut in (("", "mid"), ("-large", "full"), ("-solid", "solid")):
             mb, mw = maine_lines(0, 74 - mh + 6, mh, fg, fg, lcut, gold=False)
             m["lockup-horizontal" + lsuf + suf] = svg(w + mw + gap, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + gap), b), "Generation Maine")
