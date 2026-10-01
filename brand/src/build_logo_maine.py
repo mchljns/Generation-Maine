@@ -3,7 +3,7 @@
 The state is one color. Marigold is the dot on the i, and only there (client decision, October 1).
 
 Three cuts, one drawing, chosen by size:
-  full   : 21 lines, weight growing toward the bottom. 72 px and up
+  full   : 21 lines, weight from 2.1 to 3.4 percent of the height, first row at 6 percent. 72 px and up
   mid    : 13 heavier lines on a lightly simplified coast. 36 to 72 px
   solid  : the silhouette alone, simplified so the edge stays clean. Below 36 px
 
@@ -47,11 +47,12 @@ def maine_lines(x, y, h, fg, mark, cut="full", gold=True):
         return '<path fill="%s" d="%s"/>' % (fg, maine2.path(ring)), maxx - minx
     if cut == "mid":
         ring = simplified(ring, h * 0.006)
-    n, w_lo, w_hi, keep = (21, h * 0.015, h * 0.034, 1.8) if cut == "full" else (13, h * 0.03, h * 0.052, 2.4)
+    n, w_lo, w_hi, keep = (21, h * 0.021, h * 0.034, 1.8) if cut == "full" else (13, h * 0.032, h * 0.052, 2.4)
     rows = []
     for i in range(n):
         t = i / (n - 1)
-        y0 = miny + (maxy - miny) * (0.035 + 0.93 * t)
+        # the first row sits at 6 percent, on the broad northern border, not on the two bumps at Fort Kent
+        y0 = miny + (maxy - miny) * (0.06 + 0.905 * t)
         w = w_lo + (w_hi - w_lo) * t
         xs = maine2.crossings(ring, y0)
         runs = [(a + w / 2, b - w / 2) for a, b in zip(xs[0::2], xs[1::2]) if b - a >= w * keep]

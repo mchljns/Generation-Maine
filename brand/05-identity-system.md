@@ -85,8 +85,8 @@ Open on the logos:
 The client's call: the lines with the state of Maine are the logo. Built complete for both concepts in `brand/identity/logo-maine/`. Sheets: `logos.png`, `size-system.png`, `signature.png`, `bark-sky.png`.
 
 **Size system.** One drawing, three cuts.
-- Full, 72 px and up: 21 lines, weight from 1.5 to 3.4 percent of the height, the widest line Marigold.
-- Mid, 36 to 72 px: 13 lines on a coast simplified by 0.6 percent of the height, weight from 3 to 5.2 percent, the widest line Marigold.
+- Full, 72 px and up: 21 lines, weight from 2.1 to 3.4 percent of the height, first row at 6 percent of the height. Tightened October 1 after the top of the state read as loose dashes in the horizontal lockup.
+- Mid, 36 to 72 px: 13 lines on a coast simplified by 0.6 percent of the height, weight from 3.2 to 5.2 percent.
 - Solid, below 36 px: the silhouette simplified by 1.2 percent of the height. Never Marigold, which keeps us clear of Baxter Brewing's orange Maine.
 
 **Rules.**
