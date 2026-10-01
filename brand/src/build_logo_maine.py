@@ -47,11 +47,11 @@ def maine_lines(x, y, h, fg, mark, cut="full", gold=True):
         return '<path fill="%s" d="%s"/>' % (fg, maine2.path(ring)), maxx - minx
     if cut == "mid":
         ring = simplified(ring, h * 0.006)
-    # Sixteen lines for Maine's sixteen counties. The first line sits at 2.4 percent of the height, where the
-    # state is two separate pieces: the northwest tip at Estcourt Station and the hump over the St. John valley.
-    # Those two runs are kept as round points the weight of the line, never dropped, never bridged, so the two
-    # points at the top of the state are always drawn and the top is never cut off.
-    n, w_lo, w_hi, keep, top, span = (16, h * 0.026, h * 0.044, 1.8, 0.024, 0.946) if cut == "full" else (16, h * 0.034, h * 0.046, 2.2, 0.024, 0.946)
+    # Sixteen lines for Maine's sixteen counties. The first line sits at 3.4 percent of the height, where the
+    # state is two separate pieces, each crossed once: the northwest tip at Estcourt Station and the hump over
+    # the St. John valley. Both runs are drawn as they are, never dropped, never bridged. Higher up the hump is
+    # still two tiny pieces and the points draw on top of each other.
+    n, w_lo, w_hi, keep, top, span = (16, h * 0.026, h * 0.044, 1.8, 0.034, 0.936) if cut == "full" else (16, h * 0.034, h * 0.046, 2.2, 0.034, 0.936)
     rows = []
     for i in range(n):
         t = i / (n - 1)
@@ -64,7 +64,7 @@ def maine_lines(x, y, h, fg, mark, cut="full", gold=True):
                 if b - a < w:
                     c = (a + b) / 2
                     a, b = c - w / 2, c + w / 2
-                runs.append((a + w / 2 * 0.999, b - w / 2 * 0.999))
+                runs.append((a + w / 2 * 0.999, b - w / 2 * 0.999))   # a run shorter than the weight still draws, as a dot
             elif b - a >= w * keep:
                 runs.append((a + w / 2, b - w / 2))
         rows.append((y0, w, runs))

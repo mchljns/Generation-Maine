@@ -34,7 +34,7 @@ def mural_rows(h=720):
     rows = []
     for i in range(16):
         t = i / 15
-        y0 = miny + (maxy - miny) * (0.024 + 0.946 * t)
+        y0 = miny + (maxy - miny) * (0.034 + 0.936 * t)
         w = h * (0.026 + 0.018 * t)
         xs = maine2.crossings(ring, y0)
         runs = []
