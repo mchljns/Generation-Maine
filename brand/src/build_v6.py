@@ -23,7 +23,7 @@ C = {
     "spruce": "#104836",
     "pine": "#0B2B21",
     "birch": "#F4F0E6",
-    "snow": "#F9F8F6",   # near-white, for the reversed mark and type on Spruce and Pine. Neutral with a hair of warmth, so it never leans green on the greens. Not cream.
+    "snow": "#FFFFFF",   # pure white, for the reversed mark and type on Spruce and Pine. Near-whites read green on the greens.
     "ink": "#1E2621",
     "marigold": "#EFB443",
     "sage": "#DDE5DA",
