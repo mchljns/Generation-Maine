@@ -19,7 +19,7 @@ from build_v6 import C
 LOGO = os.path.join(ROOT, "brand", "identity", "logo-maine", "signature")
 TOWNS = ["Skowhegan", "Presque Isle", "Biddeford", "Machias", "Lewiston", "Rumford", "Belfast", "Fort Kent", "Sanford"]
 TOPICS = ["Finding a place", "Starting a shop", "Who stays", "The commute", "Coming home", "Moving out", "Two jobs", "Doing the math", "Winter work"]
-# where each story was filmed, for the hero pin. Town centers, degrees. [CONFIRM: towns once creators are cast]
+# where each story was filmed, kept for a later map. Town centers, degrees. [CONFIRM: towns once creators are cast]
 TOWN_LL = {"Skowhegan": (44.765, -69.719), "Presque Isle": (46.681, -68.016), "Biddeford": (43.493, -70.453), "Machias": (44.715, -67.461), "Lewiston": (44.100, -70.215),
            "Rumford": (44.553, -70.551), "Belfast": (44.426, -69.006), "Fort Kent": (47.258, -68.590), "Sanford": (43.439, -70.774)}
 FIELDS = ["sp", "bi", "pi", "sp", "bi", "pi", "sp", "bi", "mg"]
@@ -67,9 +67,9 @@ def mural_rows(h=720):
     return {"rows": rows, "towns": towns}
 
 
-def dot(text, cls=""):
+def dot(text, cls="", pulse=False):
     head, _, last = text.rpartition(" ")
-    return '<span class="%s">%s<b class="nw">%s<i class="d"></i></b></span>' % (cls, (head + " ") if head else "", last)
+    return '<span class="%s">%s<b class="nw">%s<i class="d%s"></i></b></span>' % (cls, (head + " ") if head else "", last, " pulse" if pulse else "")
 
 
 CSS = r"""
@@ -162,18 +162,14 @@ html.capsule .top.solid .prog{display:block}
 .hero h1{font-size:clamp(46px,8.2vw,112px);max-width:11ch}
 .hero .lede{font-size:clamp(19px,1.6vw,23px);line-height:1.5;max-width:38ch;margin:28px 0 30px;color:rgba(255,255,255,.9)}
 .hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
-.mural{position:relative;justify-self:end;width:min(100%,480px);aspect-ratio:1;max-width:100%;margin-bottom:40px}
+.mural{position:relative;justify-self:end;width:min(100%,480px);aspect-ratio:1;max-width:100%}
 .mural svg{width:100%;height:100%;display:block}
-/* the period lands on the map: one Marigold dot, the size of the headline's period, pulsing where the current story was filmed */
-.pin{position:absolute;left:0;top:0;width:4.4%;aspect-ratio:1;transform:translate(-50%,-50%);transition:left 1.1s cubic-bezier(.4,0,.2,1),top 1.1s cubic-bezier(.4,0,.2,1),opacity .6s;opacity:0}
-.mural.on .pin{opacity:1;transition-delay:0s,0s,1.2s}
-.pin .pt,.pin .ring{position:absolute;inset:0;border-radius:50%;background:var(--mg)}
-.pin .pt{box-shadow:0 0 0 3px var(--sp)}
-.pin .ring{animation:pulse 2.6s cubic-bezier(.2,.6,.3,1) infinite;opacity:0}
-@keyframes pulse{0%{transform:scale(1);opacity:.55}70%{transform:scale(2.4);opacity:0}100%{transform:scale(2.4);opacity:0}}
-.mural .lbl{position:absolute;left:18.5%;top:calc(100% + 20px);font:600 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:#FFFFFF;white-space:nowrap;opacity:0;transition:opacity .4s}
-.mural.on .lbl{opacity:.9;transition-delay:1.2s}.mural.on .lbl.sw{opacity:0;transition-delay:0s}
-@media (prefers-reduced-motion: reduce){.pin .ring{animation:none}.pin{transition:none}}
+/* the hero period pulses like a location marker: the dot holds still, a ring breathes out of it and fades */
+.d.pulse{position:relative}
+.d.pulse::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--mg);opacity:0;animation:pulse 2.4s cubic-bezier(.2,.6,.3,1) infinite 1.4s}
+@keyframes pulse{0%{transform:scale(1);opacity:.6}65%{transform:scale(3);opacity:0}100%{transform:scale(3);opacity:0}}
+@media (prefers-reduced-motion: reduce){.d.pulse::after{animation:none}}
+
 .mural path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .9s cubic-bezier(.2,.7,.2,1)}
 .mural.on path{stroke-dashoffset:0}
 @media (prefers-reduced-motion: reduce){.mural path{stroke-dashoffset:0;transition:none}}
@@ -307,7 +303,7 @@ def page():
   <div class="h1"><h1 id="h1" class="rise">%(h1)s</h1>
   <p id="lede" class="lede rise">Young Mainers film the rules that shape their lives. What rent costs, what a license costs, what it takes to stay. Told from the towns they live in.</p>
   <p class="ctas rise" id="ctas"><a class="btn b1" href="#creators">Watch the stories</a><a class="btn b2" href="#news">Get the newsletter</a></p></div>
-  <div class="mural" id="mural" aria-hidden="true"><div class="pin" id="pin"><span class="ring"></span><span class="pt"></span></div><span class="lbl" id="pinlbl"></span></div>
+  <div class="mural" id="mural" aria-hidden="true"></div>
 </div></section>
 
 <section class="about reveal" id="about" data-bg="var(--bi)"><div class="w">
@@ -372,11 +368,6 @@ def page():
   d.rows.forEach((row, i) => row.runs.forEach(([a, b]) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + a + ' ' + row.y + ' L' + b + ' ' + row.y); p.setAttribute('stroke', BI); p.setAttribute('stroke-width', row.w); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 45) + 'ms'; svg.appendChild(p); }));
   const m = document.getElementById('mural'); m.appendChild(svg);
   new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m);
-  // The pin: the headline's period sits on the state where each story was filmed, and moves town to town.
-  const pin = document.getElementById('pin'), lbl = document.getElementById('pinlbl'); let ti = 0;
-  const place = () => { const t = d.towns[ti]; pin.style.left = (t[1] / 7.2) + '%%'; pin.style.top = (t[2] / 7.2) + '%%'; lbl.textContent = 'Filmed in ' + t[0]; };
-  place();
-  if (!reduced) setInterval(() => { lbl.classList.add('sw'); setTimeout(() => { ti = (ti + 1) %% d.towns.length; place(); lbl.classList.remove('sw'); }, 450); }, 4200);
 
   // The page background changes as each section passes the middle of the screen.
   const bgs = [...document.querySelectorAll('[data-bg]')];
@@ -429,7 +420,7 @@ def page():
 </script>
 """ % dict(
         lock=logo("lockup-compact-reversed", "lk light"), lock_dark=logo("lockup-compact", "lk dark"), two=draw_paths(logo("lockup-two-line-reversed", "lk")),
-        h1="Young Mainers on building a life here", h2about=dot("Made by the people it is about"), h2cre=dot("The stories"),
+        h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The stories"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         stagevids=stagevids, panels=panels, idx=idx, json=json.dumps(rows, separators=(",", ":")))
     css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))

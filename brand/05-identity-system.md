@@ -243,3 +243,5 @@ Why this and not a moving background: a shifting field behind the mural was trie
 Other motion added, all on scroll and all off under reduced motion: the thin rules above the about columns and the quotes draw from the left; the pinned clip settles from a slight zoom as it changes; the footer lockup draws its sixteen lines when it enters, so the page ends the way it began. Considered and left out: parallax on the mural, hover effects on the follow links, a count or ticker, anything on the pointer.
 
 Town coordinates are town centers and carry a [CONFIRM] until the creators are cast.
+
+Revised the same day: the map pin and the "Filmed in" caption are out. The period stays at the end of the headline and pulses like a location marker, a ring breathing out of the dot and fading, every 2.4 seconds. The dot itself holds still. Town coordinates stay in the data for a later map.
