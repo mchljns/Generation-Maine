@@ -369,3 +369,10 @@ Each GIF is a slow push in on the portrait with the story's caption on a flat Pi
 The stage, on the splash and in the theme, now accepts an image clip as well as a video, so a GIF or a still can stand in wherever a video is expected. The story-card clips remain in the media folder as creator-N.webm.
 
 Phone QA of the creator panels, at 375 by 667, 390 by 844 and 430 by 932. The bio was being cut mid-sentence by a four-line clamp; the clamp is gone, every bio shows in full, and the stage gives up height on short screens so the clip, the details and the position row all fit without scrolling inside the pinned block. On the clip the handle ran into the duration badge; the header now stops short of it and trims with an ellipsis, and the GIF's PLACEHOLDER tag moved to the bottom right, clear of the header. No horizontal overflow at any size.
+
+## Preview URL
+
+The splash is published from the `gh-pages` branch of this repo through GitHub Pages:
+https://mchljns.github.io/Generation-Maine/
+
+The branch holds a standalone copy of brand/identity/splash/index.html plus the placeholder clips in media/. To refresh it after a change to the splash, rebuild with build_splash.py, copy index.html and media/ onto `gh-pages`, and push. Pages serves the branch directly, no workflow. The repo had to be public for this; the WordPress theme and brand files are therefore public too.
