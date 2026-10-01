@@ -58,10 +58,10 @@ def mockups():
     out.append(a("l-first", "ph9", '<div class="foot"></div>%s%s' % (bug, K.ui_overlay()), "1 · Video, first seconds. The solid cut and the name", 360, 640))
     # 2 lower third: name and town, plain, on the safe line
     out.append(a("l-lower", "ph9", '<div class="foot"></div>%s<div class="sl3">%s</div>%s' % (bug, K.credit(town="Skowhegan", cls="lg"), K.ui_overlay()), "2 · Lower third, name and town plain", 360, 640))
-    # 3 end card: the mural carries the frame, Marigold is the widest line, the headline ends in a plain period
-    end = ('<div class="lend">%s<div class="lmur">%s</div><div class="lbot"><p class="ttl xl">Follow along.</p>'
+    # 3 end card: the mural carries the frame in one color, the headline keeps its Marigold dot
+    end = ('<div class="lend">%s<div class="lmur">%s</div><div class="lbot">%s'
            '<ul class="hl s"><li><b>Instagram</b>[@handle]</li><li><b>TikTok</b>[@handle]</li><li><b>YouTube</b>[@handle]</li><li><b>Substack</b>[name].substack.com</li></ul>'
-           '<p class="disc">%s</p></div></div>') % (lock_rev, mural(300, BI, MG, n=48), K.MPI)
+           '<p class="disc">%s</p></div></div>') % (lock_rev, mural(300, BI, BI, n=48), K.ttl("Follow along", "xl"), K.MPI)
     out.append(a("l-end", "ph9", end, "3 · End card. The mural, then the handles", 360, 640))
     # 4 profile grid: the full-cut avatar, nine covers on the round-two rules
     covers = "".join('<div class="cov s %s">%s%s</div>' % (K.ORDER[i], K.credit(town=K.TOWNS[i], cls="cv"), K.ttl(K.TOPICS[i], "cv")) for i in range(9))
@@ -89,9 +89,9 @@ def mockups():
     # 7 website hero, no photo: the mural to the right, the headline low left, the lockup in the nav
     hero = ('<div class="web s lhero"><div class="wn">%s<nav><span>About</span><span>Creators</span><span>Follow</span></nav></div>'
             '<p class="sdisc w">%s</p><div class="lmural">%s</div>'
-            '<div class="lh1"><h1>Young Mainers on building a life here.</h1>'
+            '<div class="lh1">%s'
             '<p class="wlede">Short videos by young Maine creators about the rules that shape their lives.</p>'
-            '<p class="wbtn"><span class="b1">Meet the creators</span><span class="b2">Follow along</span></p></div></div>') % (lock_rev, K.MPI, mural(760, MOSS, MG, n=64))
+            '<p class="wbtn"><span class="b1">Meet the creators</span><span class="b2">Follow along</span></p></div></div>') % (lock_rev, K.MPI, mural(760, MOSS, MOSS, n=64), K.ttl("Young Mainers on building a life here", "lh"))
     web = a("l-web", "", hero, "7 · Website hero, no photo", 1200, 680)
     return "".join(out), web
 
@@ -115,7 +115,7 @@ CSS_ADD = r"""
 .lmural{position:absolute;right:56px;top:-40px;height:760px;z-index:1}
 .lmural .mural{height:100%;width:auto;display:block}
 .lh1{position:absolute;left:56px;bottom:56px;z-index:2;max-width:640px}
-.lh1 h1{font:800 92px/.9 Bric;letter-spacing:-.03em;margin:0 0 26px;max-width:11ch}
+.lh1 .ttl.lh{font:800 92px/.9 Bric;letter-spacing:-.03em;margin:0 0 26px;max-width:11ch;color:var(--bi)}
 .lh1 .wlede{margin:0 0 22px;font-size:18px;max-width:40ch}
 """
 
@@ -133,7 +133,7 @@ def build():
         css = css.replace("{{%s}}" % k, v)
     page = ('<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Generation Maine, the logo applied</title><style>%s</style></head><body>'
             '<header class="top"><div class="w"><p class="k" style="color:var(--mg)">Generation Maine · The logo applied</p><h1>Maine in lines, where it will live</h1>'
-            '<p>The size system in use: the full cut on the end card, the hero and the profile picture, the mid cut in lists, the solid cut in the video bug and the browser tab. Marigold once per frame.</p></div></header>'
+            '<p>The size system in use: the full cut on the end card, the hero and the profile picture, the mid cut in lists, the solid cut in the video bug and the browser tab. The state is one color. Marigold is the dot, once per frame.</p></div></header>'
             '<section><div class="w"><div class="cards">%s</div><div class="cards">%s</div></div></section></body></html>') % (css, boards, web)
     write(OUT + "/apply.html", page)
 

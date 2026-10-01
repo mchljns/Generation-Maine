@@ -1,7 +1,9 @@
 """The Maine logo: the state drawn in horizontal lines from the precise Census outline.
 
+The state is one color. Marigold is the dot on the i, and only there (client decision, October 1).
+
 Three cuts, one drawing, chosen by size:
-  full   : 21 lines, weight growing toward the bottom, the widest line gold. 72 px and up
+  full   : 21 lines, weight growing toward the bottom. 72 px and up
   mid    : 13 heavier lines on a lightly simplified coast. 36 to 72 px
   solid  : the silhouette alone, simplified so the edge stays clean. Below 36 px
 
@@ -71,48 +73,65 @@ def outlined(face, text, size, x, y, fill, anchor="start"):
 
 
 def signature():
+    """Signature set under the October 1 rule: the state is one color, Marigold is the dot on the i."""
     m = {}
-    # the mark, three cuts
     for cut in ("full", "mid", "solid"):
-        body, w = maine_lines(0, 0, 240, SP, MG, cut)
-        m["mark-" + cut] = svg(w, 240, body, "Generation Maine")
-        body, w = maine_lines(0, 0, 240, BI, MG, cut)
-        m["mark-%s-reversed" % cut] = svg(w, 240, body, "Generation Maine")
         body, w = maine_lines(0, 0, 240, SP, SP, cut, gold=False)
-        m["mark-%s-mono" % cut] = svg(w, 240, body, "Generation Maine")
+        m["mark-" + cut] = svg(w, 240, body, "Generation Maine")
+        body, w = maine_lines(0, 0, 240, BI, BI, cut, gold=False)
+        m["mark-%s-reversed" % cut] = svg(w, 240, body, "Generation Maine")
     body, w = maine_lines(0, 0, 240, "#000000", "#000000", "full", gold=False)
     m["mark-full-black"] = svg(w, 240, body, "Generation Maine")
     body, w = maine_lines(0, 0, 240, "#FFFFFF", "#FFFFFF", "full", gold=False)
     m["mark-full-white"] = svg(w, 240, body, "Generation Maine")
-    # the wordmark alone keeps its dot
     for suf, fg in (("", SP), ("-reversed", BI)):
         b, w, h = wordmark_one_line(fg, MG, "circle", 100)
         m["wordmark" + suf] = svg(w, h, b, "Generation Maine")
-    # lockups: the state stands taller than the capitals, like a flag beside the name
+        b2, w2, h2 = wordmark_stacked(fg, MG, "circle", 100)
+        m["wordmark-stacked" + suf] = svg(w2, h2, b2, "Generation Maine")
+    # lockups. The dot stays Marigold in every color version. Mono, black and white carry no second color.
     for suf, fg, mk, cut in (("", SP, MG, "full"), ("-reversed", BI, MG, "full"), ("-mono", SP, SP, "full"), ("-black", "#000000", "#000000", "full"), ("-white", "#FFFFFF", "#FFFFFF", "full"), ("-small", SP, MG, "mid")):
-        gold = suf in ("", "-reversed", "-small")
-        b, w, h = wordmark_one_line(fg, fg, "circle", 100)
-        mh = 96
-        mb, mw = maine_lines(0, 74 - mh + 6, mh, fg, mk, cut, gold)
-        gap = 26
+        b, w, h = wordmark_one_line(fg, mk, "circle", 100)
+        b2, w2, h2 = wordmark_stacked(fg, mk, "circle", 100)
+        mh, gap = 96, 26
+        # horizontal: the state stands taller than the capitals, like a flag beside the name
+        mb, mw = maine_lines(0, 74 - mh + 6, mh, fg, fg, cut, gold=False)
         m["lockup-horizontal" + suf] = svg(w + mw + gap, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + gap), b), "Generation Maine")
-        b2, w2, h2 = wordmark_stacked(fg, fg, "circle", 100)
+        # horizontal, state after the name
+        m["lockup-horizontal-right" + suf] = svg(w + mw + gap, h, b + '<g transform="translate(%s 0)">%s</g>' % (f(w + gap), mb), "Generation Maine")
+        # compact: the state sits inside the cap height, for bylines and tight bars
+        ch, cgap = 66, 20
+        mb, cw = maine_lines(0, 74 - ch, ch, fg, fg, "mid" if cut == "full" else cut, gold=False)
+        m["lockup-compact" + suf] = svg(w + cw + cgap, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(cw + cgap), b), "Generation Maine")
+        # stacked left: the state over the two-line name
         ms = 170
-        mb, mw = maine_lines(0, 0, ms, fg, mk, cut, gold)
+        mb, mw = maine_lines(0, 0, ms, fg, fg, cut, gold=False)
         m["lockup-stacked" + suf] = svg(max(w2, mw), ms + 30 + h2, mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 30), b2), "Generation Maine")
-        mb, mw = maine_lines(0, 74 - mh + 6, mh, fg, mk, cut, gold)
+        # stacked centered: the state over the one-line name
+        mb, mw = maine_lines((w - ms * maine2.ASPECT) / 2, 0, ms, fg, fg, cut, gold=False)
+        m["lockup-stacked-centered" + suf] = svg(w, ms + 34 + h, mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 34), b), "Generation Maine")
+        # two-line: the state beside the two-line name, as tall as both lines
+        th = 150
+        mb, mw = maine_lines(0, 8, th, fg, fg, cut, gold=False)
+        m["lockup-two-line" + suf] = svg(mw + 30 + w2, h2, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + 30), b2), "Generation Maine")
+        # endorsed horizontal
+        mb, mw = maine_lines(0, 74 - mh + 6, mh, fg, fg, cut, gold=False)
         body = mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + gap), b) + rect(mw + gap, h + 22, w, 2, fg)
         t, _ = outlined(INTER, MPI, 27, mw + gap, h + 60, fg)
         m["lockup-endorsed" + suf] = svg(w + mw + gap, h + 72, body + t, "Generation Maine, an initiative of Maine Policy Institute")
-    # avatars by size, favicon solid
-    mb, mw = maine_lines(0, 0, 164, BI, MG, "full"); m["avatar-full"] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % SP + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
-    mb, mw = maine_lines(0, 0, 164, BI, MG, "mid"); m["avatar-mid"] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % SP + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
-    mb, mw = maine_lines(0, 0, 164, BI, BI, "solid"); m["avatar-solid"] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % SP + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
-    mb, mw = maine_lines(0, 0, 164, SP, MG, "mid"); m["avatar-birch"] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % BI + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
-    mb, mw = maine_lines(0, 0, 150, BI, MG, "mid"); m["app-icon"] = svg(240, 240, rect(0, 0, 240, 240, SP, 52) + '<g transform="translate(%s 45)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
+        # endorsed stacked, centered, for the narrow end card and print
+        mb, mw = maine_lines((w - ms * maine2.ASPECT) / 2, 0, ms, fg, fg, cut, gold=False)
+        body = mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 34), b) + rect(0, ms + 34 + h + 18, w, 2, fg)
+        t, _ = outlined(INTER, MPI, 27, w / 2, ms + 34 + h + 56, fg, anchor="middle")
+        m["lockup-endorsed-stacked" + suf] = svg(w, ms + 34 + h + 70, body + t, "Generation Maine, an initiative of Maine Policy Institute")
+    # avatars by size, favicon solid. No Marigold in the mark alone.
+    for name, cut, fg, bg in (("avatar-full", "full", BI, SP), ("avatar-mid", "mid", BI, SP), ("avatar-solid", "solid", BI, SP), ("avatar-birch", "mid", SP, BI)):
+        mb, mw = maine_lines(0, 0, 164, fg, fg, cut, gold=False)
+        m[name] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % bg + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
+    mb, mw = maine_lines(0, 0, 150, BI, BI, "mid", gold=False); m["app-icon"] = svg(240, 240, rect(0, 0, 240, 240, SP, 52) + '<g transform="translate(%s 45)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
     mb, mw = maine_lines(0, 0, 20, BI, BI, "solid"); m["favicon"] = svg(32, 32, '<circle cx="16" cy="16" r="16" fill="%s"/>' % SP + '<g transform="translate(%s 6)">%s</g>' % (f((32 - mw) / 2), mb), "Generation Maine")
-    # the video bug: mid cut, Birch, no gold, with the name
-    b, w, h = wordmark_one_line(BI, BI, "circle", 100)
+    # the video bug: solid cut, Birch, with the name. The dot stays, the one Marigold in the frame.
+    b, w, h = wordmark_one_line(BI, MG, "circle", 100)
     mb, mw = maine_lines(0, 74 - 96 + 6, 96, BI, BI, "solid", gold=False)
     m["bug"] = svg(w + mw + 26, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + 26), b), "Generation Maine")
     return m
@@ -122,8 +141,8 @@ def bark_sky():
     m = {}
     bk, sk, pa, cl = D["bark"], D["sky"], D["paper"], D["clay"]
     for cut in ("full", "mid", "solid"):
-        body, w = maine_lines(0, 0, 240, bk, cl, cut); m["mark-" + cut] = svg(w, 240, body, "Generation Maine")
-        body, w = maine_lines(0, 0, 240, sk, pa, cut); m["mark-%s-reversed" % cut] = svg(w, 240, body, "Generation Maine")
+        body, w = maine_lines(0, 0, 240, bk, bk, cut, gold=False); m["mark-" + cut] = svg(w, 240, body, "Generation Maine")
+        body, w = maine_lines(0, 0, 240, sk, sk, cut, gold=False); m["mark-%s-reversed" % cut] = svg(w, 240, body, "Generation Maine")
 
     def wm(fg):
         d, w = HEDVIG.path("generation maine", 100, 0, 78, -8)
@@ -132,16 +151,16 @@ def bark_sky():
         b, w, h = wm(fg)
         m["wordmark" + suf] = svg(w, h, b, "Generation Maine")
         mh = 100
-        mb, mw = maine_lines(0, 78 - mh + 8, mh, fg, mk, "full")
+        mb, mw = maine_lines(0, 78 - mh + 8, mh, fg, fg, "full", gold=False)
         m["lockup-horizontal" + suf] = svg(w + mw + 28, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + 28), b), "Generation Maine")
         ms = 180
-        mb, mw = maine_lines((w - ms * maine2.ASPECT) / 2, 0, ms, fg, mk, "full")
+        mb, mw = maine_lines((w - ms * maine2.ASPECT) / 2, 0, ms, fg, fg, "full", gold=False)
         m["lockup-stacked" + suf] = svg(w, ms + 34 + h, mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 34), b), "Generation Maine")
         body = mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 34), b) + rect(0, ms + 34 + h + 12, w, 1.5, fg)
         t, _ = outlined(HEDVIG_SANS, MPI, 24, w / 2, ms + 34 + h + 48, fg, anchor="middle")
         m["lockup-endorsed" + suf] = svg(w, ms + 34 + h + 62, body + t, "Generation Maine, an initiative of Maine Policy Institute")
-    mb, mw = maine_lines(0, 0, 164, sk, pa, "mid"); m["avatar"] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % bk + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
-    mb, mw = maine_lines(0, 0, 164, bk, pa, "mid"); m["avatar-sky"] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % sk + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
+    mb, mw = maine_lines(0, 0, 164, sk, sk, "mid", gold=False); m["avatar"] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % bk + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
+    mb, mw = maine_lines(0, 0, 164, bk, bk, "mid", gold=False); m["avatar-sky"] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % sk + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
     mb, mw = maine_lines(0, 0, 20, sk, sk, "solid"); m["favicon"] = svg(32, 32, '<circle cx="16" cy="16" r="16" fill="%s"/>' % bk + '<g transform="translate(%s 6)">%s</g>' % (f((32 - mw) / 2), mb), "Generation Maine")
     return m
 

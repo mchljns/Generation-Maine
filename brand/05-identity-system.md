@@ -6,10 +6,10 @@ Saved September 30, 2026. Everything below is built as hand-drawn SVG geometry b
 
 | Element | Decision | Why |
 | --- | --- | --- |
-| Brandmark | **Maine in lines.** The state drawn in horizontal lines from the precise Census outline, heavier toward the bottom, the widest line gold. Three cuts chosen by size: 21 lines at 72 px and up, 13 heavier lines on a lightly simplified coast from 36 to 72 px, the simplified silhouette alone below 36 px | Chosen by the client on October 1 over the abstract margin-room mark, which is kept in `brand/identity/mark/`. The size system solves the small-size problem the silhouette had: the shape never turns to dashes, because below 36 px it is a shape again. Files: `brand/identity/logo-maine/` |
-| Mural | **Grain.** Maine drawn in horizontal lines from the precise Census outline, weight growing toward the bottom, the widest line gold | The strongest single image of the project. Lives at sizes where Maine reads: the website hero and the end card |
+| Brandmark | **Maine in lines.** The state drawn in horizontal lines from the precise Census outline, heavier toward the bottom, one color. Three cuts chosen by size: 21 lines at 72 px and up, 13 heavier lines on a lightly simplified coast from 36 to 72 px, the simplified silhouette alone below 36 px | Chosen by the client on October 1 over the abstract margin-room mark, which is kept in `brand/identity/mark/`. The size system solves the small-size problem the silhouette had: the shape never turns to dashes, because below 36 px it is a shape again. Files: `brand/identity/logo-maine/` |
+| Mural | **Grain.** Maine drawn in horizontal lines from the precise Census outline, weight growing toward the bottom, one color | The strongest single image of the project. Lives at sizes where Maine reads: the website hero and the end card |
 | Relationship | The mark is a crop of the mural where one line is missing. One rule, two scales | Everything seen large is Maine. Everything seen small is the mark |
-| Marigold | Once per frame. In the mark and the mural, the widest line, under review. In the wordmark, the dot on the i, but only when the wordmark stands alone | Keeps the rule the platform set and stops gold from spreading. The placement inside the logo is the open question in the last section |
+| Marigold | **The dot.** The state is one color in every cut. Marigold is the dot on the i of Maine, in the wordmark and in every color lockup, and the period after a headline. The logo's dot does not count against the frame's one Marigold | Chosen by the client on October 1 over the gold stripe. One rule anyone can apply. The state never carries a second color, which settles the Baxter separation |
 | Letter marks | Set aside | The G is the generic half of the name. GM reads as General Motors |
 | The abstract mark | Set aside, kept | The margin-room mark remains the stronger answer to the platform's on-the-nose test. The client preferred the state, and the size system answers the objection that mattered most |
 | Outline data | US Census cartographic boundary, 1:500,000, clipped to the shoreline, 2,265 points, public domain | The legal boundary was tested and rejected: it fills the bays and rings the islands |
@@ -131,3 +131,23 @@ The client asked whether there is a better way to use the yellow in the logo. Th
 **Trade.** The mark alone, in the avatar, the app icon and the favicon, carries no Marigold. On the sheet the A avatar's gold line at 110 px is about 2 px tall, so little is lost. The yellow lives in the type and in the Marigold field every ninth frame.
 
 **If B is chosen.** The lockups keep the dot on the i in every version. The full and mid cuts lose the gold line. The mural loses its gold line, and the end card and hero headlines get their dot back. The motion prototype's arriving gold line goes. Bark & Sky is unaffected in color, since it uses Clay, but its lowercase Hedvig wordmark has two i's, so its state should simply go one color with no Clay in the logo. Nothing changes until the client chooses.
+
+## The dot, October 1: chosen, and the lockups
+
+The client chose B. Applied in `brand/src/build_logo_maine.py`, the eight surfaces, and the motion prototype. The mural lost its gold line and the end card and hero headlines got their dot back. The mark alone carries no Marigold.
+
+**Lockups**, in `brand/identity/logo-maine/signature/`, sheet `lockups.png`. Each in color, reversed, mono, black, white, and the mid-cut small version.
+
+| Lockup | Use | Grade |
+| --- | --- | --- |
+| Horizontal | Primary. Website nav, Substack masthead, video bug with the solid cut | A- |
+| Horizontal, state after the name | When the name has to lead, as in a sentence or a byline | B |
+| Compact | The mid cut inside the cap height. Footers, bars, co-branding strips | B+ |
+| Two-line | The state beside the name on two lines. Merch, print, square posts | A- |
+| Stacked left | Narrow columns, the left-aligned title card | B+ |
+| Stacked centered | Centered title cards, print covers | B+ |
+| Endorsed | Horizontal with the disclosure line. Anywhere the Institute must be named | A- |
+| Endorsed, stacked | End card, back of print | B+ |
+| Wordmark alone | Where the state is already in frame, as on the end card and the hero | A- |
+
+The one-color versions are the same drawing as the color versions with the dot in the ink color, so one file set serves print, embroidery and vinyl.
