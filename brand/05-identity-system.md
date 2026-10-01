@@ -301,3 +301,5 @@ In the creator panel the Marigold period moved from the name to the town. It sit
 ## Snow replaces cream on dark fields
 
 The reversed mark was Birch, the kit's cream. Against the page's pure white type and fields it read as yellowed. A new near-white, Snow #F7F8F6, now carries the reversed mark in every logo file, the nav and sheet, the hero type and buttons, the about type before it turns to ink, the footer, and the hero mural. It is white with the smallest lean toward the greens, so it sits with the palette without looking like cream. Birch stays in the kit for light fields and the one Birch-field avatar.
+
+Room after the creators. The stepper used to run straight into the Marigold section, with the position row almost touching it. The creators section now carries a tail of about a tenth of the screen height, so the row and the next section breathe.

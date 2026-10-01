@@ -130,7 +130,7 @@ body.scrub{transition:none}
 /* the creators: the head, then a pinned stage. Scrolling steps through the nine; each one's details arrive from the right. */
 .stories-head{padding-bottom:0}
 .stories-head .lede{color:var(--muted);max-width:46ch;margin:18px 0 0}
-.stories{padding:36px 0 0;height:calc(9 * 80vh);min-height:calc(9 * 520px)}
+.stories{padding:36px 0 clamp(80px,12vh,160px);height:calc(9 * 80vh + clamp(80px,12vh,160px));min-height:calc(9 * 520px);box-sizing:border-box}
 /* the pinned block is its own height and sits a little below the capsule, so no empty screen opens up before it pins */
 .stories .pinw{position:sticky;top:max(92px,calc(50vh - 330px))}
 .stories .w{width:100%;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px clamp(28px,5vw,72px);align-items:center}
