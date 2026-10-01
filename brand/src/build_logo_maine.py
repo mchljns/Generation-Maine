@@ -49,7 +49,7 @@ def maine_lines(x, y, h, fg, mark, cut="full", gold=True):
         ring = simplified(ring, h * 0.006)
     # Sixteen lines for Maine's sixteen counties. The first line sits at 3.4 percent of the height, where the
     # state is two separate pieces, each crossed once: the northwest tip at Estcourt Station and the hump over
-    # the St. John valley. Each is drawn as a dot the weight of the line, so the two points match. Higher up the hump
+    # the St. John valley. Each is drawn as a short pill 2.2 line weights long, so the two points match. Higher up the hump
     # is still two tiny pieces and the points draw on top of each other.
     n, w_lo, w_hi, keep, top, span = (16, h * 0.026, h * 0.044, 1.8, 0.034, 0.936) if cut == "full" else (16, h * 0.034, h * 0.046, 2.2, 0.034, 0.936)
     rows = []
@@ -61,9 +61,9 @@ def maine_lines(x, y, h, fg, mark, cut="full", gold=True):
         runs = []
         for a, b in zip(xs[0::2], xs[1::2]):
             if i == 0:
-                # the two points at the top are drawn as two equal dots the weight of the line, so the top reads as two points and not as a pill beside a dot
+                # the two points at the top are drawn as two equal short pills, 2.2 line weights long, so the top reads as two matching points
                 c = (a + b) / 2
-                runs.append((c - w * 0.001, c + w * 0.001))
+                runs.append((c - w * 0.6, c + w * 0.6))
             elif b - a >= w * keep:
                 runs.append((a + w / 2, b - w / 2))
         rows.append((y0, w, runs))

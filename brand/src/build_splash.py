@@ -41,7 +41,7 @@ def mural_rows(h=720):
         for a, b in zip(xs[0::2], xs[1::2]):
             if i == 0:
                 c = (a + b) / 2
-                runs.append([round(c - w * 0.001, 2), round(c + w * 0.001, 2)])   # the two points as equal dots
+                runs.append([round(c - w * 0.6, 2), round(c + w * 0.6, 2)])   # the two points as equal short pills
             elif b - a >= w * 1.8:
                 runs.append([round(a + w / 2, 1), round(b - w / 2, 1)])
         rows.append({"y": round(y0, 1), "w": round(w, 2), "runs": runs})
