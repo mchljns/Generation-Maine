@@ -224,3 +224,22 @@ Two of the placeholder clip tones also failed for their captions, 4.27 and 3.93.
 
 **Light fields and Marigold QA, October 1.** The client called the Birch cream an AI default on the page. Six light fields were tested across the hero, About, a story panel and the follow row (`splash/light-field-options.png`). Applied: Fog, white tinted with Spruce, #EEF2EE, with two deeper steps, #E2E8E2 and #D3DDD4, replacing Sand and Sage on the page. Reversed text on Spruce follows it. Birch stays in the kit palette for video and print until the kit is rebuilt. Marigold QA: measured at the real scroll position, every text on the Marigold section is ink at 8.3. The failure was next door: the moving page color carried Marigold under the newsletter's muted grey at 3.8 during the transition. The Marigold section now paints its own background and no longer drives the page color, so Marigold never sits under muted text. Quote footers on Marigold are full ink, no opacity.
 Client call, same day: the light fields run from white into light green. White #FFFFFF for About and the newsletter, a pale green #E6EEE8 behind the stories, the deeper sage #D3DDD4 for the follow row. Reversed text on Spruce is white. Contrast re-measured, nothing under 4.5.
+
+## Splash round seven: QA, the hamburger, the pin
+
+A pass over both widths before anything new was added.
+
+- The newsletter section collapsed into two squeezed columns on phones. A later rule beat the phone rule. The phone rule now comes last.
+- Dead CSS from the old card layout and a duplicate set of stage rules came out.
+- Anchors landed under the fixed bar. Sections carry a scroll margin now.
+- Phone clips are a little narrower, so nine stories run shorter.
+
+The phone menu is a hamburger: three lines, round ends, which fold into a cross in place. The sheet sits under the bar and fades in, so the lockup and the button never jump.
+
+The hero's period moved onto the state. The headline ends on "here" and the Marigold dot sits where "here" is: on the map, at the town the current story was filmed in, with a slow pulse ring and a caption below the state, "Filmed in Skowhegan". Every four seconds it moves to the next town. The dot keeps the size of a headline period and wears a Spruce halo so it reads on the white lines. The hero still carries Marigold once.
+
+Why this and not a moving background: a shifting field behind the mural was tried earlier and removed, and a slow color drift either goes unnoticed or starts to look like a gradient. The pin puts the motion on the one thing the hero is about, where the stories come from. Reduced motion shows a still pin and no cycle.
+
+Other motion added, all on scroll and all off under reduced motion: the thin rules above the about columns and the quotes draw from the left; the pinned clip settles from a slight zoom as it changes; the footer lockup draws its sixteen lines when it enters, so the page ends the way it began. Considered and left out: parallax on the mural, hover effects on the follow links, a count or ticker, anything on the pointer.
+
+Town coordinates are town centers and carry a [CONFIRM] until the creators are cast.

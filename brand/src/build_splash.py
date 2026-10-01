@@ -7,6 +7,7 @@ the stories (creator-uploaded placeholders), in their words, the newsletter, fol
 """
 import json
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -18,6 +19,9 @@ from build_v6 import C
 LOGO = os.path.join(ROOT, "brand", "identity", "logo-maine", "signature")
 TOWNS = ["Skowhegan", "Presque Isle", "Biddeford", "Machias", "Lewiston", "Rumford", "Belfast", "Fort Kent", "Sanford"]
 TOPICS = ["Finding a place", "Starting a shop", "Who stays", "The commute", "Coming home", "Moving out", "Two jobs", "Doing the math", "Winter work"]
+# where each story was filmed, for the hero pin. Town centers, degrees. [CONFIRM: towns once creators are cast]
+TOWN_LL = {"Skowhegan": (44.765, -69.719), "Presque Isle": (46.681, -68.016), "Biddeford": (43.493, -70.453), "Machias": (44.715, -67.461), "Lewiston": (44.100, -70.215),
+           "Rumford": (44.553, -70.551), "Belfast": (44.426, -69.006), "Fort Kent": (47.258, -68.590), "Sanford": (43.439, -70.774)}
 FIELDS = ["sp", "bi", "pi", "sp", "bi", "pi", "sp", "bi", "mg"]
 
 
@@ -26,10 +30,22 @@ def logo(name, cls=""):
         return fh.read().replace('role="img"', "").replace("<svg ", '<svg class="%s" ' % cls, 1)
 
 
+def draw_paths(svg_text):
+    """Give each stroked path a unit length and a stagger, so the mark can draw itself in like the hero mural."""
+    n = [0]
+    def one(m):
+        i = n[0]; n[0] += 1
+        return '<path pathLength="1" style="transition-delay:%dms" ' % (i * 40)
+    return re.sub(r"<path ", one, svg_text)
+
+
 def mural_rows(h=720):
     """The hero mural is the logo's full cut at hero scale: sixteen lines, the two points kept, as row data for the draw-in."""
     w_box = h * maine2.ASPECT
     ring = maine2.fit((720 - w_box) / 2, 0, w_box, h)
+    s = min(w_box / (maine2._MAXX - maine2._MINX), h / (maine2._MAXY - maine2._MINY))
+    ox = (720 - w_box) / 2 + (w_box - (maine2._MAXX - maine2._MINX) * s) / 2
+    oy = (h - (maine2._MAXY - maine2._MINY) * s) / 2
     minx, miny, maxx, maxy = maine2.bbox(ring)
     rows = []
     for i in range(16):
@@ -45,7 +61,10 @@ def mural_rows(h=720):
             elif b - a >= w * 1.8:
                 runs.append([round(a + w / 2, 1), round(b - w / 2, 1)])
         rows.append({"y": round(y0, 1), "w": round(w, 2), "runs": runs})
-    return {"rows": rows}
+    towns = []
+    for name, (lat, lon) in TOWN_LL.items():
+        towns.append([name, round(ox + (lon * maine2._K - maine2._MINX) * s, 1), round(oy + (-lat - maine2._MINY) * s, 1)])
+    return {"rows": rows, "towns": towns}
 
 
 def dot(text, cls=""):
@@ -116,12 +135,15 @@ html.capsule .top.solid nav a::before{display:none}
 html.capsule .top.solid .cta{padding:10px 14px;border-radius:999px;font-size:13px}
 html.capsule .top.solid .prog{display:block}
 .prog{display:none;position:absolute;left:0;bottom:0;height:2px;background:var(--sp);width:0;transition:width .15s linear}
-.menu{display:none;font:600 14px/1 var(--body);background:none;border:0;color:inherit;padding:10px 0;cursor:pointer}
-.sheet{position:fixed;inset:0;z-index:30;background:var(--sp);color:#FFFFFF;padding:calc(24px + env(safe-area-inset-top,0px)) var(--M) 32px;display:none;flex-direction:column}
-.sheet.open{display:flex}
-.sheet .bar{display:flex;justify-content:space-between;align-items:center;height:44px}
-.sheet .bar .lk{height:24px;width:auto}
-.sheet nav{display:flex;flex-direction:column;gap:6px;margin-top:40px}
+.menu{display:none;position:relative;width:44px;height:44px;margin-right:-10px;background:none;border:0;color:inherit;padding:0;cursor:pointer}
+.menu i{position:absolute;left:11px;width:22px;height:2px;border-radius:1px;background:currentColor;transition:transform .4s cubic-bezier(.2,.7,.2,1),opacity .25s}
+.menu i:nth-child(1){top:15px}.menu i:nth-child(2){top:21px}.menu i:nth-child(3){top:27px}
+.menu[aria-expanded="true"] i:nth-child(1){transform:translateY(6px) rotate(45deg)}.menu[aria-expanded="true"] i:nth-child(2){opacity:0;transform:scaleX(.2)}.menu[aria-expanded="true"] i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.top.open{background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:#FFFFFF;transform:none!important}
+.top.open .lk.light{display:block}.top.open .lk.dark{display:none}
+.sheet{position:fixed;inset:0;z-index:19;background:var(--sp);color:#FFFFFF;padding:calc(68px + env(safe-area-inset-top,0px)) var(--M) 32px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s .35s}
+.sheet.open{opacity:1;visibility:visible;transition:opacity .35s}
+.sheet nav{display:flex;flex-direction:column;gap:6px;margin-top:24px}
 .sheet nav a{font:800 clamp(38px,11vw,56px)/1.05 var(--display);letter-spacing:-.03em;text-decoration:none;padding:8px 0;opacity:0;transform:translateY(14px);transition:opacity .45s,transform .55s cubic-bezier(.2,.7,.2,1)}
 .sheet.open nav a{opacity:1;transform:none}
 .sheet.open nav a:nth-child(2){transition-delay:.06s}.sheet.open nav a:nth-child(3){transition-delay:.12s}.sheet.open nav a:nth-child(4){transition-delay:.18s}
@@ -140,8 +162,18 @@ html.capsule .top.solid .prog{display:block}
 .hero h1{font-size:clamp(46px,8.2vw,112px);max-width:11ch}
 .hero .lede{font-size:clamp(19px,1.6vw,23px);line-height:1.5;max-width:38ch;margin:28px 0 30px;color:rgba(255,255,255,.9)}
 .hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
-.mural{position:relative;justify-self:end;width:min(100%,480px);aspect-ratio:1;max-width:100%}
+.mural{position:relative;justify-self:end;width:min(100%,480px);aspect-ratio:1;max-width:100%;margin-bottom:40px}
 .mural svg{width:100%;height:100%;display:block}
+/* the period lands on the map: one Marigold dot, the size of the headline's period, pulsing where the current story was filmed */
+.pin{position:absolute;left:0;top:0;width:4.4%;aspect-ratio:1;transform:translate(-50%,-50%);transition:left 1.1s cubic-bezier(.4,0,.2,1),top 1.1s cubic-bezier(.4,0,.2,1),opacity .6s;opacity:0}
+.mural.on .pin{opacity:1;transition-delay:0s,0s,1.2s}
+.pin .pt,.pin .ring{position:absolute;inset:0;border-radius:50%;background:var(--mg)}
+.pin .pt{box-shadow:0 0 0 3px var(--sp)}
+.pin .ring{animation:pulse 2.6s cubic-bezier(.2,.6,.3,1) infinite;opacity:0}
+@keyframes pulse{0%{transform:scale(1);opacity:.55}70%{transform:scale(2.4);opacity:0}100%{transform:scale(2.4);opacity:0}}
+.mural .lbl{position:absolute;left:18.5%;top:calc(100% + 20px);font:600 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:#FFFFFF;white-space:nowrap;opacity:0;transition:opacity .4s}
+.mural.on .lbl{opacity:.9;transition-delay:1.2s}.mural.on .lbl.sw{opacity:0;transition-delay:0s}
+@media (prefers-reduced-motion: reduce){.pin .ring{animation:none}.pin{transition:none}}
 .mural path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .9s cubic-bezier(.2,.7,.2,1)}
 .mural.on path{stroke-dashoffset:0}
 @media (prefers-reduced-motion: reduce){.mural path{stroke-dashoffset:0;transition:none}}
@@ -157,14 +189,15 @@ html.capsule .top.solid .prog{display:block}
 @media (prefers-reduced-motion: reduce){.js .reveal.pre .d,.js .reveal.pre .rule,.js .reveal.pre .row-in{transform:none;opacity:1}}
 
 /* sections sit on the page background, which the script changes as each one enters */
-section{padding-block:clamp(56px,8vw,112px)}
+section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 .h2{font-size:clamp(34px,4.6vw,60px)}
 .about .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px}
 .about .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;align-self:end}
 .about .cols h3{font:600 15px/1.3 var(--body);letter-spacing:0;margin:0 0 8px;color:var(--fg)}
 .about .cols p{margin:0;color:var(--muted);line-height:1.55}
-.about .cols div{padding-top:16px;position:relative}.about .cols div::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:var(--fg)}
-@media (max-width:900px){.about .w,.news .w{grid-template-columns:1fr}.about .cols{grid-template-columns:1fr}}
+.about .cols div{padding-top:16px;position:relative}.about .cols div::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:var(--fg);transform-origin:left;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.js .reveal.pre .cols div::before,.js .reveal.pre blockquote::before{transform:scaleX(0)}
+.about .cols div:nth-child(2)::before{transition-delay:.1s}.about .cols div:nth-child(3)::before{transition-delay:.2s}
 
 .stories-head .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
 .stories-head .head p{max-width:46ch;margin:0;color:var(--muted)}
@@ -173,8 +206,8 @@ section{padding-block:clamp(56px,8vw,112px)}
 .stories .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,72px);align-items:start}
 .stage{position:sticky;top:calc(60px + env(safe-area-inset-top,0px) + 28px);align-self:start;height:min(64vh,560px);display:flex;align-items:center}
 .vid{position:relative;aspect-ratio:9/16;height:100%;max-height:620px;width:auto;max-width:100%;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
-.vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .6s ease}
-.vid video.on{opacity:1}
+.vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transform:scale(1.04);transition:opacity .6s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.vid video.on{opacity:1;transform:none}
 .vid .dur{position:absolute;right:12px;top:12px;font:600 11px/1 var(--body);letter-spacing:.06em;color:#FFFFFF;background:rgba(11,43,33,.55);padding:6px 8px;border-radius:4px;z-index:2}
 .vid .idx{position:absolute;left:12px;top:12px;display:flex;gap:4px;z-index:2}
 .vid .idx i{display:block;width:14px;height:2px;background:rgba(255,255,255,.45);border-radius:1px;transition:background .3s}.vid .idx i.on{background:#EFB443}
@@ -189,46 +222,10 @@ section{padding-block:clamp(56px,8vw,112px)}
 .panel .pv{display:none}
 @media (max-width:900px){
   .stories .w{grid-template-columns:1fr}.stage{display:none}
-  .panel{min-height:0;padding-block:36px}.panel .pv{display:block;aspect-ratio:9/16;width:min(70vw,300px);border-radius:12px;overflow:hidden;background:var(--pine);margin-bottom:22px}
+  .panel{min-height:0;padding-block:36px}.panel .pv{display:block;aspect-ratio:9/16;width:min(62vw,270px);border-radius:12px;overflow:hidden;background:var(--pine);margin-bottom:22px}
   .panel .pv video{width:100%;height:100%;object-fit:cover;display:block}
 }
 
-.news .w{grid-template-columns:1fr}.about .cols{grid-template-columns:1fr}}
-
-.stories-head .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
-.stories-head .head p{max-width:46ch;margin:0;color:var(--muted)}
-.stories-head{padding-bottom:0}
-.story{padding-block:clamp(28px,4vw,56px)}
-.story .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,72px);align-items:center}
-.story.flip .w{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
-.story.flip .vid{order:2}
-.vid{position:relative;aspect-ratio:9/16;max-height:560px;width:100%;max-width:315px;justify-self:center;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
-.vid video{width:100%;height:100%;object-fit:cover;display:block}
-.vid .dur{position:absolute;right:12px;top:12px;font:600 11px/1 var(--body);letter-spacing:.06em;color:#FFFFFF;background:rgba(11,43,33,.55);padding:6px 8px;border-radius:4px}
-.story .txt .k{margin-bottom:14px}
-.story .txt h2{font-size:clamp(40px,5.2vw,72px);max-width:10ch}
-.story .txt .say{font:600 clamp(18px,1.6vw,22px)/1.35 var(--body);margin:22px 0 18px;max-width:34ch;color:var(--fg)}
-.story .txt .nm{font:600 15px/1.3 var(--body);margin:0 0 22px}.story .txt .nm span{font-weight:400;color:var(--muted)}
-.story .txt .go{display:inline-flex;gap:10px;align-items:center;font:600 15px/1 var(--body);text-decoration:none;border-bottom:1.5px solid var(--fg);padding-bottom:6px}
-@media (max-width:900px){.story .w,.story.flip .w{grid-template-columns:1fr}.story.flip .vid{order:0}.vid{justify-self:start;max-width:300px}}
-
-.news .w{grid-template-columns:1fr}.about .cols{grid-template-columns:1fr}}
-
-.creators .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:36px}
-.creators .head p{max-width:46ch;margin:0;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-@media (max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:560px){.grid{grid-template-columns:1fr}}
-.card{display:block;background:var(--card);color:var(--fg);border-radius:12px;overflow:hidden;text-decoration:none;transform:translateY(0);transition:transform .35s cubic-bezier(.2,.7,.2,1);box-shadow:0 1px 0 var(--rule)}
-.card:hover{transform:translateY(-4px)}
-.still{position:relative;aspect-ratio:4/5;background:var(--stone);display:flex;flex-direction:column;justify-content:space-between;padding:16px;color:#FFFFFF;isolation:isolate}
-.still.t1{background:#6B7A70}.still.t2{background:#7E6F5E}.still.t3{background:#5E6A63}.still.t4{background:#8A7F6A}.still.t5{background:#4E6058}.still.t6{background:#776B63}
-.still::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(11,43,33,.55),rgba(11,43,33,0) 55%);z-index:-1}
-.still .tag{font:600 11px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;opacity:.9;display:flex;justify-content:space-between}
-.still .cap{font:600 clamp(18px,1.6vw,22px)/1.25 var(--body);margin:0;text-wrap:balance;max-width:16ch}
-.card .meta{padding:16px 18px 20px}
-.card .meta .nm{font:600 14px/1.3 var(--body);margin:0 0 6px}.card .meta .nm span{font-weight:400;color:var(--muted)}
-.card .meta h3{font-size:clamp(24px,2vw,30px)}
 
 .news .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
 .news .lede{color:var(--muted);max-width:42ch;margin:18px 0 26px}
@@ -242,6 +239,8 @@ section{padding-block:clamp(56px,8vw,112px)}
 .post p{margin:0;color:var(--muted);font-size:17px}
 .post .by{font:600 13px/1.3 var(--body);color:var(--fg);margin-top:10px}.post .by span{font-weight:400;color:var(--muted)}
 .post .dt{font:600 13px/1.3 var(--body);color:var(--muted);white-space:nowrap;padding-top:6px}
+.form .ok{opacity:0;transition:opacity .4s}.form .ok.show{opacity:1}
+@media (max-width:900px){.about .w,.news .w{grid-template-columns:1fr}.about .cols{grid-template-columns:1fr}}
 
 /* the one Marigold section: what they say, in their words */
 .words{color:var(--ink);background:var(--mg)}
@@ -249,7 +248,8 @@ section{padding-block:clamp(56px,8vw,112px)}
 .words .qs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:40px}
 @media (max-width:900px){.words .qs{grid-template-columns:1fr}}
 .words blockquote{margin:0;padding-top:18px;position:relative}
-.words blockquote::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:var(--ink)}
+.words blockquote::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:var(--ink);transform-origin:left;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.words blockquote:nth-child(2)::before{transition-delay:.1s}.words blockquote:nth-child(3)::before{transition-delay:.2s}
 .words blockquote p{font:800 clamp(22px,2.1vw,30px)/1.1 var(--display);letter-spacing:-.02em;margin:0 0 14px;text-wrap:balance}
 .words blockquote footer{font:600 15px/1.3 var(--body)}.words blockquote footer span{font-weight:400}
 
@@ -262,6 +262,8 @@ section{padding-block:clamp(56px,8vw,112px)}
 .site{background:var(--pine);color:#FFFFFF;padding-block:48px 40px}
 .site .w{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:end}
 .site .lk{height:110px;width:auto;display:block}
+.js .site .lk path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .8s cubic-bezier(.2,.7,.2,1)}.js .site.on .lk path{stroke-dashoffset:0}
+@media (prefers-reduced-motion: reduce){.js .site .lk path{stroke-dashoffset:0;transition:none}}
 .site p{margin:0;font-size:14px;color:rgba(255,255,255,.8);max-width:60ch}
 .site .fine{margin-top:12px;font-size:13px}
 .site .review{margin-top:22px;padding-top:14px;border-top:1px solid rgba(255,255,255,.2)}
@@ -296,8 +298,8 @@ def page():
     body = r"""
 <header class="top" id="topbar"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s%(lock_dark)s</a>
 <nav aria-label="Page"><a href="#about" data-for="about">About</a><a href="#creators" data-for="creators">Stories</a><a href="#words" data-for="words">In their words</a><a href="#follow" data-for="follow">Follow</a></nav>
-<a class="cta" href="#news">Get the newsletter</a><button class="menu" id="menu" aria-expanded="false" aria-controls="sheet">Menu</button><span class="prog" id="prog" aria-hidden="true"></span></div></header>
-<div class="sheet" id="sheet" aria-hidden="true"><div class="bar">%(lock)s<button class="menu" id="close" style="display:block">Close</button></div>
+<a class="cta" href="#news">Get the newsletter</a><button class="menu" id="menu" aria-expanded="false" aria-controls="sheet" aria-label="Menu"><i></i><i></i><i></i></button><span class="prog" id="prog" aria-hidden="true"></span></div></header>
+<div class="sheet" id="sheet" aria-hidden="true">
 <nav aria-label="Page"><a href="#about">About<i class="d"></i></a><a href="#creators">Stories<i class="d"></i></a><a href="#words">In their words<i class="d"></i></a><a href="#follow">Follow<i class="d"></i></a></nav>
 <div class="foot"><a class="cta" href="#news">Get the newsletter</a></div></div>
 
@@ -305,7 +307,7 @@ def page():
   <div class="h1"><h1 id="h1" class="rise">%(h1)s</h1>
   <p id="lede" class="lede rise">Young Mainers film the rules that shape their lives. What rent costs, what a license costs, what it takes to stay. Told from the towns they live in.</p>
   <p class="ctas rise" id="ctas"><a class="btn b1" href="#creators">Watch the stories</a><a class="btn b2" href="#news">Get the newsletter</a></p></div>
-  <div class="mural" id="mural" aria-hidden="true"></div>
+  <div class="mural" id="mural" aria-hidden="true"><div class="pin" id="pin"><span class="ring"></span><span class="pt"></span></div><span class="lbl" id="pinlbl"></span></div>
 </div></section>
 
 <section class="about reveal" id="about" data-bg="var(--bi)"><div class="w">
@@ -370,6 +372,11 @@ def page():
   d.rows.forEach((row, i) => row.runs.forEach(([a, b]) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + a + ' ' + row.y + ' L' + b + ' ' + row.y); p.setAttribute('stroke', BI); p.setAttribute('stroke-width', row.w); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 45) + 'ms'; svg.appendChild(p); }));
   const m = document.getElementById('mural'); m.appendChild(svg);
   new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m);
+  // The pin: the headline's period sits on the state where each story was filmed, and moves town to town.
+  const pin = document.getElementById('pin'), lbl = document.getElementById('pinlbl'); let ti = 0;
+  const place = () => { const t = d.towns[ti]; pin.style.left = (t[1] / 7.2) + '%%'; pin.style.top = (t[2] / 7.2) + '%%'; lbl.textContent = 'Filmed in ' + t[0]; };
+  place();
+  if (!reduced) setInterval(() => { lbl.classList.add('sw'); setTimeout(() => { ti = (ti + 1) %% d.towns.length; place(); lbl.classList.remove('sw'); }, 450); }, 4200);
 
   // The page background changes as each section passes the middle of the screen.
   const bgs = [...document.querySelectorAll('[data-bg]')];
@@ -403,8 +410,8 @@ def page():
   const ao = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.dataset.for === e.target.id)); }), { rootMargin: '-40%% 0px -55%% 0px', threshold: 0 });
   ['about', 'creators', 'words', 'follow'].forEach(id => { const el = document.getElementById(id); if (el) ao.observe(el); });
   const sheet = document.getElementById('sheet'), menu = document.getElementById('menu');
-  const setMenu = o => { sheet.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
-  menu.addEventListener('click', () => setMenu(true)); document.getElementById('close').addEventListener('click', () => setMenu(false));
+  const setMenu = o => { sheet.classList.toggle('open', o); bar.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
+  menu.addEventListener('click', () => setMenu(!sheet.classList.contains('open')));
   sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
   addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
 
@@ -413,15 +420,16 @@ def page():
   const secs = [...document.querySelectorAll('.reveal')]; secs.forEach(sc => sc.classList.add('pre'));
   const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.remove('pre'); so.unobserve(e.target); } }), { threshold: .18 });
   secs.forEach(sc => so.observe(sc));
+  const site = document.querySelector('.site'); new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) site.classList.add('on'); }), { threshold: .3 }).observe(site);
 
   // The signup form has nowhere to go yet. It validates and confirms in the page.
   const f = document.getElementById('signup'), em = document.getElementById('email'), ok = document.getElementById('ok');
-  f.addEventListener('submit', ev => { ev.preventDefault(); if (!em.checkValidity()) { em.focus(); em.setAttribute('aria-invalid', 'true'); return; } em.removeAttribute('aria-invalid'); ok.hidden = false; f.querySelector('button').disabled = true; });
+  f.addEventListener('submit', ev => { ev.preventDefault(); if (!em.checkValidity()) { em.focus(); em.setAttribute('aria-invalid', 'true'); return; } em.removeAttribute('aria-invalid'); ok.hidden = false; requestAnimationFrame(() => ok.classList.add('show')); f.querySelector('button').disabled = true; });
 })();
 </script>
 """ % dict(
-        lock=logo("lockup-compact-reversed", "lk light"), lock_dark=logo("lockup-compact", "lk dark"), two=logo("lockup-two-line-reversed", "lk"),
-        h1=dot("Young Mainers on building a life here"), h2about=dot("Made by the people it is about"), h2cre=dot("The stories"),
+        lock=logo("lockup-compact-reversed", "lk light"), lock_dark=logo("lockup-compact", "lk dark"), two=draw_paths(logo("lockup-two-line-reversed", "lk")),
+        h1="Young Mainers on building a life here", h2about=dot("Made by the people it is about"), h2cre=dot("The stories"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         stagevids=stagevids, panels=panels, idx=idx, json=json.dumps(rows, separators=(",", ":")))
     css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))
