@@ -60,12 +60,13 @@ CSS = r"""
 :root{
   --sp:#104836;--pine:#0B2B21;--bi:#F4F0E6;--ink:#1E2621;--mg:#EFB443;--sage:#DDE5DA;--moss:#3D6F58;--stone:#5E6A63;--sand:#E8E1D1;--white:#FFFFFF;
   --bg:var(--bi);--fg:var(--ink);--muted:var(--stone);--rule:rgba(30,38,33,.14);--card:#FFFFFF;
-  --display:'Bricolage Grotesque',Arial,sans-serif;--body:Inter,system-ui,Arial,sans-serif;
+  --display:'Bricolage Grotesque',Arial,sans-serif;--body:Commissioner,Inter,system-ui,Arial,sans-serif;
   --M:clamp(16px,4.5vw,64px);
 }
 /* One palette in every theme. The page commits to its own colors so text and background always pair. */
 :root{color-scheme:light}
 @font-face{font-family:'Bricolage Grotesque';font-weight:800;font-display:swap;src:url(data:font/woff2;base64,{{F800}}) format('woff2')}
+@font-face{font-family:Commissioner;font-weight:100 900;font-display:swap;src:url(data:font/ttf;base64,{{FCOMM}}) format('truetype')}
 @font-face{font-family:Inter;font-weight:100 900;font-display:swap;src:url(data:font/woff2;base64,{{FINTER}}) format('woff2')}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -422,7 +423,7 @@ def page():
         h1=dot("Young Mainers on building a life here"), h2about=dot("Made by the people it is about"), h2cre=dot("The stories"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         stagevids=stagevids, panels=panels, idx=idx, json=json.dumps(rows, separators=(",", ":")))
-    css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2"))
+    css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2")).replace("{{FCOMM}}", K.font64("generation-maine/assets/fonts/commissioner-flair.ttf"))
     head = '<title>Generation Maine</title>\n<meta name="description" content="Young Mainers film the rules that shape their lives. Short videos and a newsletter, made in Maine.">\n<style>%s</style>' % css
     artifact = head + body
     standalone = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">%s</head><body>%s</body></html>' % (head, body)
