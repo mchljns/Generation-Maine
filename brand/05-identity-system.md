@@ -177,3 +177,18 @@ The whole concept as it stands: Bricolage and Inter, the Spruce, Birch and Pine 
 | 8. Easy to make | A- | One lockup, one dot rule, three cuts chosen by size. A staffer can place it without a guide |
 
 Concept grade: **A-**. The two B+ rows are the same fact seen twice: a state silhouette is recognizable, and recognizable means shared. The platform's on-the-nose test still says the mark restates the name. The client weighed that against recognition and chose recognition, and the sixteen lines, the two points and the dot are what make it ours anyway. The grade goes to A when the brand has lived in the world long enough that the lines alone, with no outline, are read as Generation Maine.
+
+## The splash page, October 1
+
+One page in `brand/identity/splash/` (`brand/src/build_splash.py`, renders in `splash-desktop.png` and `splash-phone.png`, hosted preview published as a private artifact). No photos. The line field is the only picture.
+
+**Motion, and why each piece is there.**
+- The hero field makes room for the headline and the lede on load and for the pointer as it moves. The lines stay Moss, so the headline's dot is the frame's one Marigold. This is the brand's language: lines that make room for a person's words.
+- The mural draws itself in as it enters, line by line from the top, with the two points first.
+- The headline, lede and buttons rise in over 900 ms, staggered by 120 ms. Nothing else on the page animates on load.
+- Creator cards reveal a faint field of lines as they scroll into view, staggered by column, then settle. The lines return on hover.
+- Reduced motion: the field is drawn once in its final state, the mural is complete, nothing rises.
+
+**Content.** Nine creator cards on the round-two cover rules, each with a real town and a placeholder name. Three Substack posts as placeholders. The Institute line appears in the strip under the nav, in its own section and in the footer. Every unknown is a `[CONFIRM: ...]`. The signup form validates and confirms in the page because there is no backend yet.
+
+**Checks.** Rendered at 1440 and 390 px: no horizontal overflow, no console errors. Dark theme defined through tokens.
