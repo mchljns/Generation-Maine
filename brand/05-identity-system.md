@@ -293,3 +293,5 @@ Third pass on the fade, after it still felt buggy. The cause was timing: a fade 
 The fade now begins with the first pixel of scroll. From the top of the page until the about section reaches the top of the screen, the page mixes from green to white in step with the scroll, so the reader lands on a white about section. The hero paints its own green, so what shows is the about section lightening as it rises.
 
 The fade now finishes earlier: it runs from the first pixel of scroll and is complete once the about section's top has risen to 60 percent of the screen height. By the time the about heading is in the upper part of the screen, the page is fully white.
+
+The gap between the creators head and the stage is closed. The pinned block used to be centered in a full screen height before it pinned, which opened an empty half screen. It is now its own height and sits just under the capsule when pinned, with a small margin under the head.

@@ -130,8 +130,9 @@ body.scrub{transition:none}
 /* the creators: the head, then a pinned stage. Scrolling steps through the nine; each one's details arrive from the right. */
 .stories-head{padding-bottom:0}
 .stories-head .lede{color:var(--muted);max-width:46ch;margin:18px 0 0}
-.stories{padding:0;height:calc(9 * 80vh);min-height:calc(9 * 520px)}
-.stories .pinw{position:sticky;top:0;height:100vh;display:flex;align-items:center}
+.stories{padding:36px 0 0;height:calc(9 * 80vh);min-height:calc(9 * 520px)}
+/* the pinned block is its own height and sits a little below the capsule, so no empty screen opens up before it pins */
+.stories .pinw{position:sticky;top:max(92px,calc(50vh - 330px))}
 .stories .w{width:100%;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px clamp(28px,5vw,72px);align-items:center}
 .stage{height:min(64vh,560px);display:flex;align-items:center}
 .vid{position:relative;aspect-ratio:9/16;height:100%;max-height:620px;width:auto;max-width:100%;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
@@ -167,7 +168,7 @@ body.scrub{transition:none}
 .panel .pv{display:none}
 @media (prefers-reduced-motion: reduce){.panel>*,.panel.prev>*{transform:none;transition:opacity .3s}}
 @media (max-width:900px){
-  .stories{height:auto;min-height:0;padding-bottom:clamp(40px,6vw,80px)}.stories .pinw{position:static;height:auto;display:block}
+  .stories{height:auto;min-height:0;padding:0 0 clamp(40px,6vw,80px)}.stories .pinw{position:static}
   .stories .w{grid-template-columns:1fr}.stage{display:none}.panels{height:auto}.where{display:none}
   .panel{position:static;opacity:1;visibility:visible;pointer-events:auto;padding-block:36px;border-top:1.5px solid var(--rule)}.panel:first-child{border-top:0}.panel>*{transform:none;opacity:1}.panel .pv{display:block;aspect-ratio:9/16;width:min(62vw,270px);border-radius:12px;overflow:hidden;background:var(--pine);margin-bottom:22px}
   .panel .pv{position:relative}.panel .pv video{width:100%;height:100%;object-fit:cover;display:block}.panel .pv .who{opacity:1}
