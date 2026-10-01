@@ -124,6 +124,25 @@ section{padding-block:clamp(56px,8vw,112px)}
 .about .cols div{padding-top:16px;position:relative}.about .cols div::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:var(--fg)}
 @media (max-width:900px){.about .w,.news .w{grid-template-columns:1fr}.about .cols{grid-template-columns:1fr}}
 
+.stories-head .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
+.stories-head .head p{max-width:46ch;margin:0;color:var(--muted)}
+.stories-head{padding-bottom:0}
+.story{padding-block:clamp(28px,4vw,56px)}
+.story .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,72px);align-items:center}
+.story.flip .w{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+.story.flip .vid{order:2}
+.vid{position:relative;aspect-ratio:9/16;max-height:560px;width:100%;max-width:315px;justify-self:center;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
+.vid video{width:100%;height:100%;object-fit:cover;display:block}
+.vid .dur{position:absolute;right:12px;top:12px;font:600 11px/1 var(--body);letter-spacing:.06em;color:#F4F0E6;background:rgba(11,43,33,.55);padding:6px 8px;border-radius:4px}
+.story .txt .k{margin-bottom:14px}
+.story .txt h2{font-size:clamp(40px,5.2vw,72px);max-width:10ch}
+.story .txt .say{font:600 clamp(18px,1.6vw,22px)/1.35 var(--body);margin:22px 0 18px;max-width:34ch;color:var(--fg)}
+.story .txt .nm{font:600 15px/1.3 var(--body);margin:0 0 22px}.story .txt .nm span{font-weight:400;color:var(--muted)}
+.story .txt .go{display:inline-flex;gap:10px;align-items:center;font:600 15px/1 var(--body);text-decoration:none;border-bottom:1.5px solid var(--fg);padding-bottom:6px}
+@media (max-width:900px){.story .w,.story.flip .w{grid-template-columns:1fr}.story.flip .vid{order:0}.vid{justify-self:start;max-width:300px}}
+
+.news .w{grid-template-columns:1fr}.about .cols{grid-template-columns:1fr}}
+
 .creators .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:36px}
 .creators .head p{max-width:46ch;margin:0;color:var(--muted)}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
@@ -192,10 +211,14 @@ CARDS = [
 
 def page():
     rows = mural_rows()
-    covers = ""
+    stories = ""
+    bgs = ["var(--sand)", "var(--bi)", "var(--sage)"]
     for i, (tone, town, topic, cap, dur) in enumerate(CARDS):
-        covers += ('<a class="card" href="#" aria-label="%s, %s, Maine"><div class="still %s"><span class="tag"><span>Video still</span><span>%s</span></span>'
-                   '<p class="cap">%s</p></div><div class="meta"><p class="nm">[Creator name] <span>%s, Maine</span></p><h3>%s</h3></div></a>') % (topic, town, tone, dur, cap, town, dot(topic))
+        stories += ('<section class="story reveal%s" id="story-%d" data-bg="%s"><div class="w">'
+                    '<div class="vid"><video src="media/creator-%d.webm" muted loop playsinline preload="metadata" aria-label="Placeholder clip, %s, %s, Maine"></video><span class="dur">%s</span></div>'
+                    '<div class="txt"><p class="k">Story %02d</p><h2>%s</h2><p class="say">"%s"</p><p class="nm">[Creator name] <span>%s, Maine</span></p>'
+                    '<a class="go" href="#">Watch the full video [CONFIRM: link]</a></div></div></section>') % (
+            " flip" if i % 2 else "", i + 1, bgs[i % 3], i + 1, topic, town, dur, i + 1, dot(topic), cap, town)
     body = r"""
 <header class="top"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s</a>
 <nav aria-label="Page"><a href="#about">About</a><a href="#creators">Creators</a><a href="#words">In their words</a><a href="#news">Newsletter</a></nav></div></header>
@@ -216,11 +239,10 @@ def page():
   </div>
 </div></section>
 
-<section class="creators reveal" id="creators" data-bg="var(--sand)"><div class="w">
+<section class="stories-head reveal" id="creators" data-bg="var(--sand)"><div class="w">
   <div class="head"><h2 class="h2">%(h2cre)s</h2><p>One story from each creator, filmed where they live. Names and faces arrive after the shoot. The towns are real.</p></div>
-  <div class="grid">%(covers)s</div>
 </div></section>
-
+%(stories)s
 <section class="words reveal" id="words" data-bg="#EFB443"><div class="w">
   <h2 class="h2">%(h2words)s</h2>
   <div class="qs">
@@ -304,6 +326,11 @@ def page():
   const bo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.body.style.background = e.target.dataset.bg; }), { rootMargin: '-45%% 0px -45%% 0px', threshold: 0 });
   bgs.forEach(el => bo.observe(el));
 
+  // Clips play while on screen and pause off screen. With reduced motion they wait for a tap.
+  const vids = [...document.querySelectorAll('.vid video')];
+  if (reduced) vids.forEach(v => v.controls = true);
+  else { const vo = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting) { v.play().catch(() => { v.controls = true; }); } else v.pause(); }), { threshold: .4 }); vids.forEach(v => vo.observe(v)); }
+
   // Sections: mark them before they enter, release them as they do.
   document.documentElement.classList.add('js');
   const secs = [...document.querySelectorAll('.reveal')]; secs.forEach(sc => sc.classList.add('pre'));
@@ -319,7 +346,7 @@ def page():
         lock=logo("lockup-compact-reversed", "lk"), two=logo("lockup-two-line-reversed", "lk"),
         h1=dot("Young Mainers on building a life here"), h2about=dot("Made by the people it is about"), h2cre=dot("The stories"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
-        covers=covers, json=json.dumps(rows, separators=(",", ":")))
+        stories=stories, json=json.dumps(rows, separators=(",", ":")))
     css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2"))
     head = '<title>Generation Maine</title>\n<meta name="description" content="Young Mainers film the rules that shape their lives. Short videos and a newsletter, made in Maine.">\n<style>%s</style>' % css
     artifact = head + body
