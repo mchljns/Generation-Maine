@@ -126,6 +126,35 @@ section{padding-block:clamp(56px,8vw,112px)}
 .stories-head .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
 .stories-head .head p{max-width:46ch;margin:0;color:var(--muted)}
 .stories-head{padding-bottom:0}
+.stories{padding-top:0}
+.stories .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,72px);align-items:start}
+.stage{position:sticky;top:calc(64px + env(safe-area-inset-top,0px) + 28px);align-self:start;height:min(64vh,560px);display:flex;align-items:center}
+.vid{position:relative;aspect-ratio:9/16;height:100%;max-height:620px;width:auto;max-width:100%;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
+.vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .6s ease}
+.vid video.on{opacity:1}
+.vid .dur{position:absolute;right:12px;top:12px;font:600 11px/1 var(--body);letter-spacing:.06em;color:#F4F0E6;background:rgba(11,43,33,.55);padding:6px 8px;border-radius:4px;z-index:2}
+.vid .idx{position:absolute;left:12px;top:12px;display:flex;gap:4px;z-index:2}
+.vid .idx i{display:block;width:14px;height:2px;background:rgba(244,240,230,.45);border-radius:1px;transition:background .3s}.vid .idx i.on{background:#EFB443}
+.panels{display:grid;gap:0}
+.panel{min-height:min(64vh,560px);display:flex;flex-direction:column;justify-content:center;padding-block:40px;border-top:1.5px solid var(--rule)}
+.panel:first-child{border-top:0}
+.panel .k{margin-bottom:14px}
+.panel h2{font-size:clamp(38px,4.6vw,66px);max-width:10ch}
+.panel .say{font:600 clamp(18px,1.6vw,22px)/1.35 var(--body);margin:22px 0 18px;max-width:34ch;color:var(--fg)}
+.panel .nm{font:600 15px/1.3 var(--body);margin:0 0 22px}.panel .nm span{font-weight:400;color:var(--muted)}
+.panel .go{display:inline-flex;gap:10px;align-items:center;font:600 15px/1 var(--body);text-decoration:none;border-bottom:1.5px solid var(--fg);padding-bottom:6px}
+.panel .pv{display:none}
+@media (max-width:900px){
+  .stories .w{grid-template-columns:1fr}.stage{display:none}
+  .panel{min-height:0;padding-block:36px}.panel .pv{display:block;aspect-ratio:9/16;width:min(70vw,300px);border-radius:12px;overflow:hidden;background:var(--pine);margin-bottom:22px}
+  .panel .pv video{width:100%;height:100%;object-fit:cover;display:block}
+}
+
+.news .w{grid-template-columns:1fr}.about .cols{grid-template-columns:1fr}}
+
+.stories-head .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
+.stories-head .head p{max-width:46ch;margin:0;color:var(--muted)}
+.stories-head{padding-bottom:0}
 .story{padding-block:clamp(28px,4vw,56px)}
 .story .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,72px);align-items:center}
 .story.flip .w{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
@@ -210,14 +239,14 @@ CARDS = [
 
 def page():
     rows = mural_rows()
-    stories = ""
-    bgs = ["var(--sand)", "var(--bi)", "var(--sage)"]
+    stagevids, panels, idx = "", "", ""
     for i, (tone, town, topic, cap, dur) in enumerate(CARDS):
-        stories += ('<section class="story reveal%s" id="story-%d" data-bg="%s"><div class="w">'
-                    '<div class="vid"><video src="media/creator-%d.webm" muted loop playsinline preload="metadata" aria-label="Placeholder clip, %s, %s, Maine"></video><span class="dur">%s</span></div>'
-                    '<div class="txt"><p class="k">Story %02d</p><h2>%s</h2><p class="say">"%s"</p><p class="nm">[Creator name] <span>%s, Maine</span></p>'
-                    '<a class="go" href="#">Watch the full video [CONFIRM: link]</a></div></div></section>') % (
-            " flip" if i % 2 else "", i + 1, bgs[i % 3], i + 1, topic, town, dur, i + 1, dot(topic), cap, town)
+        stagevids += '<video data-i="%d" data-dur="%s" src="media/creator-%d.webm" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (
+            i, dur, i + 1, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
+        idx += '<i%s></i>' % (' class="on"' if i == 0 else "")
+        panels += ('<article class="panel reveal" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="metadata"></video></div>'
+                   '<p class="k">Story %02d</p><h2>%s</h2><p class="say">"%s"</p><p class="nm">[Creator name] <span>%s, Maine</span></p>'
+                   '<a class="go" href="#">Watch the full video [CONFIRM: link]</a></article>') % (i + 1, i, i + 1, i + 1, dot(topic), cap, town)
     body = r"""
 <header class="top"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s</a>
 <nav aria-label="Page"><a href="#about">About</a><a href="#creators">Creators</a><a href="#words">In their words</a><a href="#news">Newsletter</a></nav></div></header>
@@ -241,7 +270,10 @@ def page():
 <section class="stories-head reveal" id="creators" data-bg="var(--sand)"><div class="w">
   <div class="head"><h2 class="h2">%(h2cre)s</h2><p>One story from each creator, filmed where they live. Names and faces arrive after the shoot. The towns are real.</p></div>
 </div></section>
-%(stories)s
+<section class="stories" data-bg="var(--sand)"><div class="w">
+  <div class="stage"><div class="vid" id="stage">%(stagevids)s<span class="dur" id="dur">0:52</span><span class="idx" id="idx">%(idx)s</span></div></div>
+  <div class="panels">%(panels)s</div>
+</div></section>
 <section class="words reveal" id="words" data-bg="#EFB443"><div class="w">
   <h2 class="h2">%(h2words)s</h2>
   <div class="qs">
@@ -294,10 +326,16 @@ def page():
   const bo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.body.style.background = e.target.dataset.bg; }), { rootMargin: '-45%% 0px -45%% 0px', threshold: 0 });
   bgs.forEach(el => bo.observe(el));
 
-  // Clips play while on screen and pause off screen. With reduced motion they wait for a tap.
-  const vids = [...document.querySelectorAll('.vid video')];
-  if (reduced) vids.forEach(v => v.controls = true);
-  else { const vo = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting) { v.play().catch(() => { v.controls = true; }); } else v.pause(); }), { threshold: .4 }); vids.forEach(v => vo.observe(v)); }
+  // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Phones get a clip per panel.
+  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video')] : [], marks = [...document.querySelectorAll('#idx i')], dur = document.getElementById('dur');
+  const panelVids = [...document.querySelectorAll('.panel .pv video')];
+  const wide = () => matchMedia('(min-width: 901px)').matches;
+  function show(i) { stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (on) { v.play().catch(() => {}); } else v.pause(); }); marks.forEach((m, k) => m.classList.toggle('on', k === i)); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur; }
+  const po = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && wide()) show(+e.target.dataset.i); }), { rootMargin: '-45%% 0px -45%% 0px', threshold: 0 });
+  document.querySelectorAll('.panel').forEach(p => po.observe(p));
+  if (!reduced && wide()) show(0);
+  if (reduced) { stageVids.forEach(v => { v.controls = true; }); panelVids.forEach(v => { v.controls = true; }); }
+  else { const mo = new IntersectionObserver(es => es.forEach(e => { if (!wide()) { if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause(); } }), { threshold: .4 }); panelVids.forEach(v => mo.observe(v)); }
 
   // Sections: mark them before they enter, release them as they do.
   document.documentElement.classList.add('js');
@@ -314,7 +352,7 @@ def page():
         lock=logo("lockup-compact-reversed", "lk"), two=logo("lockup-two-line-reversed", "lk"),
         h1=dot("Young Mainers on building a life here"), h2about=dot("Made by the people it is about"), h2cre=dot("The stories"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
-        stories=stories, json=json.dumps(rows, separators=(",", ":")))
+        stagevids=stagevids, panels=panels, idx=idx, json=json.dumps(rows, separators=(",", ":")))
     css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2"))
     head = '<title>Generation Maine</title>\n<meta name="description" content="Young Mainers film the rules that shape their lives. Short videos and a newsletter, made in Maine.">\n<style>%s</style>' % css
     artifact = head + body
