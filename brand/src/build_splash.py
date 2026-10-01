@@ -227,7 +227,7 @@ body.scrub{transition:none}
 /* the creators: the head, then a pinned stage. Scrolling steps through the nine; each one's details arrive from the right. */
 .stories-head{padding-bottom:0}
 .stories-head .lede{color:var(--muted);max-width:46ch;margin:18px 0 0}
-.stories{padding:36px 0 clamp(80px,12vh,160px);height:calc(9 * 80vh + clamp(80px,12vh,160px));min-height:calc(9 * 520px);box-sizing:border-box}
+.stories{overflow-x:clip;padding:36px 0 clamp(80px,12vh,160px);height:calc(9 * 80vh + clamp(80px,12vh,160px));min-height:calc(9 * 520px);box-sizing:border-box}
 /* the pinned block is its own height and sits a little below the capsule, so no empty screen opens up before it pins */
 .stories .pinw{position:sticky;top:max(92px,calc(50vh - 330px))}
 .stories .w{width:100%;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px clamp(28px,5vw,72px);align-items:center}
@@ -265,9 +265,20 @@ body.scrub{transition:none}
 .panel .pv{display:none}
 @media (prefers-reduced-motion: reduce){.panel>*,.panel.prev>*{transform:none;transition:opacity .3s}}
 @media (max-width:900px){
-  .stories{height:auto;min-height:0;padding:0 0 clamp(40px,6vw,80px)}.stories .pinw{position:static}
-  .stories .w{grid-template-columns:1fr}.stage{display:none}.panels{height:auto}.where{display:none}
-  .panel{position:static;opacity:1;visibility:visible;pointer-events:auto;padding-block:36px;border-top:1.5px solid var(--rule)}.panel:first-child{border-top:0}.panel>*{transform:none;opacity:1}.panel .pv{display:block;aspect-ratio:9/16;width:min(62vw,270px);border-radius:12px;overflow:hidden;background:var(--pine);margin-bottom:22px}
+  /* phones keep the pinned stepper: the clip on top, the creator's details under it, the position row under both */
+  .stories{padding:20px 0 clamp(60px,10vh,120px)}
+  .stories .pinw{top:calc(60px + env(safe-area-inset-top,0px) + 10px)}
+  .stories .w{grid-template-columns:1fr;gap:16px}
+  .stage{height:min(40vh,340px);justify-content:flex-start}
+  .panels{height:auto;min-height:200px}
+  .panel{justify-content:flex-start;padding-top:4px}
+  .panel .k{margin-bottom:10px}
+  .panel h2{font-size:clamp(32px,9vw,44px);max-width:none}
+  .panel .bio{font-size:17px;line-height:1.45;margin:12px 0 16px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .soc{gap:16px}.soc a{font-size:13px}
+  .panel .pv{display:none}
+  .where{margin-top:0;gap:12px;font-size:11px}.where .next{min-width:0}
+}
   .panel .pv{position:relative}.panel .pv video{width:100%;height:100%;object-fit:cover;display:block}.panel .pv .who{opacity:1}
 }
 
@@ -340,7 +351,7 @@ def page():
         whos += who
         idx += '<button type="button" aria-label="Creator %d, [Creator name], %s" data-name="[Creator name]"%s></button>' % (i + 1, town, ' class="on"' if i == 0 else "")
         socials = ''.join('<a href="#" aria-label="%s">%s<span>@handle</span></a>' % (n.capitalize(), icon(n)) for n in ("instagram", "tiktok", "youtube"))
-        panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="metadata"></video>%s</div>'
+        panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="none"></video>%s</div>'
                    '<p class="k">%s, Maine<i class="d pulse"></i></p><h2>%s</h2><p class="bio">[Two or three sentences in the creator\'s words: who they are, what they do, how long they have lived here.]</p>'
                    '<div class="soc">%s</div></article>') % (
                        " on" if i == 0 else "", i + 1, i, i + 1, who, town, "[Creator name]", socials)
@@ -441,15 +452,18 @@ def page():
   // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Phones get a clip per panel.
   const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
   const panelVids = [...document.querySelectorAll('.panel .pv video')];
-  const wide = () => matchMedia('(min-width: 901px)').matches;
+  const wide = () => true;
   const panels = [...document.querySelectorAll('.panel')], storiesEl = document.getElementById('stories'); let cur = -1;
   function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i;
     stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (on) { v.play().catch(() => {}); } else v.pause(); }); whos.forEach((w, k) => w.classList.toggle('on', k === i)); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur;
     wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.dataset.name : 'Last one'; }
   // Scroll position steps through the creators while the stage is pinned.
+  const panelsEl = document.getElementById('panels');
+  const fit = () => { if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 8) + 'px'; };
+  fit();
   const step = () => { if (!wide()) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
   marks.forEach((m, k) => m.addEventListener('click', () => { const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
-  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { step(); paint(); }); step(); if (cur < 0) show(0);
+  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); paint(); }); step(); if (cur < 0) show(0);
   if (reduced) { stageVids.forEach(v => { v.controls = true; }); panelVids.forEach(v => { v.controls = true; }); }
   else { const mo = new IntersectionObserver(es => es.forEach(e => { if (!wide()) { if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause(); } }), { threshold: .4 }); panelVids.forEach(v => mo.observe(v)); }
 

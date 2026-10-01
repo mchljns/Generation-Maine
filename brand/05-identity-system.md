@@ -319,3 +319,7 @@ Settings > Newsletter, a small page in wp-admin. Four fields: the publication's 
 ## Buttons
 
 Every button on the site is a pill. The capsule nav was already a pill and the brand's lines end round, so the squared corners on the hero and form buttons were the odd ones out. Colors: the primary action is Spruce with Snow type on light fields, and Snow with Spruce type on green. The secondary action is an outline in the current color. Hover lifts the button two pixels and deepens the fill one step, Spruce to Pine or Snow to white. The email field is a pill to match its button. Marigold is never a button; it stays the dot. The theme will carry the same rule in theme.json.
+
+## The creators on phones
+
+Phones keep the pinned stepper rather than a long list. The clip sits on top, the creator's details under it with the bio held to four lines, and the position row under both. Scrolling steps through the nine the same way as on desktop, and the next creator's details arrive from the right. The details block takes the height of the tallest panel so the row sits close. The section clips horizontally so the slide-in offset never widens the page. Checked at 390 by 844 and 375 by 667.
