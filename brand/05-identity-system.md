@@ -9,7 +9,7 @@ Saved September 30, 2026. Everything below is built as hand-drawn SVG geometry b
 | Brandmark | **Maine in lines.** The state drawn in horizontal lines from the precise Census outline, heavier toward the bottom, the widest line gold. Three cuts chosen by size: 21 lines at 72 px and up, 13 heavier lines on a lightly simplified coast from 36 to 72 px, the simplified silhouette alone below 36 px | Chosen by the client on October 1 over the abstract margin-room mark, which is kept in `brand/identity/mark/`. The size system solves the small-size problem the silhouette had: the shape never turns to dashes, because below 36 px it is a shape again. Files: `brand/identity/logo-maine/` |
 | Mural | **Grain.** Maine drawn in horizontal lines from the precise Census outline, weight growing toward the bottom, the widest line gold | The strongest single image of the project. Lives at sizes where Maine reads: the website hero and the end card |
 | Relationship | The mark is a crop of the mural where one line is missing. One rule, two scales | Everything seen large is Maine. Everything seen small is the mark |
-| Marigold | Once per frame. In the mark, the bends. In the mural, the widest line. In the wordmark, the dot on the i, but only when the wordmark stands alone | Keeps the rule the platform set and stops gold from spreading |
+| Marigold | Once per frame. In the mark and the mural, the widest line, under review. In the wordmark, the dot on the i, but only when the wordmark stands alone | Keeps the rule the platform set and stops gold from spreading. The placement inside the logo is the open question in the last section |
 | Letter marks | Set aside | The G is the generic half of the name. GM reads as General Motors |
 | The abstract mark | Set aside, kept | The margin-room mark remains the stronger answer to the platform's on-the-nose test. The client preferred the state, and the size system answers the objection that mattered most |
 | Outline data | US Census cartographic boundary, 1:500,000, clipped to the shoreline, 2,265 points, public domain | The legal boundary was tested and rejected: it fills the bays and rings the islands |
@@ -114,3 +114,20 @@ The Maine logo on the eight surfaces from the platform, in `brand/identity/apply
 | Collab post | Solid, with the wordmark | Same bug as the video |
 
 The motion prototype (`brand/identity/motion/hero.html`) now carries the lockup in its nav. The field motion stays: Maine is drawn in lines, so lines that make room for words are still the brand's language.
+
+## Where the yellow goes, October 1
+
+The client asked whether there is a better way to use the yellow in the logo. The current answer is a rule of geometry: the widest line is Marigold. A rule is not an idea, and the line is the weakest-contrast element of the logo. Four placements were built in `brand/src/build_gold.py` and shown on one sheet, `brand/identity/gold/yellow-options.png`: each on the lockup at 96 and 44 px, reversed, on the avatar on a light field, and the two strongest on the end card.
+
+| Option | What it is | What the sheet shows | Grade |
+| --- | --- | --- | --- |
+| A, the stripe | The widest line of the state is Marigold. Current | At 44 px the gold line is about 1 px tall and disappears on white. The one-color version is a different logo. A horizontal gold line through Maine sits closer to Baxter Brewing's orange ridgeline than it should | B |
+| B, the dot | The state is one color. Marigold is the dot on the i, as in every headline | At 44 px the dot is about 5 px across and still reads. The mark is one color in every cut, so color, mono, embroidery and vinyl are the same drawing. The end card gets its headline dot back and the mural turns Birch | A- |
+| C, the thread | The widest line runs out of the state and reaches the name | The boldest of the four and the only one with a picture in it: a map's leader line, the state pointing at its name. It fails at 44 px for the same reason A does, and it is a connector, which is a cliché of the category | B- |
+| D, the baseline | No gold in the state. A Marigold rule under the name | Arbitrary. The avatar version reads as an underline | C+ |
+
+**Recommendation.** B. Marigold becomes punctuation, one rule for the whole brand: the dot on the i, the period after a headline, once per frame. The state stays Spruce or Birch and never carries a second color, which also settles the Baxter separation for good.
+
+**Trade.** The mark alone, in the avatar, the app icon and the favicon, carries no Marigold. On the sheet the A avatar's gold line at 110 px is about 2 px tall, so little is lost. The yellow lives in the type and in the Marigold field every ninth frame.
+
+**If B is chosen.** The lockups keep the dot on the i in every version. The full and mid cuts lose the gold line. The mural loses its gold line, and the end card and hero headlines get their dot back. The motion prototype's arriving gold line goes. Bark & Sky is unaffected in color, since it uses Clay, but its lowercase Hedvig wordmark has two i's, so its state should simply go one color with no Clay in the logo. Nothing changes until the client chooses.
