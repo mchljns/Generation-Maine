@@ -262,6 +262,9 @@ section{padding-block:clamp(56px,8vw,112px)}
 .site .lk{height:110px;width:auto;display:block}
 .site p{margin:0;font-size:14px;color:rgba(244,240,230,.8);max-width:60ch}
 .site .fine{margin-top:12px;font-size:13px}
+.site .review{margin-top:22px;padding-top:14px;border-top:1px solid rgba(244,240,230,.2)}
+.sw{font:600 13px/1 var(--body);color:#F4F0E6;background:none;border:1.5px solid rgba(244,240,230,.4);border-radius:999px;padding:7px 12px;margin-left:6px;cursor:pointer}
+.sw.on{background:#F4F0E6;color:var(--sp);border-color:#F4F0E6}
 @media (max-width:640px){.site .w{grid-template-columns:1fr}.site .lk{height:90px}}
 """
 
@@ -349,7 +352,7 @@ def page():
   </div>
 </div></section>
 
-<footer class="site"><div class="w">%(two)s<div><p>Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.</p><p class="fine">© 2026 Generation Maine. [CONFIRM: legal name, address and contact]</p></div></div></footer>
+<footer class="site"><div class="w">%(two)s<div><p>Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.</p><p class="fine">© 2026 Generation Maine. [CONFIRM: legal name, address and contact]</p><p class="fine review">Mockup review. Nav style: <button type="button" class="sw" id="sw-bar">Bar</button> <button type="button" class="sw" id="sw-cap">Capsule</button></p></div></div></footer>
 
 <script id="maine-data" type="application/json">%(json)s</script>
 <script>
@@ -386,7 +389,11 @@ def page():
   const bar = document.getElementById('topbar'), heroEl = document.querySelector('.hero');
   new IntersectionObserver(es => es.forEach(e => bar.classList.toggle('solid', !e.isIntersecting)), { rootMargin: '-68px 0px 0px 0px', threshold: 0 }).observe(heroEl);
   // Two nav styles ship for comparison. #capsule turns the scrolled bar into a floating capsule with a reading-progress line.
-  const setNav = () => document.documentElement.classList.toggle('capsule', location.hash === '#capsule'); setNav(); addEventListener('hashchange', setNav);
+  let capsule = location.hash === '#capsule'; try { if (location.hash === '') capsule = localStorage.getItem('gm-nav') === 'capsule'; } catch (e) {}
+  const setNav = () => { document.documentElement.classList.toggle('capsule', capsule); document.getElementById('sw-bar').classList.toggle('on', !capsule); document.getElementById('sw-cap').classList.toggle('on', capsule); try { localStorage.setItem('gm-nav', capsule ? 'capsule' : 'bar'); } catch (e) {} };
+  setNav(); addEventListener('hashchange', () => { capsule = location.hash === '#capsule'; setNav(); });
+  document.getElementById('sw-bar').addEventListener('click', () => { capsule = false; setNav(); scrollTo({ top: document.getElementById('about').offsetTop - 80 }); });
+  document.getElementById('sw-cap').addEventListener('click', () => { capsule = true; setNav(); scrollTo({ top: document.getElementById('about').offsetTop - 80 }); });
   const prog = document.getElementById('prog');
   let lastY = scrollY, ticking = false;
   addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%%'; ticking = false; }); }, { passive: true });
