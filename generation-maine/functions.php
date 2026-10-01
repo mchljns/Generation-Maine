@@ -15,6 +15,7 @@ define( 'GM_THEME_VERSION', '1.0.0' );
 
 require_once get_theme_file_path( 'inc/creators.php' );
 require_once get_theme_file_path( 'inc/seo.php' );
+require_once get_theme_file_path( 'inc/newsletter.php' );
 
 /**
  * Theme supports and editor styles.

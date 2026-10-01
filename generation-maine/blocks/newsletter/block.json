@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "generation-maine/newsletter",
+	"title": "Newsletter Signup",
+	"category": "widgets",
+	"icon": "email",
+	"description": "The signup form. It hands the address to the Substack subscribe page set under Settings > Newsletter.",
+	"keywords": [ "newsletter", "substack", "email", "subscribe" ],
+	"textdomain": "generation-maine",
+	"supports": { "html": false, "align": [ "wide", "full" ], "anchor": true },
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}

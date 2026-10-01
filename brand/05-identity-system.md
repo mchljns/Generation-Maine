@@ -309,3 +309,9 @@ The footer wordmark pings. Once the footer is on screen, the dot on the i sends 
 ## The signup hand-off
 
 The form's action is the publication's subscribe page on Substack, with the address in the query string, opened in a new tab. Substack fills its field from the query, sends the confirmation email and shows its own confirmation page. The splash page stays put and shows its own "check your inbox" line. Substack offers no return URL after a free signup, so the confirmation page is theirs; a custom domain on the publication puts our name on it. For a visitor who never leaves the page, the server relay in the theme is the route, with this hand-off as its fallback. The publication address is a CONFIRM, and until it is set the form confirms in the page only.
+
+The position row names the next creator rather than the town, since the section is about the people.
+
+## Where the redirect lives in WordPress
+
+Settings > Newsletter, a small page in wp-admin. Four fields: the publication's subscribe page URL, open in a new tab, the line shown after submit, and the small print under the form. The URL is checked to be https and to end in /subscribe. A Newsletter Signup block renders the form from those settings, so no template holds the address. With the URL empty the form hides itself and shows an admin-only note pointing at the settings page. The hand-off needs no script; a few lines show the confirmation line in the page after submit.
