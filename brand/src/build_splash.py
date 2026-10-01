@@ -213,14 +213,23 @@ section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 .stories-head .lede{color:var(--muted);max-width:46ch;margin:18px 0 0}
 .stories{padding:0;height:calc(9 * 80vh);min-height:calc(9 * 520px)}
 .stories .pinw{position:sticky;top:0;height:100vh;display:flex;align-items:center}
-.stories .w{width:100%;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,72px);align-items:center}
+.stories .w{width:100%;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px clamp(28px,5vw,72px);align-items:center}
 .stage{height:min(64vh,560px);display:flex;align-items:center}
 .vid{position:relative;aspect-ratio:9/16;height:100%;max-height:620px;width:auto;max-width:100%;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
 .vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transform:scale(1.04);transition:opacity .6s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
 .vid video.on{opacity:1;transform:none}
 .vid .dur{position:absolute;right:12px;top:12px;font:600 11px/1 var(--body);letter-spacing:.06em;color:#FFFFFF;background:rgba(11,43,33,.55);padding:6px 8px;border-radius:4px;z-index:2}
-.vid .idx{position:absolute;left:12px;top:12px;display:flex;gap:4px;z-index:2}
-.vid .idx i{display:block;width:14px;height:2px;background:rgba(255,255,255,.45);border-radius:1px;transition:background .3s;cursor:pointer;padding:0;border:0}.vid .idx i.on{background:#EFB443}
+/* where you are among the nine: a counter, nine lines, and the town that arrives next */
+.where{grid-column:1 / -1;display:flex;align-items:center;gap:20px;margin-top:8px;font:600 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.where .n{color:var(--fg);font-variant-numeric:tabular-nums;min-width:6ch}
+.where .segs{display:flex;gap:6px;flex:1}
+.where .segs button{flex:1;height:14px;padding:0;border:0;background:none;cursor:pointer;position:relative}
+.where .segs button::before{content:"";position:absolute;left:0;right:0;top:6px;height:2px;border-radius:1px;background:var(--rule);transition:background .3s,transform .3s}
+.where .segs button.on::before,.where .segs button.done::before{background:var(--fg)}
+.where .segs button.done::before{opacity:.35}
+.where .segs button:hover::before{transform:scaleY(1.5)}
+.where .next{min-width:16ch;text-align:right;transition:opacity .4s}
+.where .next.sw{opacity:0}
 .panels{position:relative;height:min(64vh,560px)}
 .panel{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;opacity:0;pointer-events:none;visibility:hidden;transition:visibility 0s .5s}
 .panel.on{opacity:1;pointer-events:auto;visibility:visible;transition:none}
@@ -237,7 +246,7 @@ section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 @media (prefers-reduced-motion: reduce){.panel>*,.panel.prev>*{transform:none;transition:opacity .3s}}
 @media (max-width:900px){
   .stories{height:auto;min-height:0;padding-bottom:clamp(40px,6vw,80px)}.stories .pinw{position:static;height:auto;display:block}
-  .stories .w{grid-template-columns:1fr}.stage{display:none}.panels{height:auto}
+  .stories .w{grid-template-columns:1fr}.stage{display:none}.panels{height:auto}.where{display:none}
   .panel{position:static;opacity:1;visibility:visible;pointer-events:auto;padding-block:36px;border-top:1.5px solid var(--rule)}.panel:first-child{border-top:0}.panel>*{transform:none;opacity:1}.panel .pv{display:block;aspect-ratio:9/16;width:min(62vw,270px);border-radius:12px;overflow:hidden;background:var(--pine);margin-bottom:22px}
   .panel .pv video{width:100%;height:100%;object-fit:cover;display:block}
 }
@@ -309,7 +318,7 @@ def page():
     for i, (tone, town, topic, cap, dur) in enumerate(CARDS):
         stagevids += '<video data-i="%d" data-dur="%s" src="media/creator-%d.webm" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (
             i, dur, i + 1, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
-        idx += '<i%s></i>' % (' class="on"' if i == 0 else "")
+        idx += '<button type="button" aria-label="Creator %d, %s"%s></button>' % (i + 1, town, ' class="on"' if i == 0 else "")
         panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="metadata"></video></div>'
                    '<p class="k">[Creator name] <span>%s, Maine</span></p><h2>%s</h2><p class="say">"%s"</p><p class="nm">[One line about the creator: age, work, how long in town.]</p>'
                    '<a class="go" href="#">Watch the full video [CONFIRM: link]</a></article>') % (" on" if i == 0 else "", i + 1, i, i + 1, town, dot(topic), cap)
@@ -341,8 +350,9 @@ def page():
   <h2 class="h2">%(h2cre)s</h2><p class="lede">Nine young Mainers in nine towns. Each one films where they live and says it their own way. Names and faces arrive after the shoot.</p>
 </div></section>
 <section class="stories" id="stories" data-bg="var(--sand)"><div class="pinw"><div class="w">
-  <div class="stage"><div class="vid" id="stage">%(stagevids)s<span class="dur" id="dur">0:52</span><span class="idx" id="idx">%(idx)s</span></div></div>
+  <div class="stage"><div class="vid" id="stage">%(stagevids)s<span class="dur" id="dur">0:52</span></div></div>
   <div class="panels" id="panels">%(panels)s</div>
+  <div class="where" id="where"><span class="n" id="wn">01 / 09</span><span class="segs" id="segs">%(segs)s</span><span class="next" id="wnext"></span></div>
 </div></div></section>
 <section class="words reveal" id="words"><div class="w">
   <h2 class="h2">%(h2words)s</h2>
@@ -397,12 +407,13 @@ def page():
   bgs.forEach(el => bo.observe(el));
 
   // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Phones get a clip per panel.
-  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video')] : [], marks = [...document.querySelectorAll('#idx i')], dur = document.getElementById('dur');
+  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
   const panelVids = [...document.querySelectorAll('.panel .pv video')];
   const wide = () => matchMedia('(min-width: 901px)').matches;
   const panels = [...document.querySelectorAll('.panel')], storiesEl = document.getElementById('stories'); let cur = -1;
   function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i;
-    stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (on) { v.play().catch(() => {}); } else v.pause(); }); marks.forEach((m, k) => m.classList.toggle('on', k === i)); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur; }
+    stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (on) { v.play().catch(() => {}); } else v.pause(); }); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur;
+    wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.getAttribute('aria-label').split(', ')[1] : 'Last one'; }
   // Scroll position steps through the creators while the stage is pinned.
   const step = () => { if (!wide()) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
   marks.forEach((m, k) => m.addEventListener('click', () => { const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
@@ -448,7 +459,7 @@ def page():
         h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         ic_ig=icon("instagram"), ic_tt=icon("tiktok"), ic_yt=icon("youtube"), ic_ss=icon("substack"),
-        stagevids=stagevids, panels=panels, idx=idx, json=json.dumps(rows, separators=(",", ":")))
+        stagevids=stagevids, panels=panels, segs=idx, json=json.dumps(rows, separators=(",", ":")))
     css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))
     head = '<title>Generation Maine</title>\n<meta name="description" content="Young Mainers film the rules that shape their lives. Short videos and a newsletter, made in Maine.">\n<style>%s</style>' % css
     artifact = head + body
