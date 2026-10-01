@@ -84,7 +84,9 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .b3{background:var(--sp);color:#F4F0E6}
 
 /* nav: transparent over the hero, a frosted Birch bar once the page scrolls. The active section carries the dot. */
-.top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:#F4F0E6;transition:background .35s,color .35s,box-shadow .35s}
+.top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:#F4F0E6;transition:background .35s,color .35s,box-shadow .35s,transform .4s cubic-bezier(.2,.7,.2,1)}
+.top.hide{transform:translateY(-110%)}
+@media (prefers-reduced-motion: reduce){.top{transition:background .35s,color .35s,box-shadow .35s}}
 .top .w{display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px;transition:height .35s}
 .top .lk{height:24px;width:auto;display:block}
 .top .lk.dark{display:none}
@@ -105,7 +107,11 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .sheet .bar{display:flex;justify-content:space-between;align-items:center;height:44px}
 .sheet .bar .lk{height:24px;width:auto}
 .sheet nav{display:flex;flex-direction:column;gap:6px;margin-top:40px}
-.sheet nav a{font:800 clamp(38px,11vw,56px)/1.05 var(--display);letter-spacing:-.03em;text-decoration:none;padding:8px 0}
+.sheet nav a{font:800 clamp(38px,11vw,56px)/1.05 var(--display);letter-spacing:-.03em;text-decoration:none;padding:8px 0;opacity:0;transform:translateY(14px);transition:opacity .45s,transform .55s cubic-bezier(.2,.7,.2,1)}
+.sheet.open nav a{opacity:1;transform:none}
+.sheet.open nav a:nth-child(2){transition-delay:.06s}.sheet.open nav a:nth-child(3){transition-delay:.12s}.sheet.open nav a:nth-child(4){transition-delay:.18s}
+.sheet .foot{opacity:0;transition:opacity .4s .25s}.sheet.open .foot{opacity:1}
+@media (prefers-reduced-motion: reduce){.sheet nav a,.sheet .foot{opacity:1;transform:none;transition:none}}
 .sheet nav a .d{width:.18em;height:.18em}
 .sheet .foot{margin-top:auto;display:flex;flex-direction:column;gap:14px}
 .sheet .foot a{font:600 16px/1 var(--body);text-decoration:none}
@@ -366,6 +372,8 @@ def page():
   // The bar turns solid once the hero scrolls away, marks the section in view, and opens the phone menu.
   const bar = document.getElementById('topbar'), heroEl = document.querySelector('.hero');
   new IntersectionObserver(es => es.forEach(e => bar.classList.toggle('solid', !e.isIntersecting)), { rootMargin: '-68px 0px 0px 0px', threshold: 0 }).observe(heroEl);
+  let lastY = scrollY, ticking = false;
+  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; ticking = false; }); }, { passive: true });
   const links = [...bar.querySelectorAll('nav a')];
   const ao = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.dataset.for === e.target.id)); }), { rootMargin: '-40%% 0px -55%% 0px', threshold: 0 });
   ['about', 'creators', 'words', 'follow'].forEach(id => { const el = document.getElementById(id); if (el) ao.observe(el); });
