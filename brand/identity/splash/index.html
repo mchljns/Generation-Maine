@@ -30,15 +30,17 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .btn:hover{transform:translateY(-2px)}
 .btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--mg);outline-offset:3px}
 .b1{background:var(--snow);color:var(--sp)}.b1:hover{background:#FFFFFF}
-/* the secondary action is a text link with an underline that draws in on hover */
+/* the secondary action is a text link, underlined full width; the line brightens and drops a touch on hover */
 .tl{display:inline-block;font:600 15px/1 var(--body);color:var(--snow);text-decoration:none;padding:16px 4px;position:relative}
-.tl::after{content:"";position:absolute;left:4px;right:4px;bottom:12px;height:1.5px;background:currentColor;transform:scaleX(.35);transform-origin:left;opacity:.6;transition:transform .35s cubic-bezier(.2,.7,.2,1),opacity .25s}
-.tl:hover::after{transform:scaleX(1);opacity:1}
+.tl::after{content:"";position:absolute;left:4px;right:4px;bottom:12px;height:1.5px;background:currentColor;opacity:.55;transition:opacity .25s,bottom .25s}
+.tl:hover::after{opacity:1;bottom:10px}
 .b3{background:var(--sp);color:var(--snow)}.b3:hover{background:var(--pine)}
 
 /* nav: a transparent bar over the top of the hero. On the first scroll it folds into a floating frosted capsule with a reading line.
    The active section carries the dot. It hides on the way down past the hero and comes back on the way up. */
-.top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:var(--snow);transition:color .35s,transform .4s cubic-bezier(.2,.7,.2,1)}
+/* at rest the bar is a Moss band over the hero, a horizon line the capsule folds out of */
+.top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:var(--snow);background:var(--moss);transition:color .35s,background .35s,transform .4s cubic-bezier(.2,.7,.2,1)}
+.top.scrolled,.top.open{background:transparent}
 .top.hide{transform:translateY(-120%)}
 .top .w{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px;max-width:1280px;margin:0 auto;padding-inline:var(--M);border-radius:0;background:rgba(255,255,255,0);
   transition:height .45s cubic-bezier(.2,.7,.2,1),max-width .55s cubic-bezier(.2,.7,.2,1),margin .45s cubic-bezier(.2,.7,.2,1),padding .45s cubic-bezier(.2,.7,.2,1),border-radius .45s cubic-bezier(.2,.7,.2,1),background .35s,box-shadow .45s}
