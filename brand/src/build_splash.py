@@ -57,6 +57,11 @@ def draw_paths(svg_text):
     return re.sub(r"<path ", one, svg_text)
 
 
+def ping_dot(svg_text):
+    """The dot on the i gets a ring behind it that pings like the hero period."""
+    return re.sub(r"<circle ([^>]*)/>", lambda m: '<circle class="ping" %s/><circle class="dot" %s/>' % (m.group(1), m.group(1)), svg_text, count=1)
+
+
 def mural_rows(h=720):
     """The hero mural is the logo's full cut at hero scale: sixteen lines, the two points kept, as row data for the draw-in."""
     w_box = h * maine2.ASPECT
@@ -303,7 +308,8 @@ body.scrub{transition:none}
 .site .w{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:end}
 .site .lk{height:110px;width:auto;display:block}
 .js .site .lk path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .8s cubic-bezier(.2,.7,.2,1)}.js .site.on .lk path{stroke-dashoffset:0}
-@media (prefers-reduced-motion: reduce){.js .site .lk path{stroke-dashoffset:0;transition:none}}
+.site .lk .ping{transform-box:fill-box;transform-origin:center;opacity:0}.site.on .lk .ping{animation:pulse 2.4s cubic-bezier(.2,.6,.3,1) infinite 1.4s}
+@media (prefers-reduced-motion: reduce){.js .site .lk path{stroke-dashoffset:0;transition:none}.site.on .lk .ping{animation:none}}
 .site p{margin:0;font-size:14px;color:rgba(255,255,255,.8);max-width:60ch}
 .site .fine{margin-top:12px;font-size:13px}
 @media (max-width:640px){.site .w{grid-template-columns:1fr}.site .lk{height:90px}}
@@ -472,7 +478,7 @@ def page():
 })();
 </script>
 """ % dict(
-        lock=logo("lockup-compact-reversed", "lk light"), lock_dark=logo("lockup-compact", "lk dark"), two=draw_paths(logo("lockup-two-line-reversed", "lk")),
+        lock=logo("lockup-compact-reversed", "lk light"), lock_dark=logo("lockup-compact", "lk dark"), two=ping_dot(draw_paths(logo("lockup-two-line-reversed", "lk"))),
         h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         ic_ig=icon("instagram"), ic_tt=icon("tiktok"), ic_yt=icon("youtube"), ic_ss=icon("substack"),
