@@ -56,15 +56,15 @@ def dot(text, cls=""):
 
 
 CSS = r"""
-/* Layout: one column. The page background changes color as sections enter. Big tight type low left. */
+/* Layout: one column. The page background changes color as sections enter, and every section pairs ink text with a light field. */
 :root{
   --sp:#104836;--pine:#0B2B21;--bi:#F4F0E6;--ink:#1E2621;--mg:#EFB443;--sage:#DDE5DA;--moss:#3D6F58;--stone:#5E6A63;--sand:#E8E1D1;--white:#FFFFFF;
   --bg:var(--bi);--fg:var(--ink);--muted:var(--stone);--rule:rgba(30,38,33,.14);--card:#FFFFFF;
   --display:'Bricolage Grotesque',Arial,sans-serif;--body:Inter,system-ui,Arial,sans-serif;
   --M:clamp(16px,4.5vw,64px);
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bi:#EFEAE0;--bg:#14211B;--fg:#EFEAE0;--muted:#AEBDB4;--rule:rgba(239,234,224,.16);--card:#1B2E26;--sage:#1F3A30;--sand:#1B2A23;--white:#1B2E26;color-scheme:dark}}
-:root[data-theme="dark"]{--bi:#EFEAE0;--bg:#14211B;--fg:#EFEAE0;--muted:#AEBDB4;--rule:rgba(239,234,224,.16);--card:#1B2E26;--sage:#1F3A30;--sand:#1B2A23;--white:#1B2E26;color-scheme:dark}
+/* One palette in every theme. The page commits to its own colors so text and background always pair. */
+:root{color-scheme:light}
 @font-face{font-family:'Bricolage Grotesque';font-weight:800;font-display:swap;src:url(data:font/woff2;base64,{{F800}}) format('woff2')}
 @font-face{font-family:Inter;font-weight:100 900;font-display:swap;src:url(data:font/woff2;base64,{{FINTER}}) format('woff2')}
 *{box-sizing:border-box}
