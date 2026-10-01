@@ -251,7 +251,7 @@ body.scrub{transition:none}
 .panel.on>*{transform:none;opacity:1}
 .panel.prev>*{transform:translateX(-28px)}
 .panel.on>:nth-child(3){transition-delay:.06s}.panel.on>:nth-child(4){transition-delay:.12s}.panel.on>:nth-child(5){transition-delay:.18s}.panel.on>:nth-child(6){transition-delay:.24s}
-.panel .k{margin-bottom:14px}
+.panel .k{margin-bottom:14px;position:relative}.panel .k .d{width:.5em;height:.5em;margin-left:.3em;vertical-align:baseline}
 .panel h2{font-size:clamp(38px,4.6vw,66px);max-width:10ch}
 .panel .bio{font-size:19px;line-height:1.5;margin:22px 0 26px;max-width:42ch;color:var(--fg)}
 .soc{display:flex;gap:22px;flex-wrap:wrap}.soc a{display:inline-flex;align-items:center;gap:8px;font:600 14px/1 var(--body);text-decoration:none;color:var(--fg)}.soc .ic{width:20px;height:20px;--icon-bg:#fff}.soc a:hover .ic{transform:translateY(-1px)}
@@ -333,9 +333,9 @@ def page():
         idx += '<button type="button" aria-label="Creator %d, %s"%s></button>' % (i + 1, town, ' class="on"' if i == 0 else "")
         socials = ''.join('<a href="#" aria-label="%s">%s<span>@handle</span></a>' % (n.capitalize(), icon(n)) for n in ("instagram", "tiktok", "youtube"))
         panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="metadata"></video>%s</div>'
-                   '<p class="k">%s, Maine</p><h2>%s</h2><p class="bio">[Two or three sentences in the creator\'s words: who they are, what they do, how long they have lived here.]</p>'
+                   '<p class="k">%s, Maine<i class="d pulse"></i></p><h2>%s</h2><p class="bio">[Two or three sentences in the creator\'s words: who they are, what they do, how long they have lived here.]</p>'
                    '<div class="soc">%s</div></article>') % (
-                       " on" if i == 0 else "", i + 1, i, i + 1, who, town, dot("[Creator name]"), socials)
+                       " on" if i == 0 else "", i + 1, i, i + 1, who, town, "[Creator name]", socials)
     body = r"""
 <header class="top" id="topbar"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s%(lock_dark)s</a>
 <nav aria-label="Page"><a href="#about" data-for="about">About</a><a href="#creators" data-for="creators">Creators</a><a href="#words" data-for="words">In their words</a><a href="#follow" data-for="follow">Follow</a></nav>
