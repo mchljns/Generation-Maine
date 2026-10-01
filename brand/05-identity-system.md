@@ -257,3 +257,9 @@ How Substack connects to the site. Substack is a hosted newsletter. The emails, 
 - Reading. Each post links out to Substack. Readers who subscribe there get the email. The site is the front door; Substack is the room.
 
 If the team would rather own the list, Buttondown or Beehiiv offer the same three pieces with an API for the form. Substack wins on cost (free until paid subscriptions) and on the network of readers it already has. [CONFIRM: platform choice]
+
+## The creators section
+
+The section is about the creators now, not the stories. The heading reads "The creators" and the line under it says what the reader needs: nine young Mainers in nine towns, each filming where they live. The creator comes first in every panel, with a one-line bio placeholder, then the story.
+
+The two-column layout no longer scrolls nine panels past a pinned clip. The whole block pins for nine steps of scroll. At each step the clip crossfades and the next creator's details arrive from the right, line by line, while the last one slips out to the left. Scrolling back reverses the direction. The index marks on the clip jump to a creator. Phones keep the stacked list with a clip per creator. Reduced motion swaps with a fade and no movement.

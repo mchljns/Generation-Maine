@@ -208,30 +208,37 @@ section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 .js .reveal.pre .cols div::before,.js .reveal.pre blockquote::before{transform:scaleX(0)}
 .about .cols div:nth-child(2)::before{transition-delay:.1s}.about .cols div:nth-child(3)::before{transition-delay:.2s}
 
-.stories-head .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
-.stories-head .head p{max-width:46ch;margin:0;color:var(--muted)}
+/* the creators: the head, then a pinned stage. Scrolling steps through the nine; each one's details arrive from the right. */
 .stories-head{padding-bottom:0}
-.stories{padding-top:0}
-.stories .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,72px);align-items:start}
-.stage{position:sticky;top:calc(60px + env(safe-area-inset-top,0px) + 28px);align-self:start;height:min(64vh,560px);display:flex;align-items:center}
+.stories-head .lede{color:var(--muted);max-width:46ch;margin:18px 0 0}
+.stories{padding:0;height:calc(9 * 80vh);min-height:calc(9 * 520px)}
+.stories .pinw{position:sticky;top:0;height:100vh;display:flex;align-items:center}
+.stories .w{width:100%;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,72px);align-items:center}
+.stage{height:min(64vh,560px);display:flex;align-items:center}
 .vid{position:relative;aspect-ratio:9/16;height:100%;max-height:620px;width:auto;max-width:100%;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
 .vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transform:scale(1.04);transition:opacity .6s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
 .vid video.on{opacity:1;transform:none}
 .vid .dur{position:absolute;right:12px;top:12px;font:600 11px/1 var(--body);letter-spacing:.06em;color:#FFFFFF;background:rgba(11,43,33,.55);padding:6px 8px;border-radius:4px;z-index:2}
 .vid .idx{position:absolute;left:12px;top:12px;display:flex;gap:4px;z-index:2}
-.vid .idx i{display:block;width:14px;height:2px;background:rgba(255,255,255,.45);border-radius:1px;transition:background .3s}.vid .idx i.on{background:#EFB443}
-.panels{display:grid;gap:0}
-.panel{min-height:min(64vh,560px);display:flex;flex-direction:column;justify-content:center;padding-block:40px;border-top:1.5px solid var(--rule)}
-.panel:first-child{border-top:0}
-.panel .k{margin-bottom:14px}
+.vid .idx i{display:block;width:14px;height:2px;background:rgba(255,255,255,.45);border-radius:1px;transition:background .3s;cursor:pointer;padding:0;border:0}.vid .idx i.on{background:#EFB443}
+.panels{position:relative;height:min(64vh,560px)}
+.panel{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;opacity:0;pointer-events:none;visibility:hidden;transition:visibility 0s .5s}
+.panel.on{opacity:1;pointer-events:auto;visibility:visible;transition:none}
+.panel>*{transition:transform .7s cubic-bezier(.2,.7,.2,1),opacity .5s;transform:translateX(44px);opacity:0}
+.panel.on>*{transform:none;opacity:1}
+.panel.prev>*{transform:translateX(-28px)}
+.panel.on>:nth-child(3){transition-delay:.06s}.panel.on>:nth-child(4){transition-delay:.12s}.panel.on>:nth-child(5){transition-delay:.18s}.panel.on>:nth-child(6){transition-delay:.24s}
+.panel .k{margin-bottom:14px}.panel .k span{font-weight:400;letter-spacing:.06em}
 .panel h2{font-size:clamp(38px,4.6vw,66px);max-width:10ch}
 .panel .say{font:600 clamp(20px,1.7vw,24px)/1.35 var(--body);margin:22px 0 18px;max-width:34ch;color:var(--fg)}
-.panel .nm{font:600 15px/1.3 var(--body);margin:0 0 22px}.panel .nm span{font-weight:400;color:var(--muted)}
-.panel .go{display:inline-flex;gap:10px;align-items:center;font:600 15px/1 var(--body);text-decoration:none;border-bottom:1.5px solid var(--fg);padding-bottom:6px}
+.panel .nm{font-size:17px;color:var(--muted);margin:0 0 22px;max-width:40ch}
+.panel .go{display:inline-flex;gap:10px;align-items:center;font:600 15px/1 var(--body);text-decoration:none;border-bottom:1.5px solid var(--fg);padding-bottom:6px;align-self:flex-start}
 .panel .pv{display:none}
+@media (prefers-reduced-motion: reduce){.panel>*,.panel.prev>*{transform:none;transition:opacity .3s}}
 @media (max-width:900px){
-  .stories .w{grid-template-columns:1fr}.stage{display:none}
-  .panel{min-height:0;padding-block:36px}.panel .pv{display:block;aspect-ratio:9/16;width:min(62vw,270px);border-radius:12px;overflow:hidden;background:var(--pine);margin-bottom:22px}
+  .stories{height:auto;min-height:0;padding-bottom:clamp(40px,6vw,80px)}.stories .pinw{position:static;height:auto;display:block}
+  .stories .w{grid-template-columns:1fr}.stage{display:none}.panels{height:auto}
+  .panel{position:static;opacity:1;visibility:visible;pointer-events:auto;padding-block:36px;border-top:1.5px solid var(--rule)}.panel:first-child{border-top:0}.panel>*{transform:none;opacity:1}.panel .pv{display:block;aspect-ratio:9/16;width:min(62vw,270px);border-radius:12px;overflow:hidden;background:var(--pine);margin-bottom:22px}
   .panel .pv video{width:100%;height:100%;object-fit:cover;display:block}
 }
 
@@ -303,15 +310,15 @@ def page():
         stagevids += '<video data-i="%d" data-dur="%s" src="media/creator-%d.webm" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (
             i, dur, i + 1, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
         idx += '<i%s></i>' % (' class="on"' if i == 0 else "")
-        panels += ('<article class="panel reveal" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="metadata"></video></div>'
-                   '<p class="k">Story %02d</p><h2>%s</h2><p class="say">"%s"</p><p class="nm">[Creator name] <span>%s, Maine</span></p>'
-                   '<a class="go" href="#">Watch the full video [CONFIRM: link]</a></article>') % (i + 1, i, i + 1, i + 1, dot(topic), cap, town)
+        panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="metadata"></video></div>'
+                   '<p class="k">[Creator name] <span>%s, Maine</span></p><h2>%s</h2><p class="say">"%s"</p><p class="nm">[One line about the creator: age, work, how long in town.]</p>'
+                   '<a class="go" href="#">Watch the full video [CONFIRM: link]</a></article>') % (" on" if i == 0 else "", i + 1, i, i + 1, town, dot(topic), cap)
     body = r"""
 <header class="top" id="topbar"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s%(lock_dark)s</a>
-<nav aria-label="Page"><a href="#about" data-for="about">About</a><a href="#creators" data-for="creators">Stories</a><a href="#words" data-for="words">In their words</a><a href="#follow" data-for="follow">Follow</a></nav>
+<nav aria-label="Page"><a href="#about" data-for="about">About</a><a href="#creators" data-for="creators">Creators</a><a href="#words" data-for="words">In their words</a><a href="#follow" data-for="follow">Follow</a></nav>
 <a class="cta" href="#news">Get the newsletter</a><button class="menu" id="menu" aria-expanded="false" aria-controls="sheet" aria-label="Menu"><i></i><i></i><i></i></button><span class="prog" id="prog" aria-hidden="true"></span></div></header>
 <div class="sheet" id="sheet" aria-hidden="true">
-<nav aria-label="Page"><a href="#about">About<i class="d"></i></a><a href="#creators">Stories<i class="d"></i></a><a href="#words">In their words<i class="d"></i></a><a href="#follow">Follow<i class="d"></i></a></nav>
+<nav aria-label="Page"><a href="#about">About<i class="d"></i></a><a href="#creators">Creators<i class="d"></i></a><a href="#words">In their words<i class="d"></i></a><a href="#follow">Follow<i class="d"></i></a></nav>
 <div class="foot"><a class="cta" href="#news">Get the newsletter</a></div></div>
 
 <section class="hero" id="top"><div class="w">
@@ -331,12 +338,12 @@ def page():
 </div></section>
 
 <section class="stories-head reveal" id="creators" data-bg="var(--sand)"><div class="w">
-  <div class="head"><h2 class="h2">%(h2cre)s</h2><p>One story from each creator, filmed where they live. Names and faces arrive after the shoot. The towns are real.</p></div>
+  <h2 class="h2">%(h2cre)s</h2><p class="lede">Nine young Mainers in nine towns. Each one films where they live and says it their own way. Names and faces arrive after the shoot.</p>
 </div></section>
-<section class="stories" data-bg="var(--sand)"><div class="w">
+<section class="stories" id="stories" data-bg="var(--sand)"><div class="pinw"><div class="w">
   <div class="stage"><div class="vid" id="stage">%(stagevids)s<span class="dur" id="dur">0:52</span><span class="idx" id="idx">%(idx)s</span></div></div>
-  <div class="panels">%(panels)s</div>
-</div></section>
+  <div class="panels" id="panels">%(panels)s</div>
+</div></div></section>
 <section class="words reveal" id="words"><div class="w">
   <h2 class="h2">%(h2words)s</h2>
   <div class="qs">
@@ -393,10 +400,13 @@ def page():
   const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video')] : [], marks = [...document.querySelectorAll('#idx i')], dur = document.getElementById('dur');
   const panelVids = [...document.querySelectorAll('.panel .pv video')];
   const wide = () => matchMedia('(min-width: 901px)').matches;
-  function show(i) { stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (on) { v.play().catch(() => {}); } else v.pause(); }); marks.forEach((m, k) => m.classList.toggle('on', k === i)); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur; }
-  const po = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && wide()) show(+e.target.dataset.i); }), { rootMargin: '-45%% 0px -45%% 0px', threshold: 0 });
-  document.querySelectorAll('.panel').forEach(p => po.observe(p));
-  if (!reduced && wide()) show(0);
+  const panels = [...document.querySelectorAll('.panel')], storiesEl = document.getElementById('stories'); let cur = -1;
+  function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i;
+    stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (on) { v.play().catch(() => {}); } else v.pause(); }); marks.forEach((m, k) => m.classList.toggle('on', k === i)); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur; }
+  // Scroll position steps through the creators while the stage is pinned.
+  const step = () => { if (!wide()) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
+  marks.forEach((m, k) => m.addEventListener('click', () => { const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
+  addEventListener('scroll', step, { passive: true }); addEventListener('resize', step); step(); if (cur < 0) show(0);
   if (reduced) { stageVids.forEach(v => { v.controls = true; }); panelVids.forEach(v => { v.controls = true; }); }
   else { const mo = new IntersectionObserver(es => es.forEach(e => { if (!wide()) { if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause(); } }), { threshold: .4 }); panelVids.forEach(v => mo.observe(v)); }
 
@@ -435,7 +445,7 @@ def page():
 </script>
 """ % dict(
         lock=logo("lockup-compact-reversed", "lk light"), lock_dark=logo("lockup-compact", "lk dark"), two=draw_paths(logo("lockup-two-line-reversed", "lk")),
-        h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The stories"),
+        h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         ic_ig=icon("instagram"), ic_tt=icon("tiktok"), ic_yt=icon("youtube"), ic_ss=icon("substack"),
         stagevids=stagevids, panels=panels, idx=idx, json=json.dumps(rows, separators=(",", ":")))
