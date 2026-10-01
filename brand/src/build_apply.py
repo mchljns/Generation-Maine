@@ -71,10 +71,10 @@ def mockups():
     # 5 avatar among other accounts, by size: full at 110, mid at 40, solid at 16
     others = [("#7A4E9E", "RJ"), ("#2F6FA3", "MB"), ("#B4532A", "TK")]
     big = '<span class="oav" style="background:%s">%s</span><span class="gav">%s</span><span class="oav" style="background:%s">%s</span>' % (others[0][0], others[0][1], logo("avatar-full"), others[1][0], others[1][1])
-    rows = '<li><span class="gav s">%s</span><b>Generation Maine</b><span class="fb">Follow</span></li>' % logo("avatar-mid")
+    rows = '<li><span class="gav s">%s</span><b>Generation Maine</b><span class="fb">Follow</span></li>' % logo("avatar-solid")
     rows += "".join('<li><span class="oav s" style="background:%s">%s</span><b>Account name</b><span class="fb">Follow</span></li>' % (c, t) for c, t in others)
     tab = '<div class="tabbar"><span class="tab on"><i>%s</i>Generation Maine</span><span class="tab"><i class="g"></i>Other site</span></div>' % logo("favicon")
-    avs = '<div class="avs"><p class="k">Profile size, 110 px: full cut</p><div class="row3">%s</div><p class="k">List size, 40 px: mid cut</p><ul class="sugg">%s</ul><p class="k">Browser tab, 16 px: solid</p>%s</div>' % (big, rows, tab)
+    avs = '<div class="avs"><p class="k">Profile size, 110 px: full cut</p><div class="row3">%s</div><p class="k">List size, 40 px: solid, since the state inside is 27 px</p><ul class="sugg">%s</ul><p class="k">Browser tab, 16 px: solid</p>%s</div>' % (big, rows, tab)
     out.append(a("l-avatar", "light", avs, "5 · Avatar among other accounts, one cut per size", 480, 640))
     # 6 Substack header and email: the lockup on a Spruce masthead, the disclosure under it
     sub = ('<div class="subst s"><div class="ssh">%s</div><p class="sdisc">%s</p><div class="sb"><h3>[Post title in plain words]</h3>%s'
