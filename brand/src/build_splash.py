@@ -60,24 +60,24 @@ CSS = r"""
 :root{
   --sp:#104836;--pine:#0B2B21;--bi:#F4F0E6;--ink:#1E2621;--mg:#EFB443;--sage:#DDE5DA;--moss:#3D6F58;--stone:#5E6A63;--sand:#E8E1D1;--white:#FFFFFF;
   --bg:var(--bi);--fg:var(--ink);--muted:#4F5B55;--rule:rgba(30,38,33,.14);--card:#FFFFFF;
-  --display:'Bricolage Grotesque',Arial,sans-serif;--body:Commissioner,Inter,system-ui,Arial,sans-serif;
+  --display:'Bricolage Grotesque',Arial,sans-serif;--body:Labrada,Georgia,'Times New Roman',serif;
   --M:clamp(16px,4.5vw,64px);
 }
 /* One palette in every theme. The page commits to its own colors so text and background always pair. */
 :root{color-scheme:light}
 @font-face{font-family:'Bricolage Grotesque';font-weight:800;font-display:swap;src:url(data:font/woff2;base64,{{F800}}) format('woff2')}
-@font-face{font-family:Commissioner;font-weight:100 900;font-display:swap;src:url(data:font/ttf;base64,{{FCOMM}}) format('truetype')}
+@font-face{font-family:Labrada;font-weight:100 900;font-display:swap;src:url(data:font/ttf;base64,{{FLAB}}) format('truetype')}
 @font-face{font-family:Inter;font-weight:100 900;font-display:swap;src:url(data:font/woff2;base64,{{FINTER}}) format('woff2')}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 var(--body);-webkit-font-smoothing:antialiased;transition:background .7s ease}
+body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.55 var(--body);-webkit-font-smoothing:antialiased;transition:background .7s ease}
 a{color:inherit}
 .w{max-width:1280px;margin:0 auto;padding-inline:var(--M)}
 h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:.92;margin:0;text-wrap:balance}
 .d{display:inline-block;width:.2em;height:.2em;border-radius:50%;background:var(--mg);margin-left:.05em;vertical-align:baseline}
 .nw{white-space:nowrap;font-weight:inherit}
-.k{font:600 12px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+.k{font:600 12px/1.2 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0}
 .btn{display:inline-block;font:600 15px/1 var(--body);padding:16px 22px;border-radius:6px;text-decoration:none;border:1.5px solid transparent;transition:transform .25s cubic-bezier(.2,.7,.2,1),background .25s}
 .btn:hover{transform:translateY(-2px)}
 .btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--mg);outline-offset:3px}
@@ -137,7 +137,7 @@ html.capsule .top.solid .prog{display:block}
 .hero{position:relative;background:var(--sp);color:#F4F0E6;overflow:hidden}
 .hero .w{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:32px;padding-block:80px 88px;min-height:620px;align-items:end}
 .hero h1{font-size:clamp(46px,8.2vw,112px);max-width:11ch}
-.hero .lede{font-size:clamp(17px,1.5vw,21px);line-height:1.45;max-width:40ch;margin:28px 0 30px;color:rgba(244,240,230,.9)}
+.hero .lede{font-size:clamp(18px,1.55vw,22px);line-height:1.5;max-width:40ch;margin:28px 0 30px;color:rgba(244,240,230,.9)}
 .hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
 .mural{position:relative;justify-self:end;width:min(100%,480px);aspect-ratio:1;max-width:100%}
 .mural svg{width:100%;height:100%;display:block}
@@ -161,7 +161,7 @@ section{padding-block:clamp(56px,8vw,112px)}
 .about .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px}
 .about .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;align-self:end}
 .about .cols h3{font:600 15px/1.3 var(--body);letter-spacing:0;margin:0 0 8px;color:var(--fg)}
-.about .cols p{margin:0;color:var(--muted);line-height:1.5}
+.about .cols p{margin:0;color:var(--muted);line-height:1.55}
 .about .cols div{padding-top:16px;position:relative}.about .cols div::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:var(--fg)}
 @media (max-width:900px){.about .w,.news .w{grid-template-columns:1fr}.about .cols{grid-template-columns:1fr}}
 
@@ -423,7 +423,7 @@ def page():
         h1=dot("Young Mainers on building a life here"), h2about=dot("Made by the people it is about"), h2cre=dot("The stories"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         stagevids=stagevids, panels=panels, idx=idx, json=json.dumps(rows, separators=(",", ":")))
-    css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2")).replace("{{FCOMM}}", K.font64("generation-maine/assets/fonts/commissioner-flair.ttf"))
+    css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2")).replace("{{FLAB}}", K.font64("generation-maine/assets/fonts/labrada-var.ttf"))
     head = '<title>Generation Maine</title>\n<meta name="description" content="Young Mainers film the rules that shape their lives. Short videos and a newsletter, made in Maine.">\n<style>%s</style>' % css
     artifact = head + body
     standalone = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">%s</head><body>%s</body></html>' % (head, body)
