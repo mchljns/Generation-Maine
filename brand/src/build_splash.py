@@ -205,7 +205,7 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 .h2{font-size:clamp(34px,4.6vw,60px)}
 /* about starts on the green with white text. The page scrubs from green to white across the whole first scroll, from the top of the
-   page until about reaches the top of the screen, driven by scroll position so it tracks the hand and reverses the same way.
+   page until about has risen into the upper part of the screen (its top at 60% of the height), driven by scroll position so it tracks the hand and reverses the same way.
    The type does not crossfade through grey: it switches to ink in one quick step once the field is light enough. */
 .about{color:#FFFFFF;transition:color .15s}.about.lit{color:var(--ink)}
 body.scrub{transition:none}
@@ -421,7 +421,7 @@ def page():
   let bgNow = '';
   const canMix = CSS.supports('color', 'color-mix(in oklab, red, blue)');
   function paint() {
-    const top = aboutEl.getBoundingClientRect().top, start = top + scrollY, t = Math.min(1, Math.max(0, (start - top) / (start - 64)));
+    const top = aboutEl.getBoundingClientRect().top, start = top + scrollY, end = innerHeight * .6, t = Math.min(1, Math.max(0, (start - top) / (start - end)));
     aboutEl.classList.toggle('lit', t >= .4);
     let c; if (t <= 0) c = 'var(--sp)'; else if (t < 1) c = canMix ? 'color-mix(in oklab, var(--sp), var(--bi) ' + (t * 100).toFixed(1) + '%%)' : (t < .4 ? 'var(--sp)' : 'var(--bi)'); else { c = 'var(--bi)'; const mid = innerHeight / 2; for (const el of bgs) { if (el.getBoundingClientRect().top <= mid) c = el.dataset.bg; } }
     document.body.classList.toggle('scrub', t > 0 && aboutEl.getBoundingClientRect().bottom > 0);
