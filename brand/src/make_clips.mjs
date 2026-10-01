@@ -1,5 +1,5 @@
 // Placeholder creator clips, recorded from an HTML animation in the brand's language: a field of lines,
-// the spoken line arriving as captions, the lower third with name and town. 9:16, six seconds, loops cleanly.
+// the spoken line arriving as captions, the brand bug in the corner. The creator's avatar and handle sit on top of the clip in the page, so the clip carries no name. 9:16, six seconds, loops cleanly.
 import { chromium } from '/home/user/Generation-Maine/node_modules/playwright/index.mjs';
 import fs from 'node:fs'; import path from 'node:path';
 const ROOT = '/home/user/Generation-Maine';
@@ -22,9 +22,8 @@ function html(c) {
   .lt b{display:block;font:600 15px/1.3 Inter}.lt small{display:block;font:400 14px/1.3 Inter;opacity:.8}
   .d{display:inline-block;width:.2em;height:.2em;border-radius:50%;background:#EFB443;margin-left:.08em;vertical-align:baseline}
   </style><canvas id=c width=1080 height=1920 style="width:540px;height:960px"></canvas>
-  <p class=tag>Placeholder clip</p>
   <p class=cap id=cap>${words.map(w => `<span>${w}</span>`).join('')}</p>
-  <div class=lt><div><b>[Creator name]</b><small>${c.town}, Maine</small></div>${bug}</div>
+  <div class=lt><div></div>${bug}</div>
   <script>
   const cv=document.getElementById('c'),ctx=cv.getContext('2d');ctx.scale(2,2);
   const L=[];for(let i=0;i<9;i++){const t=i/8;L.push({y:640+t*230,w:1.4+2.2*t,ph:i*1.3});}

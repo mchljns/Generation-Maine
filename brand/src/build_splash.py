@@ -31,6 +31,11 @@ ICONS = {
 }
 
 
+def avatar():
+    return ('<svg class="av" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="20" fill="rgba(255,255,255,.22)"/>'
+            '<circle cx="20" cy="15.5" r="6.5" fill="#FFFFFF"/><path d="M8.5 34a11.5 11.5 0 0 1 23 0" fill="#FFFFFF"/></svg>')
+
+
 def icon(name):
     return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">%s</svg>' % ICONS[name]
 
@@ -199,12 +204,13 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 /* sections sit on the page background, which the script changes as each one enters */
 section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 .h2{font-size:clamp(34px,4.6vw,60px)}
-.about{background:var(--sp);color:#FFFFFF}
+/* about starts on the green with white text. When it reaches the top of the screen the page fades to white and the text to ink. */
+.about{color:#FFFFFF;transition:color .7s}.about.lit{color:var(--ink)}
 .about .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px}
 .about .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;align-self:end}
-.about .cols h3{font:600 15px/1.3 var(--body);letter-spacing:0;margin:0 0 8px;color:#FFFFFF}
-.about .cols p{margin:0;color:rgba(255,255,255,.82);line-height:1.55}
-.about .cols div{padding-top:16px;position:relative}.about .cols div::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:#FFFFFF;transform-origin:left;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.about .cols h3{font:600 15px/1.3 var(--body);letter-spacing:0;margin:0 0 8px;color:inherit}
+.about .cols p{margin:0;color:rgba(255,255,255,.82);line-height:1.55;transition:color .7s}.about.lit .cols p{color:var(--muted)}
+.about .cols div{padding-top:16px;position:relative}.about .cols div::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:#FFFFFF;transform-origin:left;transition:transform .9s cubic-bezier(.2,.7,.2,1),background .7s}.about.lit .cols div::before{background:var(--fg)}
 .js .reveal.pre .cols div::before,.js .reveal.pre blockquote::before{transform:scaleX(0)}
 .about .cols div:nth-child(2)::before{transition-delay:.1s}.about .cols div:nth-child(3)::before{transition-delay:.2s}
 
@@ -218,6 +224,10 @@ section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 .vid{position:relative;aspect-ratio:9/16;height:100%;max-height:620px;width:auto;max-width:100%;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
 .vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transform:scale(1.04);transition:opacity .6s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
 .vid video.on{opacity:1;transform:none}
+/* the social header on the clip: the creator's avatar and handle, as they appear on their own feed. Uploaded with the post in WordPress. */
+.who{position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:10px;z-index:2;color:#FFFFFF;opacity:0;transition:opacity .5s}.who.on{opacity:1}
+.who .av{width:36px;height:36px;display:block;border-radius:50%}
+.who span{display:flex;flex-direction:column;gap:3px;font:400 12px/1 var(--body);text-shadow:0 1px 2px rgba(11,43,33,.4)}.who span b{font-weight:600;font-size:13px}
 .vid .dur{position:absolute;right:12px;top:12px;font:600 11px/1 var(--body);letter-spacing:.06em;color:#FFFFFF;background:rgba(11,43,33,.55);padding:6px 8px;border-radius:4px;z-index:2}
 /* where you are among the nine: a counter, nine lines, and the town that arrives next */
 .where{grid-column:1 / -1;display:flex;align-items:center;gap:20px;margin-top:8px;font:600 12px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
@@ -237,18 +247,18 @@ section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 .panel.on>*{transform:none;opacity:1}
 .panel.prev>*{transform:translateX(-28px)}
 .panel.on>:nth-child(3){transition-delay:.06s}.panel.on>:nth-child(4){transition-delay:.12s}.panel.on>:nth-child(5){transition-delay:.18s}.panel.on>:nth-child(6){transition-delay:.24s}
-.panel .k{margin-bottom:14px}.panel .k span{font-weight:400;letter-spacing:.06em}
+.panel .k{margin-bottom:14px}
 .panel h2{font-size:clamp(38px,4.6vw,66px);max-width:10ch}
-.panel .say{font:600 clamp(20px,1.7vw,24px)/1.35 var(--body);margin:22px 0 18px;max-width:34ch;color:var(--fg)}
-.panel .nm{font-size:17px;color:var(--muted);margin:0 0 22px;max-width:40ch}
-.panel .go{display:inline-flex;gap:10px;align-items:center;font:600 15px/1 var(--body);text-decoration:none;border-bottom:1.5px solid var(--fg);padding-bottom:6px;align-self:flex-start}
+.panel .bio{font-size:19px;line-height:1.5;margin:22px 0 18px;max-width:42ch;color:var(--fg)}
+.panel .latest{font:600 15px/1.4 var(--body);margin:0 0 26px;color:var(--fg)}.panel .latest a{text-decoration:none;border-bottom:1.5px solid var(--fg)}.panel .latest span{font-weight:400;color:var(--muted);margin-left:6px}
+.soc{display:flex;gap:22px;flex-wrap:wrap}.soc a{display:inline-flex;align-items:center;gap:8px;font:600 14px/1 var(--body);text-decoration:none;color:var(--fg)}.soc .ic{width:20px;height:20px;--icon-bg:#fff}.soc a:hover .ic{transform:translateY(-1px)}
 .panel .pv{display:none}
 @media (prefers-reduced-motion: reduce){.panel>*,.panel.prev>*{transform:none;transition:opacity .3s}}
 @media (max-width:900px){
   .stories{height:auto;min-height:0;padding-bottom:clamp(40px,6vw,80px)}.stories .pinw{position:static;height:auto;display:block}
   .stories .w{grid-template-columns:1fr}.stage{display:none}.panels{height:auto}.where{display:none}
   .panel{position:static;opacity:1;visibility:visible;pointer-events:auto;padding-block:36px;border-top:1.5px solid var(--rule)}.panel:first-child{border-top:0}.panel>*{transform:none;opacity:1}.panel .pv{display:block;aspect-ratio:9/16;width:min(62vw,270px);border-radius:12px;overflow:hidden;background:var(--pine);margin-bottom:22px}
-  .panel .pv video{width:100%;height:100%;object-fit:cover;display:block}
+  .panel .pv{position:relative}.panel .pv video{width:100%;height:100%;object-fit:cover;display:block}.panel .pv .who{opacity:1}
 }
 
 
@@ -311,14 +321,18 @@ CARDS = [
 
 def page():
     rows = mural_rows()
-    stagevids, panels, idx = "", "", ""
+    stagevids, panels, idx, whos = "", "", "", ""
     for i, (tone, town, topic, cap, dur) in enumerate(CARDS):
         stagevids += '<video data-i="%d" data-dur="%s" src="media/creator-%d.webm" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (
             i, dur, i + 1, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
+        who = '<div class="who%s">%s<span><b>@handle</b>[Creator name]</span></div>' % (' on' if i == 0 else '', avatar())
+        whos += who
         idx += '<button type="button" aria-label="Creator %d, %s"%s></button>' % (i + 1, town, ' class="on"' if i == 0 else "")
-        panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="metadata"></video></div>'
-                   '<p class="k">[Creator name] <span>%s, Maine</span></p><h2>%s</h2><p class="say">"%s"</p><p class="nm">[One line about the creator: age, work, how long in town.]</p>'
-                   '<a class="go" href="#">Watch the full video [CONFIRM: link]</a></article>') % (" on" if i == 0 else "", i + 1, i, i + 1, town, dot(topic), cap)
+        socials = ''.join('<a href="#" aria-label="%s">%s<span>@handle</span></a>' % (n.capitalize(), icon(n)) for n in ("instagram", "tiktok", "youtube"))
+        panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="metadata"></video>%s</div>'
+                   '<p class="k">%s, Maine</p><h2>%s</h2><p class="bio">[Two or three sentences in the creator\'s words: who they are, what they do, how long they have lived here.]</p>'
+                   '<p class="latest">Latest story: <a href="#">%s</a> <span>%s</span></p><div class="soc">%s</div></article>') % (
+                       " on" if i == 0 else "", i + 1, i, i + 1, who, town, dot("[Creator name]"), topic, dur, socials)
     body = r"""
 <header class="top" id="topbar"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s%(lock_dark)s</a>
 <nav aria-label="Page"><a href="#about" data-for="about">About</a><a href="#creators" data-for="creators">Creators</a><a href="#words" data-for="words">In their words</a><a href="#follow" data-for="follow">Follow</a></nav>
@@ -347,7 +361,7 @@ def page():
   <h2 class="h2">%(h2cre)s</h2><p class="lede">Nine young Mainers in nine towns. Each one films where they live and says it their own way. Names and faces arrive after the shoot.</p>
 </div></section>
 <section class="stories" id="stories" data-bg="var(--bi)"><div class="pinw"><div class="w">
-  <div class="stage"><div class="vid" id="stage">%(stagevids)s<span class="dur" id="dur">0:52</span></div></div>
+  <div class="stage"><div class="vid" id="stage">%(stagevids)s%(whos)s<span class="dur" id="dur">0:52</span></div></div>
   <div class="panels" id="panels">%(panels)s</div>
   <div class="where" id="where"><span class="n" id="wn">01 / 09</span><span class="segs" id="segs">%(segs)s</span><span class="next" id="wnext"></span></div>
 </div></div></section>
@@ -400,19 +414,19 @@ def page():
 
   // The page background changes as each section passes the middle of the screen.
   // The page color is a function of scroll position, worked out every frame: green under the hero and about,
-  // white once about reaches the middle of the screen (about paints its own green), then whatever the section at the middle asks for.
+  // white once about reaches the top of the screen, with about's own text turning to ink, then whatever the section at the middle asks for.
   const aboutEl = document.getElementById('about'), bgs = [...document.querySelectorAll('[data-bg]')];
   let bgNow = '';
-  function paint() { let c = 'var(--bi)'; if (aboutEl.getBoundingClientRect().top > innerHeight * .5) c = 'var(--sp)'; else { const mid = innerHeight / 2; for (const el of bgs) { if (el.getBoundingClientRect().top <= mid) c = el.dataset.bg; } } if (c !== bgNow) { bgNow = c; document.body.style.background = c; } }
+  function paint() { let c = 'var(--bi)'; const lit = aboutEl.getBoundingClientRect().top <= 64; aboutEl.classList.toggle('lit', lit); if (!lit) c = 'var(--sp)'; else { const mid = innerHeight / 2; for (const el of bgs) { if (el.getBoundingClientRect().top <= mid) c = el.dataset.bg; } } if (c !== bgNow) { bgNow = c; document.body.style.background = c; } }
   paint();
 
   // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Phones get a clip per panel.
-  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
+  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
   const panelVids = [...document.querySelectorAll('.panel .pv video')];
   const wide = () => matchMedia('(min-width: 901px)').matches;
   const panels = [...document.querySelectorAll('.panel')], storiesEl = document.getElementById('stories'); let cur = -1;
   function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i;
-    stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (on) { v.play().catch(() => {}); } else v.pause(); }); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur;
+    stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (on) { v.play().catch(() => {}); } else v.pause(); }); whos.forEach((w, k) => w.classList.toggle('on', k === i)); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur;
     wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.getAttribute('aria-label').split(', ')[1] : 'Last one'; }
   // Scroll position steps through the creators while the stage is pinned.
   const step = () => { if (!wide()) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
@@ -452,7 +466,7 @@ def page():
         h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         ic_ig=icon("instagram"), ic_tt=icon("tiktok"), ic_yt=icon("youtube"), ic_ss=icon("substack"),
-        stagevids=stagevids, panels=panels, segs=idx, json=json.dumps(rows, separators=(",", ":")))
+        stagevids=stagevids, whos=whos, panels=panels, segs=idx, json=json.dumps(rows, separators=(",", ":")))
     css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))
     head = '<title>Generation Maine</title>\n<meta name="description" content="Young Mainers film the rules that shape their lives. Short videos and a newsletter, made in Maine.">\n<style>%s</style>' % css
     artifact = head + body

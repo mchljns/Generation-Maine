@@ -277,3 +277,13 @@ The hero period's pulse ring now draws behind the letters, so the ring breathes 
 Fix: the creators could land on green. The page color was set by two things at once, a scroll rule for the green block and an observer for the sections after it, and during a smooth scroll the observer could fire first and get overwritten. The color is now one calculation on every scroll frame: green while about's top is below the top of the screen, otherwise the color of the last section whose top has passed the middle of the screen, white by default. Checked by slow scroll, fast scroll and the nav jump at four viewport sizes.
 
 Second fix: the page now turns white once the about section reaches the middle of the screen, not its top. About paints its own green, so the earlier switch costs nothing and the creators heading is on white as soon as it appears under the green block.
+
+## Each creator, as a profile
+
+The creator panel is a profile now. The eyebrow is the town. The headline is the creator's name, or their handle if that is how people know them. Under it, two or three sentences in their own words, then the latest story with its length, then their Instagram, TikTok and YouTube handles with the hand-drawn marks.
+
+The clip carries a social header: the creator's avatar in a circle, their handle in bold and their name under it, the way a post looks on their own feed. The header belongs to the page, not the clip, so the same clip works anywhere and the clips themselves carry only the caption and the brand bug.
+
+What this asks of WordPress. A Creator post type with these fields: display name, handle, town, bio (two or three sentences), avatar (the featured image, square, shown in a circle), one clip (a video upload or a link), the latest story (title, link and length), and three social URLs. The theme draws the header from the avatar and handle. The creator fills this in once and the page updates itself.
+
+The about section is where the page turns white. It starts on the green with white text. When it reaches the top of the screen the page fades to white and the text to ink together, over about seven tenths of a second, and the creators arrive already on white.
