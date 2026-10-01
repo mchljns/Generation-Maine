@@ -38,8 +38,8 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 
 /* nav: a transparent bar over the top of the hero. On the first scroll it folds into a floating frosted capsule with a reading line.
    The active section carries the dot. It hides on the way down past the hero and comes back on the way up. */
-/* at rest the bar is a Moss band over the hero, a horizon line the capsule folds out of */
-.top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:var(--snow);background:var(--moss);transition:color .35s,background .35s,transform .4s cubic-bezier(.2,.7,.2,1)}
+/* at rest the bar is a Pine band over the hero, a shadow line the capsule folds out of. Darker than the hero, so the white reads white. */
+.top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:var(--snow);background:var(--pine);transition:color .35s,background .35s,transform .4s cubic-bezier(.2,.7,.2,1)}
 .top.scrolled,.top.open{background:transparent}
 .top.hide{transform:translateY(-120%)}
 .top .w{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px;max-width:1280px;margin:0 auto;padding-inline:var(--M);border-radius:0;background:rgba(255,255,255,0);

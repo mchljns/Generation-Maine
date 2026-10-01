@@ -335,3 +335,5 @@ No blended type over green. The nav links sat at 88 percent, the hero lede at 92
 Snow adjusted to #F9F8F6. The first Snow, #F7F8F6, had green as its highest channel, and small type takes on the hue of its surround, so on the Moss band and the Spruce hero it read as pale green. The new value is neutral with a hair of warmth and reads white on every green. Every logo file, the surfaces, the motion prototype and the splash page carry it.
 
 Snow is pure white, #FFFFFF. Two near-whites were tried on the greens and both read as pale green to the client's eye, so the reversed mark and all type on Spruce, Moss and Pine are white. The token name stays so the files need no renaming.
+
+The nav band is Pine, not Moss. White on the mid-green Moss took on a cast by contrast and read as pale green even at 255,255,255. On Pine, the darkest green, white reads white, the band sits as a shadow line over the hero rather than a stripe, and the page opens on the footer's color. Ink was crisper still but read as browser chrome; Sage capped the hero.
