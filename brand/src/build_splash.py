@@ -204,13 +204,16 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 /* sections sit on the page background, which the script changes as each one enters */
 section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 .h2{font-size:clamp(34px,4.6vw,60px)}
-/* about starts on the green with white text. When it reaches the top of the screen the page fades to white and the text to ink. */
-.about{color:#FFFFFF;transition:color .7s}.about.lit{color:var(--ink)}
+/* about starts on the green with white text. As it rises through the upper half of the screen the page scrubs from green to white,
+   driven by scroll position so it tracks the hand and reverses the same way, and is white by the time about reaches the top.
+   The type does not crossfade through grey: it switches to ink in one quick step once the field is light enough. */
+.about{color:#FFFFFF;transition:color .15s}.about.lit{color:var(--ink)}
+body.scrub{transition:none}
 .about .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px}
 .about .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;align-self:end}
 .about .cols h3{font:600 15px/1.3 var(--body);letter-spacing:0;margin:0 0 8px;color:inherit}
-.about .cols p{margin:0;color:rgba(255,255,255,.82);line-height:1.55;transition:color .7s}.about.lit .cols p{color:var(--muted)}
-.about .cols div{padding-top:16px;position:relative}.about .cols div::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:#FFFFFF;transform-origin:left;transition:transform .9s cubic-bezier(.2,.7,.2,1),background .7s}.about.lit .cols div::before{background:var(--fg)}
+.about .cols p{margin:0;color:rgba(255,255,255,.82);line-height:1.55;transition:color .15s}.about.lit .cols p{color:var(--muted)}
+.about .cols div{padding-top:16px;position:relative}.about .cols div::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:#FFFFFF;transform-origin:left;transition:transform .9s cubic-bezier(.2,.7,.2,1),background .15s}.about.lit .cols div::before{background:var(--fg)}
 .js .reveal.pre .cols div::before,.js .reveal.pre blockquote::before{transform:scaleX(0)}
 .about .cols div:nth-child(2)::before{transition-delay:.1s}.about .cols div:nth-child(3)::before{transition-delay:.2s}
 
@@ -249,8 +252,7 @@ section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 .panel.on>:nth-child(3){transition-delay:.06s}.panel.on>:nth-child(4){transition-delay:.12s}.panel.on>:nth-child(5){transition-delay:.18s}.panel.on>:nth-child(6){transition-delay:.24s}
 .panel .k{margin-bottom:14px}
 .panel h2{font-size:clamp(38px,4.6vw,66px);max-width:10ch}
-.panel .bio{font-size:19px;line-height:1.5;margin:22px 0 18px;max-width:42ch;color:var(--fg)}
-.panel .latest{font:600 15px/1.4 var(--body);margin:0 0 26px;color:var(--fg)}.panel .latest a{text-decoration:none;border-bottom:1.5px solid var(--fg)}.panel .latest span{font-weight:400;color:var(--muted);margin-left:6px}
+.panel .bio{font-size:19px;line-height:1.5;margin:22px 0 26px;max-width:42ch;color:var(--fg)}
 .soc{display:flex;gap:22px;flex-wrap:wrap}.soc a{display:inline-flex;align-items:center;gap:8px;font:600 14px/1 var(--body);text-decoration:none;color:var(--fg)}.soc .ic{width:20px;height:20px;--icon-bg:#fff}.soc a:hover .ic{transform:translateY(-1px)}
 .panel .pv{display:none}
 @media (prefers-reduced-motion: reduce){.panel>*,.panel.prev>*{transform:none;transition:opacity .3s}}
@@ -331,8 +333,8 @@ def page():
         socials = ''.join('<a href="#" aria-label="%s">%s<span>@handle</span></a>' % (n.capitalize(), icon(n)) for n in ("instagram", "tiktok", "youtube"))
         panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="metadata"></video>%s</div>'
                    '<p class="k">%s, Maine</p><h2>%s</h2><p class="bio">[Two or three sentences in the creator\'s words: who they are, what they do, how long they have lived here.]</p>'
-                   '<p class="latest">Latest story: <a href="#">%s</a> <span>%s</span></p><div class="soc">%s</div></article>') % (
-                       " on" if i == 0 else "", i + 1, i, i + 1, who, town, dot("[Creator name]"), topic, dur, socials)
+                   '<div class="soc">%s</div></article>') % (
+                       " on" if i == 0 else "", i + 1, i, i + 1, who, town, dot("[Creator name]"), socials)
     body = r"""
 <header class="top" id="topbar"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s%(lock_dark)s</a>
 <nav aria-label="Page"><a href="#about" data-for="about">About</a><a href="#creators" data-for="creators">Creators</a><a href="#words" data-for="words">In their words</a><a href="#follow" data-for="follow">Follow</a></nav>
@@ -417,7 +419,14 @@ def page():
   // white once about reaches the top of the screen, with about's own text turning to ink, then whatever the section at the middle asks for.
   const aboutEl = document.getElementById('about'), bgs = [...document.querySelectorAll('[data-bg]')];
   let bgNow = '';
-  function paint() { let c = 'var(--bi)'; const lit = aboutEl.getBoundingClientRect().top <= 64; aboutEl.classList.toggle('lit', lit); if (!lit) c = 'var(--sp)'; else { const mid = innerHeight / 2; for (const el of bgs) { if (el.getBoundingClientRect().top <= mid) c = el.dataset.bg; } } if (c !== bgNow) { bgNow = c; document.body.style.background = c; } }
+  const canMix = CSS.supports('color', 'color-mix(in oklab, red, blue)');
+  function paint() {
+    const top = aboutEl.getBoundingClientRect().top, start = innerHeight * .55, t = Math.min(1, Math.max(0, (start - top) / (start - 64)));
+    aboutEl.classList.toggle('lit', t >= .4);
+    let c; if (t <= 0) c = 'var(--sp)'; else if (t < 1) c = canMix ? 'color-mix(in oklab, var(--sp), var(--bi) ' + (t * 100).toFixed(1) + '%%)' : (t < .4 ? 'var(--sp)' : 'var(--bi)'); else { c = 'var(--bi)'; const mid = innerHeight / 2; for (const el of bgs) { if (el.getBoundingClientRect().top <= mid) c = el.dataset.bg; } }
+    document.body.classList.toggle('scrub', t > 0 && aboutEl.getBoundingClientRect().bottom > 0);
+    if (c !== bgNow) { bgNow = c; document.body.style.background = c; }
+  }
   paint();
 
   // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Phones get a clip per panel.
