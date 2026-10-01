@@ -10,7 +10,7 @@ for (const [name, w, h] of [['desktop', 1440, 900], ['phone', 390, 844]]) {
   await p.screenshot({ path: `${outPrefix}-${name}-hero.png` });
   const H = await p.evaluate(() => document.body.scrollHeight);
   for (let y = 0; y < H; y += h * 0.7) { await p.evaluate(yy => scrollTo(0, yy), y); await p.waitForTimeout(350); }
-  await p.evaluate(() => scrollTo(0, 0)); await p.addStyleTag({ content: '.top{position:static}' }); await p.waitForTimeout(400);
+  await p.evaluate(() => scrollTo(0, 0)); await p.addStyleTag({ content: '.top{position:static}' }); await p.waitForTimeout(900);
   await p.screenshot({ path: `${outPrefix}-${name}.png`, fullPage: true });
   const overflow = await p.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
   console.log(name, 'height', H, 'overflow', overflow, 'errors', errors);
