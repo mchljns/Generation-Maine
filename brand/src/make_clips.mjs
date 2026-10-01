@@ -6,7 +6,7 @@ const ROOT = '/home/user/Generation-Maine';
 const CARDS = JSON.parse(process.argv[2]);
 const font = fs.readFileSync(path.join(ROOT, 'generation-maine/assets/fonts/inter-var.woff2')).toString('base64');
 const bug = fs.readFileSync(path.join(ROOT, 'brand/identity/logo-maine/signature/bug.svg'), 'utf8').replace('role="img"', '').replace('<svg ', '<svg style="height:18px;width:auto;display:block" ');
-const TONES = { t1: ['#3D6F58', '#F4F0E6'], t2: ['#7E6F5E', '#F4F0E6'], t3: ['#104836', '#F4F0E6'], t4: ['#8A7F6A', '#1E2621'], t5: ['#0B2B21', '#F4F0E6'], t6: ['#5E6A63', '#F4F0E6'] };
+const TONES = { t1: ['#3D6F58', '#F4F0E6'], t2: ['#5F4F44', '#F4F0E6'], t3: ['#104836', '#F4F0E6'], t4: ['#6B5A4E', '#F4F0E6'], t5: ['#0B2B21', '#F4F0E6'], t6: ['#5E6A63', '#F4F0E6'] };
 function html(c) {
   const [bg, fg] = TONES[c.tone];
   const words = c.cap.split(' ');
