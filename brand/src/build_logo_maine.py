@@ -47,20 +47,26 @@ def maine_lines(x, y, h, fg, mark, cut="full", gold=True):
         return '<path fill="%s" d="%s"/>' % (fg, maine2.path(ring)), maxx - minx
     if cut == "mid":
         ring = simplified(ring, h * 0.006)
-    # Sixteen lines for Maine's sixteen counties. The first row sits on the crest at Fort Kent, and the
-    # northern border is kept as one line, so the top of the state is never cut off or broken into dashes.
-    # Every lined version has sixteen lines. The mid cut is the same drawing with heavier lines on the simplified coast.
-    n, w_lo, w_hi, keep, top, span = (16, h * 0.026, h * 0.044, 1.8, 0.03, 0.94) if cut == "full" else (16, h * 0.034, h * 0.046, 2.2, 0.03, 0.94)
+    # Sixteen lines for Maine's sixteen counties. The first line sits at 2.4 percent of the height, where the
+    # state is two separate pieces: the northwest tip at Estcourt Station and the hump over the St. John valley.
+    # Those two runs are kept as round points the weight of the line, never dropped, never bridged, so the two
+    # points at the top of the state are always drawn and the top is never cut off.
+    n, w_lo, w_hi, keep, top, span = (16, h * 0.026, h * 0.044, 1.8, 0.024, 0.946) if cut == "full" else (16, h * 0.034, h * 0.046, 2.2, 0.024, 0.946)
     rows = []
     for i in range(n):
         t = i / (n - 1)
         y0 = miny + (maxy - miny) * (top + span * t)
         w = w_lo + (w_hi - w_lo) * t
         xs = maine2.crossings(ring, y0)
-        runs = list(zip(xs[0::2], xs[1::2]))
-        if i == 0 and runs:
-            runs = [(runs[0][0], runs[-1][1])]
-        runs = [(a + w / 2, b - w / 2) for a, b in runs if b - a >= w * keep]
+        runs = []
+        for a, b in zip(xs[0::2], xs[1::2]):
+            if i == 0:
+                if b - a < w:
+                    c = (a + b) / 2
+                    a, b = c - w / 2, c + w / 2
+                runs.append((a + w / 2 * 0.999, b - w / 2 * 0.999))
+            elif b - a >= w * keep:
+                runs.append((a + w / 2, b - w / 2))
         rows.append((y0, w, runs))
     widest = max(range(n), key=lambda i: sum(b - a for a, b in rows[i][2]))
     out = ""
