@@ -6,12 +6,12 @@ Saved September 30, 2026. Everything below is built as hand-drawn SVG geometry b
 
 | Element | Decision | Why |
 | --- | --- | --- |
-| Brandmark | **The margin room.** Nine horizontal lines, heavier toward the bottom, that part for a round room opening from the left edge. Where a line bends it turns Marigold. The room stays empty | One sentence, no picture: the field makes room at the margin, where every headline sits. Opening the room to the edge removed the eye that an enclosed room always made. Holds at 16 px with six lines. Gold belongs to the lines, not a dot placed on them. Files: `brand/identity/mark/` |
+| Brandmark | **Maine in lines.** The state drawn in horizontal lines from the precise Census outline, heavier toward the bottom, the widest line gold. Three cuts chosen by size: 21 lines at 72 px and up, 13 heavier lines on a lightly simplified coast from 36 to 72 px, the simplified silhouette alone below 36 px | Chosen by the client on October 1 over the abstract margin-room mark, which is kept in `brand/identity/mark/`. The size system solves the small-size problem the silhouette had: the shape never turns to dashes, because below 36 px it is a shape again. Files: `brand/identity/logo-maine/` |
 | Mural | **Grain.** Maine drawn in horizontal lines from the precise Census outline, weight growing toward the bottom, the widest line gold | The strongest single image of the project. Lives at sizes where Maine reads: the website hero and the end card |
 | Relationship | The mark is a crop of the mural where one line is missing. One rule, two scales | Everything seen large is Maine. Everything seen small is the mark |
 | Marigold | Once per frame. In the mark, the bends. In the mural, the widest line. In the wordmark, the dot on the i, but only when the wordmark stands alone | Keeps the rule the platform set and stops gold from spreading |
 | Letter marks | Set aside | The G is the generic half of the name. GM reads as General Motors |
-| Maine as the brandmark | Set aside | The silhouette needs about 110 px to read. At 32 and 16 px it is a stack of dashes. The outline is also the most used device in Maine branding |
+| The abstract mark | Set aside, kept | The margin-room mark remains the stronger answer to the platform's on-the-nose test. The client preferred the state, and the size system answers the objection that mattered most |
 | Outline data | US Census cartographic boundary, 1:500,000, clipped to the shoreline, 2,265 points, public domain | The legal boundary was tested and rejected: it fills the bays and rings the islands |
 
 ## Open
@@ -78,3 +78,22 @@ One complete logo per concept, in `brand/identity/logo/`. Every file is outlined
 Open on the logos:
 - The Maine variant of the Signature mark is rough where the room meets the western border. Keep it as an option for the gut check, not as a default.
 - Bark & Sky's Clay accent is almost invisible on paper. That is in character for the concept, but white on Sky reads better, and the mark sits small against the serif in the horizontal lockup.
+
+## The logo, October 1: Maine in lines
+
+The client's call: the lines with the state of Maine are the logo. Built complete for both concepts in `brand/identity/logo-maine/`. Sheets: `logos.png`, `size-system.png`, `signature.png`, `bark-sky.png`.
+
+**Size system.** One drawing, three cuts.
+- Full, 72 px and up: 21 lines, weight from 1.5 to 3.4 percent of the height, the widest line Marigold.
+- Mid, 36 to 72 px: 13 lines on a coast simplified by 0.6 percent of the height, weight from 3 to 5.2 percent, the widest line Marigold.
+- Solid, below 36 px: the silhouette simplified by 1.2 percent of the height. Never Marigold, which keeps us clear of Baxter Brewing's orange Maine.
+
+**Rules.**
+- The wordmark keeps its dot on the i only when it stands alone. With the mark present it is solid, so Marigold appears once.
+- In lockups the state stands taller than the capitals, like a flag beside the name: 96 units against a 66 unit cap height, with a 26 unit gap.
+- The video bug uses the solid cut with the wordmark, Birch on footage, no gold.
+- Clear space on every side is one tenth of the mark's height. Minimum sizes: mark 16 px (solid), horizontal lockup 120 px, endorsed lockup 220 px.
+
+**Trade accepted.** The platform's on-the-nose test says the name already says Maine, and a mark that says it again restates the name. The client weighed that against recognition and chose recognition. The grain, the weight gradient and the single gold line are what keep it from being another Maine silhouette.
+
+**Grades.** Full mark A-. Horizontal and endorsed lockups A-. Stacked lockup B+. Size system B+. Avatars B+. Bark & Sky version B+, with the Clay line subtle by design.
