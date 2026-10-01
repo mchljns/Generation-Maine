@@ -115,45 +115,44 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .b1{background:var(--bi);color:var(--sp)}.b2{color:var(--bi);border-color:rgba(255,255,255,.55)}.b2:hover{background:rgba(255,255,255,.08)}
 .b3{background:var(--sp);color:#FFFFFF}
 
-/* nav: transparent over the hero, a frosted Birch bar once the page scrolls. The active section carries the dot. */
-.top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:#FFFFFF;transition:background .35s,color .35s,box-shadow .35s,transform .4s cubic-bezier(.2,.7,.2,1)}
-.top.hide{transform:translateY(-110%)}
-.top.scrolled:not(.solid){background:var(--sp);box-shadow:0 1px 0 rgba(255,255,255,.14)}
-.top.scrolled:not(.solid) .w{height:60px}
-@media (prefers-reduced-motion: reduce){.top{transition:background .35s,color .35s,box-shadow .35s}}
-.top .w{display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px;transition:height .35s}
+/* nav: a transparent bar over the top of the hero. On the first scroll it folds into a floating frosted capsule with a reading line.
+   The active section carries the dot. It hides on the way down past the hero and comes back on the way up. */
+.top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:#FFFFFF;transition:color .35s,transform .4s cubic-bezier(.2,.7,.2,1)}
+.top.hide{transform:translateY(-120%)}
+.top .w{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px;max-width:1280px;margin:0 auto;padding-inline:var(--M);border-radius:0;background:rgba(255,255,255,0);
+  transition:height .45s cubic-bezier(.2,.7,.2,1),max-width .55s cubic-bezier(.2,.7,.2,1),margin .45s cubic-bezier(.2,.7,.2,1),padding .45s cubic-bezier(.2,.7,.2,1),border-radius .45s cubic-bezier(.2,.7,.2,1),background .35s,box-shadow .45s}
 .top .lk{height:24px;width:auto;display:block}
 .top .lk.dark{display:none}
 .top nav{display:flex;gap:30px;font:600 14px/1 var(--body);align-items:center}
-.top nav a{position:relative;text-decoration:none;opacity:.88;padding:6px 0}
+.top nav a{position:relative;text-decoration:none;opacity:.88;padding:6px 0;border-radius:999px;transition:background .25s,padding .35s,opacity .25s}
 .top nav a:hover{opacity:1}
 .top nav a::before{content:"";position:absolute;left:-14px;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:var(--mg);transform:scale(0);transition:transform .3s cubic-bezier(.3,1.4,.4,1)}
 .top nav a.on{opacity:1}.top nav a.on::before{transform:scale(1)}
-.top .cta{font:600 14px/1 var(--body);text-decoration:none;padding:12px 16px;border-radius:6px;border:1.5px solid rgba(255,255,255,.55);transition:background .25s,color .25s,border-color .25s}
+.top .cta{font:600 14px/1 var(--body);text-decoration:none;padding:12px 16px;border-radius:999px;border:1.5px solid rgba(255,255,255,.55);transition:background .25s,color .25s,border-color .25s,padding .35s}
 .top .cta:hover{background:rgba(255,255,255,.1)}
-.top.solid{background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(18px) saturate(1.1);backdrop-filter:blur(18px) saturate(1.1);color:var(--ink);box-shadow:0 1px 0 var(--rule)}
-.top.solid .w{height:60px}
-.top.solid .lk.light{display:none}.top.solid .lk.dark{display:block}
-.top.solid .cta{background:var(--sp);color:#FFFFFF;border-color:var(--sp)}
-/* capsule variant: once scrolled, the bar becomes a floating frosted capsule with a reading-progress line. Switch with #capsule */
-html.capsule .top.solid{background:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
-html.capsule .top.solid .w{height:52px;max-width:880px;margin:10px auto 0;padding-inline:10px 10px;background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(18px) saturate(1.1);backdrop-filter:blur(18px) saturate(1.1);border-radius:999px;box-shadow:0 1px 0 var(--rule),0 10px 30px rgba(11,43,33,.12);position:relative;overflow:hidden;gap:16px}
-html.capsule .top.solid .w>a:first-child{padding-left:12px}
-html.capsule .top.solid .lk{height:20px}
-html.capsule .top.solid nav{gap:4px}
-html.capsule .top.solid nav a{padding:9px 12px;border-radius:999px;font-size:13px;transition:background .25s}
-html.capsule .top.solid nav a:hover{background:rgba(16,72,54,.08)}
-html.capsule .top.solid nav a.on{background:var(--sp);color:#FFFFFF}
-html.capsule .top.solid nav a::before{display:none}
-html.capsule .top.solid .cta{padding:10px 14px;border-radius:999px;font-size:13px}
-html.capsule .top.solid .prog{display:block}
-.prog{display:none;position:absolute;left:0;bottom:0;height:2px;background:var(--sp);width:0;transition:width .15s linear}
+.top.scrolled{color:var(--ink)}
+.top.scrolled .w{height:52px;max-width:880px;margin:10px auto 0;padding-inline:10px;background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(18px) saturate(1.1);backdrop-filter:blur(18px) saturate(1.1);border-radius:999px;box-shadow:0 10px 30px rgba(11,43,33,.14);overflow:hidden;gap:16px}
+.top.scrolled .w>a:first-child{padding-left:12px}
+.top.scrolled .lk{height:20px}
+.top.scrolled .lk.light{display:none}.top.scrolled .lk.dark{display:block}
+.top.scrolled nav{gap:4px}
+.top.scrolled nav a{padding:9px 12px;font-size:13px}
+.top.scrolled nav a:hover{background:rgba(16,72,54,.08)}
+.top.scrolled nav a.on{background:var(--sp);color:#FFFFFF}
+.top.scrolled nav a::before{display:none}
+.top.scrolled .cta{padding:10px 14px;font-size:13px;background:var(--sp);color:#FFFFFF;border-color:var(--sp)}
+.top.scrolled .menu{margin-right:0}
+@media (max-width:900px){.top.scrolled .w{margin:10px 12px 0;height:48px}}
+.prog{position:absolute;left:0;bottom:0;height:2px;background:var(--sp);width:0;transition:width .15s linear;opacity:0}
+.top.scrolled .prog{opacity:1}
+@media (prefers-reduced-motion: reduce){.top,.top .w,.top nav a,.top .cta{transition:none}}
 .menu{display:none;position:relative;width:44px;height:44px;margin-right:-10px;background:none;border:0;color:inherit;padding:0;cursor:pointer}
 .menu i{position:absolute;left:11px;width:22px;height:2px;border-radius:1px;background:currentColor;transition:transform .4s cubic-bezier(.2,.7,.2,1),opacity .25s}
 .menu i:nth-child(1){top:15px}.menu i:nth-child(2){top:21px}.menu i:nth-child(3){top:27px}
 .menu[aria-expanded="true"] i:nth-child(1){transform:translateY(6px) rotate(45deg)}.menu[aria-expanded="true"] i:nth-child(2){opacity:0;transform:scaleX(.2)}.menu[aria-expanded="true"] i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
-.top.open{background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:#FFFFFF;transform:none!important}
-.top.open .lk.light{display:block}.top.open .lk.dark{display:none}
+.top.open{color:#FFFFFF;transform:none!important}
+.top.open .w{background:rgba(255,255,255,0);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.top.open .lk.light{display:block}.top.open .lk.dark{display:none}.top.open .prog{opacity:0}
 .sheet{position:fixed;inset:0;z-index:19;background:var(--sp);color:#FFFFFF;padding:calc(68px + env(safe-area-inset-top,0px)) var(--M) 32px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .35s,visibility 0s .35s}
 .sheet.open{opacity:1;visibility:visible;transition:opacity .35s}
 .sheet nav{display:flex;flex-direction:column;gap:6px;margin-top:24px}
@@ -179,7 +178,7 @@ html.capsule .top.solid .prog{display:block}
 .mural svg{width:100%;height:100%;display:block}
 /* the hero period pulses like a location marker: the dot holds still, a ring breathes out of it and fades */
 .d.pulse{position:relative}
-.d.pulse::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--mg);opacity:0;animation:pulse 2.4s cubic-bezier(.2,.6,.3,1) infinite 1.4s}
+.d.pulse::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:50%;background:var(--mg);opacity:0;animation:pulse 2.4s cubic-bezier(.2,.6,.3,1) infinite 1.4s}
 @keyframes pulse{0%{transform:scale(1);opacity:.6}65%{transform:scale(3);opacity:0}100%{transform:scale(3);opacity:0}}
 @media (prefers-reduced-motion: reduce){.d.pulse::after{animation:none}}
 
@@ -200,11 +199,12 @@ html.capsule .top.solid .prog{display:block}
 /* sections sit on the page background, which the script changes as each one enters */
 section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 .h2{font-size:clamp(34px,4.6vw,60px)}
+.about{background:var(--sp);color:#FFFFFF}
 .about .w{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px}
 .about .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;align-self:end}
-.about .cols h3{font:600 15px/1.3 var(--body);letter-spacing:0;margin:0 0 8px;color:var(--fg)}
-.about .cols p{margin:0;color:var(--muted);line-height:1.55}
-.about .cols div{padding-top:16px;position:relative}.about .cols div::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:var(--fg);transform-origin:left;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
+.about .cols h3{font:600 15px/1.3 var(--body);letter-spacing:0;margin:0 0 8px;color:#FFFFFF}
+.about .cols p{margin:0;color:rgba(255,255,255,.82);line-height:1.55}
+.about .cols div{padding-top:16px;position:relative}.about .cols div::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:#FFFFFF;transform-origin:left;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
 .js .reveal.pre .cols div::before,.js .reveal.pre blockquote::before{transform:scaleX(0)}
 .about .cols div:nth-child(2)::before{transition-delay:.1s}.about .cols div:nth-child(3)::before{transition-delay:.2s}
 
@@ -293,9 +293,6 @@ section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 @media (prefers-reduced-motion: reduce){.js .site .lk path{stroke-dashoffset:0;transition:none}}
 .site p{margin:0;font-size:14px;color:rgba(255,255,255,.8);max-width:60ch}
 .site .fine{margin-top:12px;font-size:13px}
-.site .review{margin-top:22px;padding-top:14px;border-top:1px solid rgba(255,255,255,.2)}
-.sw{font:600 13px/1 var(--body);color:#FFFFFF;background:none;border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:7px 12px;margin-left:6px;cursor:pointer}
-.sw.on{background:#FFFFFF;color:var(--sp);border-color:#FFFFFF}
 @media (max-width:640px){.site .w{grid-template-columns:1fr}.site .lk{height:90px}}
 """
 
@@ -337,7 +334,7 @@ def page():
   <div class="mural" id="mural" aria-hidden="true"></div>
 </div></section>
 
-<section class="about reveal" id="about" data-bg="var(--bi)"><div class="w">
+<section class="about reveal" id="about"><div class="w">
   <h2 class="h2">%(h2about)s</h2>
   <div class="cols">
     <div class="row-in"><h3>Who makes it</h3><p>Young Mainers with a phone and a story. They pick what to film and say it their own way.</p></div>
@@ -346,10 +343,10 @@ def page():
   </div>
 </div></section>
 
-<section class="stories-head reveal" id="creators" data-bg="var(--sand)"><div class="w">
+<section class="stories-head reveal" id="creators" data-bg="var(--bi)"><div class="w">
   <h2 class="h2">%(h2cre)s</h2><p class="lede">Nine young Mainers in nine towns. Each one films where they live and says it their own way. Names and faces arrive after the shoot.</p>
 </div></section>
-<section class="stories" id="stories" data-bg="var(--sand)"><div class="pinw"><div class="w">
+<section class="stories" id="stories" data-bg="var(--bi)"><div class="pinw"><div class="w">
   <div class="stage"><div class="vid" id="stage">%(stagevids)s<span class="dur" id="dur">0:52</span></div></div>
   <div class="panels" id="panels">%(panels)s</div>
   <div class="where" id="where"><span class="n" id="wn">01 / 09</span><span class="segs" id="segs">%(segs)s</span><span class="next" id="wnext"></span></div>
@@ -384,7 +381,7 @@ def page():
   </div>
 </div></section>
 
-<footer class="site"><div class="w">%(two)s<div><p>Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.</p><p class="fine">© 2026 Generation Maine. [CONFIRM: legal name, address and contact]</p><p class="fine review">Mockup review. Nav style: <button type="button" class="sw" id="sw-bar">Bar</button> <button type="button" class="sw" id="sw-cap">Capsule</button></p></div></div></footer>
+<footer class="site"><div class="w">%(two)s<div><p>Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.</p><p class="fine">© 2026 Generation Maine. [CONFIRM: legal name, address and contact]</p></div></div></footer>
 
 <script id="maine-data" type="application/json">%(json)s</script>
 <script>
@@ -402,6 +399,9 @@ def page():
   new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m);
 
   // The page background changes as each section passes the middle of the screen.
+  // The page starts green and stays green under the hero and the about section. Once about reaches the top it fades to white.
+  const aboutEl = document.getElementById('about'), creatorsEl = document.getElementById('creators');
+  document.body.style.background = 'var(--sp)';
   const bgs = [...document.querySelectorAll('[data-bg]')];
   const bo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.body.style.background = e.target.dataset.bg; }), { rootMargin: '-45%% 0px -45%% 0px', threshold: 0 });
   bgs.forEach(el => bo.observe(el));
@@ -423,16 +423,9 @@ def page():
 
   // The bar turns solid once the hero scrolls away, marks the section in view, and opens the phone menu.
   const bar = document.getElementById('topbar'), heroEl = document.querySelector('.hero');
-  new IntersectionObserver(es => es.forEach(e => bar.classList.toggle('solid', !e.isIntersecting)), { rootMargin: '-68px 0px 0px 0px', threshold: 0 }).observe(heroEl);
-  // Two nav styles ship for comparison. #capsule turns the scrolled bar into a floating capsule with a reading-progress line.
-  let capsule = location.hash === '#capsule'; try { if (location.hash === '') capsule = localStorage.getItem('gm-nav') === 'capsule'; } catch (e) {}
-  const setNav = () => { document.documentElement.classList.toggle('capsule', capsule); document.getElementById('sw-bar').classList.toggle('on', !capsule); document.getElementById('sw-cap').classList.toggle('on', capsule); try { localStorage.setItem('gm-nav', capsule ? 'capsule' : 'bar'); } catch (e) {} };
-  setNav(); addEventListener('hashchange', () => { capsule = location.hash === '#capsule'; setNav(); });
-  document.getElementById('sw-bar').addEventListener('click', () => { capsule = false; setNav(); scrollTo({ top: document.getElementById('about').offsetTop - 80 }); });
-  document.getElementById('sw-cap').addEventListener('click', () => { capsule = true; setNav(); scrollTo({ top: document.getElementById('about').offsetTop - 80 }); });
   const prog = document.getElementById('prog');
   let lastY = scrollY, ticking = false;
-  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; bar.classList.toggle('scrolled', y > 12); if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%%'; ticking = false; }); }, { passive: true });
+  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; bar.classList.toggle('scrolled', y > 12); const at = aboutEl.getBoundingClientRect().top, ct = creatorsEl.getBoundingClientRect().top; if (at > 0) document.body.style.background = 'var(--sp)'; else if (ct > innerHeight * .55) document.body.style.background = 'var(--bi)'; if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%%'; ticking = false; }); }, { passive: true });
   const links = [...bar.querySelectorAll('nav a')];
   const ao = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.dataset.for === e.target.id)); }), { rootMargin: '-40%% 0px -55%% 0px', threshold: 0 });
   ['about', 'creators', 'words', 'follow'].forEach(id => { const el = document.getElementById(id); if (el) ao.observe(el); });

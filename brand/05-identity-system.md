@@ -265,3 +265,11 @@ The section is about the creators now, not the stories. The heading reads "The c
 The two-column layout no longer scrolls nine panels past a pinned clip. The whole block pins for nine steps of scroll. At each step the clip crossfades and the next creator's details arrive from the right, line by line, while the last one slips out to the left. Scrolling back reverses the direction. The index marks on the clip jump to a creator. Phones keep the stacked list with a clip per creator. Reduced motion swaps with a fade and no movement.
 
 Under the two columns, a row says where you are among the nine: a counter on the left, nine short lines with the current one in ink and the passed ones faded, and the next town on the right so the reader knows what is arriving. The lines are buttons and jump to a creator. The marks that used to sit inside the clip are gone; one indicator is enough. Phones hide the row, since their list scrolls on its own.
+
+## Capsule, green about, the fade to white
+
+The capsule is the only nav. The bar over the hero folds into the capsule on the first scroll: height, width, corners and background all move together over about half a second. No hairline under it, just a soft shadow. It hides on the way down past the hero and comes back on the way up. The footer switch is gone.
+
+The about section is Spruce, white text, white rules. The page itself starts green, so hero and about read as one block. Once about reaches the top of the screen the page fades to white behind it, and the creators arrive on white. The light fields after that stay as they were.
+
+The hero period's pulse ring now draws behind the letters, so the ring breathes out from under the last letter instead of over it.
