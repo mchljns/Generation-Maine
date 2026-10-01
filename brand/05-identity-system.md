@@ -97,3 +97,20 @@ The client's call: the lines with the state of Maine are the logo. Built complet
 **Trade accepted.** The platform's on-the-nose test says the name already says Maine, and a mark that says it again restates the name. The client weighed that against recognition and chose recognition. The grain, the weight gradient and the single gold line are what keep it from being another Maine silhouette.
 
 **Grades.** Full mark A-. Horizontal and endorsed lockups A-. Stacked lockup B+. Size system B+. Avatars B+. Bark & Sky version B+, with the Clay line subtle by design.
+
+## Applied, October 1
+
+The Maine logo on the eight surfaces from the platform, in `brand/identity/apply/` (`apply.html`, `mockups/`, `applied-sheet.png`). Built by `brand/src/build_apply.py`, rendered by `render_apply.mjs`.
+
+| Surface | Cut used | Note |
+| --- | --- | --- |
+| Video, first seconds | Solid, with the wordmark, Birch | The bug is 22 px tall at 360 wide. Nothing else on the footage |
+| Lower third | None | Name and town, plain, on the safe line. The bug stays |
+| End card | Full mural, 48 lines | The mural carries the frame. The widest line is the Marigold, so the headline ends in a plain period |
+| Profile grid | Full, in the avatar | Covers keep the round-two rules |
+| Avatar among accounts | Full at 110, mid at 40, solid at 16 | One cut per size, as the rule says |
+| Substack header | Horizontal lockup, reversed | The disclosure strip under the masthead |
+| Website hero | Mural, 64 lines in Moss, widest Marigold | Headline, lede and buttons stacked at left so the right belongs to the state. The lockup in the nav |
+| Collab post | Solid, with the wordmark | Same bug as the video |
+
+The motion prototype (`brand/identity/motion/hero.html`) now carries the lockup in its nav. The field motion stays: Maine is drawn in lines, so lines that make room for words are still the brand's language.
