@@ -399,12 +399,12 @@ def page():
   new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m);
 
   // The page background changes as each section passes the middle of the screen.
-  // The page starts green and stays green under the hero and the about section. Once about reaches the top it fades to white.
-  const aboutEl = document.getElementById('about'), creatorsEl = document.getElementById('creators');
-  document.body.style.background = 'var(--sp)';
-  const bgs = [...document.querySelectorAll('[data-bg]')];
-  const bo = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) document.body.style.background = e.target.dataset.bg; }), { rootMargin: '-45%% 0px -45%% 0px', threshold: 0 });
-  bgs.forEach(el => bo.observe(el));
+  // The page color is a function of scroll position, worked out every frame: green under the hero and about,
+  // white once about reaches the top, then whatever the section at the middle of the screen asks for.
+  const aboutEl = document.getElementById('about'), bgs = [...document.querySelectorAll('[data-bg]')];
+  let bgNow = '';
+  function paint() { let c = 'var(--bi)'; if (aboutEl.getBoundingClientRect().top > 0) c = 'var(--sp)'; else { const mid = innerHeight / 2; for (const el of bgs) { if (el.getBoundingClientRect().top <= mid) c = el.dataset.bg; } } if (c !== bgNow) { bgNow = c; document.body.style.background = c; } }
+  paint();
 
   // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Phones get a clip per panel.
   const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
@@ -417,7 +417,7 @@ def page():
   // Scroll position steps through the creators while the stage is pinned.
   const step = () => { if (!wide()) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
   marks.forEach((m, k) => m.addEventListener('click', () => { const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
-  addEventListener('scroll', step, { passive: true }); addEventListener('resize', step); step(); if (cur < 0) show(0);
+  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { step(); paint(); }); step(); if (cur < 0) show(0);
   if (reduced) { stageVids.forEach(v => { v.controls = true; }); panelVids.forEach(v => { v.controls = true; }); }
   else { const mo = new IntersectionObserver(es => es.forEach(e => { if (!wide()) { if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause(); } }), { threshold: .4 }); panelVids.forEach(v => mo.observe(v)); }
 
@@ -425,7 +425,7 @@ def page():
   const bar = document.getElementById('topbar'), heroEl = document.querySelector('.hero');
   const prog = document.getElementById('prog');
   let lastY = scrollY, ticking = false;
-  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; bar.classList.toggle('scrolled', y > 12); const at = aboutEl.getBoundingClientRect().top, ct = creatorsEl.getBoundingClientRect().top; if (at > 0) document.body.style.background = 'var(--sp)'; else if (ct > innerHeight * .55) document.body.style.background = 'var(--bi)'; if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%%'; ticking = false; }); }, { passive: true });
+  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; bar.classList.toggle('scrolled', y > 12); paint(); if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%%'; ticking = false; }); }, { passive: true });
   const links = [...bar.querySelectorAll('nav a')];
   const ao = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.dataset.for === e.target.id)); }), { rootMargin: '-40%% 0px -55%% 0px', threshold: 0 });
   ['about', 'creators', 'words', 'follow'].forEach(id => { const el = document.getElementById(id); if (el) ao.observe(el); });
