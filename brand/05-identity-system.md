@@ -329,3 +329,5 @@ The hero's second action is a text link, not a second button. One pill, "Watch t
 At rest the bar is a Moss band over the hero, a horizon line the capsule folds out of on the first scroll. Snow type on Moss reads at 5.4 to 1. The band drops away when the phone menu opens. A Sage band was tried and cut the green block in two; transparent left the capsule arriving from nowhere.
 
 The hero text link is underlined full width at rest; the line brightens and drops a touch on hover. A partial underline read as broken.
+
+No blended type over green. The nav links sat at 88 percent, the hero lede at 92, the about paragraphs and footer at 80 to 82. Over Moss and Spruce those blends mixed into a pale green that read as a wrong color beside the solid mark. Every piece of type on a green field is now solid Snow. Nav hover is an underline rather than an opacity change.
