@@ -313,7 +313,9 @@ function gm_render_creators( $args = array() ) {
 	$vids = $whos = $panels = $segs = '';
 	foreach ( $creators as $i => $c ) {
 		$on = 0 === $i;
-		if ( $c['clip'] ) {
+		if ( $c['clip'] && preg_match( '/\.(gif|png|jpe?g|webp)(\?|$)/i', $c['clip'] ) ) {
+			$vids .= sprintf( '<img class="clip%1$s" data-i="%2$d" data-dur="%3$s" src="%4$s" alt="" loading="%5$s">', $on ? ' on' : '', $i, esc_attr( $c['len'] ), esc_url( $c['clip'] ), $i < 2 ? 'eager' : 'lazy' );
+		} elseif ( $c['clip'] ) {
 			$vids .= sprintf(
 				'<video data-i="%1$d" data-dur="%2$s" src="%3$s" muted loop playsinline preload="%4$s" aria-label="%5$s"%6$s></video>',
 				$i,

@@ -239,8 +239,8 @@ body.scrub{transition:none}
 .stories .w{width:100%;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px clamp(28px,5vw,72px);align-items:center}
 .stage{height:min(64vh,560px);display:flex;align-items:center}
 .vid{position:relative;aspect-ratio:9/16;height:100%;max-height:620px;width:auto;max-width:100%;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
-.vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transform:scale(1.04);transition:opacity .6s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
-.vid video.on{opacity:1;transform:none}
+.vid video,.vid img.clip{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transform:scale(1.04);transition:opacity .6s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.vid video.on,.vid img.clip.on{opacity:1;transform:none}
 /* the social header on the clip: the creator's avatar and handle, as they appear on their own feed. Uploaded with the post in WordPress. */
 .who{position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:10px;z-index:2;color:#FFFFFF;opacity:0;transition:opacity .5s}.who.on{opacity:1}
 .who .av{width:36px;height:36px;display:block;border-radius:50%}
@@ -342,16 +342,20 @@ def page():
     stagevids, panels, idx, whos = "", "", "", ""
     for i, (tone, town, topic, cap, dur) in enumerate(CARDS):
         cr = CREATORS[i]
-        stagevids += '<video data-i="%d" data-dur="%s" src="media/creator-%d.webm" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (
-            i, dur, i + 1, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
+        clip = cr.get("clip", "creator-%d.webm" % (i + 1))
+        if clip.endswith((".gif", ".png", ".jpg", ".webp")):
+            stagevids += '<img class="clip%s" data-i="%d" data-dur="%s" src="media/%s" alt="" loading="%s">' % (' on' if i == 0 else '', i, dur, clip, "eager" if i < 2 else "lazy")
+        else:
+            stagevids += '<video data-i="%d" data-dur="%s" src="media/%s" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (
+                i, dur, clip, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
         who = '<div class="who%s">%s<span><b>%s</b>%s</span></div>' % (' on' if i == 0 else '', avatar(), cr["handle"], cr["name"])
         whos += who
         idx += '<button type="button" aria-label="Creator %d, %s, %s" data-name="%s"%s></button>' % (i + 1, cr["name"], town, cr["name"], ' class="on"' if i == 0 else "")
         socials = ''.join('<a href="#" aria-label="%s">%s<span>%s</span></a>' % (n.capitalize(), icon(n), cr["handle"]) for n in ("instagram", "tiktok", "youtube"))
-        panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="none"></video>%s</div>'
+        panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv">%s</div>'
                    '<p class="k">%s, Maine<i class="d pulse"></i></p><h2>%s</h2><p class="bio">%s</p>'
                    '<div class="soc">%s</div></article>') % (
-                       " on" if i == 0 else "", i + 1, i, i + 1, who, town, cr["name"], cr["bio"], socials)
+                       " on" if i == 0 else "", i + 1, i, who, town, cr["name"], cr["bio"], socials)
     body = r"""
 <header class="top" id="topbar"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s%(lock_dark)s</a>
 <nav aria-label="Page"><a href="#about" data-for="about">About</a><a href="#creators" data-for="creators">Creators</a><a href="#words" data-for="words">In their words</a><a href="#follow" data-for="follow">Follow</a></nav>
@@ -447,12 +451,12 @@ def page():
   paint();
 
   // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Phones get a clip per panel.
-  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
+  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video, img.clip')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
   const panelVids = [...document.querySelectorAll('.panel .pv video')];
   const wide = () => true;
   const panels = [...document.querySelectorAll('.panel')], storiesEl = document.getElementById('stories'); let cur = -1;
   function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i;
-    stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (on) { v.play().catch(() => {}); } else v.pause(); }); whos.forEach((w, k) => w.classList.toggle('on', k === i)); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur;
+    stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (!v.play) return; if (on) { v.play().catch(() => {}); } else v.pause(); }); whos.forEach((w, k) => w.classList.toggle('on', k === i)); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur;
     wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.dataset.name : 'Last one'; }
   // Scroll position steps through the creators while the stage is pinned.
   const panelsEl = document.getElementById('panels');
@@ -461,7 +465,7 @@ def page():
   const step = () => { if (!wide()) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
   marks.forEach((m, k) => m.addEventListener('click', () => { const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
   addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); paint(); }); step(); if (cur < 0) show(0);
-  if (reduced) { stageVids.forEach(v => { v.controls = true; }); panelVids.forEach(v => { v.controls = true; }); }
+  if (reduced) { stageVids.forEach(v => { if (v.play) v.controls = true; }); panelVids.forEach(v => { v.controls = true; }); }
   else { const mo = new IntersectionObserver(es => es.forEach(e => { if (!wide()) { if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause(); } }), { threshold: .4 }); panelVids.forEach(v => mo.observe(v)); }
 
   // The bar turns solid once the hero scrolls away, marks the section in view, and opens the phone menu.

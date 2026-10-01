@@ -1,5 +1,5 @@
 {
-  "_note": "Placeholder creators for review only. These are not real people. Every record is flagged as a placeholder in WordPress and must be replaced when the real creators are cast. [CONFIRM: towns and story topics with the team]",
+  "_note": "Placeholder creators for review only. These are not real people. Every record is flagged as a placeholder in WordPress and must be replaced when the real creators are cast. [CONFIRM: towns and story topics with the team] Clips are GIF placeholders built from generated portraits by brand/src/make_gifs.py; the story-card clips remain as creator-N.webm.",
   "creators": [
     {
       "name": "Maya",
@@ -10,7 +10,8 @@
       "caption": "Three apartments in town. One I could afford. Here is what the lease said.",
       "len": "0:52",
       "scene": "A one-bedroom apartment lease on a kitchen table in morning light, a pen, a mug, a hand turning the page",
-      "tone": "t1"
+      "tone": "t1",
+      "clip": "creator-1.gif"
     },
     {
       "name": "Devin",
@@ -21,7 +22,8 @@
       "caption": "I wanted to sell coffee from a cart. It took eleven signatures.",
       "len": "1:04",
       "scene": "A small coffee cart on a snowy sidewalk at dawn, steam rising from a cup, a stack of forms clipped to a board",
-      "tone": "t2"
+      "tone": "t2",
+      "clip": "creator-2.gif"
     },
     {
       "name": "Priya",
@@ -32,7 +34,8 @@
       "caption": "Half my graduating class left. I asked the ones who stayed why.",
       "len": "0:47",
       "scene": "A brick mill building by a river at golden hour, a footpath along the water, two empty chairs facing each other",
-      "tone": "t3"
+      "tone": "t3",
+      "clip": "creator-3.gif"
     },
     {
       "name": "Cole",
@@ -43,7 +46,8 @@
       "caption": "Forty minutes each way for a job that pays the rent. Barely.",
       "len": "0:58",
       "scene": "A two-lane coastal road at six in the morning seen through a windshield, fog over spruce trees, the dashboard clock reading 6:04",
-      "tone": "t4"
+      "tone": "t4",
+      "clip": "creator-4.gif"
     },
     {
       "name": "Jess",
@@ -54,7 +58,8 @@
       "caption": "I moved back in with my parents at 26. Here is the math that made me.",
       "len": "0:49",
       "scene": "A childhood bedroom with a laptop open to a budget spreadsheet on a small desk, a packed duffel bag on the floor, late afternoon window light",
-      "tone": "t5"
+      "tone": "t5",
+      "clip": "creator-5.gif"
     },
     {
       "name": "Tyler",
@@ -65,7 +70,8 @@
       "caption": "My first lease. My first security deposit. My first surprise fee.",
       "len": "0:55",
       "scene": "A set of apartment keys and a stack of receipts on an empty apartment floor, a cardboard box, bare walls, window light",
-      "tone": "t6"
+      "tone": "t6",
+      "clip": "creator-6.gif"
     },
     {
       "name": "Amara",
@@ -76,7 +82,8 @@
       "caption": "One job pays for the room. The second one pays for everything else.",
       "len": "1:01",
       "scene": "Two work aprons hanging on hooks by a door, a name tag on each, a wall clock, evening light on a harbor town street outside the window",
-      "tone": "t1"
+      "tone": "t1",
+      "clip": "creator-7.gif"
     },
     {
       "name": "Noah",
@@ -87,7 +94,8 @@
       "caption": "What a nursing license costs before the first paycheck.",
       "len": "0:44",
       "scene": "Nursing textbooks, a calculator and a stack of fee receipts on a desk under a lamp, snow falling past a dark window",
-      "tone": "t2"
+      "tone": "t2",
+      "clip": "creator-8.gif"
     },
     {
       "name": "Sam",
@@ -98,7 +106,8 @@
       "caption": "Landscaping stops in November. What I do until April.",
       "len": "0:50",
       "scene": "A pickup truck with a plow blade in a snowy driveway at dusk, a rake and a shovel leaning on a garage wall",
-      "tone": "t3"
+      "tone": "t3",
+      "clip": "creator-9.gif"
     }
   ]
 }

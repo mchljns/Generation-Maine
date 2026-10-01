@@ -53,7 +53,7 @@ for ( $gm_i = 0; $gm_i < $gm_count; $gm_i++ ) {
 	update_post_meta( $gm_id, 'gm_clip_len', isset( $gm_c['len'] ) ? $gm_c['len'] : '' );
 	update_post_meta( $gm_id, 'gm_placeholder', true );
 	if ( $gm_clips ) {
-		update_post_meta( $gm_id, 'gm_clip_url', $gm_clips . '/creator-' . ( ( $gm_i % 9 ) + 1 ) . '.webm' );
+		update_post_meta( $gm_id, 'gm_clip_url', $gm_clips . '/' . ( isset( $gm_c['clip'] ) ? $gm_c['clip'] : 'creator-' . ( ( $gm_i % 9 ) + 1 ) . '.webm' ) );
 	}
 	update_post_meta( $gm_id, 'gm_instagram', 'https://instagram.com/' );
 	update_post_meta( $gm_id, 'gm_tiktok', 'https://tiktok.com/' );

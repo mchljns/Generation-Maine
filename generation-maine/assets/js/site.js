@@ -58,14 +58,14 @@
 	}
 
 	// The creators: one pinned clip and one set of details that step with the scroll.
-	var stage = $('#stage'), stageVids = stage ? $$('video', stage) : [], whos = stage ? $$('.who', stage) : [], marks = $$('#segs button'), dur = $('#dur'), wn = $('#wn'), wnext = $('#wnext');
+	var stage = $('#stage'), stageVids = stage ? $$('video, img.clip', stage) : [], whos = stage ? $$('.who', stage) : [], marks = $$('#segs button'), dur = $('#dur'), wn = $('#wn'), wnext = $('#wnext');
 	var panels = $$('.panel'), panelsEl = $('#panels'), storiesEl = $('#stories'), cur = -1;
 	function show(i) {
 		if (i === cur || !panels[i]) { return; }
 		var back = i < cur;
 		panels.forEach(function (p, k) { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); });
 		cur = i;
-		stageVids.forEach(function (v, k) { var on = k === i; v.classList.toggle('on', on); if (on) { var pr = v.play(); if (pr && pr.catch) { pr.catch(function () {}); } } else { v.pause(); } });
+		stageVids.forEach(function (v, k) { var on = k === i; v.classList.toggle('on', on); if (!v.play) { return; } if (on) { var pr = v.play(); if (pr && pr.catch) { pr.catch(function () {}); } } else { v.pause(); } });
 		whos.forEach(function (w, k) { w.classList.toggle('on', k === i); });
 		marks.forEach(function (mk, k) { mk.classList.toggle('on', k === i); mk.classList.toggle('done', k < i); });
 		if (dur && stageVids[i]) { dur.textContent = stageVids[i].dataset.dur || ''; dur.hidden = !stageVids[i].dataset.dur; }
@@ -75,7 +75,7 @@
 	function fit() { if (!panelsEl) { return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; return; } var h = 0; panels.forEach(function (p) { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 8) + 'px'; }
 	function step() { if (!storiesEl || !panels.length) { return; } var total = storiesEl.offsetHeight - innerHeight; var t = total > 0 ? Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)) : 0; show(Math.min(panels.length - 1, Math.floor(t * panels.length))); }
 	marks.forEach(function (mk, k) { mk.addEventListener('click', function () { var total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + 0.5) / panels.length * total }); }); });
-	if (reduced) { stageVids.forEach(function (v) { v.controls = true; }); }
+	if (reduced) { stageVids.forEach(function (v) { if (v.play) { v.controls = true; } }); }
 	fit(); step(); if (cur < 0 && panels.length) { show(0); }
 
 	// The bar: folds into the capsule on the first scroll, hides on the way down past the hero, returns on the way up.

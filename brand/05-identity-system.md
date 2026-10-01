@@ -359,3 +359,11 @@ Still open: the funder line. The SEO module still names Maine Policy Institute a
 Nine placeholder creators now fill the page for review: a first name, a handle, a town, a bio in the creator's voice and a story. They are not real people and are flagged as placeholders in WordPress. They live in one file, brand/content/creators-placeholder.json, which the splash page, the clip generator and the WordPress seed all read.
 
 The clips are story cards, not footage. The two video connectors available to this session had no credits, and the brand's credibility rests on real faces, so no faces were generated. Each card animates the fact at the heart of the story: three apartments become one, eleven signatures tally up, a clock runs forty minutes, two bars fill, a running total climbs. The caption arrives word by word and the town signs off with the Marigold dot. They stand in until the creators film.
+
+## Placeholder portraits and GIF clips
+
+At the client's request the placeholder clips now show people. Nine portraits were generated through the Canva connector, one per creator and scene: a lease at a kitchen table, a coffee cart in the snow, a riverside mill walk, a dawn commute, a childhood bedroom, an empty apartment, a parked car between shifts, a nursing desk, a plow truck at dusk. They are generated faces, not real people. Each clip carries a PLACEHOLDER tag so no one mistakes one for a creator, and every record is flagged in WordPress.
+
+Each GIF is a slow push in on the portrait with the story's caption on a flat Pine band, the town and the Marigold dot. Silent, about two seconds, under 1.2 MB each. The connector returned the portraits at thumbnail size and the full files could not be fetched from here, so the GIFs are softened to read as film rather than pixels. The full-size images are in the client's Canva account under the media ids recorded in brand/content/portraits/canva-media-ids.json; dropping them into brand/content/portraits and rerunning make_gifs.py sharpens every clip.
+
+The stage, on the splash and in the theme, now accepts an image clip as well as a video, so a GIF or a still can stand in wherever a video is expected. The story-card clips remain in the media folder as creator-N.webm.

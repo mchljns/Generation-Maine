@@ -166,8 +166,8 @@ body.scrub{transition:none}
 .stories .w{width:100%;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px clamp(28px,5vw,72px);align-items:center}
 .stage{height:min(64vh,560px);display:flex;align-items:center}
 .vid{position:relative;aspect-ratio:9/16;height:100%;max-height:620px;width:auto;max-width:100%;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
-.vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transform:scale(1.04);transition:opacity .6s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
-.vid video.on{opacity:1;transform:none}
+.vid video,.vid img.clip{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transform:scale(1.04);transition:opacity .6s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.vid video.on,.vid img.clip.on{opacity:1;transform:none}
 /* the social header on the clip: the creator's avatar and handle, as they appear on their own feed. Uploaded with the post in WordPress. */
 .who{position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:10px;z-index:2;color:#FFFFFF;opacity:0;transition:opacity .5s}.who.on{opacity:1}
 .who .av{width:36px;height:36px;display:block;border-radius:50%}
