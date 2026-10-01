@@ -151,3 +151,5 @@ The client chose B. Applied in `brand/src/build_logo_maine.py`, the eight surfac
 | Wordmark alone | Where the state is already in frame, as on the end card and the hero | A- |
 
 The one-color versions are the same drawing as the color versions with the dot in the ink color, so one file set serves print, embroidery and vinyl.
+
+**Two colors in the name, tested October 1** (`two-color-test.png`). Maine in Moss, Generation in Moss, Maine in Marigold and Generation in Stone, each on the horizontal and two-line lockups. Rejected. Splitting the color splits the name into a modifier and a noun, and the quieter word drops back on every background. Marigold type fails contrast on Birch and puts a yellow Maine next to a Maine shape, which is Baxter's territory. The name stays one color. Stacking is allowed only in the two-line and stacked lockups, never as a free setting in headlines.
