@@ -1,0 +1,104 @@
+{
+  "_note": "Placeholder creators for review only. These are not real people. Every record is flagged as a placeholder in WordPress and must be replaced when the real creators are cast. [CONFIRM: towns and story topics with the team]",
+  "creators": [
+    {
+      "name": "Maya",
+      "handle": "@maya.skow",
+      "town": "Skowhegan",
+      "bio": "I grew up here and came back after two years in Portland. I work the front desk at a dental office and film on my lunch break. My first video was about the three apartments in town I could look at and the one I could afford.",
+      "story": "Finding a place",
+      "caption": "Three apartments in town. One I could afford. Here is what the lease said.",
+      "len": "0:52",
+      "scene": "A one-bedroom apartment lease on a kitchen table in morning light, a pen, a mug, a hand turning the page",
+      "tone": "t1"
+    },
+    {
+      "name": "Devin",
+      "handle": "@devinpourscoffee",
+      "town": "Presque Isle",
+      "bio": "I wanted to sell coffee from a cart outside the hospital. It took eleven signatures and most of a winter. I make videos about what each form was for, in the order I had to get them.",
+      "story": "Starting a shop",
+      "caption": "I wanted to sell coffee from a cart. It took eleven signatures.",
+      "len": "1:04",
+      "scene": "A small coffee cart on a snowy sidewalk at dawn, steam rising from a cup, a stack of forms clipped to a board",
+      "tone": "t2"
+    },
+    {
+      "name": "Priya",
+      "handle": "@priya.biddo",
+      "town": "Biddeford",
+      "bio": "Half of my graduating class left Maine. I stayed and started asking the others why. I film the conversations on the mill walk by the river, one person at a time.",
+      "story": "Who stays",
+      "caption": "Half my graduating class left. I asked the ones who stayed why.",
+      "len": "0:47",
+      "scene": "A brick mill building by a river at golden hour, a footpath along the water, two empty chairs facing each other",
+      "tone": "t3"
+    },
+    {
+      "name": "Cole",
+      "handle": "@cole.drives",
+      "town": "Machias",
+      "bio": "Forty minutes each way to a job that pays the rent, barely. I mount the phone on the dash and talk through the math while I drive. The numbers are real and so is the gas.",
+      "story": "The commute",
+      "caption": "Forty minutes each way for a job that pays the rent. Barely.",
+      "len": "0:58",
+      "scene": "A two-lane coastal road at six in the morning seen through a windshield, fog over spruce trees, the dashboard clock reading 6:04",
+      "tone": "t4"
+    },
+    {
+      "name": "Jess",
+      "handle": "@jess.backhome",
+      "town": "Lewiston",
+      "bio": "I moved back in with my parents at 26. I have a degree and a full-time job and a spreadsheet that explains the rest. My videos walk through one row of it at a time.",
+      "story": "Coming home",
+      "caption": "I moved back in with my parents at 26. Here is the math that made me.",
+      "len": "0:49",
+      "scene": "A childhood bedroom with a laptop open to a budget spreadsheet on a small desk, a packed duffel bag on the floor, late afternoon window light",
+      "tone": "t5"
+    },
+    {
+      "name": "Tyler",
+      "handle": "@tyler.rumford",
+      "town": "Rumford",
+      "bio": "First lease, first security deposit, first surprise fee. I am 21 and learning the rules by hitting them. I keep every receipt and read them out loud on camera.",
+      "story": "Moving out",
+      "caption": "My first lease. My first security deposit. My first surprise fee.",
+      "len": "0:55",
+      "scene": "A set of apartment keys and a stack of receipts on an empty apartment floor, a cardboard box, bare walls, window light",
+      "tone": "t6"
+    },
+    {
+      "name": "Amara",
+      "handle": "@amara.twojobs",
+      "town": "Belfast",
+      "bio": "One job pays for the room. The second one pays for everything else. I film between shifts, usually in the car, and I keep it to the parts people never say out loud.",
+      "story": "Two jobs",
+      "caption": "One job pays for the room. The second one pays for everything else.",
+      "len": "1:01",
+      "scene": "Two work aprons hanging on hooks by a door, a name tag on each, a wall clock, evening light on a harbor town street outside the window",
+      "tone": "t1"
+    },
+    {
+      "name": "Noah",
+      "handle": "@noah.rn",
+      "town": "Fort Kent",
+      "bio": "I am finishing a nursing license and adding up what it costs before the first paycheck: exams, fees, background checks, gas to Presque Isle. I show the receipts, not the speech.",
+      "story": "Doing the math",
+      "caption": "What a nursing license costs before the first paycheck.",
+      "len": "0:44",
+      "scene": "Nursing textbooks, a calculator and a stack of fee receipts on a desk under a lamp, snow falling past a dark window",
+      "tone": "t2"
+    },
+    {
+      "name": "Sam",
+      "handle": "@sam.sanford",
+      "town": "Sanford",
+      "bio": "Landscaping stops in November. I film what I do until April: plowing, odd jobs, the weeks with nothing. The off season is the part nobody budgets for, so I do it on camera.",
+      "story": "Winter work",
+      "caption": "Landscaping stops in November. What I do until April.",
+      "len": "0:50",
+      "scene": "A pickup truck with a plow blade in a snowy driveway at dusk, a rake and a shovel leaning on a garage wall",
+      "tone": "t3"
+    }
+  ]
+}

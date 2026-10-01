@@ -353,3 +353,9 @@ The newsletter: one address under Settings > Newsletter drives the signup hand-o
 Tested in a local WordPress on SQLite: the front page at 375, 768 and 1440 with nine creators and with none, the site editor opening the template with every block valid and the theme's styles in the canvas, the Creator screen, the admin note when no newsletter address is set, PHP lint on every file. The one fault found was a stray brace in the shared CSS that hid the newsletter grid; fixed at the source.
 
 Still open: the funder line. The SEO module still names Maine Policy Institute as the parent organization and the optional About Maine Policy Institute pattern remains available in the inserter. Both wait on the decision.
+
+## Placeholder creators
+
+Nine placeholder creators now fill the page for review: a first name, a handle, a town, a bio in the creator's voice and a story. They are not real people and are flagged as placeholders in WordPress. They live in one file, brand/content/creators-placeholder.json, which the splash page, the clip generator and the WordPress seed all read.
+
+The clips are story cards, not footage. The two video connectors available to this session had no credits, and the brand's credibility rests on real faces, so no faces were generated. Each card animates the fact at the heart of the story: three apartments become one, eleven signatures tally up, a clock runs forty minutes, two bars fill, a running total climbs. The caption arrives word by word and the town signs off with the Marigold dot. They stand in until the creators film.

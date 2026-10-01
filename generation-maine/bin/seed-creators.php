@@ -32,21 +32,25 @@ foreach ( $gm_existing as $gm_id ) {
 	wp_delete_post( $gm_id, true );
 }
 
+$gm_json = dirname( __DIR__, 4 ) . '/brand/content/creators-placeholder.json';
+$gm_json = file_exists( $gm_json ) ? $gm_json : __DIR__ . '/creators-placeholder.json';
+$gm_list = file_exists( $gm_json ) ? json_decode( (string) file_get_contents( $gm_json ), true ) : null; // phpcs:ignore WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
+$gm_list = isset( $gm_list['creators'] ) ? $gm_list['creators'] : array();
 $gm_towns = array( 'Skowhegan', 'Presque Isle', 'Biddeford', 'Machias', 'Lewiston', 'Rumford', 'Belfast', 'Fort Kent', 'Sanford', 'Bangor', 'Rockland', 'Farmington' );
-$gm_lens  = array( '0:52', '1:04', '0:47', '0:58', '0:49', '0:55', '1:01', '0:44', '0:50', '0:57', '0:48', '0:53' );
 for ( $gm_i = 0; $gm_i < $gm_count; $gm_i++ ) {
+	$gm_c  = isset( $gm_list[ $gm_i ] ) ? $gm_list[ $gm_i ] : array();
 	$gm_id = wp_insert_post(
 		array(
 			'post_type'    => 'gm_creator',
 			'post_status'  => 'publish',
-			'post_title'   => '[Creator name]',
-			'post_content' => '[Two or three sentences in the creator\'s words: who they are, what they do, how long they have lived here.]',
+			'post_title'   => isset( $gm_c['name'] ) ? $gm_c['name'] : '[Creator name]',
+			'post_content' => isset( $gm_c['bio'] ) ? $gm_c['bio'] : '[Two or three sentences in the creator\'s words.]',
 			'menu_order'   => $gm_i,
 		)
 	);
-	update_post_meta( $gm_id, 'gm_handle', '@handle' );
-	update_post_meta( $gm_id, 'gm_hometown', $gm_towns[ $gm_i % count( $gm_towns ) ] );
-	update_post_meta( $gm_id, 'gm_clip_len', $gm_lens[ $gm_i % count( $gm_lens ) ] );
+	update_post_meta( $gm_id, 'gm_handle', isset( $gm_c['handle'] ) ? $gm_c['handle'] : '@handle' );
+	update_post_meta( $gm_id, 'gm_hometown', isset( $gm_c['town'] ) ? $gm_c['town'] : $gm_towns[ $gm_i % count( $gm_towns ) ] );
+	update_post_meta( $gm_id, 'gm_clip_len', isset( $gm_c['len'] ) ? $gm_c['len'] : '' );
 	update_post_meta( $gm_id, 'gm_placeholder', true );
 	if ( $gm_clips ) {
 		update_post_meta( $gm_id, 'gm_clip_url', $gm_clips . '/creator-' . ( ( $gm_i % 9 ) + 1 ) . '.webm' );

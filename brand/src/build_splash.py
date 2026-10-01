@@ -332,33 +332,26 @@ body.scrub{transition:none}
 @media (max-width:640px){.site .w{grid-template-columns:1fr}.site .lk{height:90px}}
 """
 
-CARDS = [
-    ("t1", "Skowhegan", "Finding a place", "Three apartments in town. One I could afford. Here is what the lease said.", "0:52"),
-    ("t2", "Presque Isle", "Starting a shop", "I wanted to sell coffee from a cart. It took eleven signatures.", "1:04"),
-    ("t3", "Biddeford", "Who stays", "Half my graduating class left. I asked the ones who stayed why.", "0:47"),
-    ("t4", "Machias", "The commute", "Forty minutes each way for a job that pays the rent. Barely.", "0:58"),
-    ("t5", "Lewiston", "Coming home", "I moved back in with my parents at 26. Here is the math that made me.", "0:49"),
-    ("t6", "Rumford", "Moving out", "My first lease. My first security deposit. My first surprise fee.", "0:55"),
-    ("t1", "Belfast", "Two jobs", "One job pays for the room. The second one pays for everything else.", "1:01"),
-    ("t2", "Fort Kent", "Doing the math", "What a nursing license costs before the first paycheck.", "0:44"),
-    ("t3", "Sanford", "Winter work", "Landscaping stops in November. What I do until April.", "0:50"),
-]
+with open(os.path.join(ROOT, "brand", "content", "creators-placeholder.json")) as fh:
+    CREATORS = json.load(fh)["creators"]
+CARDS = [(c["tone"], c["town"], c["story"], c["caption"], c["len"]) for c in CREATORS]
 
 
 def page():
     rows = mural_rows()
     stagevids, panels, idx, whos = "", "", "", ""
     for i, (tone, town, topic, cap, dur) in enumerate(CARDS):
+        cr = CREATORS[i]
         stagevids += '<video data-i="%d" data-dur="%s" src="media/creator-%d.webm" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (
             i, dur, i + 1, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
-        who = '<div class="who%s">%s<span><b>@handle</b>[Creator name]</span></div>' % (' on' if i == 0 else '', avatar())
+        who = '<div class="who%s">%s<span><b>%s</b>%s</span></div>' % (' on' if i == 0 else '', avatar(), cr["handle"], cr["name"])
         whos += who
-        idx += '<button type="button" aria-label="Creator %d, [Creator name], %s" data-name="[Creator name]"%s></button>' % (i + 1, town, ' class="on"' if i == 0 else "")
-        socials = ''.join('<a href="#" aria-label="%s">%s<span>@handle</span></a>' % (n.capitalize(), icon(n)) for n in ("instagram", "tiktok", "youtube"))
+        idx += '<button type="button" aria-label="Creator %d, %s, %s" data-name="%s"%s></button>' % (i + 1, cr["name"], town, cr["name"], ' class="on"' if i == 0 else "")
+        socials = ''.join('<a href="#" aria-label="%s">%s<span>%s</span></a>' % (n.capitalize(), icon(n), cr["handle"]) for n in ("instagram", "tiktok", "youtube"))
         panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv"><video src="media/creator-%d.webm" muted loop playsinline preload="none"></video>%s</div>'
-                   '<p class="k">%s, Maine<i class="d pulse"></i></p><h2>%s</h2><p class="bio">[Two or three sentences in the creator\'s words: who they are, what they do, how long they have lived here.]</p>'
+                   '<p class="k">%s, Maine<i class="d pulse"></i></p><h2>%s</h2><p class="bio">%s</p>'
                    '<div class="soc">%s</div></article>') % (
-                       " on" if i == 0 else "", i + 1, i, i + 1, who, town, "[Creator name]", socials)
+                       " on" if i == 0 else "", i + 1, i, i + 1, who, town, cr["name"], cr["bio"], socials)
     body = r"""
 <header class="top" id="topbar"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s%(lock_dark)s</a>
 <nav aria-label="Page"><a href="#about" data-for="about">About</a><a href="#creators" data-for="creators">Creators</a><a href="#words" data-for="words">In their words</a><a href="#follow" data-for="follow">Follow</a></nav>
