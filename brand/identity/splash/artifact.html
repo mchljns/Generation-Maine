@@ -32,6 +32,8 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 /* nav: transparent over the hero, a frosted Birch bar once the page scrolls. The active section carries the dot. */
 .top{position:fixed;top:0;left:0;right:0;z-index:20;padding-top:env(safe-area-inset-top,0px);color:#F4F0E6;transition:background .35s,color .35s,box-shadow .35s,transform .4s cubic-bezier(.2,.7,.2,1)}
 .top.hide{transform:translateY(-110%)}
+.top.scrolled:not(.solid){background:var(--sp);box-shadow:0 1px 0 rgba(244,240,230,.14)}
+.top.scrolled:not(.solid) .w{height:60px}
 @media (prefers-reduced-motion: reduce){.top{transition:background .35s,color .35s,box-shadow .35s}}
 .top .w{display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px;transition:height .35s}
 .top .lk{height:24px;width:auto;display:block}
@@ -317,7 +319,7 @@ section{padding-block:clamp(56px,8vw,112px)}
   document.getElementById('sw-cap').addEventListener('click', () => { capsule = true; setNav(); scrollTo({ top: document.getElementById('about').offsetTop - 80 }); });
   const prog = document.getElementById('prog');
   let lastY = scrollY, ticking = false;
-  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%'; ticking = false; }); }, { passive: true });
+  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; bar.classList.toggle('scrolled', y > 12); if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%'; ticking = false; }); }, { passive: true });
   const links = [...bar.querySelectorAll('nav a')];
   const ao = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.dataset.for === e.target.id)); }), { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
   ['about', 'creators', 'words', 'follow'].forEach(id => { const el = document.getElementById(id); if (el) ao.observe(el); });
