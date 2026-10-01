@@ -323,3 +323,5 @@ Every button on the site is a pill. The capsule nav was already a pill and the b
 ## The creators on phones
 
 Phones keep the pinned stepper rather than a long list. The clip sits on top, the creator's details under it with the bio held to four lines, and the position row under both. Scrolling steps through the nine the same way as on desktop, and the next creator's details arrive from the right. The details block takes the height of the tallest panel so the row sits close. The section clips horizontally so the slide-in offset never widens the page. Checked at 390 by 844 and 375 by 667.
+
+The hero's second action is a text link, not a second button. One pill, "Watch the stories", and beside it "Get the newsletter" in Snow with a short underline that draws to full length on hover. The capsule carries the newsletter button, so the hero does not need two.

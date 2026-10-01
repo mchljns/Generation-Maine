@@ -29,7 +29,11 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .btn{display:inline-block;font:600 15px/1 var(--body);padding:16px 26px;border-radius:999px;text-decoration:none;border:1.5px solid transparent;transition:transform .25s cubic-bezier(.2,.7,.2,1),background .25s}
 .btn:hover{transform:translateY(-2px)}
 .btn:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--mg);outline-offset:3px}
-.b1{background:var(--snow);color:var(--sp)}.b1:hover{background:#FFFFFF}.b2{color:var(--snow);border-color:rgba(255,255,255,.55)}.b2:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.8)}
+.b1{background:var(--snow);color:var(--sp)}.b1:hover{background:#FFFFFF}
+/* the secondary action is a text link with an underline that draws in on hover */
+.tl{display:inline-block;font:600 15px/1 var(--body);color:var(--snow);text-decoration:none;padding:16px 4px;position:relative}
+.tl::after{content:"";position:absolute;left:4px;right:4px;bottom:12px;height:1.5px;background:currentColor;transform:scaleX(.35);transform-origin:left;opacity:.6;transition:transform .35s cubic-bezier(.2,.7,.2,1),opacity .25s}
+.tl:hover::after{transform:scaleX(1);opacity:1}
 .b3{background:var(--sp);color:var(--snow)}.b3:hover{background:var(--pine)}
 
 /* nav: a transparent bar over the top of the hero. On the first scroll it folds into a floating frosted capsule with a reading line.
@@ -90,7 +94,7 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .hero .w{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:32px;padding-block:80px 88px;min-height:620px;align-items:end}
 .hero h1{font-size:clamp(46px,8.2vw,112px);max-width:11ch}
 .hero .lede{font-size:clamp(19px,1.6vw,23px);line-height:1.5;max-width:38ch;margin:28px 0 30px;color:var(--snow);opacity:.92}
-.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero .ctas{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
 .mural{position:relative;justify-self:end;width:min(100%,480px);aspect-ratio:1;max-width:100%}
 .mural svg{width:100%;height:100%;display:block}
 /* the hero period pulses like a location marker: the dot holds still, a ring breathes out of it and fades */
@@ -242,7 +246,7 @@ body.scrub{transition:none}
 <section class="hero" id="top"><div class="w">
   <div class="h1"><h1 id="h1" class="rise"><span class="">Young Mainers on building a life <b class="nw">here<i class="d pulse"></i></b></span></h1>
   <p id="lede" class="lede rise">Young Mainers film the rules that shape their lives. What rent costs, what a license costs, what it takes to stay. Told from the towns they live in.</p>
-  <p class="ctas rise" id="ctas"><a class="btn b1" href="#creators">Watch the stories</a><a class="btn b2" href="#news">Get the newsletter</a></p></div>
+  <p class="ctas rise" id="ctas"><a class="btn b1" href="#creators">Watch the stories</a><a class="tl" href="#news">Get the newsletter</a></p></div>
   <div class="mural" id="mural" aria-hidden="true"></div>
 </div></section>
 
