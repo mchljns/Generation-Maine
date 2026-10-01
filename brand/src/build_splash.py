@@ -101,6 +101,19 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .top.solid .w{height:60px}
 .top.solid .lk.light{display:none}.top.solid .lk.dark{display:block}
 .top.solid .cta{background:var(--sp);color:#F4F0E6;border-color:var(--sp)}
+/* capsule variant: once scrolled, the bar becomes a floating frosted capsule with a reading-progress line. Switch with #capsule */
+html.capsule .top.solid{background:transparent;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+html.capsule .top.solid .w{height:52px;max-width:880px;margin:10px auto 0;padding-inline:10px 10px;background:rgba(244,240,230,.9);-webkit-backdrop-filter:blur(18px) saturate(1.1);backdrop-filter:blur(18px) saturate(1.1);border-radius:999px;box-shadow:0 1px 0 var(--rule),0 10px 30px rgba(11,43,33,.12);position:relative;overflow:hidden;gap:16px}
+html.capsule .top.solid .w>a:first-child{padding-left:12px}
+html.capsule .top.solid .lk{height:20px}
+html.capsule .top.solid nav{gap:4px}
+html.capsule .top.solid nav a{padding:9px 12px;border-radius:999px;font-size:13px;transition:background .25s}
+html.capsule .top.solid nav a:hover{background:rgba(16,72,54,.08)}
+html.capsule .top.solid nav a.on{background:var(--sp);color:#F4F0E6}
+html.capsule .top.solid nav a::before{display:none}
+html.capsule .top.solid .cta{padding:10px 14px;border-radius:999px;font-size:13px}
+html.capsule .top.solid .prog{display:block}
+.prog{display:none;position:absolute;left:0;bottom:0;height:2px;background:var(--sp);width:0;transition:width .15s linear}
 .menu{display:none;font:600 14px/1 var(--body);background:none;border:0;color:inherit;padding:10px 0;cursor:pointer}
 .sheet{position:fixed;inset:0;z-index:30;background:var(--sp);color:#F4F0E6;padding:calc(24px + env(safe-area-inset-top,0px)) var(--M) 32px;display:none;flex-direction:column}
 .sheet.open{display:flex}
@@ -278,7 +291,7 @@ def page():
     body = r"""
 <header class="top" id="topbar"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s%(lock_dark)s</a>
 <nav aria-label="Page"><a href="#about" data-for="about">About</a><a href="#creators" data-for="creators">Stories</a><a href="#words" data-for="words">In their words</a><a href="#follow" data-for="follow">Follow</a></nav>
-<a class="cta" href="#news">Get the newsletter</a><button class="menu" id="menu" aria-expanded="false" aria-controls="sheet">Menu</button></div></header>
+<a class="cta" href="#news">Get the newsletter</a><button class="menu" id="menu" aria-expanded="false" aria-controls="sheet">Menu</button><span class="prog" id="prog" aria-hidden="true"></span></div></header>
 <div class="sheet" id="sheet" aria-hidden="true"><div class="bar">%(lock)s<button class="menu" id="close" style="display:block">Close</button></div>
 <nav aria-label="Page"><a href="#about">About<i class="d"></i></a><a href="#creators">Stories<i class="d"></i></a><a href="#words">In their words<i class="d"></i></a><a href="#follow">Follow<i class="d"></i></a></nav>
 <div class="foot"><a class="cta" href="#news">Get the newsletter</a></div></div>
@@ -372,8 +385,11 @@ def page():
   // The bar turns solid once the hero scrolls away, marks the section in view, and opens the phone menu.
   const bar = document.getElementById('topbar'), heroEl = document.querySelector('.hero');
   new IntersectionObserver(es => es.forEach(e => bar.classList.toggle('solid', !e.isIntersecting)), { rootMargin: '-68px 0px 0px 0px', threshold: 0 }).observe(heroEl);
+  // Two nav styles ship for comparison. #capsule turns the scrolled bar into a floating capsule with a reading-progress line.
+  const setNav = () => document.documentElement.classList.toggle('capsule', location.hash === '#capsule'); setNav(); addEventListener('hashchange', setNav);
+  const prog = document.getElementById('prog');
   let lastY = scrollY, ticking = false;
-  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; ticking = false; }); }, { passive: true });
+  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%%'; ticking = false; }); }, { passive: true });
   const links = [...bar.querySelectorAll('nav a')];
   const ao = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.dataset.for === e.target.id)); }), { rootMargin: '-40%% 0px -55%% 0px', threshold: 0 });
   ['about', 'creators', 'words', 'follow'].forEach(id => { const el = document.getElementById(id); if (el) ao.observe(el); });
