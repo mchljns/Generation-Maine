@@ -109,15 +109,16 @@ def signature():
         mh, gap = 96, 26
         # horizontal: the state stands taller than the capitals, like a flag beside the name.
         # The mark is small in this lockup, so it ships with the mid cut. The large version carries the full cut, for 600 px wide and up. The solid version is for under 300 px wide.
+        RISE = mh - 74 - 6   # the state stands 16 units above the wordmark box, so every file includes that room
         for lsuf, lcut in (("", "mid"), ("-large", "full"), ("-solid", "solid")):
-            mb, mw = maine_lines(0, 74 - mh + 6, mh, fg, fg, lcut, gold=False)
-            m["lockup-horizontal" + lsuf + suf] = svg(w + mw + gap, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + gap), b), "Generation Maine")
-            body = mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + gap), b) + rect(mw + gap, h + 22, w, 2, fg)
-            t, _ = outlined(INTER, MPI, 27, mw + gap, h + 60, fg)
-            m["lockup-endorsed" + lsuf + suf] = svg(w + mw + gap, h + 72, body + t, "Generation Maine, an initiative of Maine Policy Institute")
-        mb, mw = maine_lines(0, 74 - mh + 6, mh, fg, fg, "mid", gold=False)
+            mb, mw = maine_lines(0, 74 - mh + 6 + RISE, mh, fg, fg, lcut, gold=False)
+            m["lockup-horizontal" + lsuf + suf] = svg(w + mw + gap, h + RISE, mb + '<g transform="translate(%s %s)">%s</g>' % (f(mw + gap), f(RISE), b), "Generation Maine")
+            body = mb + '<g transform="translate(%s %s)">%s</g>' % (f(mw + gap), f(RISE), b) + rect(mw + gap, RISE + h + 22, w, 2, fg)
+            t, _ = outlined(INTER, MPI, 27, mw + gap, RISE + h + 60, fg)
+            m["lockup-endorsed" + lsuf + suf] = svg(w + mw + gap, RISE + h + 72, body + t, "Generation Maine, an initiative of Maine Policy Institute")
+        mb, mw = maine_lines(0, 74 - mh + 6 + RISE, mh, fg, fg, "mid", gold=False)
         # horizontal, state after the name
-        m["lockup-horizontal-right" + suf] = svg(w + mw + gap, h, b + '<g transform="translate(%s 0)">%s</g>' % (f(w + gap), mb), "Generation Maine")
+        m["lockup-horizontal-right" + suf] = svg(w + mw + gap, h + RISE, '<g transform="translate(0 %s)">%s</g>' % (f(RISE), b) + '<g transform="translate(%s 0)">%s</g>' % (f(w + gap), mb), "Generation Maine")
         # compact: the state sits inside the cap height, for bylines and tight bars
         ch, cgap = 66, 20
         mb, cw = maine_lines(0, 74 - ch, ch, fg, fg, "mid", gold=False)
@@ -146,8 +147,8 @@ def signature():
     mb, mw = maine_lines(0, 0, 20, BI, BI, "solid"); m["favicon"] = svg(32, 32, '<circle cx="16" cy="16" r="16" fill="%s"/>' % SP + '<g transform="translate(%s 6)">%s</g>' % (f((32 - mw) / 2), mb), "Generation Maine")
     # the video bug: solid cut, Birch, with the name. The dot stays, the one Marigold in the frame.
     b, w, h = wordmark_one_line(BI, MG, "circle", 100)
-    mb, mw = maine_lines(0, 74 - 96 + 6, 96, BI, BI, "solid", gold=False)
-    m["bug"] = svg(w + mw + 26, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + 26), b), "Generation Maine")
+    mb, mw = maine_lines(0, 0, 96, BI, BI, "solid", gold=False)
+    m["bug"] = svg(w + mw + 26, h + 16, mb + '<g transform="translate(%s 16)">%s</g>' % (f(mw + 26), b), "Generation Maine")
     return m
 
 
@@ -165,8 +166,8 @@ def bark_sky():
         b, w, h = wm(fg)
         m["wordmark" + suf] = svg(w, h, b, "Generation Maine")
         mh = 100
-        mb, mw = maine_lines(0, 78 - mh + 8, mh, fg, fg, "full", gold=False)
-        m["lockup-horizontal" + suf] = svg(w + mw + 28, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + 28), b), "Generation Maine")
+        mb, mw = maine_lines(0, 0, mh, fg, fg, "mid", gold=False)
+        m["lockup-horizontal" + suf] = svg(w + mw + 28, h + 14, mb + '<g transform="translate(%s 14)">%s</g>' % (f(mw + 28), b), "Generation Maine")
         ms = 180
         mb, mw = maine_lines((w - ms * maine2.ASPECT) / 2, 0, ms, fg, fg, "full", gold=False)
         m["lockup-stacked" + suf] = svg(w, ms + 34 + h, mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 34), b), "Generation Maine")
