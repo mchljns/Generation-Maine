@@ -3,7 +3,7 @@
 The state is one color. Marigold is the dot on the i, and only there (client decision, October 1).
 
 Three cuts, one drawing, chosen by size:
-  full   : 21 lines, weight from 2.1 to 3.4 percent of the height, first row at 6 percent. 72 px and up
+  full   : 16 lines, one for each county, weight from 2.6 to 4.4 percent of the height. 72 px and up
   mid    : 11 heavier lines on a lightly simplified coast. 32 to 72 px. The cut the horizontal lockups ship with
   solid  : the silhouette alone, simplified so the edge stays clean. Below 32 px
 
@@ -47,15 +47,19 @@ def maine_lines(x, y, h, fg, mark, cut="full", gold=True):
         return '<path fill="%s" d="%s"/>' % (fg, maine2.path(ring)), maxx - minx
     if cut == "mid":
         ring = simplified(ring, h * 0.006)
-    # the first row sits on the broad northern border, not on the two bumps at Fort Kent
-    n, w_lo, w_hi, keep, top, span = (21, h * 0.021, h * 0.034, 1.8, 0.06, 0.905) if cut == "full" else (11, h * 0.042, h * 0.056, 2.2, 0.07, 0.88)
+    # Sixteen lines for Maine's sixteen counties. The first row sits on the crest at Fort Kent, and the
+    # northern border is kept as one line, so the top of the state is never cut off or broken into dashes.
+    n, w_lo, w_hi, keep, top, span = (16, h * 0.026, h * 0.044, 1.8, 0.03, 0.94) if cut == "full" else (11, h * 0.042, h * 0.056, 2.2, 0.035, 0.925)
     rows = []
     for i in range(n):
         t = i / (n - 1)
         y0 = miny + (maxy - miny) * (top + span * t)
         w = w_lo + (w_hi - w_lo) * t
         xs = maine2.crossings(ring, y0)
-        runs = [(a + w / 2, b - w / 2) for a, b in zip(xs[0::2], xs[1::2]) if b - a >= w * keep]
+        runs = list(zip(xs[0::2], xs[1::2]))
+        if i == 0 and runs:
+            runs = [(runs[0][0], runs[-1][1])]
+        runs = [(a + w / 2, b - w / 2) for a, b in runs if b - a >= w * keep]
         rows.append((y0, w, runs))
     widest = max(range(n), key=lambda i: sum(b - a for a, b in rows[i][2]))
     out = ""
