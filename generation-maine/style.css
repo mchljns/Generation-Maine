@@ -166,8 +166,9 @@ body.scrub{transition:none}
 .stories .w{width:100%;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px clamp(28px,5vw,72px);align-items:center}
 .stage{height:min(64vh,560px);display:flex;align-items:center}
 .vid{position:relative;aspect-ratio:9/16;height:100%;max-height:620px;width:auto;max-width:100%;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
-.vid video,.vid img.clip{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transform:scale(1.04);transition:opacity .6s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
-.vid video.on,.vid img.clip.on{opacity:1;transform:none}
+.vid video,.vid img.clip{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;visibility:hidden;transform:scale(1.04);transition:opacity 0s .5s,visibility 0s .5s,transform 0s .5s}
+/* the next clip fades in over the last one, which stays whole until it is covered, so the two never show through each other */
+.vid video.on,.vid img.clip.on{opacity:1;visibility:visible;transform:none;z-index:1;transition:opacity .45s ease,transform 1.2s cubic-bezier(.2,.7,.2,1)}
 /* the social header on the clip: the creator's avatar and handle, as they appear on their own feed. Uploaded with the post in WordPress. */
 .who{position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:10px;z-index:2;color:#FFFFFF;opacity:0;transition:opacity .5s}.who.on{opacity:1}
 .who .av{width:36px;height:36px;display:block;border-radius:50%}
@@ -198,20 +199,24 @@ body.scrub{transition:none}
 .panel .pv{display:none}
 @media (prefers-reduced-motion: reduce){.panel>*,.panel.prev>*{transform:none;transition:opacity .3s}}
 @media (max-width:900px){
-  /* phones keep the pinned stepper: the clip on top, the creator's details under it, the position row under both */
+  /* phones keep the pinned stepper: the clip on top at the size the screen allows, the creator's details tight under it, the position row at the bottom.
+     the bar hides on the way down, so the block sits near the top; the capsule overlaps the clip only for a moment on the way back up */
   .stories{padding:20px 0 clamp(60px,10vh,120px)}
-  .stories .pinw{top:calc(60px + env(safe-area-inset-top,0px) + 10px)}
-  .stories .w{grid-template-columns:1fr;gap:16px}
-  .stage{height:var(--stageh,min(40vh,340px));justify-content:flex-start}
+  .stories .pinw{top:calc(16px + env(safe-area-inset-top,0px))}
+  .stories .w{grid-template-columns:1fr;gap:14px}
+  .stage{height:var(--stageh,min(52vh,420px));justify-content:center}
+  .vid{max-height:none}
   .vid .dur{right:8px;top:8px;font-size:10px;padding:5px 6px}.who{left:8px;top:8px;gap:8px;right:52px}.who .av{width:30px;height:30px}.who span b{font-size:12px}.who span{font-size:11px}
-  .panels{height:auto;min-height:200px}
-  .panel{justify-content:flex-start;padding-top:4px}
-  .panel .k{margin-bottom:10px}
-  .panel h2{font-size:clamp(32px,9vw,44px);max-width:none}
-  .panel .bio{font-size:16px;line-height:1.42;margin:10px 0 14px}
-  .soc{gap:16px}.soc a{font-size:13px}
+  .panels{height:auto;min-height:150px}
+  .panel{justify-content:flex-start;padding-top:2px}
+  .panel .k{margin-bottom:6px;font-size:11px}
+  .panel h2{font-size:clamp(28px,8vw,40px);max-width:none}
+  .panel .bio{font-size:16px;line-height:1.42;margin:8px 0 12px}
+  /* the platforms as marks only, one row; the handle is on the clip's header */
+  .soc{gap:18px}.soc a span{display:none}.soc .ic{width:22px;height:22px}
   .panel .pv{display:none}
-  .where{margin-top:0;gap:12px;font-size:11px}.where .next{min-width:0}
+  .where{margin-top:0;gap:12px;font-size:11px;padding-bottom:max(12px,env(safe-area-inset-bottom,0px))}.where .next{min-width:0}
+  .where .segs button{height:28px}.where .segs button::before{top:13px}
 }
 
 

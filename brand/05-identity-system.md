@@ -376,3 +376,13 @@ The splash is published from the `gh-pages` branch of this repo through GitHub P
 https://mchljns.github.io/Generation-Maine/
 
 The branch holds a standalone copy of brand/identity/splash/index.html plus the placeholder clips in media/. To refresh it after a change to the splash, rebuild with build_splash.py, copy index.html and media/ onto `gh-pages`, and push. Pages serves the branch directly, no workflow. The repo had to be public for this; the WordPress theme and brand files are therefore public too.
+
+## Phone stepper, second pass
+
+Found on the live preview on a phone-sized screen: the clip was capped at 340px tall, which on a 390 by 664 Safari viewport left a 134px wide clip, and the position row sat on the bottom edge under the toolbar. Fixes, in the splash and the theme script together:
+
+- The clip takes the room the screen has. The block starts 16px from the top since the bar hides on the way down, the details sit tight under it (kicker, name, bio, platform marks without handles since the handle is on the clip), and the row at the bottom has a 28px tap height and clears the safe area. The clip floor is 200px, the ceiling two thirds of the screen or the column width at 9:16.
+- The fit runs again once the fonts load, so the measured details height is the real one.
+- The clip change is a fade of the next clip over the last one, which stays whole until it is covered. Before, both faded at once and showed through each other. Clips that are not showing are hidden outright, so a phone is not decoding nine GIFs at once.
+
+Measured after the change: 390 by 664 gives a 181 by 322 clip, 430 by 932 gives 343 by 610.

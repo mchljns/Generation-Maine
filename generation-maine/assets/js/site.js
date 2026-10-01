@@ -73,11 +73,13 @@
 		if (wnext) { var nx = marks[i + 1]; wnext.textContent = nx ? (wnext.dataset.next || 'Next: ') + nx.dataset.name : (wnext.dataset.last || 'Last one'); }
 	}
 	var stageEl = $('.stage');
-	function fit() { if (!panelsEl) { return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; if (stageEl) { stageEl.style.removeProperty('--stageh'); } return; } var h = 0; panels.forEach(function (p) { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 8) + 'px'; if (stageEl) { var room = innerHeight - 70 - (h + 8) - 14 - 32 - 24; stageEl.style.setProperty('--stageh', Math.max(170, Math.min(innerHeight * 0.4, 340, room)) + 'px'); } }
+	function fit() { if (!panelsEl) { return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; if (stageEl) { stageEl.style.removeProperty('--stageh'); } return; } var h = 0; panels.forEach(function (p) { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px'; if (stageEl) { var top = 16, row = 28 + 12, room = innerHeight - top - (h + 6) - 14 * 2 - row - 12, colw = stageEl.clientWidth || (innerWidth - 32); stageEl.style.setProperty('--stageh', Math.round(Math.max(200, Math.min(innerHeight * 0.66, colw * 16 / 9, room))) + 'px'); } }
 	function step() { if (!storiesEl || !panels.length) { return; } var total = storiesEl.offsetHeight - innerHeight; var t = total > 0 ? Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)) : 0; show(Math.min(panels.length - 1, Math.floor(t * panels.length))); }
 	marks.forEach(function (mk, k) { mk.addEventListener('click', function () { var total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + 0.5) / panels.length * total }); }); });
 	if (reduced) { stageVids.forEach(function (v) { if (v.play) { v.controls = true; } }); }
 	fit(); step(); if (cur < 0 && panels.length) { show(0); }
+	if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { fit(); step(); }); }
+	addEventListener('load', fit);
 
 	// The bar: folds into the capsule on the first scroll, hides on the way down past the hero, returns on the way up.
 	var bar = $('#topbar'), heroEl = $('.hero'), prog = $('#prog'), lastY = scrollY, ticking = false;
