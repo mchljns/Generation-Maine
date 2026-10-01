@@ -261,7 +261,7 @@ body.scrub{transition:none}
 
 <section class="news reveal" id="news" data-bg="var(--bi)"><div class="w">
   <div><h2 class="h2"><span class="">The full story, by <b class="nw">email<i class="d"></i></b></span></h2><p class="lede">Each story in full, with the numbers behind it. Written by the creator who filmed it. Your address stays with us. [CONFIRM: privacy line]</p>
-  <form class="form" id="signup" novalidate><label class="k" for="email" style="flex-basis:100%">Email</label><input id="email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required><button class="btn b3" type="submit">Subscribe</button>
+  <form class="form" id="signup" novalidate method="get" action="https://CONFIRM-publication.substack.com/subscribe" target="_blank" rel="noopener" data-confirm="[CONFIRM: publication address]"><label class="k" for="email" style="flex-basis:100%">Email</label><input id="email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required><button class="btn b3" type="submit">Subscribe</button>
   <p class="note">Runs on Substack. Unsubscribe in one click.</p><p class="ok" id="ok" hidden>Check your inbox. The confirmation is on its way.</p></form></div>
   <div class="posts"><span class="rule" aria-hidden="true"></span>
     <a class="post row-in" href="#"><div><h3>[Post title, plain words]</h3><p>[One line on what the creator found out.]</p><p class="by">[Creator name] <span>Belfast, Maine</span></p></div><span class="dt">[Date]</span></a>
@@ -348,8 +348,11 @@ body.scrub{transition:none}
   secs.forEach(sc => so.observe(sc));
   const site = document.querySelector('.site'); new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) site.classList.add('on'); }), { threshold: .3 }).observe(site);
 
-  // The signup form has nowhere to go yet. It validates and confirms in the page.
+  // The signup form hands off to Substack: the address rides in the query string to the publication's subscribe page, which opens
+  // in a new tab and sends the confirmation email. The page shows its own line. Until the publication exists, the hand-off is held.
   const f = document.getElementById('signup'), em = document.getElementById('email'), ok = document.getElementById('ok');
-  f.addEventListener('submit', ev => { ev.preventDefault(); if (!em.checkValidity()) { em.focus(); em.setAttribute('aria-invalid', 'true'); return; } em.removeAttribute('aria-invalid'); ok.hidden = false; requestAnimationFrame(() => ok.classList.add('show')); f.querySelector('button').disabled = true; });
+  f.addEventListener('submit', ev => { if (!em.checkValidity()) { ev.preventDefault(); em.focus(); em.setAttribute('aria-invalid', 'true'); return; } em.removeAttribute('aria-invalid');
+    if (f.action.includes('CONFIRM')) ev.preventDefault();
+    ok.hidden = false; requestAnimationFrame(() => ok.classList.add('show')); f.querySelector('button').disabled = true; });
 })();
 </script>

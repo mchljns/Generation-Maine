@@ -305,3 +305,7 @@ The reversed mark was Birch, the kit's cream. Against the page's pure white type
 Room after the creators. The stepper used to run straight into the Marigold section, with the position row almost touching it. The creators section now carries a tail of about a tenth of the screen height, so the row and the next section breathe.
 
 The footer wordmark pings. Once the footer is on screen, the dot on the i sends out the same slow ring as the hero period and the town dots, so the page closes on the mark the way it opened.
+
+## The signup hand-off
+
+The form's action is the publication's subscribe page on Substack, with the address in the query string, opened in a new tab. Substack fills its field from the query, sends the confirmation email and shows its own confirmation page. The splash page stays put and shows its own "check your inbox" line. Substack offers no return URL after a free signup, so the confirmation page is theirs; a custom domain on the publication puts our name on it. For a visitor who never leaves the page, the server relay in the theme is the route, with this hand-off as its fallback. The publication address is a CONFIRM, and until it is set the form confirms in the page only.
