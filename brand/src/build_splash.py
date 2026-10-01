@@ -1,6 +1,6 @@
 """The splash page: one page, the brand's lines as the motion system, the page background changing as you scroll.
 
-Sections: nav with the compact lockup, the hero with six lines and the sixteen-line mural, about,
+Sections: nav with the compact lockup, the hero with the sixteen-line mural as the only lines, about,
 the stories (creator-uploaded placeholders), in their words, the newsletter, follow, footer.
 
   python3 brand/src/build_splash.py   # writes brand/identity/splash/index.html and artifact.html
@@ -94,7 +94,6 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 /* hero */
 .hero{position:relative;background:var(--sp);color:#F4F0E6;overflow:hidden}
 .hero .w{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:32px;padding-block:80px 88px;min-height:620px;align-items:end}
-#field{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
 .hero h1{font-size:clamp(46px,8.2vw,112px);max-width:11ch}
 .hero .lede{font-size:clamp(17px,1.5vw,21px);line-height:1.45;max-width:40ch;margin:28px 0 30px;color:rgba(244,240,230,.9)}
 .hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
@@ -223,7 +222,7 @@ def page():
 <header class="top"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s</a>
 <nav aria-label="Page"><a href="#about">About</a><a href="#creators">Creators</a><a href="#words">In their words</a><a href="#news">Newsletter</a></nav></div></header>
 
-<section class="hero" id="top"><canvas id="field" aria-hidden="true"></canvas><div class="w">
+<section class="hero" id="top"><div class="w">
   <div class="h1"><h1 id="h1" class="rise">%(h1)s</h1>
   <p id="lede" class="lede rise">Young Mainers film the rules that shape their lives. What rent costs, what a license costs, what it takes to stay. Told from the towns they live in.</p>
   <p class="ctas rise" id="ctas"><a class="btn b1" href="#creators">Watch the stories</a><a class="btn b2" href="#news">Get the newsletter</a></p></div>
@@ -280,39 +279,8 @@ def page():
 (() => {
   const MOSS = '#3D6F58', BI = '#F4F0E6';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const hero = document.querySelector('.hero'), cv = document.getElementById('field'), ctx = cv.getContext('2d');
-  const h1 = document.getElementById('h1'), lede = document.getElementById('lede'), ctas = document.getElementById('ctas');
+    const h1 = document.getElementById('h1'), lede = document.getElementById('lede'), ctas = document.getElementById('ctas');
   if (!reduced) { [h1, lede, ctas].forEach(el => el.classList.add('pre')); requestAnimationFrame(() => requestAnimationFrame(() => { h1.classList.remove('pre'); setTimeout(() => lede.classList.remove('pre'), 120); setTimeout(() => ctas.classList.remove('pre'), 240); })); }
-
-  // The field: six lines across the hero that make room for the headline on load, then drift slowly. No pointer.
-  let W = 0, H = 0, lines = []; const N = 6, STEPS = 160;
-  let open = 0, t0 = performance.now(), running = true;
-  function rects() { const hb = hero.getBoundingClientRect(); return [h1, lede].map((el, i) => { const r = el.getBoundingClientRect(); return { x0: r.left - hb.left - 10, y0: r.top - hb.top + (i ? -6 : 10), x1: r.right - hb.left + 10, y1: r.bottom - hb.top + (i ? 6 : -4) }; }); }
-  function resize() { const b = hero.getBoundingClientRect(); W = b.width; H = b.height; const dpr = Math.min(2, devicePixelRatio || 1); cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); const top = H * .3, bot = H - 40; lines = []; for (let i = 0; i < N; i++) { const t = i / (N - 1); lines.push({ y: top + (bot - top) * t, w: 1.6 + 2.2 * t, ph: i * 1.7, ys: new Float32Array(STEPS + 1), cut: new Uint8Array(STEPS + 1) }); } }
-  function smooth(a, k) { const n = a.length, o = new Float32Array(n); for (let i = 0; i < n; i++) { let acc = 0, ws = 0; for (let j = Math.max(0, i - 2 * k); j <= Math.min(n - 1, i + 2 * k); j++) { const w = Math.exp(-(((j - i) / k) ** 2) / 2); acc += a[j] * w; ws += w; } o[i] = acc / ws; } return o; }
-  function frame(now) {
-    const clearMax = Math.min(40, W * .03);
-    if (!reduced) { const e = Math.min(1, (now - t0) / 1200); open = 1 - Math.pow(1 - e, 3); } else open = 1;
-    const clear = clearMax * open, T = now / 1000, drift = reduced ? 0 : 3;
-    const obs = rects(); ctx.clearRect(0, 0, W, H);
-    const dx = W / STEPS, k = Math.max(2, Math.round(STEPS * clearMax / W * .6));
-    for (const L of lines) {
-      const y0 = L.y;
-      for (let s = 0; s <= STEPS; s++) {
-        const px = s * dx; let py = y0 + drift * Math.sin(T * .3 + L.ph + px / W * 2.2), best = 0, cut = 0;
-        for (const r of obs) { const ddx = px < r.x0 ? r.x0 - px : (px > r.x1 ? px - r.x1 : 0); if (ddx >= clear || clear <= 0) continue; const hh = Math.sqrt(clear * clear - ddx * ddx), top = r.y0 - hh, bot = r.y1 + hh; if (y0 > top && y0 < bot) { cut = 1; continue; } const gap = Math.min(Math.abs(y0 - top), Math.abs(y0 - bot)); const bow = .55 * clear * Math.exp(-(((gap) / (.7 * clear)) ** 2)); if (bow > best && bow > .02 * clear) { best = bow; py = y0 <= top ? y0 - bow : y0 + bow; } }
-        L.ys[s] = py; L.cut[s] = cut;
-      }
-      const ys = smooth(L.ys, k); ctx.lineWidth = L.w; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = MOSS;
-      let run = []; const flush = () => { if (run.length > 1) { ctx.beginPath(); ctx.moveTo(run[0][0], run[0][1]); for (let i = 1; i < run.length; i++) ctx.lineTo(run[i][0], run[i][1]); ctx.stroke(); } run = []; };
-      for (let s = 0; s <= STEPS; s++) { if (L.cut[s]) { flush(); continue; } run.push([s * dx, ys[s]]); }
-      flush();
-    }
-    if (running && !reduced) requestAnimationFrame(frame);
-  }
-  addEventListener('resize', () => { resize(); if (reduced) requestAnimationFrame(frame); });
-  new IntersectionObserver(es => es.forEach(e => { const was = running; running = e.isIntersecting; if (running && !was) requestAnimationFrame(frame); }), { threshold: 0 }).observe(hero);
-  resize(); requestAnimationFrame(frame);
 
   // The mural: the logo's sixteen lines at hero scale, drawing themselves in from the top.
   const d = JSON.parse(document.getElementById('maine-data').textContent), ns = 'http://www.w3.org/2000/svg';
