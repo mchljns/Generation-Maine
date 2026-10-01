@@ -60,18 +60,18 @@ CSS = r"""
 :root{
   --sp:#104836;--pine:#0B2B21;--bi:#F4F0E6;--ink:#1E2621;--mg:#EFB443;--sage:#DDE5DA;--moss:#3D6F58;--stone:#5E6A63;--sand:#E8E1D1;--white:#FFFFFF;
   --bg:var(--bi);--fg:var(--ink);--muted:#4F5B55;--rule:rgba(30,38,33,.14);--card:#FFFFFF;
-  --display:'Bricolage Grotesque',Arial,sans-serif;--body:Labrada,Georgia,'Times New Roman',serif;
+  --display:'Bricolage Grotesque',Arial,sans-serif;--body:'DM Sans',system-ui,Arial,sans-serif;
   --M:clamp(16px,4.5vw,64px);
 }
 /* One palette in every theme. The page commits to its own colors so text and background always pair. */
 :root{color-scheme:light}
 @font-face{font-family:'Bricolage Grotesque';font-weight:800;font-display:swap;src:url(data:font/woff2;base64,{{F800}}) format('woff2')}
-@font-face{font-family:Labrada;font-weight:100 900;font-display:swap;src:url(data:font/ttf;base64,{{FLAB}}) format('truetype')}
+@font-face{font-family:'DM Sans';font-weight:100 900;font-display:swap;src:url(data:font/ttf;base64,{{FDM}}) format('truetype')}
 @font-face{font-family:Inter;font-weight:100 900;font-display:swap;src:url(data:font/woff2;base64,{{FINTER}}) format('woff2')}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
-body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.55 var(--body);-webkit-font-smoothing:antialiased;transition:background .7s ease}
+body{margin:0;background:var(--bg);color:var(--fg);font:19px/1.55 var(--body);-webkit-font-smoothing:antialiased;transition:background .7s ease}
 a{color:inherit}
 .w{max-width:1280px;margin:0 auto;padding-inline:var(--M)}
 h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-height:.92;margin:0;text-wrap:balance}
@@ -137,7 +137,7 @@ html.capsule .top.solid .prog{display:block}
 .hero{position:relative;background:var(--sp);color:#F4F0E6;overflow:hidden}
 .hero .w{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:32px;padding-block:80px 88px;min-height:620px;align-items:end}
 .hero h1{font-size:clamp(46px,8.2vw,112px);max-width:11ch}
-.hero .lede{font-size:clamp(18px,1.55vw,22px);line-height:1.5;max-width:40ch;margin:28px 0 30px;color:rgba(244,240,230,.9)}
+.hero .lede{font-size:clamp(19px,1.6vw,23px);line-height:1.5;max-width:38ch;margin:28px 0 30px;color:rgba(244,240,230,.9)}
 .hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
 .mural{position:relative;justify-self:end;width:min(100%,480px);aspect-ratio:1;max-width:100%}
 .mural svg{width:100%;height:100%;display:block}
@@ -182,7 +182,7 @@ section{padding-block:clamp(56px,8vw,112px)}
 .panel:first-child{border-top:0}
 .panel .k{margin-bottom:14px}
 .panel h2{font-size:clamp(38px,4.6vw,66px);max-width:10ch}
-.panel .say{font:600 clamp(18px,1.6vw,22px)/1.35 var(--body);margin:22px 0 18px;max-width:34ch;color:var(--fg)}
+.panel .say{font:600 clamp(20px,1.7vw,24px)/1.35 var(--body);margin:22px 0 18px;max-width:34ch;color:var(--fg)}
 .panel .nm{font:600 15px/1.3 var(--body);margin:0 0 22px}.panel .nm span{font-weight:400;color:var(--muted)}
 .panel .go{display:inline-flex;gap:10px;align-items:center;font:600 15px/1 var(--body);text-decoration:none;border-bottom:1.5px solid var(--fg);padding-bottom:6px}
 .panel .pv{display:none}
@@ -238,7 +238,7 @@ section{padding-block:clamp(56px,8vw,112px)}
 .posts{display:grid;gap:0;position:relative}
 .post{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;padding:22px 0;border-bottom:1.5px solid var(--rule);text-decoration:none}
 .post h3{font-size:clamp(22px,2vw,28px);margin:0 0 8px}
-.post p{margin:0;color:var(--muted);font-size:15px}
+.post p{margin:0;color:var(--muted);font-size:17px}
 .post .by{font:600 13px/1.3 var(--body);color:var(--fg);margin-top:10px}.post .by span{font-weight:400;color:var(--muted)}
 .post .dt{font:600 13px/1.3 var(--body);color:var(--muted);white-space:nowrap;padding-top:6px}
 
@@ -255,7 +255,7 @@ section{padding-block:clamp(56px,8vw,112px)}
 .follow .row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
 @media (max-width:760px){.follow .row{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .follow a{display:block;padding:22px 0;border-bottom:1.5px solid var(--rule);text-decoration:none}
-.follow a b{display:block;font:600 15px/1.3 var(--body)}.follow a span{color:var(--muted);font-size:15px}
+.follow a b{display:block;font:600 15px/1.3 var(--body)}.follow a span{color:var(--muted);font-size:17px}
 .follow .h2{margin-bottom:28px}
 
 .site{background:var(--pine);color:#F4F0E6;padding-block:48px 40px}
@@ -423,7 +423,7 @@ def page():
         h1=dot("Young Mainers on building a life here"), h2about=dot("Made by the people it is about"), h2cre=dot("The stories"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         stagevids=stagevids, panels=panels, idx=idx, json=json.dumps(rows, separators=(",", ":")))
-    css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2")).replace("{{FLAB}}", K.font64("generation-maine/assets/fonts/labrada-var.ttf"))
+    css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("generation-maine/assets/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))
     head = '<title>Generation Maine</title>\n<meta name="description" content="Young Mainers film the rules that shape their lives. Short videos and a newsletter, made in Maine.">\n<style>%s</style>' % css
     artifact = head + body
     standalone = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">%s</head><body>%s</body></html>' % (head, body)
