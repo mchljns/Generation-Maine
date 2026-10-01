@@ -160,3 +160,20 @@ The one-color versions are the same drawing as the color versions with the dot i
 **The stamp, October 1** (`brand/identity/stamp/`, `brand/src/build_stamp.py`). The client's idea for an alternate brandmark: a square of sixteen lines with the solid state on it. Eight treatments at 240, 110, 48 and 24 px: the state in Marigold, Birch and Moss on Spruce lines, in Spruce and Marigold on Birch lines, and three knockouts where the lines stop short of the state. Under review. The knockouts are the strongest: the state is the one place the lines do not go, which is the same idea as the field motion on the website, and they use one ink on one field. A solid Marigold state is the Baxter Brewing problem and is shown only because it was asked for.
 
 **The lined dot, tested October 1** (`dot-lined-test.png`). The client asked whether the dot on the i could carry the line treatment. Five versions on the horizontal lockup at 900, 480 and 300 px: the solid Marigold dot, the dot in four and in three Marigold lines, the dot in lines of the ink, and a Marigold dot with the ink's lines through it. Rejected. At 900 px the lined dot reads as a stack of coins or a loading spinner above the i, and it fights the state, which is already the lined element in the lockup. At 480 px the lines merge and the dot is a slightly dull Marigold. At 300 px there is no difference. The lines are the state's. The dot stays solid.
+
+## Grade, October 1: Signature with the Maine mark
+
+The whole concept as it stands: Bricolage and Inter, the Spruce, Birch and Pine fields with Marigold once per frame, the sixteen-line state in one color, the solid Marigold dot, the two-line lockup as primary. Graded against the platform's eight criteria on the applied surfaces in `brand/identity/apply/`.
+
+| Criterion | Grade | Why |
+| --- | --- | --- |
+| 1. Signs, does not cover | A- | The solid bug with the name sits in the corner at 22 px tall. It reads as a sign-off, not an ad |
+| 2. Survives the crop | B+ | The size system handles it: lines at 110 px, solid at 32 px. The cost is that the avatar and the favicon are a plain silhouette, which is where the brand is least itself |
+| 3. Carries a person | A | Unchanged from round two: the name and town are one plain line, the headline is the loudest element, the logo is small |
+| 4. Neutral | A- | A state outline is the most neutral Maine symbol there is. One color and no flag colors keep it there |
+| 5. Both audiences | A- | The lined state is at home as a TikTok avatar and as a Substack masthead. The two-line lockup carries the Institute line without looking like a letterhead |
+| 6. Stands without photos | A | The mural is the strongest thing in the project. The hero and the end card need no photo |
+| 7. Ownable | B+ | The lined construction, the weight gradient and the two points are ours. The shape is shared with every Maine brand. One color and no Marigold on the state keep it clear of Baxter |
+| 8. Easy to make | A- | One lockup, one dot rule, three cuts chosen by size. A staffer can place it without a guide |
+
+Concept grade: **A-**. The two B+ rows are the same fact seen twice: a state silhouette is recognizable, and recognizable means shared. The platform's on-the-nose test still says the mark restates the name. The client weighed that against recognition and chose recognition, and the sixteen lines, the two points and the dot are what make it ours anyway. The grade goes to A when the brand has lived in the world long enough that the lines alone, with no outline, are read as Generation Maine.
