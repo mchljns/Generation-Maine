@@ -12,10 +12,10 @@ from gmlib import ROOT, write
 
 R = os.path.join(ROOT, "brand", "identity", "logo-maine", "signature")
 ROWS = [
-    ("lockup-horizontal", "1. Horizontal. The primary lockup. The state stands taller than the capitals", 150, "A-"),
-    ("lockup-horizontal-right", "2. Horizontal, state after the name. The dot and the state sit near each other", 150, "B"),
-    ("lockup-compact", "3. Compact. The mid cut inside the cap height, for bylines, bars and footers", 150, "B+"),
-    ("lockup-two-line", "4. Two-line. The state beside the name on two lines, as tall as both", 190, "A-"),
+    ("lockup-two-line", "1. Two-line. The primary lockup. The state beside the name on two lines, as tall as both", 190, "A"),
+    ("lockup-horizontal", "2. Horizontal. For short bars: the nav, the video bug, the masthead strip", 150, "A-"),
+    ("lockup-compact", "3. Compact. The mid cut inside the cap height, for bylines and footers", 150, "B+"),
+    ("lockup-horizontal-right", "4. Horizontal, state after the name. In the files, not recommended", 150, "B"),
     ("lockup-stacked", "5. Stacked left. The state over the two-line name, for narrow spaces", 230, "B+"),
     ("lockup-stacked-centered", "6. Stacked centered. The state over the one-line name, for title cards and print", 230, "B+"),
     ("lockup-endorsed", "7. Endorsed. The horizontal lockup with the disclosure line", 180, "A-"),

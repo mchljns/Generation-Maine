@@ -51,17 +51,17 @@ def mural(h, fg, mark, n=60, w_lo=None, w_hi=None, keep=1.6):
 def mockups():
     bug = '<div class="lbug">%s</div>' % logo("bug")
     lock_rev = logo("lockup-horizontal-reversed", "lk")
-    lock = logo("lockup-horizontal", "lk")
+    two_rev = logo("lockup-two-line-reversed", "lk two")
     a = K.artboard
     out = []
     # 1 video, first seconds: the solid state and the name, Birch, nothing else
     out.append(a("l-first", "ph9", '<div class="foot"></div>%s%s' % (bug, K.ui_overlay()), "1 · Video, first seconds. The solid cut and the name", 360, 640))
     # 2 lower third: name and town, plain, on the safe line
     out.append(a("l-lower", "ph9", '<div class="foot"></div>%s<div class="sl3">%s</div>%s' % (bug, K.credit(town="Skowhegan", cls="lg"), K.ui_overlay()), "2 · Lower third, name and town plain", 360, 640))
-    # 3 end card: the mural carries the frame in one color, the headline keeps its Marigold dot
+    # 3 end card: the two-line lockup at top, the mural in one color, the headline keeps its Marigold dot
     end = ('<div class="lend">%s<div class="lmur">%s</div><div class="lbot">%s'
            '<ul class="hl s"><li><b>Instagram</b>[@handle]</li><li><b>TikTok</b>[@handle]</li><li><b>YouTube</b>[@handle]</li><li><b>Substack</b>[name].substack.com</li></ul>'
-           '<p class="disc">%s</p></div></div>') % (lock_rev, mural(300, BI, BI, n=48), K.ttl("Follow along", "xl"), K.MPI)
+           '<p class="disc">%s</p></div></div>') % (two_rev, mural(300, BI, BI, n=48), K.ttl("Follow along", "xl"), K.MPI)
     out.append(a("l-end", "ph9", end, "3 · End card. The mural, then the handles", 360, 640))
     # 4 profile grid: the full-cut avatar, nine covers on the round-two rules
     covers = "".join('<div class="cov s %s">%s%s</div>' % (K.ORDER[i], K.credit(town=K.TOWNS[i], cls="cv"), K.ttl(K.TOPICS[i], "cv")) for i in range(9))
@@ -79,7 +79,7 @@ def mockups():
     # 6 Substack header and email: the lockup on a Spruce masthead, the disclosure under it
     sub = ('<div class="subst s"><div class="ssh">%s</div><p class="sdisc">%s</p><div class="sb"><h3>[Post title in plain words]</h3>%s'
            '<p>[First paragraph in the creator\'s own words.]</p><p>[Body continues.]</p><p>[Body continues.]</p></div>'
-           '<p class="sfoot">Short videos and this newsletter are made by young Maine creators. %s.</p></div>') % (lock_rev, K.MPI, K.credit(town="Belfast", cls="by"), K.MPI)
+           '<p class="sfoot">Short videos and this newsletter are made by young Maine creators. %s.</p></div>') % (two_rev, K.MPI, K.credit(town="Belfast", cls="by"), K.MPI)
     out.append(a("l-substack", "light", sub, "6 · Substack header and email", 480, 640))
     # 8 collab post on a creator's own account
     post = '<div class="pimg"><div class="foot"></div>%s<div class="sl3 p">%s</div></div>' % (bug, K.credit(town="Machias", cls="lg"))
@@ -101,7 +101,7 @@ CSS_ADD = r"""
 .lbug svg{height:22px;width:auto;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
 .lk{height:auto;display:block}
 .lend{position:absolute;inset:0;background:var(--sp);padding:44px var(--M) var(--M);display:flex;flex-direction:column}
-.lend .lk{width:150px}
+.lend .lk.two{width:148px}
 .lmur{flex:1;display:flex;align-items:center;justify-content:center;padding:18px 0 10px}
 .lmur .mural{height:272px;width:auto;display:block}
 .lend .ttl{margin-bottom:16px;font-size:52px}
@@ -110,7 +110,7 @@ CSS_ADD = r"""
 .pav svg{width:62px;height:62px;border-radius:50%;display:block}
 .gav svg{width:100%;height:100%;display:block}
 .tab i svg{width:16px;height:16px;display:block}
-.ssh .lk{width:230px}
+.ssh .lk.two{width:200px}
 .web.s .wn .lk{height:28px;width:auto}
 .lmural{position:absolute;right:56px;top:-40px;height:760px;z-index:1}
 .lmural .mural{height:100%;width:auto;display:block}

@@ -6,6 +6,7 @@ Saved September 30, 2026. Everything below is built as hand-drawn SVG geometry b
 
 | Element | Decision | Why |
 | --- | --- | --- |
+| Lockup | **Two-line.** The state beside the name set on two lines, the state as tall as both lines, Marigold on the dot of Maine | The client's pick on October 1. The state and the name are the same size, so neither is a badge for the other. The horizontal stays for short bars |
 | Brandmark | **Maine in lines.** The state drawn in horizontal lines from the precise Census outline, heavier toward the bottom, one color. Three cuts chosen by size: 21 lines at 72 px and up, 13 heavier lines on a lightly simplified coast from 36 to 72 px, the simplified silhouette alone below 36 px | Chosen by the client on October 1 over the abstract margin-room mark, which is kept in `brand/identity/mark/`. The size system solves the small-size problem the silhouette had: the shape never turns to dashes, because below 36 px it is a shape again. Files: `brand/identity/logo-maine/` |
 | Mural | **Grain.** Maine drawn in horizontal lines from the precise Census outline, weight growing toward the bottom, one color | The strongest single image of the project. Lives at sizes where Maine reads: the website hero and the end card |
 | Relationship | The mark is a crop of the mural where one line is missing. One rule, two scales | Everything seen large is Maine. Everything seen small is the mark |
@@ -140,10 +141,10 @@ The client chose B. Applied in `brand/src/build_logo_maine.py`, the eight surfac
 
 | Lockup | Use | Grade |
 | --- | --- | --- |
-| Horizontal | Primary. Website nav, Substack masthead, video bug with the solid cut | A- |
-| Horizontal, state after the name | When the name has to lead, as in a sentence or a byline | B |
-| Compact | The mid cut inside the cap height. Footers, bars, co-branding strips | B+ |
-| Two-line | The state beside the name on two lines. Merch, print, square posts | A- |
+| Two-line | **Primary**, chosen by the client on October 1. The state beside the name on two lines, as tall as both. End card, Substack masthead, merch, print, square posts | A |
+| Horizontal | Short bars: the website nav, the video bug with the solid cut, co-branding strips | A- |
+| Horizontal, state after the name | In the files, not recommended | B |
+| Compact | The mid cut inside the cap height. Footers, bylines | B+ |
 | Stacked left | Narrow columns, the left-aligned title card | B+ |
 | Stacked centered | Centered title cards, print covers | B+ |
 | Endorsed | Horizontal with the disclosure line. Anywhere the Institute must be named | A- |
