@@ -181,6 +181,8 @@ section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 @media (max-width:760px){.follow .row{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .follow a{display:block;padding:22px 0;border-bottom:1.5px solid var(--rule);text-decoration:none}
 .follow a b{display:block;font:600 15px/1.3 var(--body)}.follow a span{color:var(--muted);font-size:17px}
+.follow .ic{display:block;width:28px;height:28px;margin-bottom:14px;color:var(--fg);--icon-bg:var(--sage);transition:transform .3s cubic-bezier(.2,.7,.2,1)}
+.follow a:hover .ic{transform:translateY(-2px)}
 .follow .h2{margin-bottom:28px}
 
 .site{background:var(--pine);color:#FFFFFF;padding-block:48px 40px}
@@ -248,10 +250,10 @@ section{padding-block:clamp(56px,8vw,112px);scroll-margin-top:60px}
 <section class="follow reveal" id="follow" data-bg="var(--sage)"><div class="w">
   <h2 class="h2"><span class="">Follow <b class="nw">along<i class="d"></i></b></span></h2>
   <span class="rule" aria-hidden="true"></span><div class="row">
-    <a class="row-in" href="#"><b>Instagram</b><span>[@handle]</span></a>
-    <a class="row-in" href="#"><b>TikTok</b><span>[@handle]</span></a>
-    <a class="row-in" href="#"><b>YouTube</b><span>[@handle]</span></a>
-    <a class="row-in" href="#"><b>Substack</b><span>[name].substack.com</span></a>
+    <a class="row-in" href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg><b>Instagram</b><span>[@handle]</span></a>
+    <a class="row-in" href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 2h3.1c.2 2.4 1.7 4 4.2 4.3v3.1c-1.6 0-3-.5-4.2-1.3v6.6a6 6 0 1 1-6-6c.4 0 .7 0 1 .1v3.2a2.9 2.9 0 1 0 1.9 2.7V2z" fill="currentColor"/></svg><b>TikTok</b><span>[@handle]</span></a>
+    <a class="row-in" href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8z" fill="currentColor"/><path d="M10 9v6l5-3z" fill="var(--icon-bg,#fff)"/></svg><b>YouTube</b><span>[@handle]</span></a>
+    <a class="row-in" href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="2.4" fill="currentColor"/><rect x="4" y="8" width="16" height="2.4" fill="currentColor"/><path d="M4 13h16v8l-8-4.4L4 21z" fill="currentColor"/></svg><b>Substack</b><span>[name].substack.com</span></a>
   </div>
 </div></section>
 

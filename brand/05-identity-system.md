@@ -245,3 +245,15 @@ Other motion added, all on scroll and all off under reduced motion: the thin rul
 Town coordinates are town centers and carry a [CONFIRM] until the creators are cast.
 
 Revised the same day: the map pin and the "Filmed in" caption are out. The period stays at the end of the headline and pulses like a location marker, a ring breathing out of the dot and fading, every 2.4 seconds. The dot itself holds still. Town coordinates stay in the data for a later map.
+
+## The follow row and Substack
+
+The follow row carries the four platform marks, drawn by hand at 24 units in one color, so they take the ink of whatever field they sit on. Instagram, TikTok and YouTube link to the accounts. Substack links to the publication.
+
+How Substack connects to the site. Substack is a hosted newsletter. The emails, the subscriber list and the archive all live at [name].substack.com. The site touches it in three places:
+
+- Subscribing. Substack gives every publication an embed, a small form served from substack.com in an iframe. On the live site that iframe sits where the mockup's form is now. The mockup cannot load it because the artifact host blocks iframes. There is no public API for adding a subscriber from our own form, so the embed, or a link to the Substack signup page, is the honest choice.
+- The posts list. Every Substack publication has an RSS feed at [name].substack.com/feed. The WordPress theme reads it with fetch_feed, caches it for an hour, and fills "The full story, by email" with the latest three posts: title, first line, author and date. Nothing is typed twice.
+- Reading. Each post links out to Substack. Readers who subscribe there get the email. The site is the front door; Substack is the room.
+
+If the team would rather own the list, Buttondown or Beehiiv offer the same three pieces with an API for the form. Substack wins on cost (free until paid subscriptions) and on the network of readers it already has. [CONFIRM: platform choice]
