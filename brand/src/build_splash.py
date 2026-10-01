@@ -99,7 +99,7 @@ CSS = r"""
 /* Layout: one column. The page background changes color as sections enter, and every section pairs ink text with a light field.
    Light fields run from white into light green: white, a pale green, a deeper sage. The warm cream is gone from the page. */
 :root{
-  --sp:#104836;--pine:#0B2B21;--bi:#FFFFFF;--ink:#1E2621;--mg:#EFB443;--sage:#D3DDD4;--moss:#3D6F58;--stone:#5E6A63;--sand:#E6EEE8;--white:#FFFFFF;--snow:#F7F8F6;
+  --sp:#104836;--pine:#0B2B21;--bi:#FFFFFF;--ink:#1E2621;--mg:#EFB443;--sage:#D3DDD4;--moss:#3D6F58;--stone:#5E6A63;--sand:#E6EEE8;--white:#FFFFFF;--snow:#F9F8F6;
   --bg:var(--bi);--fg:var(--ink);--muted:#4F5B55;--rule:rgba(30,38,33,.14);--card:#F6F9F6;
   --display:'Bricolage Grotesque',Arial,sans-serif;--body:'DM Sans',system-ui,Arial,sans-serif;
   --M:clamp(16px,4.5vw,64px);
@@ -428,7 +428,7 @@ def page():
 <script id="maine-data" type="application/json">%(json)s</script>
 <script>
 (() => {
-  const MOSS = '#3D6F58', BI = '#F7F8F6';
+  const MOSS = '#3D6F58', BI = '#F9F8F6';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const h1 = document.getElementById('h1'), lede = document.getElementById('lede'), ctas = document.getElementById('ctas');
   if (!reduced) { [h1, lede, ctas].forEach(el => el.classList.add('pre')); requestAnimationFrame(() => requestAnimationFrame(() => { h1.classList.remove('pre'); setTimeout(() => lede.classList.remove('pre'), 120); setTimeout(() => ctas.classList.remove('pre'), 240); })); }
