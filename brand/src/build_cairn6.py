@@ -21,43 +21,43 @@ OUT = os.path.join(ROOT, "brand", "identity", "marks-bark-sky", "cairn")
 BUILDS = {
     "wedges ii": {
         "flats": [
-            [(36, 206), (40, 186), (74, 183), (122, 184), (170, 178), (204, 176), (208, 206)],        # base: long, thick at the right, a dip in the middle
-            [(64, 183), (60, 160), (92, 152), (146, 158), (178, 165), (178, 178)],                    # second: thick at the left, a broken top corner
-            [(80, 155), (82, 146), (118, 141), (156, 147), (160, 160)],                                # third: a thin flat, slightly crowned
-            [(96, 145), (92, 120), (112, 110), (140, 114), (154, 124), (152, 146)],                   # fourth: a chunky wedge with a saddle on top
+            [(40, 206), (44, 188), (90, 185), (140, 186), (196, 180), (202, 206)],                 # base: long, thick at the right
+            [(70, 185), (66, 162), (108, 156), (150, 162), (152, 182)],                            # second: shorter, thick at the left, set left
+            [(58, 161), (62, 148), (120, 142), (176, 150), (178, 160)],                            # third: wider than the second, overhangs both sides
+            [(96, 148), (94, 122), (116, 114), (142, 120), (146, 146)],                           # fourth: a chunky block with a dip
         ],
-        "round": (124, 92, 27, 21, -6),
-        "note": "Four flats, no two alike: a long base thick at one end, a second stone thick at the other, a thin crowned flat, a chunky wedge with a saddle. The round stone sits in the saddle.",
+        "round": (121, 96, 26, 20, -6),
+        "note": "A long base, a shorter wedge set left, a wider flat that overhangs it on both sides, a block with a dip, the round stone. The silhouette steps in and out instead of tapering.",
     },
     "wedges iii, leaning": {
         "flats": [
-            [(44, 206), (46, 190), (100, 186), (150, 188), (200, 182), (206, 206)],
-            [(50, 187), (48, 166), (84, 158), (128, 162), (174, 170), (176, 184)],
-            [(44, 162), (46, 142), (96, 136), (140, 142), (146, 158)],
-            [(56, 141), (60, 120), (84, 110), (118, 114), (124, 128), (126, 142)],
+            [(46, 206), (50, 190), (120, 187), (198, 184), (204, 206)],
+            [(56, 188), (54, 168), (98, 160), (168, 168), (170, 186)],
+            [(40, 166), (44, 150), (100, 144), (150, 150), (152, 164)],
+            [(58, 148), (60, 126), (84, 116), (118, 120), (120, 146)],
         ],
-        "round": (92, 92, 25, 20, -10),
-        "note": "The same rules with every top face sloping left, so the stack leans left as it rises and the round stone sits near the edge, still over the stone below.",
+        "round": (90, 96, 24, 19, -10),
+        "note": "Every top face slopes left so the stack leans as it rises, the third stone overhangs to the left, and the round stone sits near the edge, still over the block below.",
     },
     "wedges iv, five": {
         "flats": [
-            [(34, 206), (38, 190), (120, 188), (200, 184), (206, 206)],
-            [(52, 189), (50, 176), (116, 172), (184, 178), (186, 186)],
-            [(70, 174), (66, 150), (104, 142), (148, 148), (172, 158), (170, 176)],
-            [(84, 150), (86, 140), (130, 136), (158, 142), (160, 156)],
-            [(100, 139), (98, 118), (122, 108), (144, 116), (146, 140)],
+            [(36, 206), (40, 192), (124, 190), (198, 186), (204, 206)],
+            [(60, 190), (58, 178), (120, 174), (182, 180), (184, 188)],
+            [(74, 177), (70, 152), (112, 144), (160, 152), (162, 176)],
+            [(52, 151), (56, 140), (120, 134), (170, 142), (172, 150)],
+            [(100, 140), (98, 120), (120, 112), (142, 118), (144, 138)],
         ],
-        "round": (124, 90, 24, 19, 4),
-        "note": "Five flats: a long thin base, a thin second, a thick wedge, a thin flat, a small block. Thin and thick alternate, which is how real stacks settle.",
+        "round": (122, 92, 24, 19, 4),
+        "note": "Five flats: long thin base, thin second, thick wedge, a wide thin flat that overhangs, a small block. Thin and thick alternate, as real stacks settle.",
     },
     "wedges v, boulder base": {
         "flats": [
-            [(40, 206), (36, 176), (62, 160), (120, 154), (176, 160), (200, 178), (204, 206)],        # a rounded boulder as the base
-            [(70, 159), (68, 146), (116, 140), (168, 146), (170, 160)],                                # a flat across the boulder
-            [(90, 144), (86, 122), (112, 112), (146, 118), (152, 144)],                                # a wedge
+            [(44, 206), (40, 178), (64, 162), (120, 156), (176, 162), (198, 180), (202, 206)],
+            [(60, 160), (62, 148), (120, 142), (180, 148), (182, 158)],
+            [(92, 147), (90, 122), (112, 112), (144, 118), (148, 146)],
         ],
-        "round": (118, 92, 26, 20, -4),
-        "note": "A rounded boulder as the base, one flat across it, one wedge, the round stone. Three shapes in three stones, and the heaviest thing is at the bottom.",
+        "round": (118, 94, 26, 20, -4),
+        "note": "A rounded boulder as the base, one long flat across it that overhangs the boulder, one wedge, the round stone. The heaviest thing is at the bottom.",
     },
 }
 
@@ -87,10 +87,20 @@ def check(build):
     return out
 
 
+def sep(pts, fg, bg):
+    """A stone with a hairline of background around it: the shadow line between stones in a real stack."""
+    d = "M" + " L".join("%s %s" % p for p in pts) + " Z"
+    return ('<path d="%s" fill="none" stroke="%s" stroke-width="9" stroke-linejoin="round"/>' % (d, bg)
+            + '<path d="%s" fill="%s" stroke="%s" stroke-width="4" stroke-linejoin="round"/>' % (d, fg, fg))
+
+
 def draw(key, fg, bg, top=None):
     b = BUILDS[key]
     cx, cy, rx, ry, tilt = b["round"]
-    return "".join(stone(p, fg, 3) for p in b["flats"]) + round_stone(cx, cy, rx, ry, top or fg, tilt)
+    body = "".join(sep(p, fg, bg) for p in b["flats"])
+    rs = round_stone(cx, cy, rx, ry, top or fg, tilt)
+    halo = round_stone(cx, cy, rx + 3, ry + 3, bg, tilt)
+    return body + halo + rs
 
 
 def build():
