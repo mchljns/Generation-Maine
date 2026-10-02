@@ -459,3 +459,42 @@ Recommendation: **Rising from the ground.** It keeps what the client liked (the 
 ## Bark & Sky, the QA pass, October 2
 
 The strict QA in `brand/06-qa-bark-sky.md` is worked through. The page now fits a laptop fold, centers its section heads the way the kit's surfaces did, carries its own placeholder clips in its own colors, shows the wordmark alone at rest and the lockup in the capsule, sets hierarchy with the serif and size instead of weight, and keeps third-party names in their own casing. The form has an error line and a settled success state, the quotes are curly and hung, the sheet carries the platform marks, and touch and type minimums hold on phones. Those last five went into the shared template, so Signature has them too. One item stays open by choice: the hero mark's weight gradient reads top-light over the serif, and the mid cut is worth a look.
+
+## Bark & Sky, color and mark, round two, October 2
+
+Sheets in `brand/identity/marks-bark-sky/explore/` (`colors.png`, `rising.png`, built by `brand/src/build_explore2_barksky.py`).
+
+**The color question.** The concept is a pale sky, a dark ground and paper between. Four pairings asked what the sky and the ground are made of, each shown as a hero, a dark surface, a paper surface and the lockup, with contrast measured.
+
+| Pairing | What it is | Read | Grade |
+| --- | --- | --- | --- |
+| Bark & Sky | Sky #CFE3F0, Bark #2B211C | Cool against warm is the one contrast the concept has, and it is what keeps it from reading as a weather app. Ground on sky 11.9 to 1 | A- |
+| Dawn | A peach sky #F2DCCA over Bark | Softer and more literary, and warm on warm loses the contrast. Drifts toward a bakery. Clay on sky drops to 4.8 | B- |
+| Fog & Granite | A grey-blue sky over granite #2E3236 | Calm and serious, and the palette of every public-radio app. Nothing in it says warmth or a person | C+ |
+| Barrens | Sky over a rust ground #46261F | The blueberry barrens after first frost. Still a brown, so still clear of the flag, and the one ground that is a Maine thing without being a picture of one. 10.2 to 1 | A- |
+
+**The accent question.** The concept has no equivalent of Marigold once per frame. Four answers tried on a link, a button, a cover and the horizon line.
+
+| Accent | Read | Grade |
+| --- | --- | --- |
+| None | Links and buttons in Bark. Nothing is ever the loud thing. Honest to the concept, and links do not announce themselves | B+ |
+| Blueberry #2F4E7A | The sky's dark sibling. Links read as links without being told to, the one-in-nine cover gets a field of its own, and it stays in the family | A- |
+| Lichen #8FA98B | Quiet, and too close to Signature's greens to be this concept's own | C |
+| Lamp #D9A54E | Marigold by another name. It drags Signature's one idea into the quiet concept | C |
+
+Recommendation: keep Bark & Sky as the pairing and take Blueberry as the interactive color only: links, focus, the ninth cover. Do not combine Blueberry with the Barrens ground; rust and blue together edge toward the flag the guardrails rule out. If the client wants the warmer ground, Barrens stands alone with no accent.
+
+**The mark, pushed.** Eight variations on Rising from the ground.
+
+| Version | Read | Grade |
+| --- | --- | --- |
+| As drawn (horizon 60, state 170) | Works. The ground strip is a little heavy | B+ |
+| Lower horizon, larger state (66, 200) | More sky, more land, the state has room to stand. Holds at 40 | A- |
+| The lined state rising | The shared sixteen lines above the horizon, the silhouette below. The system mark and the disc in one, and busy at 40 | B |
+| The line runs through | The horizon is one unbroken stroke and the state stands behind it, like land seen across water. Calmer, and it fixes the coast's ragged meeting with the line | A- |
+| Square tile | The same drawing for app icons and covers. Fine | B+ |
+| No container | A field, not a badge. Right for the hero and the end card, not for an avatar | B+ as a surface |
+| Equal halves | Calmer and the state has less sky to stand in | B |
+| **Recommended: horizon at 64, state at 190, line through** | The two improvements together | **A-** |
+
+Next, if the client agrees: draw the recommended mark into the size system (full for 72 px and up, the solid cut below 36 where the line becomes a single pixel), build the lockups and avatars in `logo-maine/bark-sky/` beside the lined state, and put it on the splash and the applied sheet so the two marks can be compared in place.
