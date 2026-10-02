@@ -573,3 +573,15 @@ The client asked where else imagery could lift the splash page. The judgment, se
 - **Left alone.** The hero already carries the loop. The follow row is icons and handles and needs nothing. The form needs nothing. The footer is the credits.
 
 All of it is template hooks (`about_media`, `band`, `post_thumbs`, `quote_stills`) that default to nothing, so the Signature page is unchanged. Sources are Commons, 2000 px or wider, graded like the hero by `brand/src/make_photos_page.py`, credited in the footer line and in `CREDITS.md`. Skowhegan and Sanford street photographs were not usable (rate limited, or carrying a flag); the posts use the three towns with good pictures.
+
+## Bark & Sky, the mark is decided: the cairn, October 2
+
+After four rounds of marks, a typographic detour (quotation mark, me, 207) and a research pass on real cairns from Wikimedia Commons, the client chose a cairn: flat stones of different sizes and shapes with one rounded stone on top. The build is "wedges ii": a long base thick at one end, a shorter wedge thick at the other and set left, a slightly wider flat, a block with a dip, and the round stone sitting in the dip. Every stone is a different shape. The stack is physically possible: each stone rests on the one below and its center of mass sits over the bearing surface under it, which `build_cairn6.py` checks numerically. Shadow hairlines of the background color separate the stones so they never fuse into a mound, which is where the emoji read came from.
+
+The meaning: the flats were laid by the people before you; the round stone, in Sky, is the one this generation sets. The way is marked, and you mark it for the next.
+
+Weighed and recorded: cairns carry a burial reading and the outdoors community objects to visitor-built stacks. The client heard both and chose it anyway. The drawing leans on the realism of the Commons references and away from the three smooth pebbles of spa imagery.
+
+The system (`build_system_cairn.py`, 40 files in `brand/identity/logo-maine/bark-sky-cairn`): mark, horizontal, horizontal large, two line, stacked left, stacked centered, endorsed, compact; each in Bark on Paper with the round stone in Sky, Sky on Bark with the round stone in Paper, black and white. Avatar in three fields, app icon, a favicon that drops the shadow lines so it stays solid at 16 px, and the bug. The funder line in the endorsed lockup is still [CONFIRM].
+
+Still to do: put the compact lockup in the splash bar and footer, regenerate the clip end card and the applied sheet, and retire the earlier mark candidates from the lockup sheet.
