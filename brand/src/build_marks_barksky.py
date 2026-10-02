@@ -108,16 +108,20 @@ def wordmark(fg):
     return '<path fill="%s" d="%s"/>' % (fg, d), w
 
 
-def build():
+def build(cands=CANDS, out=OUT, heading="Bark &amp; Sky: marks this direction allows", intro=None):
+    intro = intro or ('Signature needed weight and one bright accent, so the lined state won there. Bark &amp; Sky is quiet, serif and one weight, which admits marks that would look thin beside Bricolage. Each row: on Paper, on Bark, the avatar at 110, 40 and 16 px, and the horizontal lockup.')
     files = {}
     rows = ""
-    for key, title, note, draw in CANDS:
+    for cand in cands:
+        key, title, note, draw = cand[:4]
+        is_round = len(cand) > 4 and cand[4] == "round"
         on_paper = svg(S, S, draw(BK, PA), title)
         on_bark = svg(S, S, rect(0, 0, S, S, BK, 28) + draw(SK, BK), title)
         files["%s" % key] = on_paper
         files["%s-reversed" % key] = on_bark
         # avatar: the mark at 70 percent inside a Bark disc
-        av = svg(S, S, '<circle cx="120" cy="120" r="120" fill="%s"/>' % BK + '<g transform="translate(36 36) scale(.7)">%s</g>' % draw(SK, BK), title)
+        # a round mark is its own avatar; any other sits at 70 percent inside a Bark disc
+        av = on_paper if is_round else svg(S, S, '<circle cx="120" cy="120" r="120" fill="%s"/>' % BK + '<g transform="translate(36 36) scale(.7)">%s</g>' % draw(SK, BK), title)
         files["%s-avatar" % key] = av
         wm, w = wordmark(BK)
         lk = svg(w + S * 0.46 + 28, 114, '<g transform="translate(0 2) scale(.4583)">%s</g>' % draw(BK, PA) + '<g transform="translate(%s 14)">%s</g>' % (f(S * 0.46 + 28), wm), "Generation Maine")
@@ -131,7 +135,7 @@ def build():
             inl(av, "width:110px;height:110px"), inl(av, "width:40px;height:40px"), inl(av, "width:16px;height:16px"),
             inl(lk, "width:440px;height:auto"))
     for k, v in files.items():
-        write("%s/%s.svg" % (OUT, k), v)
+        write("%s/%s.svg" % (out, k), v)
     page = ('<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Bark &amp; Sky, mark candidates</title><style>'
             'body{margin:0;background:#E9E5DA;padding:36px;font-family:Inter,system-ui,sans-serif;color:#2B211C}'
             'h1{font:600 26px/1 Inter;margin:0 0 6px}.intro{font:14px/1.45 Inter;color:#6B5A4E;max-width:760px;margin:0 0 28px}'
@@ -140,10 +144,10 @@ def build():
             '.t{border-radius:12px;display:flex;align-items:center;justify-content:center;gap:18px;padding:0;height:170px}'
             '.t.pa{background:#fff}.t.bk{background:#2B211C}.t.wide{padding:0 28px;justify-content:flex-start}'
             '.t svg{display:block;border-radius:12px}'
-            '</style></head><body><h1>Bark &amp; Sky: marks this direction allows</h1>'
-            '<p class="intro">Signature needed weight and one bright accent, so the lined state won there. Bark &amp; Sky is quiet, serif and one weight, which admits marks that would look thin beside Bricolage. Each row: on Paper, on Bark, the avatar at 110, 40 and 16 px, and the horizontal lockup.</p>%s</body></html>') % rows
-    write(OUT + "/candidates.html", page)
-    subprocess.run(["node", os.path.join(ROOT, "brand", "src", "shot.mjs"), os.path.join(ROOT, OUT, "candidates.html"), os.path.join(ROOT, OUT, "candidates.png"), "1500"], check=True)
+            '</style></head><body><h1>%s</h1>'
+            '<p class="intro">%s</p>%s</body></html>') % (heading, intro, rows)
+    write(out + "/candidates.html", page)
+    subprocess.run(["node", os.path.join(ROOT, "brand", "src", "shot.mjs"), os.path.join(ROOT, out, "candidates.html"), os.path.join(ROOT, out, "candidates.png"), "1500"], check=True)
 
 
 if __name__ == "__main__":

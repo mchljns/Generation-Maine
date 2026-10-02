@@ -440,3 +440,18 @@ Asked whether the second concept opens a different brand mark. It does. Signatur
 | Ground and sky | A disc split at the horizon | Abstract and calm, and it answers "building a life here" without a map. Also the most anonymous: a split circle belongs to a hundred brands |
 
 Recommendation if the client takes Bark & Sky: keep the lined state as the system mark for recognition, and test the opening quote as the avatar and the bug, where the mark stands alone and the state is already in the name. That is a two-mark system, which Signature does not need; it suits a quieter concept whose covers rely on type.
+
+## Ground and sky, with Maine in it, October 2
+
+The client liked the split disc and asked whether the state can be worked in. Six ways, all keeping the horizon (Sky above, ground below, a thin line of light between), in `brand/identity/marks-bark-sky/horizon/` (`candidates.png`, `brand/src/build_horizon_barksky.py`).
+
+| Version | Read |
+| --- | --- |
+| Counterchange | The state centred on the line, dark on the sky, light on the ground. Clever, and at 16 px it is mud |
+| Rising from the ground | The state stands on the horizon and rises into the sky, its base in the ground. Reads as a landform first and a map second, which is the point of the disc. Holds at 40, and at 16 it is still a shape on a line |
+| A place on the line | A small state on the horizon. Lovely at 110, gone at 40 |
+| Cut from the ground | The state cut out of the ground. The quietest; too quiet to read |
+| Maine holds the horizon | No disc, the state is the field. The clearest at every size, and also the most literal: a solid Maine silhouette, which the stamp and the lined mark were both built to avoid |
+| The lined state on the horizon | The shared sixteen lines counterchanged in the disc. The system mark and the horizon in one, and too busy for an avatar |
+
+Recommendation: **Rising from the ground.** It keeps what the client liked (the horizon, the calm) and makes Maine the ground itself rather than a badge on it. Next step if it goes forward: tune where the horizon cuts the state (the coast should sit just under the line), draw the solid cut for under 36 px, and test it as the avatar and bug on the applied sheet.
