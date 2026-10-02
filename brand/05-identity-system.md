@@ -567,7 +567,7 @@ The client asked for more cinematic pans. Changes in `make_hero_video.mjs` and `
 The client asked where else imagery could lift the splash page. The judgment, section by section:
 
 - **About.** The left column held only the heading and a void below it. Now a 3 by 2 photograph of Belfast's brick downtown and harbor from above sits under the heading, with a one line caption. It answers "where" while the three columns answer who, what and how.
-- **Between the creators and their words.** A full-bleed band, Lewiston's mills and downtown from above, with one line in the serif: "filmed in nine towns, from the County to the coast." A breath after the long stepper, in the hero's language, before the dark quotes section. The scrim is heaviest at the bottom where the line sits.
+- **Between the creators and their words.** A full-bleed band, Lewiston's mills and downtown from above. A breath after the long stepper, in the hero's language, before the dark quotes section. It first carried a line of copy; the client asked for the photograph alone, so the only type on it is the credit.
 - **In their words.** Each quote's footer carries a small still of the creator beside the name, so the words have a face. Forty by fifty two pixels, the same 3 by 4 as the strip.
 - **The newsletter.** Each post gets a 3 by 2 thumbnail of its town (Belfast, Machias, Lewiston). A list of three titles reads as a publication once it has pictures.
 - **Left alone.** The hero already carries the loop. The follow row is icons and handles and needs nothing. The form needs nothing. The footer is the credits.

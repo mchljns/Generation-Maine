@@ -90,9 +90,9 @@ CSS = r"""
 .bs .about .w{align-items:start}
 .bs .ph{margin:34px 0 0;max-width:460px}.bs .ph img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:12px;background:var(--mist)}
 .bs .ph figcaption{font:400 12px/1.4 var(--body);color:var(--clay);margin-top:10px}
-.bs .band{position:relative;height:min(520px,56vh);overflow:hidden;background:var(--bark);color:var(--paper);display:flex;flex-direction:column;justify-content:flex-end}
+.bs .band{position:relative;height:min(520px,56vh);padding-block:0;overflow:hidden;background:var(--bark);color:var(--paper);display:flex;flex-direction:column;justify-content:flex-end}
 .bs .band img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.bs .band::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(38,32,28,.12) 0%,rgba(38,32,28,0) 30%,rgba(38,32,28,.55) 68%,rgba(38,32,28,.86) 100%)}
+.bs .band::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(38,32,28,.08) 0%,rgba(38,32,28,0) 30%,rgba(38,32,28,0) 70%,rgba(38,32,28,.42) 100%)}
 .bs .band .w{position:relative;z-index:2;width:100%;padding-block:0 48px}
 .bs .band p{margin:0;font:400 clamp(26px,3.2vw,44px)/1.08 var(--display);max-width:18ch;text-wrap:balance;text-shadow:0 1px 2px rgba(38,32,28,.3)}
 .bs .band .credit{position:absolute;right:var(--M);bottom:16px;z-index:2;font:400 11px/1.3 var(--body);color:rgba(244,243,238,.72)}
@@ -148,7 +148,7 @@ BARK_SKY = dict(
     nav_light="wordmark-reversed", nav_dark="wordmark", nav_rest="wordmark-reversed", footer="wordmark-reversed", footer_ping=False,
     hero_media='<div class="bg" aria-hidden="true"><video autoplay muted loop playsinline preload="auto" poster="{media}media/hero-poster.jpg"><source src="{media}media/hero.webm" type="video/webm"></video></div><p class="credit">Katahdin, Aroostook County, Cadillac Mountain, Portland Head Light, the Old Port. Photographs via Wikimedia Commons, credits in the footer.</p>',
     about_media='<figure class="ph"><img src="{media}media/about.jpg" alt="Belfast, Maine, the brick downtown and the harbor from above." width="1600" height="1067" loading="lazy"><figcaption>Belfast. Photograph via Wikimedia Commons, credits in the footer.</figcaption></figure>',
-    band='<section class="band" aria-label="Lewiston, Maine from above"><img src="{media}media/band.jpg" alt="" width="2400" height="1000" loading="lazy"><div class="w"><p>filmed in nine towns, from the County to the coast.</p></div><span class="credit">Lewiston. Photograph via Wikimedia Commons, credits in the footer.</span></section>',
+    band='<section class="band" aria-label="Lewiston, Maine from above"><img src="{media}media/band.jpg" alt="" width="2400" height="1000" loading="lazy"><span class="credit">Lewiston. Photograph via Wikimedia Commons, credits in the footer.</span></section>',
     post_thumbs=['<img class="th" src="{media}media/post-%d.jpg" alt="" width="720" height="480" loading="lazy">' % i for i in (1, 2, 3)],
     quote_stills=['<img class="qs-im" src="{media}media/portrait-%d.jpg" alt="" width="120" height="160" loading="lazy">' % i for i in (2, 7, 4)],
     credits="Photographs in the opening loop, via Wikimedia Commons: Michael Sipos (CC BY-SA 4.0), Jack Delano for the Farm Security Administration (public domain), John Manard (CC BY-SA 2.0), Derek Ramsey (CC BY-SA 4.0), Domenico Convertini (CC BY-SA 2.0). Towns: Quintin Soloviev (Belfast and Lewiston from above, CC BY 4.0), FujiAppleSan (Belfast, CC0), Zedmaster375 (Machias, CC BY-SA 3.0), David Wilson (Lewiston, CC BY 2.0).",
