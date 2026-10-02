@@ -406,5 +406,363 @@
    "http": "200",
    "file": "brand/content/photos/commons/cadillac2-6.jpg"
   }
+ ],
+ "belfast": [
+  {
+   "title": "File:Belfast, Maine.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Belfast%2C_Maine.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Belfast,_Maine.jpg",
+   "w": 2492,
+   "h": 1708,
+   "license": "CC BY-SA 3.0",
+   "artist": "",
+   "credit": "Bruce C. Cooper (<a href=\"https://en.wikipedia.org/wiki/User:_Centpacrr\" class=\"extiw\" title=\"en:User: Centpacrr\">User: Centpacrr</a>)",
+   "http": "429",
+   "file": "brand/content/photos/commons/belfast-1.jpg"
+  },
+  {
+   "title": "File:Belfast, Maine downtown.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Belfast%2C_Maine_downtown.jpg/3840px-Belfast%2C_Maine_downtown.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Belfast,_Maine_downtown.jpg",
+   "w": 8076,
+   "h": 5384,
+   "license": "CC BY 4.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Quintin_Soloviev\" title=\"User:Quintin Soloviev\">Quintin Soloviev</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "200",
+   "file": "brand/content/photos/commons/belfast-2.jpg"
+  },
+  {
+   "title": "File:Downtown Belfast Maine, February 2025.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Downtown_Belfast_Maine%2C_February_2025.jpg/3840px-Downtown_Belfast_Maine%2C_February_2025.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Downtown_Belfast_Maine,_February_2025.jpg",
+   "w": 4032,
+   "h": 2268,
+   "license": "CC0",
+   "artist": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:FujiAppleSan&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:FujiAppleSan (page does not exist)\">FujiAppleSan</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "200",
+   "file": "brand/content/photos/commons/belfast-3.jpg"
+  },
+  {
+   "title": "File:Belfast Harbor.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/4/41/Belfast_Harbor.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Belfast_Harbor.jpg",
+   "w": 3832,
+   "h": 2841,
+   "license": "CC BY-SA 4.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Indies1\" title=\"User:Indies1\">P. Hughes</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "429",
+   "file": "brand/content/photos/commons/belfast-4.jpg"
+  },
+  {
+   "title": "File:Map of Belfast Harbor Maine Showing Improvements completed in 1879 and Additional Improvements recommended in 1888 - DPLA - 4f6fd578cf611b6d542e4cef0c5273a5.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Map_of_Belfast_Harbor_Maine_Showing_Improvements_completed_in_1879_and_Additional_Improvements_recommended_in_1888_-_DPLA_-_4f6fd578cf611b6d542e4cef0c5273a5.jpg/3840px-Map_of_Belfast_Harbor_Maine_Showing_Improvements_completed_in_1879_and_Additional_Improvements_recommended_in_1888_-_DPLA_-_4f6fd578cf611b6d542e4cef0c5273a5.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Map_of_Belfast_Harbor_Maine_Showing_Improvements_completed_in_1879_and_Additional_Improvements_recommended_in_1888_-_DPLA_-_4f6fd578cf611b6d542e4cef0c5273a5.jpg",
+   "w": 10157,
+   "h": 8072,
+   "license": "Public domain",
+   "artist": "War Department. Office of the Chief of Engineers. 1818-9/18/1947",
+   "credit": "This file was contributed to Wikimedia Commons by <a href=\"https://en.wikipedia.org/wiki/en:National_Archives_and_Records_Administration\" class=\"extiw\" title=\"w:en:National Archives and Records Administration\"><span title=\"United States government agency\">National Archives and Records Administration</span></a> as part of a cooperation project. The donation was facilitated by the <a href=\"https://en.wikipedia.org/wiki/Digital_Public_Library_of_America\" class=\"extiw\" title=\"w:Digital Public Library of America\">Digital Public Library of America</a>, via its partner <a href=\"https://en.wikipedia.org/wiki/en:Digital_Public_Library_of_America\" class=\"extiw\" title=\"w:en:Digital Public Library of America\"><span title=\"American aggregation platform providing open access to digital collections from libraries, archives, and museums.\">Digital Public Library of America</span></a>.<span style=\"text-align:left\">\n<ul><li><a rel=\"nofollow\" class=\"external text\" data-mw-original-href=\"http://catalog.archives.gov/id/167974008\" href=\"https://catalog.archives.gov/id/167974008\">Record in source catalog</a></li>\n<li>DPLA identifier: <a rel=\"nofollow\" class=\"external text\" href=\"https://dp.la/item/4f6fd578cf611b6d542e4cef0c5273a5\">4f6fd578cf611b6d542e4cef0c5273a5</a></li>\n<li>National Archives Identifier: 167974008</li></ul>\n</span>",
+   "http": "200",
+   "file": "brand/content/photos/commons/belfast-5.jpg"
+  },
+  {
+   "title": "File:Panoramic view of beach and harbor at Belfast, Maine.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Panoramic_view_of_beach_and_harbor_at_Belfast%2C_Maine.jpg/3840px-Panoramic_view_of_beach_and_harbor_at_Belfast%2C_Maine.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Panoramic_view_of_beach_and_harbor_at_Belfast,_Maine.jpg",
+   "w": 7376,
+   "h": 1584,
+   "license": "CC BY-SA 2.0",
+   "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/27315689@N00\">Michael Surran</a>",
+   "credit": "originally posted to <b><a href=\"//commons.wikimedia.org/wiki/Flickr\" class=\"mw-redirect\" title=\"Flickr\">Flickr</a></b> as <a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/27315689@N00/3704618205\">Panoramic view of beach and harbor at Belfast, Maine</a>",
+   "http": "200",
+   "file": "brand/content/photos/commons/belfast-6.jpg"
+  }
+ ],
+ "skowhegan": [
+  {
+   "title": "File:Falls at Skowhegan, Kennebec Valley, by John Bachelder.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/8/87/Falls_at_Skowhegan%2C_Kennebec_Valley%2C_by_John_Bachelder.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Falls_at_Skowhegan,_Kennebec_Valley,_by_John_Bachelder.jpg",
+   "w": 2737,
+   "h": 1418,
+   "license": "Public domain",
+   "artist": "<div class=\"fn value\">\nBachelder, John -- Photographer</div>",
+   "credit": "This image is available from the <a href=\"//commons.wikimedia.org/wiki/New_York_Public_Library\" title=\"New York Public Library\">New York Public Library</a>'s Digital Library under the digital ID G89F231_010F: <a rel=\"nofollow\" class=\"external text\" href=\"http://digitalgallery.nypl.org/nypldigital/id?G89F231_010F\">digitalgallery.nypl.org</a> \u2192 <a rel=\"nofollow\" class=\"external text\" href=\"https://digitalcollections.nypl.org/search/index?keywords=G89F231_010F\">digitalcollections.nypl.org</a>",
+   "http": "429",
+   "file": "brand/content/photos/commons/skowhegan-1.jpg"
+  },
+  {
+   "title": "File:Falls at Skowhegan, Kennebec Valley, by John Bachelder.png",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Falls_at_Skowhegan%2C_Kennebec_Valley%2C_by_John_Bachelder.png",
+   "page": "https://commons.wikimedia.org/wiki/File:Falls_at_Skowhegan,_Kennebec_Valley,_by_John_Bachelder.png",
+   "w": 2737,
+   "h": 1418,
+   "license": "Public domain",
+   "artist": "<div class=\"fn value\">\nBachelder, John -- Photographer</div>",
+   "credit": "This image is available from the <a href=\"//commons.wikimedia.org/wiki/New_York_Public_Library\" title=\"New York Public Library\">New York Public Library</a>'s Digital Library under the digital ID G89F231_010F: <a rel=\"nofollow\" class=\"external text\" href=\"http://digitalgallery.nypl.org/nypldigital/id?G89F231_010F\">digitalgallery.nypl.org</a> \u2192 <a rel=\"nofollow\" class=\"external text\" href=\"https://digitalcollections.nypl.org/search/index?keywords=G89F231_010F\">digitalcollections.nypl.org</a>",
+   "http": "429",
+   "file": "brand/content/photos/commons/skowhegan-2.jpg"
+  },
+  {
+   "title": "File:From Neil Hill, Skowhegan, Kennebec Valley, by John Bachelder.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/b/be/From_Neil_Hill%2C_Skowhegan%2C_Kennebec_Valley%2C_by_John_Bachelder.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:From_Neil_Hill,_Skowhegan,_Kennebec_Valley,_by_John_Bachelder.jpg",
+   "w": 2737,
+   "h": 1429,
+   "license": "Public domain",
+   "artist": "<div class=\"fn value\">\nBachelder, John -- Photographer</div>",
+   "credit": "This image is available from the <a href=\"//commons.wikimedia.org/wiki/New_York_Public_Library\" title=\"New York Public Library\">New York Public Library</a>'s Digital Library under the digital ID G89F231_012F: <a rel=\"nofollow\" class=\"external text\" href=\"http://digitalgallery.nypl.org/nypldigital/id?G89F231_012F\">digitalgallery.nypl.org</a> \u2192 <a rel=\"nofollow\" class=\"external text\" href=\"https://digitalcollections.nypl.org/search/index?keywords=G89F231_012F\">digitalcollections.nypl.org</a>",
+   "http": "429",
+   "file": "brand/content/photos/commons/skowhegan-3.jpg"
+  },
+  {
+   "title": "File:From Neil Hill, Skowhegan, Kennebec Valley, by John Bachelder.png",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/a/ac/From_Neil_Hill%2C_Skowhegan%2C_Kennebec_Valley%2C_by_John_Bachelder.png",
+   "page": "https://commons.wikimedia.org/wiki/File:From_Neil_Hill,_Skowhegan,_Kennebec_Valley,_by_John_Bachelder.png",
+   "w": 2737,
+   "h": 1429,
+   "license": "Public domain",
+   "artist": "<div class=\"fn value\">\nBachelder, John -- Photographer</div>",
+   "credit": "This image is available from the <a href=\"//commons.wikimedia.org/wiki/New_York_Public_Library\" title=\"New York Public Library\">New York Public Library</a>'s Digital Library under the digital ID G89F231_012F: <a rel=\"nofollow\" class=\"external text\" href=\"http://digitalgallery.nypl.org/nypldigital/id?G89F231_012F\">digitalgallery.nypl.org</a> \u2192 <a rel=\"nofollow\" class=\"external text\" href=\"https://digitalcollections.nypl.org/search/index?keywords=G89F231_012F\">digitalcollections.nypl.org</a>",
+   "http": "429",
+   "file": "brand/content/photos/commons/skowhegan-4.jpg"
+  },
+  {
+   "title": "File:Looking down Kennebec River from Coburn Park, Skowhegan, Me (68284).jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Looking_down_Kennebec_River_from_Coburn_Park%2C_Skowhegan%2C_Me_%2868284%29.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Looking_down_Kennebec_River_from_Coburn_Park,_Skowhegan,_Me_(68284).jpg",
+   "w": 3310,
+   "h": 2097,
+   "license": "Public domain",
+   "artist": "Tichnor Brothers, Publisher",
+   "credit": "Boston Public Library Tichnor Brothers collection <a rel=\"nofollow\" class=\"external text\" href=\"http://ark.digitalcommonwealth.org/ark:/50959/3n204210z\">#68284</a>",
+   "http": "429",
+   "file": "brand/content/photos/commons/skowhegan-5.jpg"
+  },
+  {
+   "title": "File:Skowhegan Hotel, Kennebec Valley, by John Bachelder.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Skowhegan_Hotel%2C_Kennebec_Valley%2C_by_John_Bachelder.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Skowhegan_Hotel,_Kennebec_Valley,_by_John_Bachelder.jpg",
+   "w": 2737,
+   "h": 1416,
+   "license": "Public domain",
+   "artist": "<div class=\"fn value\">\nBachelder, John -- Photographer</div>",
+   "credit": "This image is available from the <a href=\"//commons.wikimedia.org/wiki/New_York_Public_Library\" title=\"New York Public Library\">New York Public Library</a>'s Digital Library under the digital ID G89F231_014F: <a rel=\"nofollow\" class=\"external text\" href=\"http://digitalgallery.nypl.org/nypldigital/id?G89F231_014F\">digitalgallery.nypl.org</a> \u2192 <a rel=\"nofollow\" class=\"external text\" href=\"https://digitalcollections.nypl.org/search/index?keywords=G89F231_014F\">digitalcollections.nypl.org</a>",
+   "http": "429",
+   "file": "brand/content/photos/commons/skowhegan-6.jpg"
+  }
+ ],
+ "lewiston": [
+  {
+   "title": "File:415 Lisbon Street, Lewiston ME.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/3/30/415_Lisbon_Street%2C_Lewiston_ME.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:415_Lisbon_Street,_Lewiston_ME.jpg",
+   "w": 3264,
+   "h": 2448,
+   "license": "CC BY-SA 3.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Faolin42\" title=\"User:Faolin42\">John Phelan</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "429",
+   "file": "brand/content/photos/commons/lewiston-1.jpg"
+  },
+  {
+   "title": "File:Lisbon Street, downtown Lewiston, Maine.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Lisbon_Street%2C_downtown_Lewiston%2C_Maine.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Lisbon_Street,_downtown_Lewiston,_Maine.jpg",
+   "w": 3000,
+   "h": 1979,
+   "license": "CC BY-SA 4.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Kzirkel\" title=\"User:Kzirkel\">Kenneth C. Zirkel</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "429",
+   "file": "brand/content/photos/commons/lewiston-2.jpg"
+  },
+  {
+   "title": "File:119 Lewiston, Maine.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/119_Lewiston%2C_Maine.jpg/3840px-119_Lewiston%2C_Maine.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:119_Lewiston,_Maine.jpg",
+   "w": 4000,
+   "h": 3000,
+   "license": "CC BY 2.0",
+   "artist": "David Wilson",
+   "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/davidwilson1949/8495558089/in/album-72157632545939653/\">https://www.flickr.com/photos/davidwilson1949/8495558089/in/album-72157632545939653/</a>",
+   "http": "200",
+   "file": "brand/content/photos/commons/lewiston-3.jpg"
+  },
+  {
+   "title": "File:Atkinson Building, Lewiston ME.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Atkinson_Building%2C_Lewiston_ME.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Atkinson_Building,_Lewiston_ME.jpg",
+   "w": 3072,
+   "h": 2304,
+   "license": "CC BY-SA 3.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Faolin42\" title=\"User:Faolin42\">John Phelan</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "429",
+   "file": "brand/content/photos/commons/lewiston-4.jpg"
+  },
+  {
+   "title": "File:Lewiston, ME.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Lewiston%2C_ME.jpg/3840px-Lewiston%2C_ME.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Lewiston,_ME.jpg",
+   "w": 5016,
+   "h": 3344,
+   "license": "CC BY 4.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Quintin_Soloviev\" title=\"User:Quintin Soloviev\">Quintin Soloviev</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "200",
+   "file": "brand/content/photos/commons/lewiston-5.jpg"
+  },
+  {
+   "title": "File:Sun-Journal office, Lewiston, Maine.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/9/94/Sun-Journal_office%2C_Lewiston%2C_Maine.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Sun-Journal_office,_Lewiston,_Maine.jpg",
+   "w": 3000,
+   "h": 2000,
+   "license": "CC BY-SA 4.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Kzirkel\" title=\"User:Kzirkel\">Kenneth C. Zirkel</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "429",
+   "file": "brand/content/photos/commons/lewiston-6.jpg"
+  }
+ ],
+ "machias": [
+  {
+   "title": "File:EastMachiasME JamesRTalbotHouse.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/5/5f/EastMachiasME_JamesRTalbotHouse.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:EastMachiasME_JamesRTalbotHouse.jpg",
+   "w": 3072,
+   "h": 2304,
+   "license": "CC BY-SA 2.0",
+   "artist": "Doug Kerr",
+   "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"https://www.flickr.com/photos/dougtone/8168506607/\">https://www.flickr.com/photos/dougtone/8168506607/</a>",
+   "http": "429",
+   "file": "brand/content/photos/commons/machias-1.jpg"
+  },
+  {
+   "title": "File:East Machias, Maine.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/East_Machias%2C_Maine.jpg/3840px-East_Machias%2C_Maine.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:East_Machias,_Maine.jpg",
+   "w": 5611,
+   "h": 3741,
+   "license": "CC BY 4.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Quintin_Soloviev\" title=\"User:Quintin Soloviev\">Quintin Soloviev</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "200",
+   "file": "brand/content/photos/commons/machias-2.jpg"
+  },
+  {
+   "title": "File:Main Street, Machias, Maine.JPG",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Main_Street%2C_Machias%2C_Maine.JPG/3840px-Main_Street%2C_Machias%2C_Maine.JPG",
+   "page": "https://commons.wikimedia.org/wiki/File:Main_Street,_Machias,_Maine.JPG",
+   "w": 4896,
+   "h": 3672,
+   "license": "CC BY-SA 3.0",
+   "artist": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Zedmaster375&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Zedmaster375 (page does not exist)\">Zedmaster375</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "200",
+   "file": "brand/content/photos/commons/machias-3.jpg"
+  },
+  {
+   "title": "File:Main Street, Machias, Maine (66918).jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Main_Street%2C_Machias%2C_Maine_%2866918%29.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Main_Street,_Machias,_Maine_(66918).jpg",
+   "w": 3289,
+   "h": 2072,
+   "license": "Public domain",
+   "artist": "Tichnor Brothers, Publisher",
+   "credit": "Boston Public Library Tichnor Brothers collection <a rel=\"nofollow\" class=\"external text\" href=\"http://ark.digitalcommonwealth.org/ark:/50959/5t34td10j\">#66918</a>",
+   "http": "429",
+   "file": "brand/content/photos/commons/machias-4.jpg"
+  },
+  {
+   "title": "File:Machias, Maine.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Machias%2C_Maine.jpg/3840px-Machias%2C_Maine.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Machias,_Maine.jpg",
+   "w": 12173,
+   "h": 8115,
+   "license": "CC BY 4.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Quintin_Soloviev\" title=\"User:Quintin Soloviev\">Quintin Soloviev</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "200",
+   "file": "brand/content/photos/commons/machias-5.jpg"
+  }
+ ],
+ "sanford": [
+  {
+   "title": "File:Leavitt & Co. Sanford.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Leavitt_%26_Co._Sanford.jpg/3840px-Leavitt_%26_Co._Sanford.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Leavitt_%26_Co._Sanford.jpg",
+   "w": 4141,
+   "h": 3474,
+   "license": "Public domain",
+   "artist": "Fred Philpot",
+   "credit": "<a rel=\"nofollow\" class=\"external free\" href=\"http://www.mainememory.net/bin/Detail?ln=9709\">http://www.mainememory.net/bin/Detail?ln=9709</a>",
+   "http": "200",
+   "file": "brand/content/photos/commons/sanford-1.jpg"
+  },
+  {
+   "title": "File:Main Street, 2014, Sanford ME.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/4/42/Main_Street%2C_2014%2C_Sanford_ME.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Main_Street,_2014,_Sanford_ME.jpg",
+   "w": 3264,
+   "h": 2448,
+   "license": "CC BY-SA 4.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Faolin42\" title=\"User:Faolin42\">John Phelan</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "200",
+   "file": "brand/content/photos/commons/sanford-2.jpg"
+  },
+  {
+   "title": "File:Main Street, Sanford ME.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/9/91/Main_Street%2C_Sanford_ME.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Main_Street,_Sanford_ME.jpg",
+   "w": 3264,
+   "h": 2448,
+   "license": "CC BY-SA 3.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Faolin42\" title=\"User:Faolin42\">John Phelan</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "429",
+   "file": "brand/content/photos/commons/sanford-3.jpg"
+  },
+  {
+   "title": "File:Cub Scout Pride (springvale maine).jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Cub_Scout_Pride_%28springvale_maine%29.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Cub_Scout_Pride_(springvale_maine).jpg",
+   "w": 2832,
+   "h": 2128,
+   "license": "CC BY 2.0",
+   "artist": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/18334814@N00\">spablab</a> from Chicago",
+   "credit": "<p><a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/spablab/3589055211/\">Boy Scout Pride</a>\n</p>\n<ul><li>Uploaded by <a href=\"//commons.wikimedia.org/wiki/User:Evrik\" title=\"User:Evrik\">evrik</a></li></ul>",
+   "http": "429",
+   "file": "brand/content/photos/commons/sanford-4.jpg"
+  },
+  {
+   "title": "File:Mill Street Dam, Springvale ME.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Mill_Street_Dam%2C_Springvale_ME.jpg/3840px-Mill_Street_Dam%2C_Springvale_ME.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Mill_Street_Dam,_Springvale_ME.jpg",
+   "w": 5472,
+   "h": 3648,
+   "license": "CC BY 4.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Faolin42\" title=\"User:Faolin42\">John Phelan</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "200",
+   "file": "brand/content/photos/commons/sanford-5.jpg"
+  },
+  {
+   "title": "File:Sanford Springvale Rail Trail, Springvale ME.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Sanford_Springvale_Rail_Trail%2C_Springvale_ME.jpg/3840px-Sanford_Springvale_Rail_Trail%2C_Springvale_ME.jpg",
+   "page": "https://commons.wikimedia.org/wiki/File:Sanford_Springvale_Rail_Trail,_Springvale_ME.jpg",
+   "w": 4032,
+   "h": 3024,
+   "license": "CC BY-SA 4.0",
+   "artist": "<a href=\"//commons.wikimedia.org/wiki/User:Faolin42\" title=\"User:Faolin42\">John Phelan</a>",
+   "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+   "http": "200",
+   "file": "brand/content/photos/commons/sanford-6.jpg"
+  }
  ]
 }

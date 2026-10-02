@@ -264,7 +264,7 @@ body.scrub{transition:none}
 </div></section>
 
 <section class="about reveal" id="about"><div class="w">
-  <h2 class="h2"><span class="">Made by the people it is <b class="nw">about<i class="d"></i></b></span></h2>
+  <div><h2 class="h2"><span class="">Made by the people it is <b class="nw">about<i class="d"></i></b></span></h2></div>
   <div class="cols">
     <div class="row-in"><h3>Who makes it</h3><p>Young Mainers with a phone and a story. They pick what to film and say it their own way.</p></div>
     <div class="row-in"><h3>What it is about</h3><p>The rules behind everyday costs. Leases, licenses, permits, wages, and the fine print nobody reads until it costs them.</p></div>
@@ -324,8 +324,7 @@ body.scrub{transition:none}
   const d = JSON.parse(document.getElementById('maine-data').textContent), ns = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 720 720');
   d.rows.forEach((row, i) => row.runs.forEach(([a, b]) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + a + ' ' + row.y + ' L' + b + ' ' + row.y); p.setAttribute('stroke', BI); p.setAttribute('stroke-width', row.w); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 45) + 'ms'; svg.appendChild(p); }));
-  const m = document.getElementById('mural'); m.appendChild(svg);
-  new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m);
+  const m = document.getElementById('mural'); if (m) { m.appendChild(svg); new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m); }
 
   // The page background changes as each section passes the middle of the screen.
   // The page color is a function of scroll position, worked out every frame: green under the hero and about,

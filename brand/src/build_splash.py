@@ -406,7 +406,7 @@ def page(theme=SIGNATURE, out=None, media=None):
 </div></section>
 
 <section class="about reveal" id="about"><div class="w">
-  <h2 class="h2">%(h2about)s</h2>
+  <div><h2 class="h2">%(h2about)s</h2>%(about_media)s</div>
   <div class="cols">
     <div class="row-in"><h3>Who makes it</h3><p>Young Mainers with a phone and a story. They pick what to film and say it their own way.</p></div>
     <div class="row-in"><h3>What it is about</h3><p>The rules behind everyday costs. Leases, licenses, permits, wages, and the fine print nobody reads until it costs them.</p></div>
@@ -422,12 +422,12 @@ def page(theme=SIGNATURE, out=None, media=None):
   <div class="panels" id="panels">%(panels)s</div>
   <div class="where" id="where"><span class="n" id="wn">01 / 09</span><span class="segs" id="segs">%(segs)s</span><span class="next" id="wnext"></span></div>
 </div></div></section>
-<section class="words reveal" id="words"><div class="w">
+%(band)s<section class="words reveal" id="words"><div class="w">
   <h2 class="h2">%(h2words)s</h2>
   <div class="qs">
-    <blockquote class="row-in"><p>“[A sentence from the creator’s video, in their words.]”</p><footer>[Creator name] <span>Belfast, Maine</span></footer></blockquote>
-    <blockquote class="row-in"><p>“[A sentence from the creator’s video, in their words.]”</p><footer>[Creator name] <span>Machias, Maine</span></footer></blockquote>
-    <blockquote class="row-in"><p>“[A sentence from the creator’s video, in their words.]”</p><footer>[Creator name] <span>Lewiston, Maine</span></footer></blockquote>
+    <blockquote class="row-in"><p>“[A sentence from the creator’s video, in their words.]”</p><footer>%(qa1)s[Creator name] <span>Belfast, Maine</span></footer></blockquote>
+    <blockquote class="row-in"><p>“[A sentence from the creator’s video, in their words.]”</p><footer>%(qa2)s[Creator name] <span>Machias, Maine</span></footer></blockquote>
+    <blockquote class="row-in"><p>“[A sentence from the creator’s video, in their words.]”</p><footer>%(qa3)s[Creator name] <span>Lewiston, Maine</span></footer></blockquote>
   </div>
 </div></section>
 
@@ -436,9 +436,9 @@ def page(theme=SIGNATURE, out=None, media=None):
   <form class="form" id="signup" novalidate method="get" action="https://CONFIRM-publication.substack.com/subscribe" target="_blank" rel="noopener" data-confirm="[CONFIRM: publication address]"><label class="k" for="email" style="flex-basis:100%%">Email</label><input id="email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required aria-describedby="err"><button class="btn b3" type="submit" id="sub">Subscribe</button>
   <p class="err" id="err" role="alert" hidden>Enter an email address like you@example.com.</p><p class="note" id="note">Runs on Substack. Unsubscribe in one click.</p><p class="ok" id="ok" role="status" hidden>Check your inbox. The confirmation is on its way.</p></form></div>
   <div class="posts"><span class="rule" aria-hidden="true"></span>
-    <a class="post row-in" href="#"><div><h3>[Post title, plain words]</h3><p>[One line on what the creator found out.]</p><p class="by">[Creator name] <span>Belfast, Maine</span></p></div><span class="dt">[Date]</span></a>
-    <a class="post row-in" href="#"><div><h3>[Post title, plain words]</h3><p>[One line on what the creator found out.]</p><p class="by">[Creator name] <span>Machias, Maine</span></p></div><span class="dt">[Date]</span></a>
-    <a class="post row-in" href="#"><div><h3>[Post title, plain words]</h3><p>[One line on what the creator found out.]</p><p class="by">[Creator name] <span>Lewiston, Maine</span></p></div><span class="dt">[Date]</span></a>
+    <a class="post row-in" href="#">%(pt1)s<div><h3>[Post title, plain words]</h3><p>[One line on what the creator found out.]</p><p class="by">[Creator name] <span>Belfast, Maine</span></p></div><span class="dt">[Date]</span></a>
+    <a class="post row-in" href="#">%(pt2)s<div><h3>[Post title, plain words]</h3><p>[One line on what the creator found out.]</p><p class="by">[Creator name] <span>Machias, Maine</span></p></div><span class="dt">[Date]</span></a>
+    <a class="post row-in" href="#">%(pt3)s<div><h3>[Post title, plain words]</h3><p>[One line on what the creator found out.]</p><p class="by">[Creator name] <span>Lewiston, Maine</span></p></div><span class="dt">[Date]</span></a>
   </div>
 </div></section>
 
@@ -544,6 +544,10 @@ def page(theme=SIGNATURE, out=None, media=None):
         head_extra=theme.get("head_extra", "").replace("{media}", media),
         hero_media=theme.get("hero_media", '<div class="mural" id="mural" aria-hidden="true"></div>').replace("{media}", media),
         credits=('<p class="fine credits">%s</p>' % theme["credits"]) if theme.get("credits") else "",
+        about_media=theme.get("about_media", "").replace("{media}", media),
+        band=theme.get("band", "").replace("{media}", media),
+        pt1=theme.get("post_thumbs", ["", "", ""])[0].replace("{media}", media), pt2=theme.get("post_thumbs", ["", "", ""])[1].replace("{media}", media), pt3=theme.get("post_thumbs", ["", "", ""])[2].replace("{media}", media),
+        qa1=theme.get("quote_stills", ["", "", ""])[0].replace("{media}", media), qa2=theme.get("quote_stills", ["", "", ""])[1].replace("{media}", media), qa3=theme.get("quote_stills", ["", "", ""])[2].replace("{media}", media),
         two=(ping_dot if theme["footer_ping"] else (lambda t: t))(draw_paths(logo(theme["footer"], "lk", theme["logo"]))), mural=theme["mural"], bg_follow=theme["bg_follow"],
         h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),

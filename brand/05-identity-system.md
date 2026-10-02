@@ -561,3 +561,15 @@ The client asked for more cinematic pans. Changes in `make_hero_video.mjs` and `
 - The moves are near constant speed, with only the gentlest ease, and each pairs a drift with a push in or a pull out: push toward Katahdin's summit, pull out over the Aroostook fields, push toward the islands from Cadillac, pull out from the Head Light to the sea, drift along the Old Port waterfront. Plates are 22 percent larger than the frame to give the moves room.
 - The grade is filmic: color at 80 percent, a soft S curve with the blacks lifted to 6 percent and the highlights held under 96, a touch of Sky in the shadows, a light vignette.
 - The file is now drawn on a canvas and encoded in the browser, which gives an exact start and end on the first setting at rest, so the loop point is seamless and the poster is the true first frame. The encoder omits the duration, so the script writes it into the WebM header.
+
+## Bark & Sky, photographs through the page, October 2
+
+The client asked where else imagery could lift the splash page. The judgment, section by section:
+
+- **About.** The left column held only the heading and a void below it. Now a 3 by 2 photograph of Belfast's brick downtown and harbor from above sits under the heading, with a one line caption. It answers "where" while the three columns answer who, what and how.
+- **Between the creators and their words.** A full-bleed band, Lewiston's mills and downtown from above, with one line in the serif: "filmed in nine towns, from the County to the coast." A breath after the long stepper, in the hero's language, before the dark quotes section. The scrim is heaviest at the bottom where the line sits.
+- **In their words.** Each quote's footer carries a small still of the creator beside the name, so the words have a face. Forty by fifty two pixels, the same 3 by 4 as the strip.
+- **The newsletter.** Each post gets a 3 by 2 thumbnail of its town (Belfast, Machias, Lewiston). A list of three titles reads as a publication once it has pictures.
+- **Left alone.** The hero already carries the loop. The follow row is icons and handles and needs nothing. The form needs nothing. The footer is the credits.
+
+All of it is template hooks (`about_media`, `band`, `post_thumbs`, `quote_stills`) that default to nothing, so the Signature page is unchanged. Sources are Commons, 2000 px or wider, graded like the hero by `brand/src/make_photos_page.py`, credited in the footer line and in `CREDITS.md`. Skowhegan and Sanford street photographs were not usable (rate limited, or carrying a flag); the posts use the three towns with good pictures.

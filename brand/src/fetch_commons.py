@@ -20,8 +20,14 @@ SUBJECTS = {
     "aroostook": ["Aroostook County potato field", "Presque Isle Maine farmland", "Fort Fairfield potato harvest"],
     "headlight": ["Portland Head Light", "Portland Head Lighthouse Cape Elizabeth", "Portland Head Light Fort Williams Park"],
     "cadillac2": ["Cadillac Mountain sunrise", "Cadillac Mountain summit panorama", "Frenchman Bay from Cadillac Mountain"],
+    # the towns the placeholder creators are from, for the smaller slots on the page
+    "belfast": ["Belfast Maine Main Street", "Belfast Maine downtown", "Belfast Maine harbor"],
+    "skowhegan": ["Skowhegan Maine downtown", "Skowhegan Maine Water Street", "Skowhegan Maine Kennebec"],
+    "lewiston": ["Lisbon Street Lewiston Maine", "Lewiston Maine downtown", "Bates Mill Lewiston"],
+    "machias": ["Machias Maine Main Street", "Machias Maine downtown", "Machias River Maine"],
+    "sanford": ["Sanford Maine downtown", "Sanford Maine Main Street", "Springvale Maine"],
 }
-MIN_W = 3000  # a full-width hero at 1920 by 1080 with room to pan needs the source wider than that
+MIN_W = int(os.environ.get("GM_MIN_W", "3000"))  # a full-width hero at 1920 by 1080 with room to pan needs the source wider than that
 OK = ("cc by", "cc by-sa", "cc0", "public domain", "pd", "cc-by", "cc-by-sa")
 
 

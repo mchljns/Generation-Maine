@@ -9,3 +9,11 @@ Portland Head Light is a client-directed exception to the direction's rule again
 - sunrise from Cadillac Mountain, Acadia: John Manard, CC BY-SA 2.0, 4032x3024. https://commons.wikimedia.org/wiki/File:Cadillac_Mountain_Sunrise,_Acadia_National_Park_-_51650832934.jpg
 - Portland Head Light, Cape Elizabeth: Photo by and (c)2014 Derek Ramsey (Ram-Man), CC BY-SA 4.0, 4928x3264. https://commons.wikimedia.org/wiki/File:Portland_Head_Lighthouse_Ocean_Horizontal.JPG
 - the Old Port waterfront, Portland: Domenico Convertini, CC BY-SA 2.0, 6000x4000. https://commons.wikimedia.org/wiki/File:Commercial_Street,_Portland.jpg
+
+## The smaller slots
+
+- about.jpg: Quintin Soloviev, CC BY 4.0, 8076x5384. https://commons.wikimedia.org/wiki/File:Belfast,_Maine_downtown.jpg
+- band.jpg: Quintin Soloviev, CC BY 4.0, 5016x3344. https://commons.wikimedia.org/wiki/File:Lewiston,_ME.jpg
+- post-1.jpg: FujiAppleSan, CC0, 4032x2268. https://commons.wikimedia.org/wiki/File:Downtown_Belfast_Maine,_February_2025.jpg
+- post-2.jpg: Zedmaster375, CC BY-SA 3.0, 4896x3672. https://commons.wikimedia.org/wiki/File:Main_Street,_Machias,_Maine.JPG
+- post-3.jpg: David Wilson, CC BY 2.0, 4000x3000. https://commons.wikimedia.org/wiki/File:119_Lewiston,_Maine.jpg
