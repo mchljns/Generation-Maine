@@ -86,10 +86,10 @@ def flat_stack(fg, bg, top=None, seed=3):
 
 
 FORMS = [
-    ("the Bates cairn", "ref-20.jpg", "Acadia's own design, drawn from the Gorham Mountain photographs: two rounded granite boulders, a split slab across them, a pointer stone set toward the way. A structure, not a pile. Only Maine builds these, and the park maintains them.", bates),
-    ("the Bates cairn, simplified", "ref-19.jpg", "The same structure with fewer corners, for the avatar and favicon.", bates_simple),
+    ("the Bates cairn", "ref-32.jpg", "Acadia's own design, drawn from the Gorham Mountain photographs: two rounded granite boulders, a split slab across them, a pointer stone set toward the way. A structure, not a pile. Only Maine builds these, and the park maintains them.", bates),
+    ("the Bates cairn, simplified", "ref-31.jpg", "The same structure with fewer corners, for the avatar and favicon.", bates_simple),
     ("the heap", "ref-01.jpg", "Katahdin's summit cairn: a rough cone of many stones, leaning a little, a pointer on top. The texture is the drawing. Reads as a mountain at 16 px.", heap),
-    ("the flat stack", "ref-12.jpg", "Seven flat stones of seven sizes balanced the way they are in the Zion and Texter Mountain photographs. Honest, and still a stack.", flat_stack),
+    ("the flat stack", "ref-34.jpg", "Seven flat stones of seven sizes balanced the way they are in the Zion and Texter Mountain photographs. Honest, and still a stack.", flat_stack),
 ]
 
 
