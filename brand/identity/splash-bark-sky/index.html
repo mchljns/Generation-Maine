@@ -319,14 +319,14 @@ body.scrub{transition:none}
 .bs .band{position:relative;height:min(520px,56vh);overflow:hidden;background:var(--bark);color:var(--paper);display:flex;flex-direction:column;justify-content:flex-end}
 .bs .band img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .bs .band::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(38,32,28,.12) 0%,rgba(38,32,28,0) 30%,rgba(38,32,28,.55) 68%,rgba(38,32,28,.86) 100%)}
-.bs .band .w{position:relative;z-index:2;width:100%;padding-bottom:44px}
+.bs .band .w{position:relative;z-index:2;width:100%;padding-block:0 48px}
 .bs .band p{margin:0;font:400 clamp(26px,3.2vw,44px)/1.08 var(--display);max-width:18ch;text-wrap:balance;text-shadow:0 1px 2px rgba(38,32,28,.3)}
 .bs .band .credit{position:absolute;right:var(--M);bottom:16px;z-index:2;font:400 11px/1.3 var(--body);color:rgba(244,243,238,.72)}
 .bs .post{grid-template-columns:112px minmax(0,1fr) auto;align-items:start}
 .bs .post .th{display:block;width:112px;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:8px;background:var(--mist)}
 .bs .words blockquote footer{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .bs .qs-im{display:block;width:40px;height:52px;object-fit:cover;border-radius:6px;background:var(--bark2)}
-@media (max-width:900px){.bs .ph{max-width:none;margin-top:26px}.bs .band{height:min(380px,52vh)}.bs .band .w{padding-bottom:16px}.bs .band .credit{position:static;display:block;padding:0 var(--M) 14px;color:rgba(244,243,238,.72)}.bs .post{grid-template-columns:88px minmax(0,1fr) auto}.bs .post .th{width:88px}}
+@media (max-width:900px){.bs .ph{max-width:none;margin-top:26px}.bs .band{height:min(380px,52vh)}.bs .band .w{padding-block:0 18px}.bs .band .credit{position:static;display:block;padding:0 var(--M) 14px;color:rgba(244,243,238,.72)}.bs .post{grid-template-columns:88px minmax(0,1fr) auto}.bs .post .th{width:88px}}
 /* the bar over the video: Paper type and the Sky wordmark until the page scrolls, then the capsule as before */
 .bs .top{color:var(--paper)}.bs .top .tl{color:var(--paper)}
 .bs .top:not(.scrolled) .cta{border-color:rgba(244,243,238,.75)}.bs .top:not(.scrolled) .cta:hover{background:rgba(244,243,238,.14)}
