@@ -455,3 +455,7 @@ The client liked the split disc and asked whether the state can be worked in. Si
 | The lined state on the horizon | The shared sixteen lines counterchanged in the disc. The system mark and the horizon in one, and too busy for an avatar |
 
 Recommendation: **Rising from the ground.** It keeps what the client liked (the horizon, the calm) and makes Maine the ground itself rather than a badge on it. Next step if it goes forward: tune where the horizon cuts the state (the coast should sit just under the line), draw the solid cut for under 36 px, and test it as the avatar and bug on the applied sheet.
+
+## Bark & Sky, the QA pass, October 2
+
+The strict QA in `brand/06-qa-bark-sky.md` is worked through. The page now fits a laptop fold, centers its section heads the way the kit's surfaces did, carries its own placeholder clips in its own colors, shows the wordmark alone at rest and the lockup in the capsule, sets hierarchy with the serif and size instead of weight, and keeps third-party names in their own casing. The form has an error line and a settled success state, the quotes are curly and hung, the sheet carries the platform marks, and touch and type minimums hold on phones. Those last five went into the shared template, so Signature has them too. One item stays open by choice: the hero mark's weight gradient reads top-light over the serif, and the mid cut is worth a look.

@@ -140,7 +140,7 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .top .lk{height:24px;width:auto;display:block}
 .top .lk.dark{display:none}
 .top nav{display:flex;gap:30px;font:600 14px/1 var(--body);align-items:center}
-.top nav a{position:relative;text-decoration:none;padding:6px 0;border-radius:999px;transition:background .25s,padding .35s,opacity .25s}
+.top nav a{position:relative;text-decoration:none;padding:12px 0;border-radius:999px;transition:background .25s,padding .35s,opacity .25s}
 .top nav a:hover{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1.5px}
 .top nav a::before{content:"";position:absolute;left:-14px;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:var(--mg);transform:scale(0);transition:transform .3s cubic-bezier(.3,1.4,.4,1)}
 .top nav a.on::before{transform:scale(1)}
@@ -180,6 +180,7 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.03em;line-h
 .sheet nav a .d{width:.18em;height:.18em}
 .sheet .foot{margin-top:auto;display:flex;flex-direction:column;gap:14px}
 .sheet .foot a{font:600 16px/1 var(--body);text-decoration:none}
+.sheet .foot .sheet-soc{display:flex;gap:6px;margin-top:4px}.sheet .foot .sheet-soc a{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;color:var(--snow)}.sheet .foot .sheet-soc .ic{width:22px;height:22px;--icon-bg:var(--sp)}
 .sheet .foot .cta{align-self:flex-start;background:var(--snow);color:var(--sp);padding:16px 26px;border-radius:999px;font:600 15px/1 var(--body);text-decoration:none}
 @media (max-width:900px){.top nav,.top .cta{display:none}.menu{display:block}}
 .hero{padding-top:68px}
@@ -231,10 +232,10 @@ body.scrub{transition:none}
 /* the creators: the head, then a pinned stage. Scrolling steps through the nine; each one's details arrive from the right. */
 .stories-head{padding-bottom:0}
 .stories-head .lede{color:var(--muted);max-width:46ch;margin:18px 0 0}
-.stories{overflow-x:clip;padding:36px 0 clamp(80px,12vh,160px);height:calc(9 * 80vh + clamp(80px,12vh,160px));min-height:calc(9 * 520px);box-sizing:border-box}
+.stories{overflow-x:clip;padding:8px 0 clamp(80px,12vh,160px);height:calc(9 * 80vh + clamp(80px,12vh,160px));min-height:calc(9 * 520px);box-sizing:border-box}
 /* the pinned block is its own height and sits a little below the capsule, so no empty screen opens up before it pins */
 .stories .pinw{position:sticky;top:max(92px,calc(50vh - 330px))}
-.stories .w{width:100%;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px clamp(28px,5vw,72px);align-items:center}
+.stories .w{width:100%;display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px clamp(40px,6vw,96px);align-items:center}
 .stage{height:min(64vh,560px);display:flex;align-items:center}
 .vid{position:relative;aspect-ratio:9/16;height:100%;max-height:620px;width:auto;max-width:100%;border-radius:14px;overflow:hidden;background:var(--pine);box-shadow:0 1px 0 var(--rule)}
 .vid video,.vid img.clip{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;visibility:hidden;transform:scale(1.04);transition:opacity 0s .5s,visibility 0s .5s,transform 0s .5s}
@@ -265,8 +266,8 @@ body.scrub{transition:none}
 .panel.on>:nth-child(3){transition-delay:.06s}.panel.on>:nth-child(4){transition-delay:.12s}.panel.on>:nth-child(5){transition-delay:.18s}.panel.on>:nth-child(6){transition-delay:.24s}
 .panel .k{margin-bottom:14px;position:relative}.panel .k .d{width:.5em;height:.5em;margin-left:.3em;vertical-align:baseline}
 .panel h2{font-size:clamp(38px,4.6vw,66px);max-width:10ch}
-.panel .bio{font-size:19px;line-height:1.5;margin:22px 0 26px;max-width:42ch;color:var(--fg)}
-.soc{display:flex;gap:22px;flex-wrap:wrap}.soc a{display:inline-flex;align-items:center;gap:8px;font:600 14px/1 var(--body);text-decoration:none;color:var(--fg)}.soc .ic{width:20px;height:20px;--icon-bg:#fff}.soc a:hover .ic{transform:translateY(-1px)}
+.panel .bio{font-size:19px;line-height:1.5;margin:22px 0 14px;max-width:42ch;color:var(--fg)}
+.soc{display:flex;gap:22px;flex-wrap:wrap}.soc a{display:inline-flex;align-items:center;gap:8px;min-height:44px;font:600 14px/1 var(--body);text-decoration:none;color:var(--fg)}.soc .ic{width:20px;height:20px;--icon-bg:#fff}.soc a:hover .ic{transform:translateY(-1px)}
 .panel .pv{display:none}
 @media (prefers-reduced-motion: reduce){.panel>*,.panel.prev>*{transform:none;transition:opacity .3s}}
 @media (max-width:900px){
@@ -277,16 +278,16 @@ body.scrub{transition:none}
   .stories .w{grid-template-columns:1fr;gap:14px}
   .stage{height:var(--stageh,min(52vh,420px));justify-content:center}
   .vid{max-height:none}
-  .vid .dur{right:8px;top:8px;font-size:10px;padding:5px 6px}.who{left:8px;top:8px;gap:8px;right:52px}.who .av{width:30px;height:30px}.who span b{font-size:12px}.who span{font-size:11px}
+  .vid .dur{right:8px;top:8px;font-size:12px;padding:5px 7px}.who{left:8px;top:8px;gap:8px;right:52px}.who .av{width:30px;height:30px}.who span b{font-size:12px}.who span{font-size:11px}
   .panels{height:auto;min-height:150px}
   .panel{justify-content:flex-start;padding-top:2px}
   .panel .k{margin-bottom:6px;font-size:11px}
   .panel h2{font-size:clamp(28px,8vw,40px);max-width:none}
   .panel .bio{font-size:16px;line-height:1.42;margin:8px 0 12px}
   /* the platforms as marks only, one row; the handle is on the clip's header */
-  .soc{gap:18px}.soc a span{display:none}.soc .ic{width:22px;height:22px}
+  .soc{gap:8px}.soc a span{display:none}.soc .ic{width:22px;height:22px}.soc a{min-width:44px;justify-content:center;margin-inline:-8px}
   .panel .pv{display:none}
-  .where{margin-top:0;gap:12px;font-size:11px;padding-bottom:max(12px,env(safe-area-inset-bottom,0px))}.where .next{min-width:0}
+  .where{margin-top:0;gap:12px;font-size:12px;padding-bottom:max(12px,env(safe-area-inset-bottom,0px))}.where .next{min-width:0}
   .where .segs button{height:28px}.where .segs button::before{top:13px}
 }
 
@@ -296,6 +297,12 @@ body.scrub{transition:none}
 .form{display:flex;gap:10px;flex-wrap:wrap;max-width:520px}
 .form input{flex:1 1 220px;min-width:0;font:16px var(--body);padding:15px 20px;border-radius:999px;border:1.5px solid var(--rule);background:var(--card);color:var(--fg)}
 .form .note{flex-basis:100%;font-size:13px;color:var(--muted);margin:4px 0 0}
+.form .err{flex-basis:100%;font-size:14px;color:var(--fg);margin:4px 0 0}
+.form input[aria-invalid="true"]{border-color:var(--fg)}
+.form input:read-only{color:var(--muted)}
+.form button:disabled{opacity:.7;cursor:default}
+/* the focus state is the border itself, so the pill never doubles */
+.form input:focus-visible{outline:none;border-color:var(--fg);border-width:2px;padding:14px 19px}
 .form .ok{flex-basis:100%;font:600 15px var(--body);color:var(--fg);margin:4px 0 0}
 .posts{display:grid;gap:0;position:relative}
 .post{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;padding:22px 0;border-bottom:1.5px solid var(--rule);text-decoration:none}
@@ -314,7 +321,7 @@ body.scrub{transition:none}
 .words blockquote{margin:0;padding-top:18px;position:relative}
 .words blockquote::before{content:"";position:absolute;left:0;right:0;top:0;height:1.5px;background:var(--ink);transform-origin:left;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
 .words blockquote:nth-child(2)::before{transition-delay:.1s}.words blockquote:nth-child(3)::before{transition-delay:.2s}
-.words blockquote p{font:800 clamp(22px,2.1vw,30px)/1.1 var(--display);letter-spacing:-.02em;margin:0 0 14px;text-wrap:balance}
+.words blockquote p{font:800 clamp(22px,2.1vw,30px)/1.1 var(--display);letter-spacing:-.02em;margin:0 0 14px;text-wrap:balance;text-indent:-.42em;hanging-punctuation:first}
 .words blockquote footer{font:600 15px/1.3 var(--body)}.words blockquote footer span{font-weight:400}
 
 .follow .row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
@@ -374,12 +381,12 @@ def page(theme=SIGNATURE, out=None, media=None):
                    '<div class="soc">%s</div></article>') % (
                        " on" if i == 0 else "", i + 1, i, who, town, cr["name"], cr["bio"], socials)
     body = r"""
-<header class="top" id="topbar"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s%(lock_dark)s</a>
+<header class="top" id="topbar"><div class="w"><a href="#top" aria-label="Generation Maine, home">%(lock)s%(lock_dark)s%(lock_rest)s</a>
 <nav aria-label="Page"><a href="#about" data-for="about">About</a><a href="#creators" data-for="creators">Creators</a><a href="#words" data-for="words">In their words</a><a href="#follow" data-for="follow">Follow</a></nav>
 <a class="cta" href="#news">Get the newsletter</a><button class="menu" id="menu" aria-expanded="false" aria-controls="sheet" aria-label="Menu"><i></i><i></i><i></i></button><span class="prog" id="prog" aria-hidden="true"></span></div></header>
 <div class="sheet" id="sheet" aria-hidden="true">
 <nav aria-label="Page"><a href="#about">About<i class="d"></i></a><a href="#creators">Creators<i class="d"></i></a><a href="#words">In their words<i class="d"></i></a><a href="#follow">Follow<i class="d"></i></a></nav>
-<div class="foot"><a class="cta" href="#news">Get the newsletter</a></div></div>
+<div class="foot"><a class="cta" href="#news">Get the newsletter</a><div class="soc sheet-soc"><a href="#follow" aria-label="Instagram">%(ic_ig)s</a><a href="#follow" aria-label="TikTok">%(ic_tt)s</a><a href="#follow" aria-label="YouTube">%(ic_yt)s</a><a href="#follow" aria-label="Substack">%(ic_ss)s</a></div></div></div>
 
 <section class="hero" id="top"><div class="w">
   <div class="h1"><h1 id="h1" class="rise">%(h1)s</h1>
@@ -408,16 +415,16 @@ def page(theme=SIGNATURE, out=None, media=None):
 <section class="words reveal" id="words"><div class="w">
   <h2 class="h2">%(h2words)s</h2>
   <div class="qs">
-    <blockquote class="row-in"><p>"[A sentence from the creator's video, in their words.]"</p><footer>[Creator name] <span>Belfast, Maine</span></footer></blockquote>
-    <blockquote class="row-in"><p>"[A sentence from the creator's video, in their words.]"</p><footer>[Creator name] <span>Machias, Maine</span></footer></blockquote>
-    <blockquote class="row-in"><p>"[A sentence from the creator's video, in their words.]"</p><footer>[Creator name] <span>Lewiston, Maine</span></footer></blockquote>
+    <blockquote class="row-in"><p>“[A sentence from the creator’s video, in their words.]”</p><footer>[Creator name] <span>Belfast, Maine</span></footer></blockquote>
+    <blockquote class="row-in"><p>“[A sentence from the creator’s video, in their words.]”</p><footer>[Creator name] <span>Machias, Maine</span></footer></blockquote>
+    <blockquote class="row-in"><p>“[A sentence from the creator’s video, in their words.]”</p><footer>[Creator name] <span>Lewiston, Maine</span></footer></blockquote>
   </div>
 </div></section>
 
 <section class="news reveal" id="news" data-bg="var(--bi)"><div class="w">
   <div><h2 class="h2">%(h2news)s</h2><p class="lede">Each story in full, with the numbers behind it. Written by the creator who filmed it. Your address stays with us. [CONFIRM: privacy line]</p>
-  <form class="form" id="signup" novalidate method="get" action="https://CONFIRM-publication.substack.com/subscribe" target="_blank" rel="noopener" data-confirm="[CONFIRM: publication address]"><label class="k" for="email" style="flex-basis:100%%">Email</label><input id="email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required><button class="btn b3" type="submit">Subscribe</button>
-  <p class="note">Runs on Substack. Unsubscribe in one click.</p><p class="ok" id="ok" hidden>Check your inbox. The confirmation is on its way.</p></form></div>
+  <form class="form" id="signup" novalidate method="get" action="https://CONFIRM-publication.substack.com/subscribe" target="_blank" rel="noopener" data-confirm="[CONFIRM: publication address]"><label class="k" for="email" style="flex-basis:100%%">Email</label><input id="email" type="email" name="email" placeholder="you@example.com" autocomplete="email" required aria-describedby="err"><button class="btn b3" type="submit" id="sub">Subscribe</button>
+  <p class="err" id="err" role="alert" hidden>Enter an email address like you@example.com.</p><p class="note" id="note">Runs on Substack. Unsubscribe in one click.</p><p class="ok" id="ok" role="status" hidden>Check your inbox. The confirmation is on its way.</p></form></div>
   <div class="posts"><span class="rule" aria-hidden="true"></span>
     <a class="post row-in" href="#"><div><h3>[Post title, plain words]</h3><p>[One line on what the creator found out.]</p><p class="by">[Creator name] <span>Belfast, Maine</span></p></div><span class="dt">[Date]</span></a>
     <a class="post row-in" href="#"><div><h3>[Post title, plain words]</h3><p>[One line on what the creator found out.]</p><p class="by">[Creator name] <span>Machias, Maine</span></p></div><span class="dt">[Date]</span></a>
@@ -508,18 +515,22 @@ def page(theme=SIGNATURE, out=None, media=None):
   const secs = [...document.querySelectorAll('.reveal')]; secs.forEach(sc => sc.classList.add('pre'));
   const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.remove('pre'); so.unobserve(e.target); } }), { threshold: .18 });
   secs.forEach(sc => so.observe(sc));
+  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', () => { const t = document.getElementById(a.getAttribute('href').slice(1)); if (t && t.classList.contains('reveal')) { t.classList.remove('pre'); so.unobserve(t); } }));
   const site = document.querySelector('.site'); new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) site.classList.add('on'); }), { threshold: .3 }).observe(site);
 
   // The signup form hands off to Substack: the address rides in the query string to the publication's subscribe page, which opens
   // in a new tab and sends the confirmation email. The page shows its own line. Until the publication exists, the hand-off is held.
   const f = document.getElementById('signup'), em = document.getElementById('email'), ok = document.getElementById('ok');
-  f.addEventListener('submit', ev => { if (!em.checkValidity()) { ev.preventDefault(); em.focus(); em.setAttribute('aria-invalid', 'true'); return; } em.removeAttribute('aria-invalid');
+  const err = document.getElementById('err'), note = document.getElementById('note'), sub = document.getElementById('sub');
+  f.addEventListener('submit', ev => { if (!em.checkValidity()) { ev.preventDefault(); em.focus(); em.setAttribute('aria-invalid', 'true'); err.hidden = false; return; } em.removeAttribute('aria-invalid'); err.hidden = true;
     if (f.action.includes('CONFIRM')) ev.preventDefault();
-    ok.hidden = false; requestAnimationFrame(() => ok.classList.add('show')); f.querySelector('button').disabled = true; });
+    ok.hidden = false; note.hidden = true; requestAnimationFrame(() => ok.classList.add('show')); sub.disabled = true; sub.textContent = sub.dataset.sent || 'Sent'; em.readOnly = true; });
+  em.addEventListener('input', () => { if (em.checkValidity()) { err.hidden = true; em.removeAttribute('aria-invalid'); } });
 })();
 </script>
 """ % dict(
         lock=logo(theme["nav_light"], "lk light", theme["logo"]), lock_dark=logo(theme["nav_dark"], "lk dark", theme["logo"]),
+        lock_rest=(logo(theme["nav_rest"], "lk rest", theme["logo"]) if theme.get("nav_rest") else ""),
         two=(ping_dot if theme["footer_ping"] else (lambda t: t))(draw_paths(logo(theme["footer"], "lk", theme["logo"]))), mural=theme["mural"], bg_follow=theme["bg_follow"],
         h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),

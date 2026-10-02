@@ -4,7 +4,8 @@ and the Marigold dot, and a small PLACEHOLDER tag so a generated face is never m
 Reads brand/content/creators-placeholder.json and brand/content/portraits/creator-N.jpg (any size; the full-size files from
 Canva replace the thumbnails when dropped into the same folder). Writes brand/identity/splash/media/creator-N.gif.
 
-  python3 brand/src/make_gifs.py
+  python3 brand/src/make_gifs.py                    # Signature: Pine band, Marigold dot, DM Sans
+  python3 brand/src/make_gifs.py --theme bark-sky   # Bark & Sky: Bark band, no dot, Hedvig Sans, into splash-bark-sky/media
 """
 import json
 import os
@@ -18,10 +19,17 @@ from gmlib import ROOT
 
 W, H = 324, 576            # 9:16, small enough for a GIF the page can carry
 FRAMES, FPS, LOOP_S = 18, 8, 2.25
-PINE = (11, 43, 33)
-MG = (239, 180, 67)
-FONT = os.path.join(ROOT, "generation-maine", "assets", "fonts", "dm-sans-var.ttf")
-MEDIA = os.path.join(ROOT, "brand", "identity", "splash", "media")
+THEMES = {
+    "signature": dict(band=(11, 43, 33), dot=(239, 180, 67), font=os.path.join(ROOT, "generation-maine", "assets", "fonts", "dm-sans-var.ttf"),
+                      media=os.path.join(ROOT, "brand", "identity", "splash", "media"), lower=False),
+    "bark-sky": dict(band=(43, 33, 28), dot=None, font=os.path.join(ROOT, "brand", "fonts", "d", "HedvigLettersSans-Regular.ttf"),
+                     media=os.path.join(ROOT, "brand", "identity", "splash-bark-sky", "media"), lower=True),
+}
+THEME = THEMES["bark-sky" if "--theme" in sys.argv and "bark-sky" in sys.argv else "signature"]
+PINE = THEME["band"]
+MG = THEME["dot"]
+FONT = THEME["font"]
+MEDIA = THEME["media"]
 PORTRAITS = os.path.join(ROOT, "brand", "content", "portraits")
 
 
@@ -94,16 +102,18 @@ def build_one(i, c):
         for ln in lines:
             d.text((20, y), ln, font=cap_f, fill=(255, 255, 255))
             y += 27
-        town = "%s, Maine" % c["town"].upper()
+        town = ("%s, maine" % c["town"].lower()) if THEME["lower"] else ("%s, Maine" % c["town"].upper())
         d.text((20, H - 26), town, font=k_f, fill=(255, 255, 255, 220))
         tw = d.textlength(town, font=k_f)
-        d.ellipse((20 + tw + 8, H - 24, 20 + tw + 15, H - 17), fill=MG)
+        if MG:
+            d.ellipse((20 + tw + 8, H - 24, 20 + tw + 15, H - 17), fill=MG)
         # the tag: this is a stand-in
         tag = "PLACEHOLDER"
         tl = d.textlength(tag, font=tag_f)
         d.rounded_rectangle((W - tl - 34, H - 33, W - 16, H - 15), radius=4, fill=(255, 255, 255, 40))
         d.text((W - tl - 25, H - 29), tag, font=tag_f, fill=(255, 255, 255, 210))
         frames.append(fr.quantize(colors=72, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE))
+    os.makedirs(MEDIA, exist_ok=True)
     out = os.path.join(MEDIA, "creator-%d.gif" % (i + 1))
     frames[0].save(out, save_all=True, append_images=frames[1:], duration=int(1000 / FPS), loop=0, optimize=True)
     return out

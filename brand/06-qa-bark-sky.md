@@ -1,5 +1,7 @@
 # Bark & Sky splash: strict QA
 
+**Status, October 2, 2026: every P1 and P2 item below is fixed and live. The P3 items are decided and applied as noted. V4 (the hero mark's cut) is the one item left open on purpose.**
+
 October 2, 2026. Reviewed `brand/identity/splash-bark-sky/index.html` at 1440x900, 1280x650, 1024x700, 820x1180 and 390x844, through every section and state: bar at rest, capsule, sheet, keyboard focus, hover, the scroll scrub, stepper first and last, the form empty and submitted, follow, footer. Measured contrast, tap sizes, type sizes, overflow, console errors and font loading. No console errors, no horizontal overflow, both fonts load.
 
 Severity: **P1** fix before anyone outside the team sees it. **P2** fix before launch. **P3** a judgment call, decide once.
@@ -64,6 +66,29 @@ Severity: **P1** fix before anyone outside the team sees it. **P2** fix before l
 
 - The capsule, the scroll scrub from Sky to Paper, the sheet, keyboard focus on links and buttons, reduced motion, and the stepper's first and last steps all behave.
 - A blank frame appeared once when scrolling up inside the stepper. It did not reproduce on two further runs on either concept. Treat as a screenshot artifact unless seen in a browser.
+
+## What was done
+
+- U1: the hero mark and headline are capped by viewport height as well as width; the buttons clear the fold at 1280 by 650 and 1024 by 700.
+- B1: section heads and ledes are centered; reading columns, the stepper and the posts list stay left-aligned inside centered blocks. The newsletter section stacks: centered copy and form, then the posts list at 820 px.
+- B2: `make_gifs.py --theme bark-sky` renders the placeholder clips with a Bark band, no dot, Hedvig Sans and a lowercase town into `splash-bark-sky/media/`. The page reads its own clips.
+- B3: the bar carries the wordmark alone at rest (28 px), the horizontal solid lockup in the capsule (22 px), the Sky lockup on the sheet. The template gained a third logo slot for this.
+- B4: curly quotes with the opening mark hung. Shared.
+- B5: name in the serif, town in the sans at 13 px, on the quote footers, the posts list and the clip header.
+- B6: third-party names keep their casing. Decided.
+- B7: the wordmark alone in the bar at rest. Decided.
+- U2, U3: an error line with `role=alert`, the field marked invalid, the line clearing as the user types; on success the button reads sent, the field is read-only and the note hides. Shared.
+- U4, U5: 44 px targets on the platform marks on phones (shared), 12 px minimum on the position row and duration badge (shared).
+- U6: the sheet carries the four platform marks under the button. Shared.
+- U7: an anchor click reveals its target section at once. Shared.
+- V1: the input's focus state is its border. Shared.
+- V2, V3: the stepper's first column is the clip's width; the stories block starts closer to its heading. Shared.
+- V5: platform name in Bark, handle in Clay, both 15 px.
+- A1: Clay is #5E4E43, about 5.9 to 1 on Sky.
+- A2: nav links are 38 px tall at rest. Shared.
+- A3: the single weight is set by element rather than forced; emphasis in reading text becomes the serif.
+
+The shared items also improved Signature and are in its splash and artifact. The WordPress theme does not yet carry the form error line or the sheet marks; that is a follow-up.
 
 ## Order of work
 
