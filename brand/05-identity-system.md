@@ -537,3 +537,18 @@ The client asked for a video hero, then specified the placeholder: a GIF that pa
 The template now lets a theme replace the hero media outright, and the mural script tolerates a hero without the mural.
 
 Real footage: four two-second pans of the real places, or better, of the creators in them, cut to the same 4 by 5 and dropped in as `media/hero.gif` or as a muted MP4 in the same slot. A first draft of the video route (`make_hero_video.mjs`, a Playwright-recorded montage of the clip placeholders) is in the repo for when footage exists.
+
+## Bark & Sky, the hero becomes the video, October 2
+
+The client opened the environment to Wikimedia Commons, asked for the video to span the whole hero with legible type over it, and added Portland Head Light as a fifth setting, with a note that the sources must hold up at full width.
+
+What changed:
+
+- `brand/src/fetch_commons.py` searches Commons by subject, keeps only CC BY, CC BY-SA, CC0 and public domain files, and now rejects anything under 3000 px wide. The five sources used are 3840 px wide as fetched (the Commons 3840 rendition, or the original where it was smaller than that), and the candidate set is listed in `brand/content/photos/commons/candidates.json`. Unused candidates stay out of the repo.
+- `brand/src/make_hero_real.py` grades each source lightly toward Sky (color down to 84 percent, 6 percent Sky blend), cuts a 2150 by 1210 plate per setting, writes the poster and `CREDITS.md`, and `make_hero_video.mjs` records the loop in Chromium: five settings, two seconds each, a slow drift with a two percent push in, alternating direction, 1920 by 1080, muted WebM of about 3 MB. Order: Katahdin from Abol Bridge, the Aroostook potato fields (Jack Delano, 1940), sunrise from Cadillac Mountain, Portland Head Light, the Old Port waterfront.
+- The hero is now the video edge to edge, 100svh tall at most. The bar sits over it in Paper with the Sky wordmark, then takes the capsule on scroll as before. The type is Paper on a Bark scrim that is heaviest at the left and along the bottom. Measured against the brightest three percent of each frame under the scrim, the headline's worst case is 5.0:1 (Aroostook) and the lede's 8.0:1, so every frame clears AA for both. Reduced motion shows the poster alone.
+- A small credit sits in the hero's corner and the full credit line, with licenses, is in the footer. CC BY-SA requires that line wherever the loop appears.
+
+The lighthouse: this direction's guardrails said no lighthouses, as a cliché. The client asked for Portland Head Light by name, so it is in as a client-directed exception and recorded here. The frame chosen keeps it small in a wide sea and rock view rather than a postcard.
+
+Still a placeholder in one sense: these are landscapes, not the creators. The slot is ready for real footage of young Mainers in these places, cut to the same 16 by 9 and dropped in as `media/hero.webm`. An MP4 rendition for older Safari needs ffmpeg, which this environment does not have; convert before launch. [CONFIRM: hosting can serve a 3 MB video on the first paint, or move it behind a lazy load]

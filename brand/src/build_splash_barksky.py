@@ -72,17 +72,26 @@ CSS = r"""
 .bs .top.open{color:var(--sky)}
 .bs .sheet{background:var(--bark);color:var(--sky)}.bs .sheet .foot .cta{background:var(--sky);color:var(--bark)}
 /* the hero: centered and airy. The state in Bark sits above the headline, the headline in the serif at one weight. */
-.bs .hero .w{grid-template-columns:minmax(0,8fr) minmax(0,4fr);align-items:end;padding-block:clamp(48px,10vh,120px) clamp(56px,9vh,96px);min-height:min(620px,78vh)}
-.bs .mural{display:block;width:min(100%,440px);aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:url({media}media/photo-hero.jpg) center 20%/cover no-repeat;justify-self:end;align-self:end;box-shadow:0 1px 0 rgba(38,32,28,.12);position:relative}
-.bs .mural svg{display:none}
-/* the hero video: muted, looping, vertical, in the photo's slot. The poster is the photograph, and with reduced motion the poster is all there is. */
-.bs .mural .hv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-@media (prefers-reduced-motion: reduce){.bs .mural .hv{display:none}}
-.bs .hero .w{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px}
-@media (max-width:900px){.bs .mural{order:-1;width:100%;aspect-ratio:3/2;justify-self:stretch;margin-bottom:26px}}
-.bs .hero h1{font-size:clamp(42px,min(7vw,11vh),100px);max-width:12ch}
-.bs .hero .lede{margin:22px 0 26px;max-width:42ch;font-size:clamp(17px,min(1.5vw,2.6vh),21px)}
-@media (max-width:900px){.bs .hero .w{grid-template-columns:1fr;padding-block:40px 56px;min-height:0}.bs .top .lk{height:26px}}
+/* the hero is the video, edge to edge. The words sit low left in Paper on a Bark scrim that is heaviest where they are. */
+.bs .hero{background:var(--bark);color:var(--paper);min-height:min(860px,100svh);display:flex;align-items:flex-end}
+.bs .hero .bg{position:absolute;inset:0;overflow:hidden;z-index:0;background:var(--bark)}
+.bs .hero .bg video,.bs .hero .bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.bs .hero .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(38,32,28,.80) 0%,rgba(38,32,28,.62) 42%,rgba(38,32,28,.18) 74%,rgba(38,32,28,.08) 100%),linear-gradient(180deg,rgba(38,32,28,.32) 0%,rgba(38,32,28,0) 28%,rgba(38,32,28,.42) 100%)}
+.bs .hero .w{position:static;display:block;width:100%;padding-block:clamp(120px,18vh,180px) clamp(60px,9vh,96px);min-height:0}
+.bs .hero .h1{position:relative;z-index:2;max-width:760px}
+.bs .hero h1{font-size:clamp(42px,min(6.4vw,11vh),92px);max-width:12ch;color:var(--paper);text-shadow:0 1px 2px rgba(38,32,28,.25)}
+.bs .hero .lede{margin:22px 0 28px;max-width:40ch;font-size:clamp(17px,min(1.5vw,2.6vh),21px);color:var(--paper)}
+.bs .hero .b1{background:var(--paper);color:var(--bark)}.bs .hero .b1:hover{background:#fff}
+.bs .hero .tl{color:var(--paper)}
+.bs .mural{display:none}
+.bs .hero .credit{position:absolute;right:var(--M);bottom:16px;z-index:2;margin:0;font:400 11px/1.35 var(--body);color:rgba(244,243,238,.72);max-width:44ch;text-align:right}
+@media (prefers-reduced-motion: reduce){.bs .hero .bg video{display:none}.bs .hero .bg{background:url({media}media/hero-poster.jpg) center/cover no-repeat}}
+/* the bar over the video: Paper type and the Sky wordmark until the page scrolls, then the capsule as before */
+.bs .top{color:var(--paper)}.bs .top .tl{color:var(--paper)}
+.bs .top:not(.scrolled) .cta{border-color:rgba(244,243,238,.75)}.bs .top:not(.scrolled) .cta:hover{background:rgba(244,243,238,.14)}
+.bs .top:not(.scrolled) nav a:hover{background:rgba(244,243,238,.12)}
+.bs .top.scrolled{color:var(--bark)}.bs .top.scrolled .tl{color:var(--bark)}
+@media (max-width:900px){.bs .hero{min-height:min(760px,100svh)}.bs .hero .w{padding-block:124px 56px}.bs .top .lk{height:26px}.bs .hero .credit{position:static;text-align:left;margin-top:26px;max-width:none}.bs .hero .bg::after{background:linear-gradient(180deg,rgba(38,32,28,.42) 0%,rgba(38,32,28,.18) 30%,rgba(38,32,28,.74) 100%)}}
 /* section heads are centered, like the hero and the kit's end card and header. Reading text inside them stays left-aligned. */
 .bs .h2{max-width:14ch;text-wrap:balance}
 .bs .strip{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:8px;margin-top:34px}
@@ -121,8 +130,9 @@ CSS = r"""
 
 BARK_SKY = dict(
     logo=os.path.join(ROOT, "brand", "identity", "logo-maine", "bark-sky"),
-    nav_light="wordmark-reversed", nav_dark="wordmark", nav_rest="wordmark", footer="wordmark-reversed", footer_ping=False,
-    hero_media='<div class="mural" id="mural"><img class="hv" src="{media}media/hero.gif" alt="Four Maine places, a slow pan across each: Katahdin, Cadillac Mountain, the Old Port, the Aroostook fields. Placeholder." width="640" height="800"></div>',
+    nav_light="wordmark-reversed", nav_dark="wordmark", nav_rest="wordmark-reversed", footer="wordmark-reversed", footer_ping=False,
+    hero_media='<div class="bg" aria-hidden="true"><video autoplay muted loop playsinline preload="auto" poster="{media}media/hero-poster.jpg"><source src="{media}media/hero.webm" type="video/webm"></video></div><p class="credit">Katahdin, Aroostook County, Cadillac Mountain, Portland Head Light, the Old Port. Photographs via Wikimedia Commons, credits in the footer.</p>',
+    credits="Photographs in the opening loop, via Wikimedia Commons: Michael Sipos (CC BY-SA 4.0), Jack Delano for the Farm Security Administration (public domain), John Manard (CC BY-SA 2.0), Derek Ramsey (CC BY-SA 4.0), Domenico Convertini (CC BY-SA 2.0).",
     head_extra='<div class="strip" aria-hidden="true">' + ''.join('<img src="{media}media/portrait-%d.jpg" alt="" loading="lazy">' % i for i in range(1, 10)) + '</div>',
     fonts=FONTS, font_files={"FSERIF": "brand/fonts/d/HedvigLettersSerif-24.ttf", "FSANS": "brand/fonts/d/HedvigLettersSans-Regular.ttf", "FMONO": "brand/fonts/alt/IBMPlexMono-Medium.ttf"},
     mural="#2B211C", bg_follow="var(--mist)", css=CSS, title="Generation Maine, Bark & Sky", root_class="bs",

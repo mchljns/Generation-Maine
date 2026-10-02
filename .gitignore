@@ -4,3 +4,10 @@ node_modules/
 qa/php-errors.log
 __pycache__/
 brand/src/data/terrain/
+# Commons candidate downloads are large; only the five sources the hero uses are kept in the repo
+brand/content/photos/commons/*.jpg
+!brand/content/photos/commons/katahdin-1.jpg
+!brand/content/photos/commons/aroostook-5.jpg
+!brand/content/photos/commons/cadillac2-4.jpg
+!brand/content/photos/commons/headlight-6.jpg
+!brand/content/photos/commons/oldport-2.jpg

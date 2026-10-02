@@ -452,7 +452,7 @@ def page(theme=SIGNATURE, out=None, media=None):
   </div>
 </div></section>
 
-<footer class="site"><div class="w">%(two)s<div><p>Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.</p><p class="fine">© 2026 Generation Maine. [CONFIRM: legal name, address and contact]</p></div></div></footer>
+<footer class="site"><div class="w">%(two)s<div><p>Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.</p><p class="fine">© 2026 Generation Maine. [CONFIRM: legal name, address and contact]</p>%(credits)s</div></div></footer>
 
 <script id="maine-data" type="application/json">%(json)s</script>
 <script>
@@ -543,6 +543,7 @@ def page(theme=SIGNATURE, out=None, media=None):
         kicker=('<p class="k idx rise">%s</p>' % theme["hero_kicker"]) if theme.get("hero_kicker") else "",
         head_extra=theme.get("head_extra", "").replace("{media}", media),
         hero_media=theme.get("hero_media", '<div class="mural" id="mural" aria-hidden="true"></div>').replace("{media}", media),
+        credits=('<p class="fine credits">%s</p>' % theme["credits"]) if theme.get("credits") else "",
         two=(ping_dot if theme["footer_ping"] else (lambda t: t))(draw_paths(logo(theme["footer"], "lk", theme["logo"]))), mural=theme["mural"], bg_follow=theme["bg_follow"],
         h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
