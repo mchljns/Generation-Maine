@@ -426,3 +426,17 @@ What the sheet says:
 - The endorsed lockups set the institute line in Hedvig Sans at 24 units, a touch large next to the serif. It can come down to 22 if the line ever crowds the name.
 - The avatar at 40 px uses the solid cut and holds. At 16 px the state is a silhouette either way.
 - Nothing on the sheet carries a second color. That is the concept, and it is the thing to weigh against Signature's one Marigold per frame.
+
+## Bark & Sky: marks the direction allows, October 2
+
+Asked whether the second concept opens a different brand mark. It does. Signature needed weight and one bright accent, so the lined state won there. Bark & Sky is quiet, serif and one weight, which admits marks that would look thin or precious beside Bricolage. Five drawn against the lined state, in `brand/identity/marks-bark-sky/` (`candidates.png`, built by `brand/src/build_marks_barksky.py`):
+
+| Mark | What it is | Read |
+| --- | --- | --- |
+| The opening quote | Hedvig's opening quotation mark alone | The strongest new idea. It says what the brand does (young people in their own words) instead of where it is, which is the platform's on-the-nose test passed outright. Holds at 16 px. Risk: quotation marks are a common device in publishing and podcast marks; it needs the serif's exact shape and the lockup to be its own |
+| The gm monogram | The initials in the serif, tight | Reads as a byline or a bookplate. Calm and literary, but GM still reads as the carmaker in isolation, and at 16 px it is two grey letters |
+| Ruled paper, Maine left blank | Notebook rules stopping at the state's edge | The cleverest, and the weakest in use. At avatar size the gap does not read as Maine, and the rules fight the serif in the lockup |
+| The state as one line | The coast as a single hairline | Honest and quiet, and this concept can carry a stroke that thin. But a one-line outline of a state is the most common Maine mark there is, and it dies at 40 px |
+| Ground and sky | A disc split at the horizon | Abstract and calm, and it answers "building a life here" without a map. Also the most anonymous: a split circle belongs to a hundred brands |
+
+Recommendation if the client takes Bark & Sky: keep the lined state as the system mark for recognition, and test the opening quote as the avatar and the bug, where the mark stands alone and the state is already in the name. That is a two-mark system, which Signature does not need; it suits a quieter concept whose covers rely on type.
