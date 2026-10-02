@@ -167,6 +167,10 @@ def bark_sky():
         mh = 100
         mb, mw = maine_lines(0, 0, mh, fg, fg, "mid", gold=False)
         m["lockup-horizontal" + suf] = svg(w + mw + 28, h + 14, mb + '<g transform="translate(%s 14)">%s</g>' % (f(mw + 28), b), "Generation Maine")
+        # the same size system as Signature: the full cut for 600 px wide and up, the solid silhouette under 300 px wide
+        for lsuf, lcut in (("-large", "full"), ("-solid", "solid")):
+            mb2, mw2 = maine_lines(0, 0, mh, fg, fg, lcut, gold=False)
+            m["lockup-horizontal" + lsuf + suf] = svg(w + mw2 + 28, h + 14, mb2 + '<g transform="translate(%s 14)">%s</g>' % (f(mw2 + 28), b), "Generation Maine")
         ms = 180
         mb, mw = maine_lines((w - ms * maine2.ASPECT) / 2, 0, ms, fg, fg, "full", gold=False)
         m["lockup-stacked" + suf] = svg(w, ms + 34 + h, mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 34), b), "Generation Maine")

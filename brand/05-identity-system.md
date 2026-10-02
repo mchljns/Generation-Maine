@@ -386,3 +386,22 @@ Found on the live preview on a phone-sized screen: the clip was capped at 340px 
 - The clip change is a fade of the next clip over the last one, which stays whole until it is covered. Before, both faded at once and showed through each other. Clips that are not showing are hidden outright, so a phone is not decoding nine GIFs at once.
 
 Measured after the change: 390 by 664 gives a 181 by 322 clip, 430 by 932 gives 343 by 610.
+
+## Bark & Sky, built as a page, October 2
+
+The second concept had lived only as kit mockups. It is now a full splash page on the same template as Signature, so the two can be compared on the same content, the same sections and the same motion. Files: `brand/identity/splash-bark-sky/`, built by `brand/src/build_splash_barksky.py`, which passes a theme into `build_splash.page()`. Signature's output is unchanged by the refactor.
+
+What is different, by the concept's own rules:
+
+- Sky is the hero field and the start of the scroll scrub, Paper the page, Bark the dark fields (the sheet, in their words, the footer), Mist the light one (follow), Clay the quiet text.
+- Hedvig Letters Serif for titles and names, Hedvig Letters Sans for everything else, one weight each. Titles, names, nav, buttons and kickers are lowercase. Reading text keeps its case.
+- No dot anywhere. The hero period, the headline periods, the nav marker and the footer ping are gone. The active nav link is underlined instead.
+- The hero is centered and airy: the sixteen-line state in Bark above the headline, the headline in the serif, the lede and two pills under it.
+- Buttons are Bark pills with Paper type everywhere. The bar has no band: Bark type on Sky, then the same frosted capsule.
+- The lockups follow the same size system as Signature. Two cuts were added to `logo-maine/bark-sky/`: `lockup-horizontal-solid` for the bar and `lockup-horizontal-large` for the footer, each with a reversed version.
+
+Found and fixed in QA: the horizontal lockup is wide, and sized by height it ran past a phone screen and pushed the menu button off the edge. It is sized by width now.
+
+Preview: https://mchljns.github.io/Generation-Maine/bark-sky/ (served from the same `gh-pages` branch, reading the same placeholder clips). Artifact: https://claude.ai/artifact/2y7Hbbnz5ro7TBPy5gJnUk
+
+What this build does not decide: the Clay accent stays subtle by design, and the concept still has no equivalent of Marigold once per frame. Whether that quiet reads as calm or as absent is the question for the comparison.

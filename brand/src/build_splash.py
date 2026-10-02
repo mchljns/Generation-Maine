@@ -43,8 +43,8 @@ def icon(name):
 FIELDS = ["sp", "bi", "pi", "sp", "bi", "pi", "sp", "bi", "mg"]
 
 
-def logo(name, cls=""):
-    with open(os.path.join(LOGO, name + ".svg")) as fh:
+def logo(name, cls="", folder=None):
+    with open(os.path.join(folder or LOGO, name + ".svg")) as fh:
         return fh.read().replace('role="img"', "").replace("<svg ", '<svg class="%s" ' % cls, 1)
 
 
@@ -106,9 +106,7 @@ CSS = r"""
 }
 /* One palette in every theme. The page commits to its own colors so text and background always pair. */
 :root{color-scheme:light}
-@font-face{font-family:'Bricolage Grotesque';font-weight:800;font-display:swap;src:url(data:font/woff2;base64,{{F800}}) format('woff2')}
-@font-face{font-family:'DM Sans';font-weight:100 900;font-display:swap;src:url(data:font/ttf;base64,{{FDM}}) format('truetype')}
-@font-face{font-family:Inter;font-weight:100 900;font-display:swap;src:url(data:font/woff2;base64,{{FINTER}}) format('woff2')}
+{{FONTS}}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
@@ -343,17 +341,30 @@ with open(os.path.join(ROOT, "brand", "content", "creators-placeholder.json")) a
 CARDS = [(c["tone"], c["town"], c["story"], c["caption"], c["len"]) for c in CREATORS]
 
 
-def page():
+SIGNATURE_FONTS = """@font-face{font-family:'Bricolage Grotesque';font-weight:800;font-display:swap;src:url(data:font/woff2;base64,{{F800}}) format('woff2')}
+@font-face{font-family:'DM Sans';font-weight:100 900;font-display:swap;src:url(data:font/ttf;base64,{{FDM}}) format('truetype')}
+@font-face{font-family:Inter;font-weight:100 900;font-display:swap;src:url(data:font/woff2;base64,{{FINTER}}) format('woff2')}"""
+
+# Signature is the page as built. A second concept passes its own theme: logo folder and lockup names, fonts, the mural stroke,
+# the follow field, extra CSS appended after the base rules, and where the files go.
+SIGNATURE = dict(
+    logo=LOGO, nav_light="lockup-compact-reversed", nav_dark="lockup-compact", footer="lockup-two-line-reversed", footer_ping=True,
+    fonts=SIGNATURE_FONTS, mural="#FFFFFF", bg_follow="var(--sage)", css="", title="Generation Maine", root_class="",
+    out="brand/identity/splash", media="")
+
+
+def page(theme=SIGNATURE, out=None, media=None):
+    out = out or theme["out"]; media = theme["media"] if media is None else media
     rows = mural_rows()
     stagevids, panels, idx, whos = "", "", "", ""
     for i, (tone, town, topic, cap, dur) in enumerate(CARDS):
         cr = CREATORS[i]
         clip = cr.get("clip", "creator-%d.webm" % (i + 1))
         if clip.endswith((".gif", ".png", ".jpg", ".webp")):
-            stagevids += '<img class="clip%s" data-i="%d" data-dur="%s" src="media/%s" alt="" loading="%s">' % (' on' if i == 0 else '', i, dur, clip, "eager" if i < 2 else "lazy")
+            stagevids += '<img class="clip%s" data-i="%d" data-dur="%s" src="%smedia/%s" alt="" loading="%s">' % (' on' if i == 0 else '', i, dur, media, clip, "eager" if i < 2 else "lazy")
         else:
-            stagevids += '<video data-i="%d" data-dur="%s" src="media/%s" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (
-                i, dur, clip, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
+            stagevids += '<video data-i="%d" data-dur="%s" src="%smedia/%s" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (
+                i, dur, media, clip, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
         who = '<div class="who%s">%s<span><b>%s</b>%s</span></div>' % (' on' if i == 0 else '', avatar(), cr["handle"], cr["name"])
         whos += who
         idx += '<button type="button" aria-label="Creator %d, %s, %s" data-name="%s"%s></button>' % (i + 1, cr["name"], town, cr["name"], ' class="on"' if i == 0 else "")
@@ -414,7 +425,7 @@ def page():
   </div>
 </div></section>
 
-<section class="follow reveal" id="follow" data-bg="var(--sage)"><div class="w">
+<section class="follow reveal" id="follow" data-bg="%(bg_follow)s"><div class="w">
   <h2 class="h2">%(h2follow)s</h2>
   <span class="rule" aria-hidden="true"></span><div class="row">
     <a class="row-in" href="#">%(ic_ig)s<b>Instagram</b><span>[@handle]</span></a>
@@ -429,7 +440,7 @@ def page():
 <script id="maine-data" type="application/json">%(json)s</script>
 <script>
 (() => {
-  const MOSS = '#3D6F58', BI = '#FFFFFF';
+  const BI = '%(mural)s';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const h1 = document.getElementById('h1'), lede = document.getElementById('lede'), ctas = document.getElementById('ctas');
   if (!reduced) { [h1, lede, ctas].forEach(el => el.classList.add('pre')); requestAnimationFrame(() => requestAnimationFrame(() => { h1.classList.remove('pre'); setTimeout(() => lede.classList.remove('pre'), 120); setTimeout(() => ctas.classList.remove('pre'), 240); })); }
@@ -508,17 +519,23 @@ def page():
 })();
 </script>
 """ % dict(
-        lock=logo("lockup-compact-reversed", "lk light"), lock_dark=logo("lockup-compact", "lk dark"), two=ping_dot(draw_paths(logo("lockup-two-line-reversed", "lk"))),
+        lock=logo(theme["nav_light"], "lk light", theme["logo"]), lock_dark=logo(theme["nav_dark"], "lk dark", theme["logo"]),
+        two=(ping_dot if theme["footer_ping"] else (lambda t: t))(draw_paths(logo(theme["footer"], "lk", theme["logo"]))), mural=theme["mural"], bg_follow=theme["bg_follow"],
         h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         ic_ig=icon("instagram"), ic_tt=icon("tiktok"), ic_yt=icon("youtube"), ic_ss=icon("substack"),
         stagevids=stagevids, whos=whos, panels=panels, segs=idx, json=json.dumps(rows, separators=(",", ":")))
-    css = CSS.replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("brand/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))
-    head = '<title>Generation Maine</title>\n<meta name="description" content="Young Mainers film the rules that shape their lives. Short videos and a newsletter, made in Maine.">\n<style>%s</style>' % css
+    css = (CSS.replace("{{FONTS}}", theme["fonts"]) + theme["css"]).replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("brand/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))
+    for k, v in theme.get("font_files", {}).items():
+        css = css.replace("{{%s}}" % k, K.font64(v))
+    head = '<title>%s</title>\n<meta name="description" content="Young Mainers film the rules that shape their lives. Short videos and a newsletter, made in Maine.">\n<style>%s</style>' % (theme["title"], css)
     artifact = head + body
-    standalone = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">%s</head><body>%s</body></html>' % (head, body)
-    write("brand/identity/splash/index.html", standalone)
-    write("brand/identity/splash/artifact.html", artifact)
+    if theme["root_class"]:
+        artifact = '<div class="%s">%s</div>' % (theme["root_class"], artifact)
+    standalone = '<!doctype html><html lang="en" class="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">%s</head><body>%s</body></html>' % (theme["root_class"], head, body)
+    write(out + "/index.html", standalone)
+    write(out + "/artifact.html", artifact)
+    return standalone, artifact
 
 
 if __name__ == "__main__":

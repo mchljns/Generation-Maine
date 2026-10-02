@@ -308,7 +308,7 @@ body.scrub{transition:none}
 <script id="maine-data" type="application/json">{"rows":[{"y":24.5,"w":18.72,"runs":[[326.03,348.5],[435.19,457.65]]},{"y":69.4,"w":19.58,"runs":[[296.1,491.6]]},{"y":114.3,"w":20.45,"runs":[[264.8,491.2]]},{"y":159.3,"w":21.31,"runs":[[252.6,491.2]]},{"y":204.2,"w":22.18,"runs":[[226.6,491.2]]},{"y":249.1,"w":23.04,"runs":[[230.1,491.1]]},{"y":294.0,"w":23.9,"runs":[[193.8,497.0]]},{"y":339.0,"w":24.77,"runs":[[186.1,530.9]]},{"y":383.9,"w":25.63,"runs":[[136.6,566.5]]},{"y":428.8,"w":26.5,"runs":[[139.7,579.8]]},{"y":473.8,"w":27.36,"runs":[[142.1,512.6]]},{"y":518.7,"w":28.22,"runs":[[144.5,347.4]]},{"y":563.6,"w":29.09,"runs":[[146.4,332.8]]},{"y":608.5,"w":29.95,"runs":[[148.4,209.2]]},{"y":653.5,"w":30.82,"runs":[[151.5,187.4]]},{"y":698.4,"w":31.68,"runs":[]}],"towns":[["Skowhegan",279.1,441.0],["Presque Isle",475.3,127.4],["Biddeford",194.6,649.1],["Machias",539.3,449.1],["Lewiston",222.0,549.8],["Rumford",183.3,475.7],["Belfast",361.3,496.4],["Fort Kent",409.2,33.0],["Sanford",157.6,658.0]]}</script>
 <script>
 (() => {
-  const MOSS = '#3D6F58', BI = '#FFFFFF';
+  const BI = '#FFFFFF';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const h1 = document.getElementById('h1'), lede = document.getElementById('lede'), ctas = document.getElementById('ctas');
   if (!reduced) { [h1, lede, ctas].forEach(el => el.classList.add('pre')); requestAnimationFrame(() => requestAnimationFrame(() => { h1.classList.remove('pre'); setTimeout(() => lede.classList.remove('pre'), 120); setTimeout(() => ctas.classList.remove('pre'), 240); })); }
