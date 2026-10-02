@@ -415,7 +415,7 @@ def page(theme=SIGNATURE, out=None, media=None):
 </div></section>
 
 <section class="stories-head reveal" id="creators" data-bg="var(--bi)"><div class="w">
-  <h2 class="h2">%(h2cre)s</h2><p class="lede">Nine young Mainers in nine towns. Each one films where they live and says it their own way. Names and faces arrive after the shoot.</p>
+  <h2 class="h2">%(h2cre)s</h2><p class="lede">Nine young Mainers in nine towns. Each one films where they live and says it their own way. Names and faces arrive after the shoot.</p>%(head_extra)s
 </div></section>
 <section class="stories" id="stories" data-bg="var(--bi)"><div class="pinw"><div class="w">
   <div class="stage"><div class="vid" id="stage">%(stagevids)s%(whos)s<span class="dur" id="dur">0:52</span></div></div>
@@ -542,6 +542,7 @@ def page(theme=SIGNATURE, out=None, media=None):
         lock=logo(theme["nav_light"], "lk light", theme["logo"]), lock_dark=logo(theme["nav_dark"], "lk dark", theme["logo"]),
         lock_rest=(logo(theme["nav_rest"], "lk rest", theme["logo"]) if theme.get("nav_rest") else ""),
         kicker=('<p class="k idx rise">%s</p>' % theme["hero_kicker"]) if theme.get("hero_kicker") else "",
+        head_extra=theme.get("head_extra", "").replace("{media}", media),
         two=(ping_dot if theme["footer_ping"] else (lambda t: t))(draw_paths(logo(theme["footer"], "lk", theme["logo"]))), mural=theme["mural"], bg_follow=theme["bg_follow"],
         h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),

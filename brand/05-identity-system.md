@@ -514,3 +514,18 @@ What was not used, on purpose: heavy weights, black, neon, texture, camo, anythi
 **Applied to the page.** `splash-bark-sky/` now carries Field notes: the steel sky and bone paper, the mono labels in uppercase with 0.06 em tracking, a left grid with the index line "nine young mainers · nine towns" above the headline and no mural in the hero, the Rising mark (horizon at 64, state at 190, line through) as the lockup in the bar and the footer, Blueberry #2B4760 as the link color, and the placeholder clips re-rendered with the peat band. Logo files: `logo-maine/bark-sky/mark-rising*`, `lockup-rising*`, `avatar-rising`, `favicon-rising`. The template gained an optional hero kicker and makes inlined logo ids unique, since two copies of one mark on a page, one hidden, were sharing a clip path.
 
 Open: the lined state remains the shared system mark in the files. Whether Bark & Sky keeps it anywhere, or runs on the horizon alone, is the next decision. The applied sheet (`apply-bark-sky/`) still shows the earlier treatment and should be rebuilt once that is settled.
+
+## Bark & Sky, the client's four notes, October 2
+
+The client on Field notes: the brandmark is not it yet, the footer is out of whack, too much monospace, too much eyebrow text, and explore stock photography to fill the empty spaces, for Gen Z in Maine. And a tone note on the imagery: not too depressing.
+
+**Done on the page.**
+- The monospace is for numbers only now: the counter, the clip length, the dates. Every label is back in the sans, sentence case.
+- Eyebrows cut. The hero index line is gone. The town is a line under the creator's name, not a label over it. The form's label is for screen readers only.
+- The footer is the wordmark at 34 px with the two lines beside it, nothing out of scale.
+- The bar and footer carry the wordmark alone until a mark is chosen.
+- Photography: the hero's empty right column holds a 4 by 5 photograph, and the creators heading carries a strip of the nine portraits. Both are placeholders built from small generated thumbnails, graded cool and grained like the clip placeholders and tagged. `brand/content/photos/SHOTLIST.md` says what to license for each slot and why: young people in Maine doing things, in daylight, together. The stock-photo guardrail in `00-platform.md` is set aside at the client's request for this concept; the rule that survives is that the picture is of the thing, not of a mood.
+
+**The mark, round three** (`marks-bark-sky/round3/candidates.png`, `brand/src/build_marks3_barksky.py`): patch, sticker, the state as a grid at three resolutions, a heavy outline, the split silhouette, and the name alone. My read: the grid at 5 by 6 is the one with a future. It is a feed, an app icon and the state in one gesture, it is abstract enough to pass the on-the-nose test, and it holds at 40 px. The patch is the safe choice. The sticker is the loudest and the most Gen Z. The name alone is honest and leaves the avatar weak.
+
+**Imagery note.** Four generated test frames: a tailgate, a kitchen table with a lease, a main street, a lot in fog. Only the tailgate is in use. The other three were grey and solitary, which is the wrong temperature; the shot list says so. The image generator is out of credits and every photo host is blocked from this environment, so real photography comes from the client's licensing.

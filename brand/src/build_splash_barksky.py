@@ -41,16 +41,21 @@ CSS = r"""
 .bs .bio b,.bs .bio strong,.bs .lede b,.bs .lede strong{font-family:var(--display);font-size:1.06em}
 .bs h1,.bs h2,.bs h3{letter-spacing:-.02em;line-height:1.02;text-transform:lowercase}
 .bs .d{display:none}
-.bs .k,.bs .where,.bs .vid .dur,.bs .who span b,.bs .post .dt,.bs .form .note,.bs .follow a span,.bs .soc a,.bs .site .fine,.bs .words blockquote footer span,.bs .post .by span,.bs .top nav a,.bs .form .k{font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
-.bs .k{font-size:11px}.bs .top nav a{font-size:12px}.bs .where{font-size:11px}.bs .follow a span{font-size:13px}.bs .soc a{font-size:12px}.bs .post .dt{font-size:11px}.bs .form .note{font-size:11px}.bs .site .fine{font-size:11px}
-.bs .idx{margin:0 0 18px;color:var(--bark);opacity:.75}
-.bs .top .cta,.bs .btn,.bs .tl,.bs .sheet nav a,.bs .sheet .foot .cta,.bs .form button{text-transform:lowercase}
+/* the monospace is for numbers only: the counter, the clip length, the dates. Everything else is the sans in sentence case. */
+.bs .where .n,.bs .vid .dur,.bs .post .dt{font-family:var(--mono);letter-spacing:.04em}
+.bs .k{text-transform:none;letter-spacing:0;font-size:14px}
+.bs .where{text-transform:none;letter-spacing:0;font-size:13px}
+/* the town is a line under the name, not a label over it */
+.bs .panel h2{order:0}.bs .panel .k{order:1;margin:-4px 0 14px;font-size:16px;color:var(--clay)}.bs .panel .bio{order:2}.bs .panel .soc{order:3}.bs .panel .k .d{display:none}
+.bs .form .k{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.bs .about .cols h3{font-size:17px;margin-bottom:8px}
+.bs .top nav a,.bs .top .cta,.bs .btn,.bs .tl,.bs .sheet nav a,.bs .sheet .foot .cta,.bs .form button{text-transform:lowercase}
 /* buttons: Bark pills with Paper type, everywhere. The text link is Bark. */
 .bs .b1,.bs .b3{background:var(--bark);color:var(--paper)}.bs .b1:hover,.bs .b3:hover{background:var(--bark2)}
 .bs .tl{color:var(--bark)}
 /* the bar: no band. Bark type on the Sky hero, then the frosted capsule; the open sheet is Bark with Sky type and the Sky lockup */
 .bs .top{background:transparent;color:var(--bark)}
-.bs .top .lk{height:30px}.bs .top.scrolled .lk{height:24px}
+.bs .top .lk{height:22px}.bs .top.scrolled .lk{height:19px}
 .bs .top .lk.light,.bs .top .lk.dark{display:none}.bs .top .lk.rest{display:block}
 .bs .top.scrolled .lk.rest{display:none}.bs .top.scrolled .lk.dark{display:block}
 .bs .top.open .lk.rest,.bs .top.open .lk.dark{display:none}.bs .top.open .lk.light{display:block}
@@ -68,12 +73,18 @@ CSS = r"""
 .bs .sheet{background:var(--bark);color:var(--sky)}.bs .sheet .foot .cta{background:var(--sky);color:var(--bark)}
 /* the hero: centered and airy. The state in Bark sits above the headline, the headline in the serif at one weight. */
 .bs .hero .w{grid-template-columns:minmax(0,8fr) minmax(0,4fr);align-items:end;padding-block:clamp(48px,10vh,120px) clamp(56px,9vh,96px);min-height:min(620px,78vh)}
-.bs .mural{display:none}
+.bs .mural{display:block;width:min(100%,440px);aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:url({media}media/photo-hero.jpg) center 20%/cover no-repeat;justify-self:end;align-self:end;box-shadow:0 1px 0 rgba(38,32,28,.12)}
+.bs .mural svg{display:none}
+.bs .hero .w{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px}
+@media (max-width:900px){.bs .mural{order:-1;width:100%;aspect-ratio:3/2;justify-self:stretch;margin-bottom:26px}}
 .bs .hero h1{font-size:clamp(42px,min(7vw,11vh),100px);max-width:12ch}
 .bs .hero .lede{margin:22px 0 26px;max-width:42ch;font-size:clamp(17px,min(1.5vw,2.6vh),21px)}
 @media (max-width:900px){.bs .hero .w{grid-template-columns:1fr;padding-block:40px 56px;min-height:0}.bs .top .lk{height:26px}}
 /* section heads are centered, like the hero and the kit's end card and header. Reading text inside them stays left-aligned. */
 .bs .h2{max-width:14ch;text-wrap:balance}
+.bs .strip{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:8px;margin-top:34px}
+.bs .strip img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;background:var(--mist)}
+@media (max-width:900px){.bs .strip{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.bs .strip img:nth-child(n+6){display:none}}
 .bs .follow .h2{margin-bottom:32px}
 /* about: Bark type from the start, on Sky scrubbing to Paper. The columns' rules are Bark. */
 .bs .about,.bs .about.lit{color:var(--bark)}
@@ -97,18 +108,23 @@ CSS = r"""
 .bs .follow .ic{--icon-bg:var(--mist)}
 .bs .site{background:var(--bark);color:var(--sky)}.bs .site p{color:var(--sky)}
 /* the horizontal lockup is wide, so it is sized by width: it never runs past the screen */
-.bs .site .lk{width:min(100%,640px);height:auto}
-.bs .site{background:var(--bark)}
+.bs .site{background:var(--bark);padding-block:44px 40px}
+.bs .site .w{grid-template-columns:auto minmax(0,1fr);gap:48px;align-items:center}
+.bs .site .lk{width:auto;height:34px}
 .bs .site .lk path{stroke-dasharray:none;stroke-dashoffset:0}
+.bs .site p{max-width:52ch}
+@media (max-width:640px){.bs .site .w{grid-template-columns:1fr;gap:22px}.bs .site .lk{height:28px}}
 """
 
 BARK_SKY = dict(
     logo=os.path.join(ROOT, "brand", "identity", "logo-maine", "bark-sky"),
-    nav_light="lockup-rising-reversed", nav_dark="lockup-rising", nav_rest="lockup-rising", footer="lockup-rising-large-reversed", footer_ping=False, hero_kicker="nine young mainers \u00b7 nine towns",
+    nav_light="wordmark-reversed", nav_dark="wordmark", nav_rest="wordmark", footer="wordmark-reversed", footer_ping=False,
+    head_extra='<div class="strip" aria-hidden="true">' + ''.join('<img src="{media}media/portrait-%d.jpg" alt="" loading="lazy">' % i for i in range(1, 10)) + '</div>',
     fonts=FONTS, font_files={"FSERIF": "brand/fonts/d/HedvigLettersSerif-24.ttf", "FSANS": "brand/fonts/d/HedvigLettersSans-Regular.ttf", "FMONO": "brand/fonts/alt/IBMPlexMono-Medium.ttf"},
     mural="#2B211C", bg_follow="var(--mist)", css=CSS, title="Generation Maine, Bark & Sky", root_class="bs",
     out="brand/identity/splash-bark-sky", media="")
 
 if __name__ == "__main__":
-    S.page(BARK_SKY)   # the clips live beside the page, in the concept's own colors (brand/src/make_gifs.py --theme bark-sky)
+    BARK_SKY["css"] = CSS.replace("{media}", BARK_SKY["media"])
+    S.page(BARK_SKY)   # the clips and photos live beside the page (make_gifs.py --theme bark-sky, make_photos.py)
     print("bark & sky splash written")
