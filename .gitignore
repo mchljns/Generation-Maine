@@ -16,3 +16,6 @@ brand/content/photos/commons/*.jpg
 !brand/content/photos/commons/lewiston-3.jpg
 !brand/content/photos/commons/lewiston-5.jpg
 !brand/content/photos/commons/machias-3.jpg
+
+# cairn reference photographs are study material, not brand assets
+brand/content/photos/cairns/*.jpg
