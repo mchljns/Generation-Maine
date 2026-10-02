@@ -41,7 +41,7 @@ def disc(bg, body, defs=""):
 # them without lifting. The 0 is a loop the line makes on its way to the 7.
 def one_line(fg, bg):
     d = ("M40 98 A21 21 0 0 1 82 98 C82 122 56 148 40 170 L118 170 "
-         "A21 44 0 1 1 118 170.01 L166 170 L200 72 L146 72")
+         "A21 44 0 0 1 118 82 A21 44 0 0 1 118 170 L166 170 L200 72 L146 72")
     return disc(bg, '<path d="%s" fill="none" stroke="%s" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>' % (d, fg))
 
 
