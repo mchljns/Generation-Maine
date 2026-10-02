@@ -1,7 +1,7 @@
 """Can Bark & Sky live on the wordmark alone? The stacked wordmark at working sizes, and avatar and favicon options that use
 no brand mark and no initials: the name itself, the word maine, the quotation mark, the period, and the colors as the mark.
 
-  python3 brand/src/build_wordmark_only.py   # writes brand/identity/marks-bark-sky/wordmark-only.html and .png
+  python3 brand/src/build_wordmark_only.py   # writes brand/identity/marks-bark-sky/wordmark-only-2.html and .png
 """
 import os
 import re
@@ -15,6 +15,7 @@ OUT = os.path.join(ROOT, "brand", "identity", "marks-bark-sky")
 LOGO = os.path.join(ROOT, "brand", "identity", "logo-maine", "bark-sky")
 BK, SK, PA, CL = "#26201C", "#B9C9D3", "#F4F3EE", "#5B544C"
 SERIF = Face("d/HedvigLettersSerif-24.ttf")
+MONO = Face("alt/IBMPlexMono-Medium.ttf")
 S = 240
 
 
@@ -25,10 +26,11 @@ def bbox(d):
     return min(xs), min(ys), max(xs), max(ys)
 
 
-def word(text, fg, size, dy=0, dx=0):
-    d, _ = SERIF.path(text, size, 0, 0)
+def word(text, fg, size, dy=0, dx=0, face=None):
+    face = face or SERIF
+    d, _ = face.path(text, size, 0, 0)
     x0, y0, x1, y1 = bbox(d)
-    d, _ = SERIF.path(text, size, S / 2 - (x0 + x1) / 2 + dx, S / 2 - (y0 + y1) / 2 + dy)
+    d, _ = face.path(text, size, S / 2 - (x0 + x1) / 2 + dx, S / 2 - (y0 + y1) / 2 + dy)
     return '<path fill="%s" d="%s"/>' % (fg, d)
 
 
@@ -57,23 +59,17 @@ def stacked_name(fg, size):
 
 def options():
     o = []
-    # 1 the name, two lines, set to the disc's width so the edges crop: the name as a texture, still readable at 110
-    o.append(("the name, cropped", "The stacked name set wider than the disc. At 110 px it reads; at 40 it is a texture of the brand's letters.",
-              lambda fg, bg: disc_clip(bg, stacked_name(fg, 62))))
-    # 2 the name, two lines, inside the disc
-    o.append(("the name, inside", "The stacked name fitted inside the disc. Honest, and too small below 60 px.",
-              lambda fg, bg: disc(bg, stacked_name(fg, 40))))
-    # 3 maine alone
-    o.append(("maine", "The one word everyone in the audience owns. Not an initial. Reads at 40 px.",
+    o.append(("207", "The area code. Every Mainer's number, already on shirts and in handles. Set in Plex Mono, the brand's numbers face. Digits read at 16 px.",
+              lambda fg, bg: disc(bg, word("207", fg, 96, face=MONO))))
+    o.append(("207, serif", "The same number in the wordmark's face, so it matches the name rather than the counters.",
+              lambda fg, bg: disc(bg, word("207", fg, 104))))
+    o.append(("me", "The postal abbreviation, lowercase, which is also the word. Two letters that are not the brand's initials. Reads at 16 px.",
+              lambda fg, bg: disc(bg, word("me", fg, 120, dy=-6))))
+    o.append(("me.", "The abbreviation with the voice's full stop. A sentence about whose story it is.",
+              lambda fg, bg: disc(bg, word("me.", fg, 112, dy=-6, dx=6))))
+    o.append(("maine", "The whole word. Reads at 40 px, a bar at 16.",
               lambda fg, bg: disc(bg, word("maine", fg, 76, dy=-4))))
-    # 4 the quotation mark
-    o.append(("the quotation mark", "In their words. One serif glyph from the wordmark's own face. Reads at 16 px.",
-              lambda fg, bg: disc(bg, word("“", fg, 300, dy=34))))
-    # 5 the period
-    o.append(("the period", "Plain sentences, full stop. The quietest option; risks reading as a dot.",
-              lambda fg, bg: disc(bg, '<circle cx="%d" cy="%d" r="34" fill="%s"/>' % (S / 2, S / 2 + 44, fg))))
-    # 6 the colors as the mark: Sky over Bark at the horizon line
-    o.append(("sky over bark", "No letters. The two colors meeting at a low horizon. Recognisable only once the brand is known.",
+    o.append(("sky over bark", "No letters. The two colors at a low horizon. A sticker more than an avatar.",
               lambda fg, bg: disc_clip(bg, '<rect x="0" y="%d" width="%d" height="%d" fill="%s"/>' % (S * 0.62, S, S * 0.38, fg))))
     return o
 
@@ -114,7 +110,7 @@ def build():
     h.append('<div class="pane light"><div>%s<div class="lab">one line, 320 px, for comparison</div></div><div>%s<div class="lab">stacked centered lockup, as built, with the lined state</div></div><div>%s<div class="lab">two-line lockup, as built</div></div></div>' % (file_img("wordmark", 320), file_img("lockup-stacked-centered", 220), file_img("lockup-two-line", 300)))
     h.append('</div>')
     # avatars
-    h.append("<h2>avatar and favicon without a mark, without initials</h2><p class='in'>Each option at 110, 40 and 16 px, which is the profile, the comment thread, and the browser tab. Bark on Sky, then Sky on Bark.</p>")
+    h.append("<h2>avatar and favicon without a mark, without initials, round two</h2><p class='in'>The quotation mark is out. Each option at 110, 40 and 16 px, which is the profile, the comment thread, and the browser tab. Bark on Sky, then Sky on Bark.</p>")
     for fg, bg, cls in ((BK, SK, ""), (SK, BK, "")):
         h.append('<div class="row">')
         for name, note, fn in options():
@@ -122,8 +118,8 @@ def build():
             h.append('<div class="card %s"><h3>%s</h3><p>%s</p><div class="sizes">%s</div></div>' % (cls, name, note, "".join('<div>%s%d</div>' % (img(s, px), px) for px in (110, 40, 16))))
         h.append('</div>')
     # in context: a browser tab and a social bar
-    h.append("<h2>in place</h2><p class='in'>The two strongest candidates where they would live: a browser tab, and a profile row beside the handle.</p>")
-    q = options()[3][2](BK, SK); m = options()[2][2](BK, SK)
+    h.append("<h2>in place</h2><p class='in'>207 and me where they would live: a browser tab, and a profile row beside the handle.</p>")
+    q = options()[0][2](BK, SK); m = options()[2][2](BK, SK)
     h.append('<div class="row"><div class="chrome">%s generation maine</div><div class="chrome">%s generation maine</div></div>' % (img(q, 16), img(m, 16)))
     h.append('<div class="row" style="margin-top:18px"><div class="bar">%s<span>@generationmaine</span></div><div class="bar">%s<span>@generationmaine</span></div></div>' % (img(q, 44), img(m, 44)))
     # fonts
@@ -133,9 +129,9 @@ def build():
         if os.path.exists(p):
             fonts += "@font-face{font-family:'%s';src:url(file://%s)}" % (fam, p)
     h.append("<style>%s</style>" % fonts)
-    out = os.path.join(OUT, "wordmark-only.html")
+    out = os.path.join(OUT, "wordmark-only-2.html")
     write(out, "".join(h))
-    subprocess.run(["node", os.path.join(ROOT, "brand", "src", "shot.mjs"), out, os.path.join(OUT, "wordmark-only.png"), "1500", "1.4"], check=True)
+    subprocess.run(["node", os.path.join(ROOT, "brand", "src", "shot.mjs"), out, os.path.join(OUT, "wordmark-only-2.png"), "1500", "1.4"], check=True)
     print("wrote", out)
 
 
