@@ -552,3 +552,12 @@ What changed:
 The lighthouse: this direction's guardrails said no lighthouses, as a cliché. The client asked for Portland Head Light by name, so it is in as a client-directed exception and recorded here. The frame chosen keeps it small in a wide sea and rock view rather than a postcard.
 
 Still a placeholder in one sense: these are landscapes, not the creators. The slot is ready for real footage of young Mainers in these places, cut to the same 16 by 9 and dropped in as `media/hero.webm`. An MP4 rendition for older Safari needs ffmpeg, which this environment does not have; convert before launch. [CONFIRM: hosting can serve a 3 MB video on the first paint, or move it behind a lazy load]
+
+### The loop, second cut
+
+The client asked for more cinematic pans. Changes in `make_hero_video.mjs` and `make_hero_real.py`:
+
+- Each setting holds 2.6 seconds and dissolves into the next over 0.9 of them, so nothing cuts; the loop runs 13 seconds.
+- The moves are near constant speed, with only the gentlest ease, and each pairs a drift with a push in or a pull out: push toward Katahdin's summit, pull out over the Aroostook fields, push toward the islands from Cadillac, pull out from the Head Light to the sea, drift along the Old Port waterfront. Plates are 22 percent larger than the frame to give the moves room.
+- The grade is filmic: color at 80 percent, a soft S curve with the blacks lifted to 6 percent and the highlights held under 96, a touch of Sky in the shadows, a light vignette.
+- The file is now drawn on a canvas and encoded in the browser, which gives an exact start and end on the first setting at rest, so the loop point is seamless and the poster is the true first frame. The encoder omits the duration, so the script writes it into the WebM header.
