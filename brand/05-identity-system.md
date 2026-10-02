@@ -405,3 +405,24 @@ Found and fixed in QA: the horizontal lockup is wide, and sized by height it ran
 Preview: https://mchljns.github.io/Generation-Maine/bark-sky/ (served from the same `gh-pages` branch, reading the same placeholder clips). Artifact: https://claude.ai/artifact/2y7Hbbnz5ro7TBPy5gJnUk
 
 What this build does not decide: the Clay accent stays subtle by design, and the concept still has no equivalent of Marigold once per frame. Whether that quiet reads as calm or as absent is the question for the comparison.
+
+## Bark & Sky, the brand mark and the set, October 2
+
+The second concept's logo set was 21 files and a thin sheet. It is now the same matrix as Signature, 76 files in `brand/identity/logo-maine/bark-sky/`, built by the same script and the same size system.
+
+- Marks: full, mid and solid cuts, each in Bark, Sky, black and white. No mono version, because the mark and the name are already one color.
+- Wordmark in one line and stacked on two, lowercase Hedvig, one weight.
+- Lockups: horizontal (mid cut, with large and solid versions), horizontal with the state after the name, compact, stacked left, stacked centered, two-line, endorsed (horizontal with large and solid versions) and endorsed stacked. Each in the four colors.
+- Avatars at full, mid and solid, Sky on Bark, plus one in Bark on Sky. App icon, favicon, and the video bug: the solid cut and the name in Paper.
+
+Sheets: `logo-maine/lockups-bark-sky.png` (every lockup in color on Paper and reversed on Bark, then the set at working sizes) and `apply-bark-sky/applied-sheet.png` (the eight surfaces: first seconds, lower third, end card, grid, avatar among accounts, Substack, collab post, the hero as built). The old `bark-sky.png` sheet is removed; it predated the full set and had a rendering fault.
+
+**Grades, against the same bar as Signature.** Two-line A-. Horizontal A-. Compact B. Stacked centered A-. Stacked left B+. Endorsed B+. Avatars B+. Bug A-. Size system A-.
+
+What the sheet says:
+
+- The serif at one weight makes the horizontal lockup the natural primary. The state and the lowercase name sit at the same visual weight, which the Bricolage version never quite managed, so this concept does not need the two-line lockup to balance the pair.
+- The compact lockup is the weak one. Inside the x-height the mid cut drops to about 14 lines of visible weight at nav size and reads as a smudge. Use the solid cut below 36 px, as the system already says, and prefer the horizontal solid in bars.
+- The endorsed lockups set the institute line in Hedvig Sans at 24 units, a touch large next to the serif. It can come down to 22 if the line ever crowds the name.
+- The avatar at 40 px uses the solid cut and holds. At 16 px the state is a silhouette either way.
+- Nothing on the sheet carries a second color. That is the concept, and it is the thing to weigh against Signature's one Marigold per frame.

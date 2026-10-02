@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..', '..');
-const dir = path.join(root, 'brand', 'identity', 'apply');
+const dir = path.join(root, 'brand', 'identity', process.argv[2] || 'apply');
 const exe = fs.existsSync('/opt/pw-browsers/chromium-1194/chrome-linux/chrome') ? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' : undefined;
 const b = await chromium.launch({ executablePath: exe });
 fs.mkdirSync(path.join(dir, 'mockups'), { recursive: true });

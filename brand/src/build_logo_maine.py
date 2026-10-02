@@ -152,34 +152,69 @@ def signature():
 
 
 def bark_sky():
+    """Bark & Sky, the same drawing and the same size system as Signature, in the concept's own voice: one color per file, the lowercase
+    Hedvig wordmark, nothing bold, no dot. Color is Bark on Paper, reversed is Sky on Bark, then black and white. There is no separate
+    mono version because the mark and the name are already one color."""
     m = {}
     bk, sk, pa, cl = D["bark"], D["sky"], D["paper"], D["clay"]
-    for cut in ("full", "mid", "solid"):
-        body, w = maine_lines(0, 0, 240, bk, bk, cut, gold=False); m["mark-" + cut] = svg(w, 240, body, "Generation Maine")
-        body, w = maine_lines(0, 0, 240, sk, sk, cut, gold=False); m["mark-%s-reversed" % cut] = svg(w, 240, body, "Generation Maine")
+    for suf, fg in (("", bk), ("-reversed", sk), ("-black", "#000000"), ("-white", "#FFFFFF")):
+        for cut in ("full", "mid", "solid"):
+            body, w = maine_lines(0, 0, 240, fg, fg, cut, gold=False); m["mark-%s%s" % (cut, suf)] = svg(w, 240, body, "Generation Maine")
 
     def wm(fg):
         d, w = HEDVIG.path("generation maine", 100, 0, 78, -8)
         return '<path fill="%s" d="%s"/>' % (fg, d), w, 100
-    for suf, fg, mk in (("", bk, cl), ("-reversed", sk, pa)):
+
+    def wm2(fg):
+        d1, w1 = HEDVIG.path("generation", 100, 0, 78, -8)
+        d2, w2 = HEDVIG.path("maine", 100, 0, 78 + 96, -8)
+        return '<path fill="%s" d="%s"/><path fill="%s" d="%s"/>' % (fg, d1, fg, d2), max(w1, w2), 196
+
+    for suf, fg in (("", bk), ("-reversed", sk), ("-black", "#000000"), ("-white", "#FFFFFF")):
         b, w, h = wm(fg)
         m["wordmark" + suf] = svg(w, h, b, "Generation Maine")
-        mh = 100
+        b2, w2, h2 = wm2(fg)
+        m["wordmark-stacked" + suf] = svg(w2, h2, b2, "Generation Maine")
+        mh, gap = 100, 28
+        # horizontal: the state as tall as the name's box. The mid cut ships by default; the full cut for 600 px wide and up, the solid cut under 300 px
+        for lsuf, lcut in (("", "mid"), ("-large", "full"), ("-solid", "solid")):
+            mb, mw = maine_lines(0, 0, mh, fg, fg, lcut, gold=False)
+            m["lockup-horizontal" + lsuf + suf] = svg(w + mw + gap, h + 14, mb + '<g transform="translate(%s 14)">%s</g>' % (f(mw + gap), b), "Generation Maine")
+            body = mb + '<g transform="translate(%s 14)">%s</g>' % (f(mw + gap), b) + rect(mw + gap, h + 14 + 18, w, 1.5, fg)
+            t, _ = outlined(HEDVIG_SANS, MPI, 24, mw + gap, h + 14 + 54, fg)
+            m["lockup-endorsed" + lsuf + suf] = svg(w + mw + gap, h + 14 + 66, body + t, "Generation Maine, an initiative of Maine Policy Institute")
         mb, mw = maine_lines(0, 0, mh, fg, fg, "mid", gold=False)
-        m["lockup-horizontal" + suf] = svg(w + mw + 28, h + 14, mb + '<g transform="translate(%s 14)">%s</g>' % (f(mw + 28), b), "Generation Maine")
-        # the same size system as Signature: the full cut for 600 px wide and up, the solid silhouette under 300 px wide
-        for lsuf, lcut in (("-large", "full"), ("-solid", "solid")):
-            mb2, mw2 = maine_lines(0, 0, mh, fg, fg, lcut, gold=False)
-            m["lockup-horizontal" + lsuf + suf] = svg(w + mw2 + 28, h + 14, mb2 + '<g transform="translate(%s 14)">%s</g>' % (f(mw2 + 28), b), "Generation Maine")
+        # horizontal, state after the name
+        m["lockup-horizontal-right" + suf] = svg(w + mw + gap, h + 14, '<g transform="translate(0 14)">%s</g>' % b + '<g transform="translate(%s 0)">%s</g>' % (f(w + gap), mb), "Generation Maine")
+        # compact: the state inside the x-height and ascenders, for bylines and tight bars
+        ch, cgap = 66, 20
+        mb, cw = maine_lines(0, 12, ch, fg, fg, "mid", gold=False)
+        m["lockup-compact" + suf] = svg(w + cw + cgap, h, mb + '<g transform="translate(%s 0)">%s</g>' % (f(cw + cgap), b), "Generation Maine")
+        # stacked left: the state over the two-line name
         ms = 180
+        mb, mw = maine_lines(0, 0, ms, fg, fg, "full", gold=False)
+        m["lockup-stacked" + suf] = svg(max(w2, mw), ms + 30 + h2, mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 30), b2), "Generation Maine")
+        # stacked centered: the state over the one-line name, for title cards and print
         mb, mw = maine_lines((w - ms * maine2.ASPECT) / 2, 0, ms, fg, fg, "full", gold=False)
-        m["lockup-stacked" + suf] = svg(w, ms + 34 + h, mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 34), b), "Generation Maine")
-        body = mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 34), b) + rect(0, ms + 34 + h + 12, w, 1.5, fg)
+        m["lockup-stacked-centered" + suf] = svg(w, ms + 34 + h, mb + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 34), b), "Generation Maine")
+        # two-line: the state beside the two-line name, as tall as both lines
+        mb, mw = maine_lines(0, 8, 180, fg, fg, "full", gold=False)
+        m["lockup-two-line" + suf] = svg(mw + 30 + w2, h2, mb + '<g transform="translate(%s 0)">%s</g>' % (f(mw + 30), b2), "Generation Maine")
+        # endorsed stacked, centered, for the end card and print
+        body = mb_c = maine_lines((w - ms * maine2.ASPECT) / 2, 0, ms, fg, fg, "full", gold=False)[0]
+        body = body + '<g transform="translate(0 %s)">%s</g>' % (f(ms + 34), b) + rect(0, ms + 34 + h + 12, w, 1.5, fg)
         t, _ = outlined(HEDVIG_SANS, MPI, 24, w / 2, ms + 34 + h + 48, fg, anchor="middle")
-        m["lockup-endorsed" + suf] = svg(w, ms + 34 + h + 62, body + t, "Generation Maine, an initiative of Maine Policy Institute")
-    mb, mw = maine_lines(0, 0, 164, sk, sk, "mid", gold=False); m["avatar"] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % bk + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
-    mb, mw = maine_lines(0, 0, 164, bk, bk, "mid", gold=False); m["avatar-sky"] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % sk + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
+        m["lockup-endorsed-stacked" + suf] = svg(w, ms + 34 + h + 62, body + t, "Generation Maine, an initiative of Maine Policy Institute")
+    # avatars by size, the app icon and the favicon. Sky on Bark; one on Sky for light surfaces
+    for name, cut, fg, bg in (("avatar-full", "full", sk, bk), ("avatar-mid", "mid", sk, bk), ("avatar", "mid", sk, bk), ("avatar-solid", "solid", sk, bk), ("avatar-sky", "mid", bk, sk)):
+        mb, mw = maine_lines(0, 0, 164, fg, fg, cut, gold=False)
+        m[name] = svg(240, 240, '<circle cx="120" cy="120" r="120" fill="%s"/>' % bg + '<g transform="translate(%s 38)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
+    mb, mw = maine_lines(0, 0, 150, sk, sk, "mid", gold=False); m["app-icon"] = svg(240, 240, rect(0, 0, 240, 240, bk, 52) + '<g transform="translate(%s 45)">%s</g>' % (f((240 - mw) / 2), mb), "Generation Maine")
     mb, mw = maine_lines(0, 0, 20, sk, sk, "solid"); m["favicon"] = svg(32, 32, '<circle cx="16" cy="16" r="16" fill="%s"/>' % bk + '<g transform="translate(%s 6)">%s</g>' % (f((32 - mw) / 2), mb), "Generation Maine")
+    # the video bug: the solid cut and the name in Paper, for the first seconds of every video
+    b, w, h = wm(pa)
+    mb, mw = maine_lines(0, 4, 96, pa, pa, "solid", gold=False)
+    m["bug"] = svg(w + mw + 26, h + 8, mb + '<g transform="translate(%s 4)">%s</g>' % (f(mw + 26), b), "Generation Maine")
     return m
 
 

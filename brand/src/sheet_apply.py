@@ -1,9 +1,11 @@
 """Contact sheet of the applied logo. python3 brand/src/sheet_apply.py"""
 import os
+import sys
 from PIL import Image
 from gmlib import ROOT
 
-M = os.path.join(ROOT, "brand", "identity", "apply", "mockups")
+D = sys.argv[1] if len(sys.argv) > 1 else "apply"
+M = os.path.join(ROOT, "brand", "identity", D, "mockups")
 IDS = ["first", "lower", "end", "grid", "avatar", "substack", "collab"]
 
 
@@ -20,5 +22,5 @@ x = 40
 for t in ts:
     o.paste(t, (x, 40)); x += t.width + 20
 o.paste(w, (40, 720))
-o.save(os.path.join(ROOT, "brand", "identity", "apply", "applied-sheet.png"))
+o.save(os.path.join(ROOT, "brand", "identity", D, "applied-sheet.png"))
 print("sheet", o.size)
