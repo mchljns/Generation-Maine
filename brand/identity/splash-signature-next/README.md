@@ -1,17 +1,13 @@
-# Signature Next — splash concept
+# Signature Next — restored review copy
 
-This is a separate review version. The original `brand/identity/splash/` page and generator are untouched.
+This folder is a duplicate of `brand/identity/splash/`. The original page and generator are untouched.
 
-## Direction
+The page's HTML, CSS, embedded fonts, headline copy, mural drawing, section reveals, pinned creator sequence, navigation motion, and media files are copied from the original Signature output. They are intentionally kept intact after a redesign pass changed the headline wrapping and removed motion.
 
-This pass returns to Signature's own rules. The hero keeps its oversized low-left headline, unboxed Maine line mural, spruce field, and one marigold period. The next section keeps the plain three-part explanation. Three vertical text frames demonstrate the publishing format with no photography or video. A single marigold section states the question behind the series. The page ends with a clear account of where the work will live.
+Only three small behavioral changes are present in `index.html` and `artifact.html`:
 
-The page is shorter than the original nine-step placeholder sequence. It also removes invented creator names, quotations, account links, and simulated newsletter confirmation. Story topics are labeled as examples until real creator work is ready.
+1. The second placeholder GIF is lazy-loaded, reducing work on the first screen.
+2. The placeholder newsletter destination no longer shows a false success message when a visitor submits an address.
+3. Placeholder social and post links no longer jump to the top of the page.
 
-The page has no image dependencies beyond the existing vector identity assets. It opens directly as a static HTML file and needs no build step.
-
-## Before launch
-
-1. Replace format previews with real creator names, towns, films, and links when approved. The text-only system can remain as a cover treatment.
-2. Add live social and newsletter destinations only after the accounts and publication are ready.
-3. Confirm legal, privacy, and funder-disclosure copy. Current Signature files omit the Maine Policy Institute line following a documented client request; earlier strategy documents recommended it.
+The creator portraits, names, quotes, social destinations, and publication address remain review placeholders. They need real content and working destinations before launch. This copy preserves the visual baseline for the next design pass.
