@@ -58,7 +58,7 @@ def tile(body, bg, round_=False, size=S):
 
 
 def img(svg, px, h=None):
-    return '<img src="data:image/svg+xml;base64,%s" width="%d" height="%d">' % (base64.b64encode(svg.encode()).decode(), px, h or px)
+    return '<img src="data:image/svg+xml;base64,%s" width="%d" height="%d" style="width:%dpx;height:%dpx">' % (base64.b64encode(svg.encode()).decode(), px, h or px, px, h or px)
 
 
 def build():
@@ -72,7 +72,7 @@ def build():
     .sw{display:flex;gap:6px;margin-top:8px}.sw i{display:block;width:22px;height:22px;border-radius:6px;border:1px solid rgba(0,0,0,.08)}
     .pal{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.pal .c{padding:0;overflow:hidden}.pal .c .top{padding:16px 16px 0}
     .page{padding:22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}.page b{font:400 24px/1 'Hedvig Letters Serif';display:block}.page span{font-size:12px;color:#5B544C}
-    .page img{width:56px;height:56px}
+    .page img{border-radius:50%}
     """
     fonts = ""
     for fam, fn in (("Hedvig Letters Serif", "d/HedvigLettersSerif-24.ttf"), ("Hedvig Letters Sans", "d/HedvigLettersSans-Regular.ttf")):
