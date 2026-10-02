@@ -43,9 +43,19 @@ def icon(name):
 FIELDS = ["sp", "bi", "pi", "sp", "bi", "pi", "sp", "bi", "mg"]
 
 
+_LOGO_N = [0]
+
+
 def logo(name, cls="", folder=None):
+    """Inline a logo file. Any ids inside (clip paths) are made unique per insertion, so two copies of one file on the page, one of
+    them hidden, never point at each other's definitions."""
     with open(os.path.join(folder or LOGO, name + ".svg")) as fh:
-        return fh.read().replace('role="img"', "").replace("<svg ", '<svg class="%s" ' % cls, 1)
+        t = fh.read().replace('role="img"', "").replace("<svg ", '<svg class="%s" ' % cls, 1)
+    _LOGO_N[0] += 1
+    suf = "_%d" % _LOGO_N[0]
+    t = re.sub(r'id="([^"]+)"', lambda m: 'id="%s%s"' % (m.group(1), suf), t)
+    t = re.sub(r'url\(#([^)]+)\)', lambda m: 'url(#%s%s)' % (m.group(1), suf), t)
+    return t
 
 
 def draw_paths(svg_text):
@@ -389,7 +399,7 @@ def page(theme=SIGNATURE, out=None, media=None):
 <div class="foot"><a class="cta" href="#news">Get the newsletter</a><div class="soc sheet-soc"><a href="#follow" aria-label="Instagram">%(ic_ig)s</a><a href="#follow" aria-label="TikTok">%(ic_tt)s</a><a href="#follow" aria-label="YouTube">%(ic_yt)s</a><a href="#follow" aria-label="Substack">%(ic_ss)s</a></div></div></div>
 
 <section class="hero" id="top"><div class="w">
-  <div class="h1"><h1 id="h1" class="rise">%(h1)s</h1>
+  <div class="h1">%(kicker)s<h1 id="h1" class="rise">%(h1)s</h1>
   <p id="lede" class="lede rise">Young Mainers film the rules that shape their lives. What rent costs, what a license costs, what it takes to stay. Told from the towns they live in.</p>
   <p class="ctas rise" id="ctas"><a class="btn b1" href="#creators">Watch the stories</a><a class="tl" href="#news">Get the newsletter</a></p></div>
   <div class="mural" id="mural" aria-hidden="true"></div>
@@ -531,6 +541,7 @@ def page(theme=SIGNATURE, out=None, media=None):
 """ % dict(
         lock=logo(theme["nav_light"], "lk light", theme["logo"]), lock_dark=logo(theme["nav_dark"], "lk dark", theme["logo"]),
         lock_rest=(logo(theme["nav_rest"], "lk rest", theme["logo"]) if theme.get("nav_rest") else ""),
+        kicker=('<p class="k idx rise">%s</p>' % theme["hero_kicker"]) if theme.get("hero_kicker") else "",
         two=(ping_dot if theme["footer_ping"] else (lambda t: t))(draw_paths(logo(theme["footer"], "lk", theme["logo"]))), mural=theme["mural"], bg_follow=theme["bg_follow"],
         h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),

@@ -191,3 +191,29 @@ if __name__ == "__main__":
     os.replace(os.path.join(ROOT, OUT, "candidates.png"), os.path.join(ROOT, OUT, "rising.png"))
     os.replace(os.path.join(ROOT, OUT, "candidates.html"), os.path.join(ROOT, OUT, "rising.html"))
     print("explore sheets written")
+
+
+# ------------------------------------------------------------------ the horizon mark as logo files, for the page
+FIELD = dict(sky="#B9C9D3", ground="#26201C", paper="#F4F3EE")
+
+
+def horizon_files(c=FIELD, folder="brand/identity/logo-maine/bark-sky"):
+    """The recommended Rising mark (horizon 64, state 190, line through) as a mark, avatars, a favicon and horizontal lockups,
+    in the Field palette. The reversed files sit on the ground color: the mark's lower half turns Paper so it still reads as a disc."""
+    sky, gr, pa = c["sky"], c["ground"], c["paper"]
+    files = {}
+    mk = lambda ground, line: rising(sky, ground, line, y_frac=0.64, h=190, base=0.7, through=True)
+    files["mark-rising"] = svg(S, S, mk(gr, pa), "Generation Maine")
+    files["mark-rising-reversed"] = svg(S, S, mk(pa, gr), "Generation Maine")
+    files["avatar-rising"] = files["mark-rising"]
+    files["favicon-rising"] = svg(32, 32, '<g transform="scale(%s)">%s</g>' % (f(32 / S), rising(sky, gr, pa, y_frac=0.64, h=190, base=0.7, through=True).replace('height="3"', 'height="12"')), "Generation Maine")
+    for suf, fg, ground, line in (("", gr, gr, pa), ("-reversed", sky, pa, gr)):
+        d, w = M.SERIF.path("generation maine", 100, 0, 78, -8)
+        b = '<path fill="%s" d="%s"/>' % (fg, d)
+        mh = 100
+        body = '<g transform="translate(0 7) scale(%s)">%s</g>' % (f(mh / S), mk(ground, line)) + '<g transform="translate(%s 14)">%s</g>' % (f(mh + 24), b)
+        files["lockup-rising" + suf] = svg(w + mh + 24, 114, body, "Generation Maine")
+        files["lockup-rising-large" + suf] = files["lockup-rising" + suf]
+    for k, v in files.items():
+        write("%s/%s.svg" % (folder, k), v)
+    return files

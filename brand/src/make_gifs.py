@@ -22,7 +22,7 @@ FRAMES, FPS, LOOP_S = 18, 8, 2.25
 THEMES = {
     "signature": dict(band=(11, 43, 33), dot=(239, 180, 67), font=os.path.join(ROOT, "generation-maine", "assets", "fonts", "dm-sans-var.ttf"),
                       media=os.path.join(ROOT, "brand", "identity", "splash", "media"), lower=False),
-    "bark-sky": dict(band=(43, 33, 28), dot=None, font=os.path.join(ROOT, "brand", "fonts", "d", "HedvigLettersSans-Regular.ttf"),
+    "bark-sky": dict(band=(38, 32, 28), dot=None, font=os.path.join(ROOT, "brand", "fonts", "d", "HedvigLettersSans-Regular.ttf"),
                      media=os.path.join(ROOT, "brand", "identity", "splash-bark-sky", "media"), lower=True),
 }
 THEME = THEMES["bark-sky" if "--theme" in sys.argv and "bark-sky" in sys.argv else "signature"]

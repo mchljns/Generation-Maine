@@ -498,3 +498,19 @@ Recommendation: keep Bark & Sky as the pairing and take Blueberry as the interac
 | **Recommended: horizon at 64, state at 190, line through** | The two improvements together | **A-** |
 
 Next, if the client agrees: draw the recommended mark into the size system (full for 72 px and up, the solid cut below 36 where the line becomes a single pixel), build the lockups and avatars in `logo-maine/bark-sky/` beside the lined state, and put it on the splash and the applied sheet so the two marks can be compared in place.
+
+## Bark & Sky, Field notes, October 2
+
+The brief: make the identity appeal to Gen Z, skew masculine, and keep the understatement. Three treatments on the same four surfaces in `brand/identity/marks-bark-sky/field/field.png` (`brand/src/build_field_barksky.py`).
+
+| Treatment | What changes | Read |
+| --- | --- | --- |
+| A. Slate | Sky to steel #B9C9D3, Paper to bone #F4F3EE, Bark to peat #26201C. Type unchanged | Already less soft. The pastel was most of the problem |
+| **B. Field notes** | Slate, plus IBM Plex Mono (OFL) for every label and number: kickers, counters, towns, timestamps, handles, nav. The serif keeps names and headlines. A grid that sits left. The horizon mark as the badge | **Chosen.** The mono reads as gear tags and camera overlays, which is where this audience lives, and the serif keeps a person in it |
+| C. Utility | B, with Instrument Sans at medium in place of the serif | The most Gen Z and the most masculine, and the least this identity. A different concept wearing the horizon |
+
+What was not used, on purpose: heavy weights, black, neon, texture, camo, anything that looks like a drop. The masculine skew comes from temperature, grid and labeling, not from force.
+
+**Applied to the page.** `splash-bark-sky/` now carries Field notes: the steel sky and bone paper, the mono labels in uppercase with 0.06 em tracking, a left grid with the index line "nine young mainers · nine towns" above the headline and no mural in the hero, the Rising mark (horizon at 64, state at 190, line through) as the lockup in the bar and the footer, Blueberry #2B4760 as the link color, and the placeholder clips re-rendered with the peat band. Logo files: `logo-maine/bark-sky/mark-rising*`, `lockup-rising*`, `avatar-rising`, `favicon-rising`. The template gained an optional hero kicker and makes inlined logo ids unique, since two copies of one mark on a page, one hidden, were sharing a clip path.
+
+Open: the lined state remains the shared system mark in the files. Whether Bark & Sky keeps it anywhere, or runs on the horizon alone, is the next decision. The applied sheet (`apply-bark-sky/`) still shows the earlier treatment and should be rebuilt once that is settled.
