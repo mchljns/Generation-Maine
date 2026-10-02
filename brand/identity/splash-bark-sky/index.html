@@ -299,8 +299,11 @@ body.scrub{transition:none}
 .bs .sheet{background:var(--bark);color:var(--sky)}.bs .sheet .foot .cta{background:var(--sky);color:var(--bark)}
 /* the hero: centered and airy. The state in Bark sits above the headline, the headline in the serif at one weight. */
 .bs .hero .w{grid-template-columns:minmax(0,8fr) minmax(0,4fr);align-items:end;padding-block:clamp(48px,10vh,120px) clamp(56px,9vh,96px);min-height:min(620px,78vh)}
-.bs .mural{display:block;width:min(100%,440px);aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:url(media/photo-hero.jpg) center 20%/cover no-repeat;justify-self:end;align-self:end;box-shadow:0 1px 0 rgba(38,32,28,.12)}
+.bs .mural{display:block;width:min(100%,440px);aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:url(media/photo-hero.jpg) center 20%/cover no-repeat;justify-self:end;align-self:end;box-shadow:0 1px 0 rgba(38,32,28,.12);position:relative}
 .bs .mural svg{display:none}
+/* the hero video: muted, looping, vertical, in the photo's slot. The poster is the photograph, and with reduced motion the poster is all there is. */
+.bs .mural .hv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+@media (prefers-reduced-motion: reduce){.bs .mural .hv{display:none}}
 .bs .hero .w{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px}
 @media (max-width:900px){.bs .mural{order:-1;width:100%;aspect-ratio:3/2;justify-self:stretch;margin-bottom:26px}}
 .bs .hero h1{font-size:clamp(42px,min(7vw,11vh),100px);max-width:12ch}
@@ -352,7 +355,7 @@ body.scrub{transition:none}
   <div class="h1"><h1 id="h1" class="rise"><span class="">Young Mainers on building a life <b class="nw">here<i class="d pulse"></i></b></span></h1>
   <p id="lede" class="lede rise">Young Mainers film the rules that shape their lives. What rent costs, what a license costs, what it takes to stay. Told from the towns they live in.</p>
   <p class="ctas rise" id="ctas"><a class="btn b1" href="#creators">Watch the stories</a><a class="tl" href="#news">Get the newsletter</a></p></div>
-  <div class="mural" id="mural" aria-hidden="true"></div>
+  <div class="mural" id="mural"><img class="hv" src="media/hero.gif" alt="Four Maine places, a slow pan across each: Katahdin, Cadillac Mountain, the Old Port, the Aroostook fields. Placeholder." width="640" height="800"></div>
 </div></section>
 
 <section class="about reveal" id="about"><div class="w">
@@ -416,8 +419,7 @@ body.scrub{transition:none}
   const d = JSON.parse(document.getElementById('maine-data').textContent), ns = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 720 720');
   d.rows.forEach((row, i) => row.runs.forEach(([a, b]) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + a + ' ' + row.y + ' L' + b + ' ' + row.y); p.setAttribute('stroke', BI); p.setAttribute('stroke-width', row.w); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 45) + 'ms'; svg.appendChild(p); }));
-  const m = document.getElementById('mural'); m.appendChild(svg);
-  new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m);
+  const m = document.getElementById('mural'); if (m) { m.appendChild(svg); new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m); }
 
   // The page background changes as each section passes the middle of the screen.
   // The page color is a function of scroll position, worked out every frame: green under the hero and about,

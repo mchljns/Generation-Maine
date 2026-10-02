@@ -73,8 +73,11 @@ CSS = r"""
 .bs .sheet{background:var(--bark);color:var(--sky)}.bs .sheet .foot .cta{background:var(--sky);color:var(--bark)}
 /* the hero: centered and airy. The state in Bark sits above the headline, the headline in the serif at one weight. */
 .bs .hero .w{grid-template-columns:minmax(0,8fr) minmax(0,4fr);align-items:end;padding-block:clamp(48px,10vh,120px) clamp(56px,9vh,96px);min-height:min(620px,78vh)}
-.bs .mural{display:block;width:min(100%,440px);aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:url({media}media/photo-hero.jpg) center 20%/cover no-repeat;justify-self:end;align-self:end;box-shadow:0 1px 0 rgba(38,32,28,.12)}
+.bs .mural{display:block;width:min(100%,440px);aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:url({media}media/photo-hero.jpg) center 20%/cover no-repeat;justify-self:end;align-self:end;box-shadow:0 1px 0 rgba(38,32,28,.12);position:relative}
 .bs .mural svg{display:none}
+/* the hero video: muted, looping, vertical, in the photo's slot. The poster is the photograph, and with reduced motion the poster is all there is. */
+.bs .mural .hv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+@media (prefers-reduced-motion: reduce){.bs .mural .hv{display:none}}
 .bs .hero .w{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px}
 @media (max-width:900px){.bs .mural{order:-1;width:100%;aspect-ratio:3/2;justify-self:stretch;margin-bottom:26px}}
 .bs .hero h1{font-size:clamp(42px,min(7vw,11vh),100px);max-width:12ch}
@@ -119,6 +122,7 @@ CSS = r"""
 BARK_SKY = dict(
     logo=os.path.join(ROOT, "brand", "identity", "logo-maine", "bark-sky"),
     nav_light="wordmark-reversed", nav_dark="wordmark", nav_rest="wordmark", footer="wordmark-reversed", footer_ping=False,
+    hero_media='<div class="mural" id="mural"><img class="hv" src="{media}media/hero.gif" alt="Four Maine places, a slow pan across each: Katahdin, Cadillac Mountain, the Old Port, the Aroostook fields. Placeholder." width="640" height="800"></div>',
     head_extra='<div class="strip" aria-hidden="true">' + ''.join('<img src="{media}media/portrait-%d.jpg" alt="" loading="lazy">' % i for i in range(1, 10)) + '</div>',
     fonts=FONTS, font_files={"FSERIF": "brand/fonts/d/HedvigLettersSerif-24.ttf", "FSANS": "brand/fonts/d/HedvigLettersSans-Regular.ttf", "FMONO": "brand/fonts/alt/IBMPlexMono-Medium.ttf"},
     mural="#2B211C", bg_follow="var(--mist)", css=CSS, title="Generation Maine, Bark & Sky", root_class="bs",

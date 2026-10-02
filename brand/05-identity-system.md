@@ -529,3 +529,11 @@ The client on Field notes: the brandmark is not it yet, the footer is out of wha
 **The mark, round three** (`marks-bark-sky/round3/candidates.png`, `brand/src/build_marks3_barksky.py`): patch, sticker, the state as a grid at three resolutions, a heavy outline, the split silhouette, and the name alone. My read: the grid at 5 by 6 is the one with a future. It is a feed, an app icon and the state in one gesture, it is abstract enough to pass the on-the-nose test, and it holds at 40 px. The patch is the safe choice. The sticker is the loudest and the most Gen Z. The name alone is honest and leaves the avatar weak.
 
 **Imagery note.** Four generated test frames: a tailgate, a kitchen table with a lease, a main street, a lot in fog. Only the tailgate is in use. The other three were grey and solitary, which is the wrong temperature; the shot list says so. The image generator is out of credits and every photo host is blocked from this environment, so real photography comes from the client's licensing.
+
+## Bark & Sky, a video hero, October 2
+
+The client asked for a video hero, then specified the placeholder: a GIF that pans two seconds across each of four famous Maine settings and loops. No photography is reachable from this environment and the image generator is out of credits, so the four settings are drawn flat in the concept's palette by `brand/src/make_hero_gif.py`: Katahdin over a lake with the Knife Edge as a pale line, Cadillac Mountain's granite with the Porcupine Islands, the Old Port's brick blocks and the Custom House tower, and the Aroostook fields converging to a line of spruce. No lighthouse, per the guardrails. 96 frames at 12 a second, 640 by 800, about 1 MB, tagged PLACEHOLDER. It sits in the hero's media slot in place of the photograph, with the photograph kept as the slot's background while the GIF loads, and it is hidden under reduced motion.
+
+The template now lets a theme replace the hero media outright, and the mural script tolerates a hero without the mural.
+
+Real footage: four two-second pans of the real places, or better, of the creators in them, cut to the same 4 by 5 and dropped in as `media/hero.gif` or as a muted MP4 in the same slot. A first draft of the video route (`make_hero_video.mjs`, a Playwright-recorded montage of the clip placeholders) is in the repo for when footage exists.

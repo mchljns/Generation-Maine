@@ -402,7 +402,7 @@ def page(theme=SIGNATURE, out=None, media=None):
   <div class="h1">%(kicker)s<h1 id="h1" class="rise">%(h1)s</h1>
   <p id="lede" class="lede rise">Young Mainers film the rules that shape their lives. What rent costs, what a license costs, what it takes to stay. Told from the towns they live in.</p>
   <p class="ctas rise" id="ctas"><a class="btn b1" href="#creators">Watch the stories</a><a class="tl" href="#news">Get the newsletter</a></p></div>
-  <div class="mural" id="mural" aria-hidden="true"></div>
+  %(hero_media)s
 </div></section>
 
 <section class="about reveal" id="about"><div class="w">
@@ -466,8 +466,7 @@ def page(theme=SIGNATURE, out=None, media=None):
   const d = JSON.parse(document.getElementById('maine-data').textContent), ns = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 720 720');
   d.rows.forEach((row, i) => row.runs.forEach(([a, b]) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + a + ' ' + row.y + ' L' + b + ' ' + row.y); p.setAttribute('stroke', BI); p.setAttribute('stroke-width', row.w); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 45) + 'ms'; svg.appendChild(p); }));
-  const m = document.getElementById('mural'); m.appendChild(svg);
-  new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m);
+  const m = document.getElementById('mural'); if (m) { m.appendChild(svg); new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m); }
 
   // The page background changes as each section passes the middle of the screen.
   // The page color is a function of scroll position, worked out every frame: green under the hero and about,
@@ -543,6 +542,7 @@ def page(theme=SIGNATURE, out=None, media=None):
         lock_rest=(logo(theme["nav_rest"], "lk rest", theme["logo"]) if theme.get("nav_rest") else ""),
         kicker=('<p class="k idx rise">%s</p>' % theme["hero_kicker"]) if theme.get("hero_kicker") else "",
         head_extra=theme.get("head_extra", "").replace("{media}", media),
+        hero_media=theme.get("hero_media", '<div class="mural" id="mural" aria-hidden="true"></div>').replace("{media}", media),
         two=(ping_dot if theme["footer_ping"] else (lambda t: t))(draw_paths(logo(theme["footer"], "lk", theme["logo"]))), mural=theme["mural"], bg_follow=theme["bg_follow"],
         h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
