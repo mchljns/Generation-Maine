@@ -21,21 +21,21 @@ NAVY, BLUE, MG, WHITE, PAPER = "#0F2E4D", "#0556A5", "#EFB443", "#FFFFFF", "#F4F
 ANGLE, N, FILL, ACCENT_AT = 62, 16, 0.62, 10
 
 
-def segments(h, x=0, y=0, angle=ANGLE, n=N, fill=FILL, tol=0.01, chip=2.0):
-    """Sixteen stripes as line segments crossing the state, in page coordinates. Returns (ring, [(x0,y0,x1,y1), ...] per stripe, stroke width, state width)."""
+def segments(h, x=0, y=0, angle=ANGLE, n=N, fill=FILL, tol=0.003, speck=2.0, samples=7):
+    """Sixteen stripes crossing the state, as the pieces each stripe makes with the accurate outline. A piece is found by
+    sampling several lines across the stripe's width and merging the intervals where they cross the polygon; its extent along
+    the stripe is the farthest crossing on any sample line, so the clip (the exact outline) cuts every piece exactly at the
+    coast. Pieces are dropped only if they are specks (shorter along the stripe than `speck` stripe widths) or slivers (the
+    stripe's center line never crosses them). Returns (ring, [[(x0,y0,x1,y1), ...] per stripe], stroke width, state width)."""
     ring = simplified(maine2.fit(x, y, h * maine2.ASPECT, h), h * tol)
     minx, miny, maxx, maxy = maine2.bbox(ring)
     cx, cy = (minx + maxx) / 2, (miny + maxy) / 2
     rot = math.radians(90 - angle)
-    def to(px, py):  # page -> stripe frame (bars vertical)
+    def to(px, py):
         return (cx + (px - cx) * math.cos(-rot) - (py - cy) * math.sin(-rot), cy + (px - cx) * math.sin(-rot) + (py - cy) * math.cos(-rot))
     def back(px, py):
         return (cx + (px - cx) * math.cos(rot) - (py - cy) * math.sin(rot), cy + (px - cx) * math.sin(rot) + (py - cy) * math.cos(rot))
     r2 = [to(*p) for p in ring]
-    lo, hi = min(p[0] for p in r2), max(p[0] for p in r2)
-    pitch = (hi - lo) / n
-    sw = pitch * fill
-    stripes = []
     m = len(r2)
     def cross(xc):
         ys = []
@@ -44,25 +44,34 @@ def segments(h, x=0, y=0, angle=ANGLE, n=N, fill=FILL, tol=0.01, chip=2.0):
             if (x0 <= xc < x1) or (x1 <= xc < x0):
                 ys.append(y0 + (xc - x0) / (x1 - x0) * (y1 - y0))
         ys.sort()
-        return ys
+        return list(zip(ys[0::2], ys[1::2]))
+    lo, hi = min(p[0] for p in r2), max(p[0] for p in r2)
+    pitch = (hi - lo) / n
+    sw = pitch * fill
+    stripes = []
     for i in range(n):
         c = lo + (i + 0.5) * pitch
-        ys = cross(c)
-        eL, eR = cross(c - sw / 2), cross(c + sw / 2)   # where the stripe's two edges cross the outline
+        # intervals on each sample line across the stripe, tagged with whether they come from the center line
+        ivs = []
+        for k in range(samples):
+            xc = c - sw / 2 + sw * (k + 0.5) / samples
+            for a, b in cross(xc):
+                ivs.append([a, b, k == samples // 2, {k}])
+        # merge overlapping intervals into pieces
+        ivs.sort()
+        pieces = []
+        for a, b, mid, ks in ivs:
+            if pieces and a <= pieces[-1][1]:
+                pieces[-1][1] = max(pieces[-1][1], b); pieces[-1][2] = pieces[-1][2] or mid; pieces[-1][3] |= ks
+            else:
+                pieces.append([a, b, mid, set(ks)])
         segs = []
-        for a, b in zip(ys[0::2], ys[1::2]):
-            if b - a < sw * chip:
+        for a, b, mid, ks in pieces:
+            # drop a sliver along the coast (the center line misses it), a piece narrower than most of the stripe (fewer than
+            # 70 percent of the sample lines cross it: a peninsula thinner than a stripe), or a speck shorter than `speck` widths
+            if not mid or len(ks) < math.ceil(samples * 0.7) or b - a < sw * speck:
                 continue
-            # a piece narrower than the stripe (neither edge line crosses near it) is a sliver along the coast: drop it
-            inL = [y for y in eL if a - sw <= y <= b + sw]; inR = [y for y in eR if a - sw <= y <= b + sw]
-            if (not inL or not inR) and b - a < sw * 3:
-                continue
-            # at each end: if the outline runs nearly along the stripe, the clipped end would be a long thin wedge; cut it square instead
-            def end(v, sign):
-                near = [abs(y - v) for y in eL + eR if (y - v) * sign >= -sw * 0.5]
-                wedge = min(near) if near else 0
-                return v + sign * sw * 0.05 if wedge > sw * 1.5 else v - sign * sw
-            p0, p1 = back(c, end(a, 1)), back(c, end(b, -1))
+            p0, p1 = back(c, a - sw * 0.1), back(c, b + sw * 0.1)
             segs.append((round(p0[0], 2), round(p0[1], 2), round(p1[0], 2), round(p1[1], 2)))
         stripes.append(segs)
     return ring, stripes, sw, maxx - minx
@@ -129,7 +138,7 @@ def build():
     for k, v in files.items():
         write(os.path.join(OUT, k + ".svg"), v)
     # the hero mural: the state at 720, centered in a 720 square, white stripes, the accent in marigold, as lines for the draw-in
-    ring, stripes, sw, w = segments(720, (720 - 720 * maine2.ASPECT) / 2, 0, tol=0.004, chip=2.0)
+    ring, stripes, sw, w = segments(720, (720 - 720 * maine2.ASPECT) / 2, 0, tol=0.0015)
     lines = []
     for i, segs in enumerate(stripes):
         for x0, y0, x1, y1 in segs:
