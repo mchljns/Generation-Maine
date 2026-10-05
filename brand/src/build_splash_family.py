@@ -17,6 +17,7 @@ import json
 LOGO_A = os.path.join(S.ROOT, "brand", "identity", "logo-maine", "family-a")
 LOGO_B = os.path.join(S.ROOT, "brand", "identity", "logo-maine", "family-b")
 MURAL_A = json.load(open(os.path.join(LOGO_A, "mural.json")))
+MURAL_A["stagger"] = 90   # ms between lines; the hero draws over about three seconds, like the footer
 
 NAVY_A, BLUE_A, MG = "#0F2E4D", "#0556A5", "#EFB443"
 NAVY_B, BLUE_B = "#112337", "#006CB5"
@@ -28,13 +29,13 @@ COLS = [("What it is", "Young Mainers film the rules that shape their lives. Lea
 # The audit (brand/07-family-ui-audit.md), applied. Keyed on the .static root class so the two original concepts are untouched.
 STATIC_CSS = """
 /* header: a plain sticky bar. No capsule morph, no hide on scroll, no progress bar, no nav dot. */
-.static .top.scrolled .w{height:60px;max-width:1280px;margin:0 auto;padding-inline:var(--M);background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;border-radius:0}
+.static .top .w{height:68px}.static .top nav{gap:30px}.static .top.scrolled .w{height:68px;max-width:1280px;margin:0 auto;padding-inline:var(--M);background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;border-radius:0}
 .static .top.scrolled{background:var(--pine);color:#fff}
 .static .top.scrolled .lk{height:24px}.static .top.scrolled .lk.light{display:block}.static .top.scrolled .lk.dark{display:none}
 .static .top.scrolled nav{gap:30px}.static .top.scrolled nav a{padding:12px 0;font-size:13px;background:none;color:inherit}
 .static .top.scrolled nav a.on{background:none;color:inherit;text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1.5px}
 .static .top nav a::before{display:none}.static .top.scrolled nav a::before{display:none}
-.static .top.scrolled .cta{padding:12px 16px;font-size:13px}
+.static .top .cta,.static .top.scrolled .cta{padding:12px 16px;font-size:13px}.static .top.scrolled .w>a:first-child{padding-left:0}.static .top .menu,.static .top.scrolled .menu{margin-right:-10px}
 .static .top.hide{transform:none}.static .prog{display:none}
 .static .top.scrolled .w{box-shadow:0 1px 0 rgba(255,255,255,.12)}
 /* corners: zero everywhere */
@@ -111,7 +112,7 @@ h2,h3{letter-spacing:-.01em}
 .h2{font-size:clamp(34px,4vw,52px)}
 .signup .btn{background:%(mg)s;color:%(navy)s}
 /* the mural and the footer draw come back for Family A, with the slanted state */
-.static .mural{display:block}.static .mural path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .9s cubic-bezier(.2,.7,.2,1)}.static .mural.on path{stroke-dashoffset:0}
+.static .mural{display:block}.static .mural path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.9s cubic-bezier(.3,.6,.2,1)}.static .mural.on path{stroke-dashoffset:0}
 .static.js .site .lk path[stroke]{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .8s cubic-bezier(.2,.7,.2,1)}.static.js .site.on .lk path[stroke]{stroke-dashoffset:0}
 .static .site .lk path:not([stroke]){stroke-dasharray:none}
 @media (prefers-reduced-motion: reduce){.static .mural path,.static.js .site .lk path[stroke]{stroke-dashoffset:0;transition:none}}
@@ -149,7 +150,7 @@ FAMILY_B_CSS = """
 .bs.static .site .flinks a{font-family:var(--body);font-weight:500}
 .bs.static .site a{color:#fff}.bs.static .site .flegal a{color:rgba(244,243,238,.75)}.bs.static .site .fsocial a:hover,.bs.static .site .flinks a:hover{color:#EFB443}
 .bs.static .top .lk{height:26px;width:auto}.bs.static .top.scrolled .lk{height:26px}
-@media (max-width:900px){.bs.static .top .lk{height:24px}}
+@media (max-width:900px){.bs.static .top .lk,.bs.static .top.scrolled .lk{height:24px}}
 .bs.static .site .lk{height:150px}@media (max-width:900px){.bs.static .site .lk{height:120px}}
 /* footer: the frame draws itself. The long leg first, from the open end up and around; then the return from the corner back toward the opening; then the two words rise in. Hidden states do not depend on .js, or they would transition in at load; without script everything shows at once */
 .bs.static .site .lk path[stroke]{stroke-dasharray:1;stroke-dashoffset:1}.bs.static .site .lk path[stroke]:nth-of-type(2){stroke-dashoffset:-1}

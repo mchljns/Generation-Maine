@@ -369,13 +369,13 @@ body.scrub{transition:none}
 @media (max-width:640px){.bs .site .w{grid-template-columns:1fr;gap:22px}.bs .site .lk{height:28px}}
 
 /* header: a plain sticky bar. No capsule morph, no hide on scroll, no progress bar, no nav dot. */
-.static.bs .top.scrolled .w{height:60px;max-width:1280px;margin:0 auto;padding-inline:var(--M);background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;border-radius:0}
+.static.bs .top .w{height:68px}.static.bs .top nav{gap:30px}.static.bs .top.scrolled .w{height:68px;max-width:1280px;margin:0 auto;padding-inline:var(--M);background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;border-radius:0}
 .static.bs .top.scrolled{background:var(--pine);color:#fff}
 .static.bs .top.scrolled .lk{height:24px}.static.bs .top.scrolled .lk.light{display:block}.static.bs .top.scrolled .lk.dark{display:none}
 .static.bs .top.scrolled nav{gap:30px}.static.bs .top.scrolled nav a{padding:12px 0;font-size:13px;background:none;color:inherit}
 .static.bs .top.scrolled nav a.on{background:none;color:inherit;text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1.5px}
 .static.bs .top nav a::before{display:none}.static.bs .top.scrolled nav a::before{display:none}
-.static.bs .top.scrolled .cta{padding:12px 16px;font-size:13px}
+.static.bs .top .cta,.static.bs .top.scrolled .cta{padding:12px 16px;font-size:13px}.static.bs .top.scrolled .w>a:first-child{padding-left:0}.static.bs .top .menu,.static.bs .top.scrolled .menu{margin-right:-10px}
 .static.bs .top.hide{transform:none}.static.bs .prog{display:none}
 .static.bs .top.scrolled .w{box-shadow:0 1px 0 rgba(255,255,255,.12)}
 /* corners: zero everywhere */
@@ -449,7 +449,7 @@ body.scrub{transition:none}
 .bs.static .site .flinks a{font-family:var(--body);font-weight:500}
 .bs.static .site a{color:#fff}.bs.static .site .flegal a{color:rgba(244,243,238,.75)}.bs.static .site .fsocial a:hover,.bs.static .site .flinks a:hover{color:#EFB443}
 .bs.static .top .lk{height:26px;width:auto}.bs.static .top.scrolled .lk{height:26px}
-@media (max-width:900px){.bs.static .top .lk{height:24px}}
+@media (max-width:900px){.bs.static .top .lk,.bs.static .top.scrolled .lk{height:24px}}
 .bs.static .site .lk{height:150px}@media (max-width:900px){.bs.static .site .lk{height:120px}}
 /* footer: the frame draws itself. The long leg first, from the open end up and around; then the return from the corner back toward the opening; then the two words rise in. Hidden states do not depend on .js, or they would transition in at load; without script everything shows at once */
 .bs.static .site .lk path[stroke]{stroke-dasharray:1;stroke-dashoffset:1}.bs.static .site .lk path[stroke]:nth-of-type(2){stroke-dashoffset:-1}
@@ -535,7 +535,7 @@ body.scrub{transition:none}
   const d = JSON.parse(document.getElementById('maine-data').textContent), ns = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 720 720');
   if (d.lines) { const defs = document.createElementNS(ns, 'defs'), cp = document.createElementNS(ns, 'clipPath'); cp.setAttribute('id', 'muralclip'); const cpp = document.createElementNS(ns, 'path'); cpp.setAttribute('d', d.clip); cp.appendChild(cpp); defs.appendChild(cp); svg.appendChild(defs); const g = document.createElementNS(ns, 'g'); g.setAttribute('clip-path', 'url(#muralclip)'); svg.appendChild(g);
-    d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || BI); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 35) + 'ms'; g.appendChild(p); }); }
+    d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || BI); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * (d.stagger || 35)) + 'ms'; g.appendChild(p); }); }
   (d.rows || []).forEach((row, i) => row.runs.forEach(([a, b]) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + a + ' ' + row.y + ' L' + b + ' ' + row.y); p.setAttribute('stroke', BI); p.setAttribute('stroke-width', row.w); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 45) + 'ms'; svg.appendChild(p); }));
   const m = document.getElementById('mural'); if (m) { m.appendChild(svg); new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m); }
 

@@ -130,3 +130,7 @@ Proposed structure, same for both pages:
 ### Footer audit, applied
 
 Both family pages now carry the proposed footer, built in `family_footer()` in `brand/src/build_splash_family.py` and passed to the template as `footer_html`. Row one: the mark, the sentence, the page links (About, Creators, Follow, Newsletter) and the social row in the follow section's icons. Row two: "A project of Maine Policy Institute" linked, and the partner row linking The Maine Wire, Maine Civic Action and Maine Education Initiative. Row three: the copyright with the year set by script, Privacy and Contact, and on Family B a one line Photo credits toggle that opens the full list. On a phone the partners stack. Social and legal links are placeholders until the accounts and pages exist. Bark & Sky's link color rule now excludes the footer so the links stay white on navy. Capture: `brand/identity/logo-maine/family-b/footer-built.png`.
+
+### Bar and hero draw, corrected
+
+The bar shifted on scroll on both family pages: the static layer still set a 60 px scrolled height against 68 px at rest, the logo took a 12 px pad once scrolled, the button changed size on Family A, and on a phone the menu button moved and the Family B mark changed height. All of it was left over from the capsule bar. Every measurement of the bar is now identical before and after scroll at 1400 and 390 wide. The Family A hero mural drew in about 1.4 seconds; it now draws over about three, the same pace as the footer.
