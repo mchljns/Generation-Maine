@@ -48,7 +48,7 @@ STATIC_CSS = """
 .static .reveal .row-in{transition-duration:.5s}
 .static body,.static .about{transition:none}
 /* footer: no ping, no draw */
-.static .site.on .lk .ping{animation:none}.static .site .lk .ping{display:none}.static.bs .site .lk path{stroke-dashoffset:0!important;transition:none}
+.static .site.on .lk .ping{animation:none}.static .site .lk .ping{display:none}
 /* the dot stays on the hero only */
 .static .h2 .d{display:none}
 /* the sign up band under the hero: full width navy, one field, one button, like the parents */
@@ -125,6 +125,16 @@ FAMILY_B_CSS = """
 .bs.static .top .lk{height:26px;width:auto}.bs.static .top.scrolled .lk{height:26px}
 @media (max-width:900px){.bs.static .top .lk{height:24px}}
 .bs.static .site .lk{height:150px}@media (max-width:900px){.bs.static .site .lk{height:120px}}
+/* footer: the frame draws itself. The long leg first, from the open end up and around; then the return from the corner back toward the opening; then the two words rise in. Hidden states do not depend on .js, or they would transition in at load; without script everything shows at once */
+.bs.static .site .lk path[stroke]{stroke-dasharray:1;stroke-dashoffset:1}.bs.static .site .lk path[stroke]:nth-of-type(2){stroke-dashoffset:-1}
+.bs.static .site .lk g path{opacity:0;transform-box:fill-box;transform:translateY(5%%)}
+.bs.static:not(.js) .site .lk path[stroke],.bs.static .site.on .lk path[stroke]{stroke-dashoffset:0}
+.bs.static:not(.js) .site .lk g path,.bs.static .site.on .lk g path{opacity:1;transform:none}
+.bs.static.js .site .lk path[stroke]:nth-of-type(1){transition:stroke-dashoffset 1.1s cubic-bezier(.3,.6,.2,1) 0s!important}
+.bs.static.js .site .lk path[stroke]:nth-of-type(2){transition:stroke-dashoffset .5s cubic-bezier(.3,.6,.2,1) 1s!important}
+.bs.static.js .site .lk g path{transition:opacity .6s ease-out,transform .7s cubic-bezier(.2,.7,.2,1)}
+.bs.static.js .site .lk g path:nth-of-type(1){transition-delay:.85s!important}.bs.static.js .site .lk g path:nth-of-type(2){transition-delay:1.05s!important}
+@media (prefers-reduced-motion: reduce){.bs.static .site .lk path[stroke]{stroke-dashoffset:0!important;transition:none!important}.bs.static .site .lk g path{opacity:1;transform:none;transition:none!important}}
 """ % dict(blue=BLUE_B, navy=NAVY_B, mg=MG)
 
 FAMILY_A = dict(S.SIGNATURE, css=STATIC_CSS + FAMILY_A_CSS, root_class="static", signup_band=SIGNUP,

@@ -570,7 +570,7 @@ def page(theme=SIGNATURE, out=None, media=None):
     artifact = head + body
     if theme["root_class"]:
         artifact = '<div class="%s">%s</div>' % (theme["root_class"], artifact)
-    standalone = '<!doctype html><html lang="en" class="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">%s</head><body>%s</body></html>' % (theme["root_class"], head, body)
+    standalone = '<!doctype html><html lang="en" class="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>document.documentElement.classList.add("js")</script>%s</head><body>%s</body></html>' % (theme["root_class"], head, body)
     write(out + "/index.html", standalone)
     write(out + "/artifact.html", artifact)
     return standalone, artifact
