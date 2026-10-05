@@ -34,7 +34,7 @@ CSS = r"""
 }
 /* the white page is bone, and the blue that was a link's only hint becomes the link color */
 .bs body,body.bs{background:var(--paper)}
-.bs a:not(.btn):not(.tl):not(.cta):not(.post):not(.soc a):not(.follow a):not(nav a):not(.lk):not(.top .w>a){color:var(--blue)}
+.bs a:not(.btn):not(.tl):not(.cta):not(.post):not(.soc a):not(.follow a):not(nav a):not(.lk):not(.top .w>a):not(.site a){color:var(--blue)}
 /* one weight each, set on every element the template makes heavy, so nothing is synthesized bold. Emphasis in reading text becomes the serif. */
 .bs h1,.bs h2,.bs h3,.bs .k,.bs .btn,.bs .tl,.bs .top .cta,.bs .top nav,.bs .where,.bs .soc a,.bs .follow a b,.bs .post .by,.bs .post .dt,.bs .form .ok,.bs .form .err,.bs .form button,
 .bs .about .cols h3,.bs .words blockquote p,.bs .words blockquote footer,.bs .sheet nav a,.bs .sheet .foot a,.bs .who span b,.bs .vid .dur,.bs .site p,.bs b,.bs strong{font-weight:400}

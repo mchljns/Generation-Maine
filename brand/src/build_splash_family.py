@@ -49,6 +49,30 @@ STATIC_CSS = """
 .static body,.static .about{transition:none}
 /* footer: no ping, no draw */
 .static .site.on .lk .ping{animation:none}.static .site .lk .ping{display:none}
+/* footer: three rows. The mark and the sentence with the page links and the social row; the parent and the partners; the fine print */
+.static .site{padding-block:56px 28px}
+.static .site .fw{display:grid;grid-template-columns:auto 1fr;gap:44px;align-items:start}
+.static .site .fbody{display:grid;gap:18px;max-width:640px}
+.static .site .lede{font-size:15px;line-height:1.5;color:#fff;margin:0;max-width:52ch}
+.static .site .flinks{display:flex;flex-wrap:wrap;gap:4px 22px}
+.static .site .flinks a{color:#fff;text-decoration:none;font-weight:600;font-size:13px;line-height:1;letter-spacing:.1em;text-transform:uppercase;padding:6px 0}
+.static .site .flinks a:hover{color:#EFB443}
+.static .site .fsocial{display:flex;flex-wrap:wrap;gap:6px 18px}
+.static .site .fsocial a{display:inline-flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-size:13.5px;padding:4px 0}
+.static .site .fsocial .ic{width:18px;height:18px;flex:none;color:#EFB443}
+.static .site .fsocial a:hover{color:#EFB443}
+.static .site .fpartners{margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,255,255,.18);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 32px}
+.static .site .fpartners p{margin:0;font-size:13.5px;color:rgba(255,255,255,.82)}
+.static .site .fpartners a{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px}
+.static .site .fpartners a:hover{text-decoration-color:#EFB443}
+.static .site .plist span{margin-right:14px;color:rgba(255,255,255,.6);white-space:nowrap}.static .site .plist a{margin-right:18px;white-space:nowrap}.static .site .plist a:last-child{margin-right:0}
+.static .site .ffine{margin-top:16px;display:grid;grid-template-columns:1fr auto;gap:8px 32px;align-items:baseline}
+.static .site .ffine p{margin:0;font-size:12.5px;color:rgba(255,255,255,.6)}
+.static .site .flegal{display:flex;flex-wrap:wrap;gap:4px 18px;align-items:baseline}.static .site .flegal a{color:rgba(255,255,255,.75);text-decoration:none}.static .site .flegal a:hover{color:#fff}
+.static .site .credits{grid-column:1/-1;font-size:12.5px;color:rgba(255,255,255,.75)}.static .site .credits summary{cursor:pointer;list-style:none;display:inline}.static .site .credits summary::-webkit-details-marker{display:none}
+.static .site .credits summary::after{content:" +";color:#EFB443}.static .site .credits[open] summary::after{content:" −"}
+.static .site .credits p{margin:8px 0 0;font-size:12.5px;line-height:1.5;color:rgba(255,255,255,.6);max-width:80ch}
+@media (max-width:900px){.static .site .fw{grid-template-columns:1fr;gap:28px}.static .site .fpartners{flex-direction:column;gap:10px;align-items:flex-start;text-align:left}.static .site .ffine{text-align:left}.static .site .fw{text-align:left}.static .site .ffine{grid-template-columns:1fr;gap:10px}.static .site .plist span{display:block;margin:0 0 6px}.static .site .plist a{display:block;margin:0 0 8px;white-space:normal}}
 /* the dot stays on the hero only */
 .static .h2 .d{display:none}
 /* the sign up band under the hero: full width navy, one field, one button, like the parents */
@@ -64,7 +88,7 @@ STATIC_CSS = """
 .static .stories-head,.static .stories{background:#fff}
 """
 
-SIGNUP = ('<section class="signup" aria-label="Newsletter sign up"><div class="w"><b>Get the newsletter</b>'
+SIGNUP = ('<section class="signup" id="signup" aria-label="Newsletter sign up"><div class="w"><b>Get the newsletter</b>'
           '<input type="email" placeholder="you@example.com" aria-label="Email" autocomplete="email">'
           '<a class="btn b1" href="https://CONFIRM-publication.substack.com/subscribe" target="_blank" rel="noopener">Sign up</a>'
           '<p class="note">Runs on Substack. Unsubscribe in one click. [CONFIRM: publication address]</p></div></section>')
@@ -122,6 +146,8 @@ FAMILY_B_CSS = """
 .bs .strip img,.bs .ph img{border-radius:0}
 .bs .hero h1{font-size:clamp(42px,6vw,84px)}
 /* the framed wordmark needs height: a taller bar, and room in the footer */
+.bs.static .site .flinks a{font-family:var(--body);font-weight:500}
+.bs.static .site a{color:#fff}.bs.static .site .flegal a{color:rgba(244,243,238,.75)}.bs.static .site .fsocial a:hover,.bs.static .site .flinks a:hover{color:#EFB443}
 .bs.static .top .lk{height:26px;width:auto}.bs.static .top.scrolled .lk{height:26px}
 @media (max-width:900px){.bs.static .top .lk{height:24px}}
 .bs.static .site .lk{height:150px}@media (max-width:900px){.bs.static .site .lk{height:120px}}
@@ -137,12 +163,35 @@ FAMILY_B_CSS = """
 @media (prefers-reduced-motion: reduce){.bs.static .site .lk path[stroke]{stroke-dashoffset:0!important;transition:none!important}.bs.static .site .lk g path{opacity:1;transform:none;transition:none!important}}
 """ % dict(blue=BLUE_B, navy=NAVY_B, mg=MG)
 
-FAMILY_A = dict(S.SIGNATURE, css=STATIC_CSS + FAMILY_A_CSS, root_class="static", signup_band=SIGNUP, footer_at_bottom=True,
+
+PARTNERS = (("Maine Policy Institute", "https://mainepolicy.org/"), ("The Maine Wire", "https://themainewire.com/"),
+            ("Maine Civic Action", "https://mainecivicaction.org/"), ("Maine Education Initiative", "https://www.fixmaineschools.com/"))
+
+
+def family_footer(mark, theme):
+    """The family footer: the mark and the sentence, the page links and the social row; the parent and partner row; the fine print."""
+    ic = S.icon
+    social = "".join('<a href="#" aria-label="%s">%s<span>%s</span></a>' % (n, ic(k), n) for k, n in (("instagram", "Instagram"), ("tiktok", "TikTok"), ("youtube", "YouTube"), ("substack", "Substack")))
+    partners = "".join('<a href="%s" rel="noopener">%s</a>' % (u, n) for n, u in PARTNERS[1:])
+    credits = ('<details class="credits"><summary>Photo credits</summary><p>%s</p></details>' % theme["credits"]) if theme.get("credits") else ""
+    return ('<div class="w fw">'
+            '<div class="fmark">%s</div>'
+            '<div class="fbody"><p class="lede">Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.</p>'
+            '<nav class="flinks" aria-label="Footer"><a href="#about">About</a><a href="#creators">Creators</a><a href="#follow">Follow</a><a href="#signup">Newsletter</a></nav>'
+            '<div class="fsocial">%s</div></div>'
+            '</div>'
+            '<div class="w fpartners"><p>A project of <a href="%s" rel="noopener">Maine Policy Institute</a></p><p class="plist"><span>Also in the family</span>%s</p></div>'
+            '<div class="w ffine"><p>&copy; <span class="yr">2026</span> Generation Maine. [CONFIRM: legal name, address and contact]</p>'
+            '<p class="flegal"><a href="#">Privacy</a><a href="#">Contact</a></p>%s</div>'
+            '<script>document.querySelectorAll(".yr").forEach(function(e){e.textContent=new Date().getFullYear()})</script>'
+            % (mark, social, PARTNERS[0][1], partners, credits))
+
+FAMILY_A = dict(S.SIGNATURE, css=STATIC_CSS + FAMILY_A_CSS, root_class="static", signup_band=SIGNUP, footer_at_bottom=True, footer_html=family_footer,
                 logo=LOGO_A, nav_light="lockup-compact-reversed", nav_dark="lockup-compact-reversed", footer="lockup-two-line-reversed", mural_data=MURAL_A, title="Generation Maine", out="brand/identity/splash-family-a", media="",
                 lean=True, hero_kicker="A Maine Policy Institute project", h2about="What this is", cols=COLS, footer_line=CREDIT, bg_follow="#EAF1F8", footer_ping=False)
 
 B_CSS = B.CSS.replace("{media}", "") + STATIC_CSS.replace(".static", ".static.bs").replace(".static.bs.js", ".static.bs.js") + FAMILY_B_CSS
-FAMILY_B = dict(B.BARK_SKY, css=B_CSS, title="Generation Maine", out="brand/identity/splash-family-b", media="", root_class="bs static", signup_band=SIGNUP, footer_at_bottom=True,
+FAMILY_B = dict(B.BARK_SKY, css=B_CSS, title="Generation Maine", out="brand/identity/splash-family-b", media="", root_class="bs static", signup_band=SIGNUP, footer_at_bottom=True, footer_html=family_footer,
                 logo=LOGO_B, nav_light="lockup-compact-reversed", nav_dark="lockup-compact-reversed", nav_rest="lockup-compact-reversed", footer="lockup-two-line-reversed",
                 lean=True, hero_kicker="A Maine Policy Institute project", h2about="what this is", cols=COLS, footer_line=CREDIT, bg_follow="#EAF1F8",
                 about_media="", band="", post_thumbs=["", "", ""], quote_stills=["", "", ""])

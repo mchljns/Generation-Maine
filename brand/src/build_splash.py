@@ -449,7 +449,7 @@ def page(theme=SIGNATURE, out=None, media=None):
   </div>
 </div></section>
 
-<footer class="site"><div class="w">%(two)s<div><p>Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.</p><p class="fine">%(footer_line)s</p>%(credits)s</div></div></footer>
+<footer class="site">%(footer_inner)s</footer>
 
 <script id="maine-data" type="application/json">%(json)s</script>
 <script>
@@ -550,6 +550,11 @@ def page(theme=SIGNATURE, out=None, media=None):
         head_extra=theme.get("head_extra", "").replace("{media}", media),
         hero_media=theme.get("hero_media", '<div class="mural" id="mural" aria-hidden="true"></div>').replace("{media}", media),
         credits=('<p class="fine credits">%s</p>' % theme["credits"]) if theme.get("credits") else "",
+        footer_inner=theme["footer_html"](draw_paths(logo(theme["footer"], "lk", theme["logo"])), theme) if theme.get("footer_html") else
+            '<div class="w">%s<div><p>Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.</p><p class="fine">%s</p>%s</div></div>' % (
+                (ping_dot if theme["footer_ping"] else (lambda t: t))(draw_paths(logo(theme["footer"], "lk", theme["logo"]))),
+                theme.get("footer_line", "© 2026 Generation Maine. An initiative of Maine Policy Institute. [CONFIRM: legal name, address and contact]"),
+                ('<p class="fine credits">%s</p>' % theme["credits"]) if theme.get("credits") else ""),
         signup_band=theme.get("signup_band", ""),
         about_media=theme.get("about_media", "").replace("{media}", media),
         band=theme.get("band", "").replace("{media}", media),

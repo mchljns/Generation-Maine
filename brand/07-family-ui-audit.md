@@ -126,3 +126,7 @@ Proposed structure, same for both pages:
 - Row one: the mark. Beside it the one sentence, then the page links (About, Creators, Follow, Newsletter), then the social row (Instagram, TikTok, YouTube, Substack) in the same icon set as the follow section.
 - Row two: "A project of Maine Policy Institute" linked, then the partner row: The Maine Wire, Maine Civic Action, Maine Education Initiative, each linked.
 - Row three, fine print: copyright with the year set by script, Privacy, Contact, and Photo credits as one line that opens the full list.
+
+### Footer audit, applied
+
+Both family pages now carry the proposed footer, built in `family_footer()` in `brand/src/build_splash_family.py` and passed to the template as `footer_html`. Row one: the mark, the sentence, the page links (About, Creators, Follow, Newsletter) and the social row in the follow section's icons. Row two: "A project of Maine Policy Institute" linked, and the partner row linking The Maine Wire, Maine Civic Action and Maine Education Initiative. Row three: the copyright with the year set by script, Privacy and Contact, and on Family B a one line Photo credits toggle that opens the full list. On a phone the partners stack. Social and legal links are placeholders until the accounts and pages exist. Bark & Sky's link color rule now excludes the footer so the links stay white on navy. Capture: `brand/identity/logo-maine/family-b/footer-built.png`.
