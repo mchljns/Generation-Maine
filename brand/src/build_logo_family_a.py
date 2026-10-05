@@ -21,7 +21,7 @@ NAVY, BLUE, MG, WHITE, PAPER = "#0F2E4D", "#0556A5", "#EFB443", "#FFFFFF", "#F4F
 ANGLE, N, FILL, ACCENT_AT = 62, 16, 0.62, 10
 
 
-def segments(h, x=0, y=0, angle=ANGLE, n=N, fill=FILL, tol=0.01, chip=0.3):
+def segments(h, x=0, y=0, angle=ANGLE, n=N, fill=FILL, tol=0.01, chip=2.0):
     """Sixteen stripes as line segments crossing the state, in page coordinates. Returns (ring, [(x0,y0,x1,y1), ...] per stripe, stroke width, state width)."""
     ring = simplified(maine2.fit(x, y, h * maine2.ASPECT, h), h * tol)
     minx, miny, maxx, maxy = maine2.bbox(ring)
@@ -36,21 +36,33 @@ def segments(h, x=0, y=0, angle=ANGLE, n=N, fill=FILL, tol=0.01, chip=0.3):
     pitch = (hi - lo) / n
     sw = pitch * fill
     stripes = []
-    for i in range(n):
-        c = lo + (i + 0.5) * pitch
-        # crossings of the vertical line x=c with the rotated polygon
+    m = len(r2)
+    def cross(xc):
         ys = []
-        m = len(r2)
         for k in range(m):
             (x0, y0), (x1, y1) = r2[k], r2[(k + 1) % m]
-            if (x0 <= c < x1) or (x1 <= c < x0):
-                ys.append(y0 + (c - x0) / (x1 - x0) * (y1 - y0))
+            if (x0 <= xc < x1) or (x1 <= xc < x0):
+                ys.append(y0 + (xc - x0) / (x1 - x0) * (y1 - y0))
         ys.sort()
+        return ys
+    for i in range(n):
+        c = lo + (i + 0.5) * pitch
+        ys = cross(c)
+        eL, eR = cross(c - sw / 2), cross(c + sw / 2)   # where the stripe's two edges cross the outline
         segs = []
         for a, b in zip(ys[0::2], ys[1::2]):
             if b - a < sw * chip:
                 continue
-            p0, p1 = back(c, a - sw), back(c, b + sw)  # overshoot; the clip trims to the outline
+            # a piece narrower than the stripe (neither edge line crosses near it) is a sliver along the coast: drop it
+            inL = [y for y in eL if a - sw <= y <= b + sw]; inR = [y for y in eR if a - sw <= y <= b + sw]
+            if (not inL or not inR) and b - a < sw * 3:
+                continue
+            # at each end: if the outline runs nearly along the stripe, the clipped end would be a long thin wedge; cut it square instead
+            def end(v, sign):
+                near = [abs(y - v) for y in eL + eR if (y - v) * sign >= -sw * 0.5]
+                wedge = min(near) if near else 0
+                return v + sign * sw * 0.05 if wedge > sw * 1.5 else v - sign * sw
+            p0, p1 = back(c, end(a, 1)), back(c, end(b, -1))
             segs.append((round(p0[0], 2), round(p0[1], 2), round(p1[0], 2), round(p1[1], 2)))
         stripes.append(segs)
     return ring, stripes, sw, maxx - minx
@@ -117,7 +129,7 @@ def build():
     for k, v in files.items():
         write(os.path.join(OUT, k + ".svg"), v)
     # the hero mural: the state at 720, centered in a 720 square, white stripes, the accent in marigold, as lines for the draw-in
-    ring, stripes, sw, w = segments(720, (720 - 720 * maine2.ASPECT) / 2, 0, tol=0.004, chip=0.8)
+    ring, stripes, sw, w = segments(720, (720 - 720 * maine2.ASPECT) / 2, 0, tol=0.004, chip=2.0)
     lines = []
     for i, segs in enumerate(stripes):
         for x0, y0, x1, y1 in segs:
