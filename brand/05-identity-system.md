@@ -657,3 +657,11 @@ The creators section is the pinned clip stepper from the first preview, carried 
 ### Copy with a job
 
 Every line on the lean page now does one thing. Hero: what it is. About: what we hope to achieve, as the statement, with how it works as three one line facts. Creators: the clips, and one line that sets expectations. Where to find it: the four places, as a list with the handles, then the form. The descriptions under each feed are gone; they promised cadence and plans nobody has agreed. Substack sits in the list with the other three, and the form stands under it.
+
+### The about section, rebuilt on what the research says
+
+Read before rebuilding: nonprofit site guidance on mission content, layout pattern surveys, and the usability literature on text over images and column count. Three findings held across sources. A mission statement works short, 25 words or under, specific, and placed where visitors expect it. It should sit beside an authentic photograph rather than over one; text over a picture needs heavy contrast work and distracts from content people read closely. Supporting points read best in one column; multi column text costs comprehension.
+
+Built: a split layout. The photograph on the left, a 3 by 4 crop of Lisbon Street in Lewiston, the same on both concepts so the comparison stays about type and color. On the right, in one column: the label, the aim as the statement in display type, then the three facts of how it works as a ruled list. Concept A now carries a photograph; the no photography rule for that concept gave way to the client's wish for the family look, which runs on photography. The nine towns panel is retired.
+
+Sources: Loop, nonprofit website best practices; Wired Impact, effective nonprofit mission pages; Donorbox on mission statement length; Nielsen Norman Group on text over images; SitePoint on split layouts; the eye tracking study of single, two and three column reading.

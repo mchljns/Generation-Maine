@@ -30,7 +30,7 @@ SITE_CSS = lambda css: "\n".join(l for l in css.splitlines() if ".site" in l)
 
 LEAN_A = dict(
     key="lean-a", out="brand/identity/splash-lean-a", root_class="static lean", navy="#0F2E4D", blue="#0556A5", ink="#0F2E4D", paper="#FFFFFF", tint="#EAF1F8",
-    fonts=S.SIGNATURE_FONTS, font_files={}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="",
+    fonts=S.SIGNATURE_FONTS, font_files={}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="Photograph via Wikimedia Commons: David Wilson, Lisbon Street, Lewiston (CC BY 2.0).",
     display="'Bricolage Grotesque',system-ui,sans-serif", body="'DM Sans',system-ui,sans-serif", label="'DM Sans',system-ui,sans-serif",
     h1="Young Mainers<br>on building<br>a life <em>here.</em>", h2_about="What this is", h2_creators="The creators", h2_follow="Where to find it",
     site_css=SITE_CSS(F.STATIC_CSS) + "\n" + SITE_CSS(F.FAMILY_A_CSS % dict(blue="#0556A5", navy="#0F2E4D", mg=MG)),
@@ -148,19 +148,19 @@ section.block{padding-block:112px}
 .block .head .lede{max-width:56ch}
 .about{background:var(--paper)}
 .about .body{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:stretch}
-.about .media{display:grid;grid-template-rows:1fr auto;gap:10px;min-height:360px}
-.about .media .ph{position:relative;overflow:hidden;background:var(--tint);min-height:360px}
+.about .media{display:grid;grid-template-rows:auto auto;gap:10px}
+.about .media .ph{position:relative;overflow:hidden;background:var(--tint);aspect-ratio:3/4}
 .about .media .ph img{position:absolute;inset:0;width:100%%;height:100%%;object-fit:cover;display:block}
 .about .media .cap{margin:0;font-size:13px;color:rgba(15,46,77,.7)}
 .about .towns{background:var(--navy);color:#fff;padding:32px 28px;display:grid;align-content:start;gap:22px}
 .about .towns .k{color:var(--mg)}
 .about .towns ul{list-style:none;margin:0;padding:0;columns:2;column-gap:24px}
 .about .towns li{font-family:var(--display);font-size:clamp(22px,2vw,28px);line-height:1.25;break-inside:avoid;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.14)}
-.about .body{align-items:center}
+.about .body{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:center}
 .about .aim .k{display:block;color:var(--blue);margin-bottom:20px}
-.about .aim .big{font-family:var(--display);font-size:clamp(26px,2.7vw,38px);line-height:1.2;margin:0;max-width:22ch}
-.about .how{margin-top:64px;padding-top:28px;border-top:1px solid var(--navy);display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
-.about .how div{display:grid;grid-template-columns:40px 1fr;gap:0 12px;align-items:baseline}
+.about .aim .big{font-family:var(--display);font-size:clamp(28px,3vw,42px);line-height:1.18;margin:0;max-width:20ch}
+.about .how{margin-top:40px;border-top:1px solid var(--navy);display:grid;max-width:60ch}
+.about .how div{display:grid;grid-template-columns:40px 1fr;gap:0 12px;align-items:baseline;padding:16px 0;border-bottom:1px solid rgba(15,46,77,.18)}
 .about .how .n{font:600 13px/1 var(--label);letter-spacing:.1em;color:var(--blue)}
 .about .how p{margin:0;font-size:17px;line-height:1.5}
 /* the cast: nine faces, the name under each, the town and the handle */
@@ -210,7 +210,7 @@ a.row:hover .name{color:var(--mg)}
  section.block{padding-block:56px}
  .block .head{grid-template-columns:1fr;gap:16px;margin-bottom:32px}
  .about .cols{grid-template-columns:1fr;gap:28px}
- .about .body{grid-template-columns:1fr;gap:28px}.about .media{min-height:0}.about .media .ph{min-height:0;aspect-ratio:4/3}.about .how{grid-template-columns:1fr;gap:20px;margin-top:40px}
+ .about .body{grid-template-columns:1fr;gap:28px}.about .media .ph{aspect-ratio:4/3}.about .how{margin-top:32px}
  .follow .row{grid-template-columns:36px 1fr;gap:4px 16px;padding:20px 0}.follow .row .ic{width:24px;height:24px;grid-row:1/3}.follow .row .h{grid-column:2;justify-self:start;margin-top:4px}
  .follow .nl{grid-template-columns:1fr;gap:24px;margin-top:48px;padding-top:36px}
  .follow form{grid-template-columns:1fr}
@@ -251,8 +251,7 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
 </div>%(hero_credit)s</section>
 
 <section class="block about" id="about"><div class="w">
-  <div class="body">%(about_media)s<div class="aim"><span class="k">What we hope to achieve</span><p class="big">[CONFIRM: the project's aim, in the client's words.] Young people in Maine who understand the rules behind everyday costs, and who say so in their own words.</p></div></div>
-  <div class="how">%(cols)s</div>
+  <div class="body">%(about_media)s<div class="aim"><span class="k">What we hope to achieve</span><p class="big">[CONFIRM: the project's aim, in the client's words.] Young people in Maine who understand the rules behind everyday costs, and who say so in their own words.</p><div class="how">%(cols)s</div></div></div>
 </div></section>
 
 <section class="block roster stories-head" id="creators"><div class="w">
@@ -321,11 +320,12 @@ def cols_html():
     return "".join('<div><span class="n">%02d</span><p>%s</p></div>' % (i + 1, t) for i, t in enumerate(HOW))
 
 
+ABOUT_PHOTO = ("lewiston-3.jpg", "Lisbon Street, Lewiston, Maine", "Lisbon Street, Lewiston. Photograph: David Wilson, CC BY 2.0")
+
+
 def about_media(theme):
-    if theme["hero"] == "video":
-        return '<figure class="media" style="margin:0"><div class="ph"><img src="media/about.jpg" alt="Downtown Belfast, Maine, from above" width="1400" height="934" loading="lazy"></div><figcaption class="cap">Belfast. Photograph: Quintin Soloviev, CC BY 4.0</figcaption></figure>'
-    towns = "".join("<li>%s</li>" % c["town"] for c in S.CREATORS)
-    return '<div class="media"><div class="towns"><span class="k">Nine towns</span><ul>%s</ul></div></div>' % towns
+    return ('<figure class="media" style="margin:0"><div class="ph"><img src="media/about.jpg" alt="%s" width="1200" height="1600" loading="lazy"></div>'
+            '<figcaption class="cap">%s</figcaption></figure>' % (ABOUT_PHOTO[1], ABOUT_PHOTO[2]))
 
 
 def tiles_html():
@@ -431,9 +431,10 @@ def page(theme):
     for i in range(1, 10):
         shutil.copy(os.path.join(fam_b, "portrait-%d.jpg" % i), os.path.join(ROOT, out_dir, "media", "portrait-%d.jpg" % i))
         shutil.copy(os.path.join(fam_b, "creator-%d.gif" % i), os.path.join(ROOT, out_dir, "media", "creator-%d.gif" % i))
-    if theme["hero"] == "video":
-        from PIL import Image
-        Image.open(os.path.join(ROOT, "brand", "identity", "splash-bark-sky", "media", "about.jpg")).convert("RGB").resize((1400, 934)).save(os.path.join(ROOT, out_dir, "media", "about.jpg"), quality=84)
+    from PIL import Image
+    im = Image.open(os.path.join(ROOT, "brand", "content", "photos", "commons", ABOUT_PHOTO[0])).convert("RGB")
+    w, h = im.size; tw = int(h * 3 / 4); x0 = (w - tw) // 2 + int(w * 0.04)   # a 3 by 4 crop, a touch right of center, toward the street
+    im.crop((x0, 0, x0 + tw, h)).resize((1200, 1600), Image.LANCZOS).save(os.path.join(ROOT, out_dir, "media", "about.jpg"), quality=84)
     footer = F.family_footer(S.draw_paths(S.logo("lockup-two-line-reversed", "lk", theme["logo"])), dict(credits=theme["credits"]))
     footer = footer.replace('href="#signup"', 'href="#newsletter"')
     footer = re.sub(r'href="(https?://[^"]+)"', lambda m: 'href="%s"' % utm(m.group(1)), footer)
