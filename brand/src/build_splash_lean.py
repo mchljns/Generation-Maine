@@ -121,35 +121,50 @@ section.block{padding-block:112px}
 .block .head{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start;margin-bottom:48px}
 .block .head .lede{max-width:56ch}
 .about{background:var(--paper)}
-.about .cols{display:grid;grid-template-columns:1fr 1fr;gap:40px}
-.about .col{border-top:2px solid var(--blue);padding-top:18px}
-.about .col b{display:block;font-size:19px;line-height:1.3;margin-bottom:10px}
-.about .col p{margin:0;font-size:17px;line-height:1.6;max-width:52ch}
-/* the roster: nine towns, no faces until the shoot */
+.about .body{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:stretch}
+.about .media{position:relative;background:var(--tint);min-height:420px;overflow:hidden;display:grid;place-items:center}
+.about .media img{position:absolute;inset:0;width:100%%;height:100%%;object-fit:cover;display:block}
+.about .media .mk{width:58%%;height:auto;display:block}
+.about .media .cap{position:absolute;left:18px;bottom:14px;margin:0;font-size:13px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.about .cols{display:grid;grid-template-rows:1fr 1fr;gap:0}
+.about .col{border-top:1px solid var(--navy);padding:22px 0 28px;display:grid;grid-template-columns:56px 1fr;gap:0 24px;align-content:start}
+.about .col:last-child{border-bottom:1px solid var(--navy)}
+.about .col .n{font:600 13px/1.6 var(--label);letter-spacing:.1em;color:var(--blue)}
+.about .col b{display:block;font-size:22px;line-height:1.25;margin-bottom:10px}
+.about .col p{margin:0;font-size:17px;line-height:1.6;max-width:52ch;grid-column:2}
+/* the cast: nine faces, the name under each, the town and the handle */
 .roster{background:var(--tint)}
-.roster .grid{display:grid;grid-template-columns:repeat(9,1fr);gap:12px}
-.roster .tile{background:var(--paper);border-top:2px solid var(--blue);padding:16px 14px 18px;min-height:112px;display:grid;align-content:space-between;gap:14px;text-decoration:none;color:inherit}
-.roster .tile .n{font:600 13px/1 var(--label);letter-spacing:.1em;color:var(--blue)}
+.roster .grid{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:16px 12px}
+.roster .tile{display:grid;gap:12px;text-decoration:none;color:inherit;align-content:start}
+.roster .tile .ph{aspect-ratio:4/5;background:var(--navy);overflow:hidden;position:relative}
+.roster .tile .ph img{width:100%%;height:100%%;object-fit:cover;display:block;filter:saturate(.92)}
+.roster .tile .ph .n{position:absolute;left:10px;top:8px;font:600 13px/1 var(--label);letter-spacing:.1em;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.roster .tile .who{display:grid;gap:3px;border-top:1px solid var(--navy);padding-top:10px}
 .roster .tile b{font-size:17px;line-height:1.2;font-weight:700;font-family:var(--body)}
-.roster .tile .av{width:44px;height:44px;border-radius:50%%;background:var(--tint);display:none}
-.roster .tile.ready .av{display:block}
-a.roster-tile:hover{border-top-color:var(--navy)}
-/* follow tiles: the conversion block */
+.roster .tile .town{font-size:13px;line-height:1.3;color:rgba(15,46,77,.7)}
+.roster .tile .h{font:600 13px/1.4 var(--label);color:var(--blue);letter-spacing:.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+a.roster-tile:hover .who{border-top-color:var(--blue)}a.roster-tile:hover b{color:var(--blue)}
+/* where to find it: three feeds as an editorial list, then the newsletter band */
 .follow{background:var(--navy);color:#fff}
-.follow .tiles{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.follow .tile{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);padding:28px;display:grid;grid-template-columns:28px 1fr;gap:16px 18px;align-items:start;text-decoration:none;color:inherit;min-height:168px;transition:border-color .2s,background .2s}
-a.follow-tile:hover{border-color:var(--mg);background:rgba(255,255,255,.1)}
-.follow .tile .ic{width:28px;height:28px;color:var(--mg);margin-top:2px}
-.follow .tile b{display:block;font-size:19px;line-height:1.2;font-weight:600;font-family:var(--body);margin-bottom:6px}
-.follow .tile p{margin:0;font-size:15px;line-height:1.5;color:rgba(255,255,255,.82)}
-.follow .tile .h{display:block;margin-top:14px;font:600 13px/1 var(--label);letter-spacing:.06em;color:var(--mg)}
-.follow .tile .meta{grid-column:2}
-.follow form{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:12px;margin-top:6px}
+.follow .list{border-top:1px solid rgba(255,255,255,.22)}
+.follow .row{display:grid;grid-template-columns:48px minmax(200px,3fr) 6fr auto;gap:0 24px;align-items:center;padding:30px 0;border-bottom:1px solid rgba(255,255,255,.22);text-decoration:none;color:inherit}
+.follow .row .ic{width:28px;height:28px;color:var(--mg)}
+.follow .row .name{font-family:var(--display);font-size:clamp(26px,2.6vw,34px);line-height:1;transition:color .2s}
+.follow .row p{margin:0;font-size:16px;line-height:1.5;color:rgba(255,255,255,.78);max-width:44ch}
+.follow .row .h{font:600 13px/1 var(--label);letter-spacing:.06em;color:var(--mg);white-space:nowrap;justify-self:end}
+a.row:hover .name{color:var(--mg)}
+.follow .nl{margin-top:72px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:center;padding:48px 0 0;border-top:1px solid var(--mg)}
+.follow .nl .k{display:block;color:var(--mg);margin-bottom:16px}
+.follow .nl h3{font-family:var(--display);font-size:clamp(30px,3.2vw,44px);line-height:1.05;margin:0 0 14px}
+.follow .nl .lede{color:rgba(255,255,255,.85);font-size:17px;max-width:40ch}
+.follow form{display:grid;grid-template-columns:1fr auto;gap:12px}
 .follow input{height:var(--ctl);border:1px solid rgba(255,255,255,.4);background:#fff;color:var(--ink);padding:0 16px;font:16px var(--body);width:100%%}
 .follow input:focus-visible{outline-color:var(--mg)}
-.follow .fine{grid-column:1/-1;margin:10px 0 0;font-size:13px;color:rgba(255,255,255,.65)}
+.follow .fine{grid-column:1/-1;margin:8px 0 0;font-size:13px;color:rgba(255,255,255,.65)}
+.follow .fine a{color:inherit}
 /* responsive */
-@media (max-width:1100px){.roster .grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:1100px){.roster .grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (max-width:700px){.roster .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 10px}.roster .tile b{font-size:15px}}
 @media (max-width:900px){
  :root{--M:20px}
  body{font-size:16px}
@@ -165,7 +180,9 @@ a.follow-tile:hover{border-color:var(--mg);background:rgba(255,255,255,.1)}
  section.block{padding-block:56px}
  .block .head{grid-template-columns:1fr;gap:16px;margin-bottom:32px}
  .about .cols{grid-template-columns:1fr;gap:28px}
- .follow .tiles{grid-template-columns:1fr}
+ .about .body{grid-template-columns:1fr;gap:28px}.about .media{min-height:0;aspect-ratio:4/3}.about .col{grid-template-columns:40px 1fr}
+ .follow .row{grid-template-columns:36px 1fr;gap:6px 16px;padding:22px 0}.follow .row .ic{width:24px;height:24px}.follow .row p{grid-column:2}.follow .row .h{grid-column:2;justify-self:start;margin-top:6px}
+ .follow .nl{grid-template-columns:1fr;gap:24px;margin-top:48px;padding-top:36px}
  .follow form{grid-template-columns:1fr}
 }
 %(site_css)s
@@ -204,17 +221,17 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
 
 <section class="block about" id="about"><div class="w">
   <div class="head"><h2>%(h2_about)s</h2><p class="lede">Short videos from young people in Maine about the rules behind everyday costs, and a newsletter with the full story. Nothing is published on this page; it points to where the work lives.</p></div>
-  <div class="cols">%(cols)s</div>
+  <div class="body">%(about_media)s<div class="cols">%(cols)s</div></div>
 </div></section>
 
 <section class="block roster" id="creators"><div class="w">
-  <div class="head"><h2>%(h2_creators)s</h2><p class="lede">Nine young Mainers in nine towns. Each one films where they live and says it their own way. Names and faces arrive after the shoot. First clips [CONFIRM: month].</p></div>
+  <div class="head"><h2>%(h2_creators)s</h2><p class="lede">Nine young Mainers in nine towns. Each one films where they live and says it their own way. Names and faces here stand in until the shoot. First clips [CONFIRM: month].</p></div>
   <div class="grid">%(tiles)s</div>
 </div></section>
 
 <section class="block follow" id="follow"><div class="w">
   <div class="head"><h2>%(h2_follow)s</h2><p class="lede">The videos are on TikTok, Instagram and YouTube. The full story, with the numbers, is in the newsletter on Substack.</p></div>
-  <div class="tiles">%(follow)s</div>
+  %(follow)s
 </div></section>
 </main>
 <footer class="site">%(footer)s</footer>
@@ -255,29 +272,37 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
 
 
 def cols_html():
-    return "".join('<div class="col"><b>%s</b><p>%s</p></div>' % (t, p) for t, p in COLS)
+    return "".join('<div class="col"><span class="n">%02d</span><div><b>%s</b></div><p>%s</p></div>' % (i + 1, t, p) for i, (t, p) in enumerate(COLS))
+
+
+def about_media(theme):
+    if theme["hero"] == "video":
+        return '<div class="media"><img src="media/about.jpg" alt="Downtown Belfast, Maine, from above" width="1400" height="934" loading="lazy"><p class="cap">Belfast. Photograph: Quintin Soloviev, CC BY 4.0</p></div>'
+    return '<div class="media" aria-hidden="true">%s</div>' % S.logo("mark", "mk", theme["logo"])
 
 
 def tiles_html():
+    """The cast: one tile per creator, the face above the name. Placeholder names and portraits until the shoot; the handle
+    links out once the account exists, so a tile is a plain block until then."""
     out = []
-    for i, town in enumerate(S.TOWNS):
-        out.append('<div class="tile" aria-label="Creator %d, %s, Maine"><span class="n">%02d</span><span class="av" aria-hidden="true"></span><b>%s</b></div>' % (i + 1, town, i + 1, town))
+    for i, c in enumerate(S.CREATORS):
+        inner = ('<span class="ph"><img src="media/portrait-%d.jpg" alt="" width="300" height="400" loading="lazy"><span class="n">%02d</span></span>'
+                 '<span class="who"><b>%s</b><span class="town">%s, Maine</span><span class="h">%s</span></span>' % (i + 1, i + 1, c["name"], c["town"], c["handle"]))
+        out.append('<div class="tile" aria-label="%s, %s, Maine">%s</div>' % (c["name"], c["town"], inner))
     return "".join(out)
 
 
 def follow_html():
-    out = []
-    for key, name, line, handle, href in FOLLOW:
-        if key == "substack":
-            out.append('<div class="tile" id="newsletter">%s<div class="meta"><b>%s</b><p>%s</p><span class="h">%s</span></div>'
-                       '<form id="nl" action="%s" method="get" target="_blank" rel="noopener"><label class="k" for="em" style="position:absolute;left:-9999px">Email</label>'
-                       '<input id="em" name="email" type="email" placeholder="you@example.com" autocomplete="email" required inputmode="email"><button class="btn b1" type="submit">Sign up</button>'
-                       '<p class="fine">Runs on Substack. Unsubscribe in one click. [CONFIRM: publication address]</p></form></div>'
-                       % (S.icon(key), name, line, handle, utm(href)))
-        else:
-            out.append('<a class="tile follow-tile" href="%s" rel="noopener"%s>%s<span class="meta"><b>%s</b><p>%s</p><span class="h">%s</span></span></a>'
-                       % (utm(href), ' target="_blank"' if href.startswith("http") else "", S.icon(key), name, line, handle))
-    return "".join(out)
+    rows = []
+    for key, name, line, handle, href in FOLLOW[:3]:
+        rows.append('<a class="row" href="%s" rel="noopener"%s>%s<span class="name">%s</span><p>%s</p><span class="h">%s</span></a>'
+                    % (utm(href), ' target="_blank"' if href.startswith("http") else "", S.icon(key), name, line, handle))
+    key, name, line, handle, href = FOLLOW[3]
+    nl = ('<div class="nl" id="newsletter"><div><span class="k">Substack</span><h3>The full story, by email.</h3><p class="lede">The numbers behind each clip, and what they mean for the people in it. %s</p></div>'
+          '<form id="nl" action="%s" method="get" target="_blank" rel="noopener"><label for="em" style="position:absolute;left:-9999px">Email</label>'
+          '<input id="em" name="email" type="email" placeholder="you@example.com" autocomplete="email" required inputmode="email"><button class="btn b1" type="submit">Sign up</button>'
+          '<p class="fine">Runs on Substack. Unsubscribe in one click. [CONFIRM: publication address]</p></form></div>' % (handle, utm(href)))
+    return '<div class="list">%s</div>%s' % ("".join(rows), nl)
 
 
 def share_card(theme, out_dir):
@@ -332,13 +357,19 @@ def page(theme):
         hero_bg = ""
         hero_side = '<div class="mural" id="mural" aria-hidden="true"></div>'
         hero_credit = ""
+    fam_b = os.path.join(ROOT, "brand", "identity", "splash-family-b", "media")
+    for i in range(1, 10):
+        shutil.copy(os.path.join(fam_b, "portrait-%d.jpg" % i), os.path.join(ROOT, out_dir, "media", "portrait-%d.jpg" % i))
+    if theme["hero"] == "video":
+        from PIL import Image
+        Image.open(os.path.join(ROOT, "brand", "identity", "splash-bark-sky", "media", "about.jpg")).convert("RGB").resize((1400, 934)).save(os.path.join(ROOT, out_dir, "media", "about.jpg"), quality=84)
     footer = F.family_footer(S.draw_paths(S.logo("lockup-two-line-reversed", "lk", theme["logo"])), dict(credits=theme["credits"]))
     footer = footer.replace('href="#signup"', 'href="#newsletter"')
     footer = re.sub(r'href="(https?://[^"]+)"', lambda m: 'href="%s"' % utm(m.group(1)), footer)
     url = LIVE + theme["key"] + "/"
     html = HTML % dict(root_class=theme["root_class"], css=css, url=url, bar_logo=S.logo("lockup-compact-reversed", "lk", theme["logo"]), h1=theme["h1"],
                        hero_bg=hero_bg, hero_side=hero_side, hero_credit=hero_credit, h2_about=theme["h2_about"], h2_creators=theme["h2_creators"], h2_follow=theme["h2_follow"],
-                       cols=cols_html(), tiles=tiles_html(), follow=follow_html(), footer=footer, mural_json=json.dumps(theme["mural"]) if theme["mural"] else "{}")
+                       cols=cols_html(), about_media=about_media(theme), tiles=tiles_html(), follow=follow_html(), footer=footer, mural_json=json.dumps(theme["mural"]) if theme["mural"] else "{}")
     write(os.path.join(out_dir, "index.html"), html)
     icons(theme, out_dir)
     share_card(theme, out_dir)
