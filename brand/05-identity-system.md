@@ -649,3 +649,7 @@ The creators roster: nine tiles, numbered, one town each. Before the shoot a til
 ### The lean page, second pass
 
 Thirteen fixes from the critical read, on both concepts. Concept A's about panel is now the nine towns set in display type on navy, so the state mark appears once on the page, in the hero. The roster carries the numeral in the caption, no handle text, and a tile becomes the link once the account exists. Kicker white on Concept A. The headline breaks on three lines. One call to action in the hero. Bar mark at 32 px. The Belfast caption sits under its photograph. The about lede is gone and column 01 says what the hero did not. The follow list sets the description under the platform name. Every description that promised a cadence or a plan is neutral or marked to confirm. The newsletter address lives in the fine print.
+
+### The lean page, with the stepper back
+
+The creators section is the pinned clip stepper from the first preview, carried over whole: one clip on the stage, the creator's details beside it, the position row, scroll stepping through the nine. Flat corners, the family's blue and navy, the sticky bar allowed for on a phone. The roster grid is kept in the builder but not on the page. The nine placeholder clips bring the page back to about 9 MB on Concept A and 12 MB on Concept B; the clips should be muted video, not GIF, before launch.

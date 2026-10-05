@@ -61,6 +61,29 @@ LEAN_B = dict(
 @media (max-width:900px){.lean .hero .credit{position:static;text-align:left;margin-top:28px;max-width:none}}
 """)
 
+def stepper_css():
+    """The pinned stepper's rules from the original splash, from the section rule to the end of its phone block."""
+    a = S.CSS.index(".stories{overflow-x:clip")
+    b = S.CSS.index(".panel .bio{font-size:16px", a)
+    b = S.CSS.index("\n}", b) + 2
+    return S.CSS[a:b]
+
+
+STEPPER_OVERRIDES = """
+:root{--rule:rgba(15,46,77,.18);--fg:var(--ink);--muted:rgba(15,46,77,.7);--bi:var(--tint)}
+.stories-head{padding-bottom:0!important}
+.stories{background:var(--tint)}
+.stories .w{max-width:1280px;margin:0 auto;padding-inline:var(--M)}
+.vid,.vid video,.vid img.clip{border-radius:0}.vid{box-shadow:none;background:var(--navy)}
+.vid .dur{border-radius:0;background:rgba(17,35,55,.6)}
+.who span{text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.panel .k{color:var(--blue)}
+.where{color:var(--muted)}.where .n{color:var(--ink)}
+.where .segs button::before{background:rgba(15,46,77,.2);border-radius:0}.where .segs button.on::before,.where .segs button.done::before{background:var(--navy)}
+.soc a{color:var(--ink)}.soc .ic{color:var(--blue)}
+@media (max-width:900px){.stories .pinw{top:calc(84px + env(safe-area-inset-top,0px))}}
+"""
+
 COLS = [("What it is", "Nine creators, each in their own town, making short videos about one rule at a time: a lease clause, a license fee, a permit, a line on a pay stub. The clips go out on their own accounts. The newsletter follows the paperwork behind them."),
         F.COLS[1]]
 FOLLOW = [("instagram", "Instagram", "The clips, and stills from the towns.", "[@handle]", "#"),
@@ -192,6 +215,7 @@ a.row:hover .name{color:var(--mg)}
  .follow .nl{grid-template-columns:1fr;gap:24px;margin-top:48px;padding-top:36px}
  .follow form{grid-template-columns:1fr}
 }
+%(stepper_css)s
 %(site_css)s
 %(css)s
 """
@@ -231,10 +255,10 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   <div class="body">%(about_media)s<div class="cols">%(cols)s</div></div>
 </div></section>
 
-<section class="block roster" id="creators"><div class="w">
-  <div class="head"><h2>%(h2_creators)s</h2><p class="lede">Nine young Mainers in nine towns. Each one films where they live and says it their own way. Names and faces here stand in until the shoot. First clips [CONFIRM: month].</p></div>
-  <div class="grid">%(tiles)s</div>
+<section class="block roster stories-head" id="creators"><div class="w">
+  <div class="head" style="margin-bottom:0"><h2>%(h2_creators)s</h2><p class="lede">Nine young Mainers in nine towns. Each one films where they live and says it their own way. Names, faces and clips here stand in until the shoot. First clips [CONFIRM: month].</p></div>
 </div></section>
+%(stepper)s
 
 <section class="block follow" id="follow"><div class="w">
   <div class="head"><h2>%(h2_follow)s</h2><p class="lede">Three feeds for the clips. One newsletter for the rest. Nothing is published on this page.</p></div>
@@ -260,6 +284,21 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
     d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || '#FFFFFF'); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * (d.stagger || 35)) + 'ms'; g.appendChild(p); });
     m.appendChild(svg); requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('on')));
   }
+  // The stage: one pinned clip that changes as each story panel reaches the middle of the screen.
+  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video, img.clip')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
+  const panels = [...document.querySelectorAll('.panel')], storiesEl = document.getElementById('stories'); let cur = -1;
+  function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i;
+    stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (!v.play) return; if (on) { v.play().catch(() => {}); } else v.pause(); }); whos.forEach((w, k) => w.classList.toggle('on', k === i)); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur;
+    wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.dataset.name : 'Last one'; }
+  const panelsEl = document.getElementById('panels'), stageEl = document.querySelector('.stage');
+  const fit = () => { if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
+    const top = 16, row = 28 + 12, room = innerHeight - top - (h + 6) - 14 * 2 - row - 12, colw = stageEl.clientWidth || (innerWidth - 32);
+    stageEl.style.setProperty('--stageh', Math.round(Math.max(200, Math.min(innerHeight * .62, colw * 16 / 9, room))) + 'px'); };
+  const step = () => { const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
+  fit(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fit(); step(); }); addEventListener('load', fit);
+  marks.forEach((m, k) => m.addEventListener('click', () => { const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
+  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); }); step(); if (cur < 0) show(0);
+  if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
   // the footer mark draws once the page is scrolled to its end
   const site = document.querySelector('.site');
   const atEnd = () => { if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) { site.classList.add('on'); removeEventListener('scroll', atEnd); } };
@@ -299,6 +338,29 @@ def tiles_html():
         # the tile links to the creator's feed once the account exists; until then it is a plain block
         out.append('<div class="tile" data-handle="%s" aria-label="%s, %s, Maine">%s</div>' % (c["handle"], c["name"], c["town"], inner))
     return "".join(out)
+
+
+def stepper_html():
+    """The pinned clip stepper from the first preview: one clip on the stage, the creator's details beside it, the position row."""
+    stagevids, panels, idx, whos = "", "", "", ""
+    for i, (tone, town, topic, cap, dur) in enumerate(S.CARDS):
+        cr = S.CREATORS[i]
+        clip = cr.get("clip", "creator-%d.webm" % (i + 1))
+        if clip.endswith((".gif", ".png", ".jpg", ".webp")):
+            stagevids += '<img class="clip%s" data-i="%d" data-dur="%s" src="media/%s" alt="" loading="%s">' % (' on' if i == 0 else '', i, dur, clip, "eager" if i < 2 else "lazy")
+        else:
+            stagevids += '<video data-i="%d" data-dur="%s" src="media/%s" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (i, dur, clip, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
+        who = '<div class="who%s">%s<span><b>%s</b>%s</span></div>' % (' on' if i == 0 else '', S.avatar(), cr["handle"], cr["name"])
+        whos += who
+        idx += '<button type="button" aria-label="Creator %d, %s, %s" data-name="%s"%s></button>' % (i + 1, cr["name"], town, cr["name"], ' class="on"' if i == 0 else "")
+        socials = ''.join('<a href="#" aria-label="%s">%s<span>%s</span></a>' % (n.capitalize(), S.icon(n), cr["handle"]) for n in ("instagram", "tiktok", "youtube"))
+        panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv">%s</div><p class="k">%s, Maine</p><h2>%s</h2><p class="bio">%s</p><div class="soc">%s</div></article>'
+                   % (" on" if i == 0 else "", i + 1, i, who, town, cr["name"], cr["bio"], socials))
+    return ('<section class="stories" id="stories"><div class="pinw"><div class="w">'
+            '<div class="stage"><div class="vid" id="stage">%s%s<span class="dur" id="dur">0:52</span></div></div>'
+            '<div class="panels" id="panels">%s</div>'
+            '<div class="where" id="where"><span class="n" id="wn">01 / 09</span><span class="segs" id="segs">%s</span><span class="next" id="wnext"></span></div>'
+            '</div></div></section>' % (stagevids, whos, panels, idx))
 
 
 def follow_html():
@@ -348,7 +410,7 @@ def icons(theme, out_dir):
 def page(theme):
     out_dir = theme["out"]
     os.makedirs(os.path.join(ROOT, out_dir, "media"), exist_ok=True)
-    css = (CSS % dict(theme, site_css=theme["site_css"]))
+    css = (CSS % dict(theme, site_css=theme["site_css"], stepper_css=stepper_css() + STEPPER_OVERRIDES))
     css = css.replace("{{FONTS}}", theme["fonts"]).replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("brand/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))
     for k, v in theme["font_files"].items():
         css = css.replace("{{%s}}" % k, K.font64(v))
@@ -369,6 +431,7 @@ def page(theme):
     fam_b = os.path.join(ROOT, "brand", "identity", "splash-family-b", "media")
     for i in range(1, 10):
         shutil.copy(os.path.join(fam_b, "portrait-%d.jpg" % i), os.path.join(ROOT, out_dir, "media", "portrait-%d.jpg" % i))
+        shutil.copy(os.path.join(fam_b, "creator-%d.gif" % i), os.path.join(ROOT, out_dir, "media", "creator-%d.gif" % i))
     if theme["hero"] == "video":
         from PIL import Image
         Image.open(os.path.join(ROOT, "brand", "identity", "splash-bark-sky", "media", "about.jpg")).convert("RGB").resize((1400, 934)).save(os.path.join(ROOT, out_dir, "media", "about.jpg"), quality=84)
@@ -378,7 +441,7 @@ def page(theme):
     url = LIVE + theme["key"] + "/"
     html = HTML % dict(root_class=theme["root_class"], css=css, url=url, bar_logo=S.logo("lockup-compact-reversed", "lk", theme["logo"]), h1=theme["h1"],
                        hero_bg=hero_bg, hero_side=hero_side, hero_credit=hero_credit, h2_about=theme["h2_about"], h2_creators=theme["h2_creators"], h2_follow=theme["h2_follow"],
-                       cols=cols_html(), about_media=about_media(theme), tiles=tiles_html(), follow=follow_html(), footer=footer, mural_json=json.dumps(theme["mural"]) if theme["mural"] else "{}")
+                       cols=cols_html(), about_media=about_media(theme), tiles=tiles_html(), stepper=stepper_html(), follow=follow_html(), footer=footer, mural_json=json.dumps(theme["mural"]) if theme["mural"] else "{}")
     write(os.path.join(out_dir, "index.html"), html)
     icons(theme, out_dir)
     share_card(theme, out_dir)
