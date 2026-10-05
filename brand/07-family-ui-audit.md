@@ -161,3 +161,33 @@ Findings, heaviest first:
 11. **Off grid values.** The phone gutter is 17.55 px (4.5 vw), the hero button row sits 19 px below the paragraph, the follow heading has 28 px below it on A and 32 on B. Fix the gutter at 18 or 20, the row at 20, the heading at one value.
 
 Sheets: `brand/identity/splash-family-b/audit-spacing-1400.png` and `audit-spacing-390.png`.
+
+## Usability and conversion audit, both family pages
+
+The page has three conversions, in this order: watch a clip, follow an account, subscribe to the newsletter. Scored against a standard homepage framework adapted to that, out of 50. Both pages share one structure and one set of behaviors, so they score together; the differences are noted.
+
+| Section | Score | Why |
+|---|---|---|
+| First impression | 7 of 10 | Headline under ten words and plain. Subhead gives the specifics. Clear primary button, one secondary link. Family B's video is the stronger first frame; Family A's hero leaves the lower third empty on desktop. The only trust signal above the fold is the kicker naming the parent. |
+| Value communication | 7 of 10 | Three columns say what, why and where in the project's own voice. Problem to solution is there in the hero copy. The "why" column is a placeholder until the client writes it. No proof yet, by design, before the shoot. |
+| Trust | 4 of 10 | Parent and partner links now carry the family's credibility. No faces, names, numbers or press yet. Seven visible placeholders. No privacy link target. |
+| Usability | 6 of 10 | Alt text on every image, visible focus ring, language set, honest headings. No skip link. No favicon. Family A loads 8.8 MB and Family B 13.9 MB on first view. Nine pinned panels put the follow row more than 8,000 px down. |
+| Conversion mechanics | 5 of 10 | The newsletter button goes to the wrong place. The sign up field discards what is typed. Outbound links carry no tracking. No share card for a social first project. |
+| **Total** | **29 of 50, C** | A sound structure with its mechanics unfinished. |
+
+Findings, heaviest first:
+
+1. **The sign up field is decorative.** The input sits outside any form, has no name, and the Sign up button is a plain link to the Substack subscribe page. A visitor types an address, clicks, and lands on a page that asks for it again. Substack prefills from the address in the link, so the fix is small: a form whose submit sends the typed address to the subscribe page, or Substack's own embed. Until the publication exists the field should not be shown at all.
+2. **"Get the newsletter" does not go to the newsletter.** The bar button and the hero link both go to the follow row, where Substack is one of four items. The sign up band has its own anchor now. Point both at it. The Follow item in the nav already covers the follow row.
+3. **No share card.** No Open Graph or Twitter card metadata, so a link posted on Instagram, TikTok, X or in a group chat shows no image and a bare title. For a project whose audience arrives from social feeds this is the first conversion surface. Add title, description, a 1200 by 630 image from the hero loop, and the page URL.
+4. **Nothing is measurable.** Every outbound link, to Substack, to the accounts, to the parents, goes out bare. Add a source parameter to each so the newsletter and the accounts can see what the page sends them, and add one analytics tag the parents already use. [CONFIRM: which analytics Maine Policy runs]
+5. **Page weight.** Nine creator clips are GIFs of about a megabyte each, loaded up front. The hero loop is 4.4 MB. On a phone over cellular the first view costs 9 to 14 MB. Convert the clips to muted video, load them as their panel approaches, and keep the hero loop under 2 MB.
+6. **The follow row is a long way down.** Nine pinned panels before the follow and newsletter sections. The sticky bar button mitigates it, once it points at the right place. Consider a follow strip after the fourth or fifth panel, or let a visitor leave the stepper with a visible "skip to follow" link.
+7. **Placeholders are live.** Seven visible: three "[CONFIRM]" notes, "[@handle]" four times, "PLACEHOLDER" on every clip card. Every creator handle and every social link goes to "#". Expected before launch, but the page should not go to the client's board with them showing. Mark them in the build so a flag lists what is open.
+8. **The title is only the name.** The browser tab, bookmarks and search results read "Generation Maine". Append the one line: "Generation Maine: young Mainers on the rules that shape their lives."
+9. **No skip link, no favicon.** Both are one line each.
+10. **Hidden sections remain in the page.** The quote band and the newsletter posts are hidden by CSS but still in the document with placeholder copy. Remove them from the build when lean, so they cannot leak to a reader or a crawler.
+
+What already works: one headline, one promise, one primary action. Plain copy throughout. The hero button lands on the first clip. The bar stays visible with the newsletter action on every scroll position. Reduced motion is honored, the video is muted and has a poster, and the footer now repeats every path out.
+
+Quick wins, under a day: 1, 2, 3, 8, 9. Strategic: 4, 5, 6.
