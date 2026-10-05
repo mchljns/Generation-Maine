@@ -585,3 +585,16 @@ Weighed and recorded: cairns carry a burial reading and the outdoors community o
 The system (`build_system_cairn.py`, 40 files in `brand/identity/logo-maine/bark-sky-cairn`): mark, horizontal, horizontal large, two line, stacked left, stacked centered, endorsed, compact; each in Bark on Paper with the round stone in Sky, Sky on Bark with the round stone in Paper, black and white. Avatar in three fields, app icon, a favicon that drops the shadow lines so it stays solid at 16 px, and the bug. The funder line in the endorsed lockup is still [CONFIRM].
 
 Still to do: put the compact lockup in the splash bar and footer, regenerate the clip end card and the applied sheet, and retire the earlier mark candidates from the lockup sheet.
+
+## Two pages for the family, October 5
+
+Garrick's note changed the brief: the brand has to look like it belongs with Maine Policy Institute, The Maine Wire and Maine Civic Action, and the site is a splash page with three jobs. Three of the four parent sites were read from the live pages (`brand/content/parent-brands.md`). The family pattern: navy top bar, blue primary, one warm accent carried by flat buttons, uppercase letterspaced labels and navigation, hard corners, a boxed section label, a typographic mark.
+
+Two new pages apply those rules to the existing concepts, trimmed to what it is, what we hope to achieve, where to find it, with the Maine Policy credit in the footer. Both are themes on the shared template (`build_splash_family.py`); a `lean` flag hides the stepper, quotes and newsletter sections and trims the navigation, so the script and the two original pages are untouched.
+
+- **Family A** keeps Signature's type (Bricolage Grotesque, DM Sans) and the lined state mark. Navy #0F2E4D bar and footer, Maine Policy's blue #0556A5 hero, marigold on flat buttons and on the last word of the headline, the way the parent sets its heroes. Preview: /family-a/.
+- **Family B** keeps Bark & Sky's type (Hedvig Letters Serif, lowercase) and the photographic hero loop. Civic Action's navy #112337 and blue #006CB5, Sky as the secondary, marigold on flat buttons and the kicker. Navigation, labels and buttons go uppercase in the sans. Preview: /family-b/.
+
+The marigold is the one thing Generation Maine keeps for itself: yellow belongs to Maine Policy and the Wire, coral to Civic Action, and marigold sits between them.
+
+The "what we hope to achieve" column is a [CONFIRM] placeholder in the client's words. The Maine Policy credit now appears in the footer of all four pages.

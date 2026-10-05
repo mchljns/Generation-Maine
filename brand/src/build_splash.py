@@ -407,11 +407,7 @@ def page(theme=SIGNATURE, out=None, media=None):
 
 <section class="about reveal" id="about"><div class="w">
   <div><h2 class="h2">%(h2about)s</h2>%(about_media)s</div>
-  <div class="cols">
-    <div class="row-in"><h3>Who makes it</h3><p>Young Mainers with a phone and a story. They pick what to film and say it their own way.</p></div>
-    <div class="row-in"><h3>What it is about</h3><p>The rules behind everyday costs. Leases, licenses, permits, wages, and the fine print nobody reads until it costs them.</p></div>
-    <div class="row-in"><h3>Where to find it</h3><p>Short videos on TikTok, Instagram and YouTube. The full story, with the numbers, by email.</p></div>
-  </div>
+  <div class="cols">%(cols)s</div>
 </div></section>
 
 <section class="stories-head reveal" id="creators" data-bg="var(--bi)"><div class="w">
@@ -452,7 +448,7 @@ def page(theme=SIGNATURE, out=None, media=None):
   </div>
 </div></section>
 
-<footer class="site"><div class="w">%(two)s<div><p>Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.</p><p class="fine">© 2026 Generation Maine. [CONFIRM: legal name, address and contact]</p>%(credits)s</div></div></footer>
+<footer class="site"><div class="w">%(two)s<div><p>Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.</p><p class="fine">%(footer_line)s</p>%(credits)s</div></div></footer>
 
 <script id="maine-data" type="application/json">%(json)s</script>
 <script>
@@ -549,10 +545,18 @@ def page(theme=SIGNATURE, out=None, media=None):
         pt1=theme.get("post_thumbs", ["", "", ""])[0].replace("{media}", media), pt2=theme.get("post_thumbs", ["", "", ""])[1].replace("{media}", media), pt3=theme.get("post_thumbs", ["", "", ""])[2].replace("{media}", media),
         qa1=theme.get("quote_stills", ["", "", ""])[0].replace("{media}", media), qa2=theme.get("quote_stills", ["", "", ""])[1].replace("{media}", media), qa3=theme.get("quote_stills", ["", "", ""])[2].replace("{media}", media),
         two=(ping_dot if theme["footer_ping"] else (lambda t: t))(draw_paths(logo(theme["footer"], "lk", theme["logo"]))), mural=theme["mural"], bg_follow=theme["bg_follow"],
-        h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot("Made by the people it is about"), h2cre=dot("The creators"),
+        h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot(theme.get("h2about", "Made by the people it is about")), h2cre=dot("The creators"),
+        cols="".join('<div class="row-in"><h3>%s</h3><p>%s</p></div>' % c for c in theme.get("cols", [("Who makes it", "Young Mainers with a phone and a story. They pick what to film and say it their own way."), ("What it is about", "The rules behind everyday costs. Leases, licenses, permits, wages, and the fine print nobody reads until it costs them."), ("Where to find it", "Short videos on TikTok, Instagram and YouTube. The full story, with the numbers, by email.")])),
+        footer_line=theme.get("footer_line", "© 2026 Generation Maine. An initiative of Maine Policy Institute. [CONFIRM: legal name, address and contact]"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         ic_ig=icon("instagram"), ic_tt=icon("tiktok"), ic_yt=icon("youtube"), ic_ss=icon("substack"),
         stagevids=stagevids, whos=whos, panels=panels, segs=idx, json=json.dumps(rows, separators=(",", ":")))
+    if theme.get("lean"):
+        body = body.replace('<a href="#creators" data-for="creators">Creators</a><a href="#words" data-for="words">In their words</a>', '')
+        body = body.replace('<a href="#creators">Creators<i class="d"></i></a><a href="#words">In their words<i class="d"></i></a>', '')
+        body = body.replace('<a class="cta" href="#news">Get the newsletter</a>', '<a class="cta" href="#follow">Get the newsletter</a>')
+        body = body.replace('<a class="btn b1" href="#creators">Watch the stories</a><a class="tl" href="#news">Get the newsletter</a>', '<a class="btn b1" href="#follow">Watch the stories</a><a class="tl" href="#follow">Get the newsletter</a>')
+        theme = dict(theme, css=theme["css"] + "\n.stories-head,.stories,.words,.news,.band,.strip{display:none!important}")
     css = (CSS.replace("{{FONTS}}", theme["fonts"]) + theme["css"]).replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("brand/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))
     for k, v in theme.get("font_files", {}).items():
         css = css.replace("{{%s}}" % k, K.font64(v))
