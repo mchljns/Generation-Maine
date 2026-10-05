@@ -91,7 +91,9 @@ h2,h3{letter-spacing:-.01em}
 .static .site .lk path:not([stroke]){stroke-dasharray:none}
 @media (prefers-reduced-motion: reduce){.static .mural path,.static.js .site .lk path[stroke]{stroke-dashoffset:0;transition:none}}
 .hero .w{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+@media (max-width:900px){.hero .w{grid-template-columns:1fr}.static .mural{order:-1;width:min(56vw,300px);justify-self:start;margin-bottom:8px}}
 .site .lk{height:96px}
+@media (max-width:900px){.site .lk{height:72px}}
 .top .lk{height:26px}.static .top.scrolled .lk{height:26px}
 .about .cols div::before{background:%(mg)s}.about.lit .cols div::before{background:%(mg)s}
 .about .cols h3{font:800 18px/1.2 var(--display);letter-spacing:-.01em;text-transform:none}
