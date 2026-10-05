@@ -32,19 +32,20 @@ LEAN_A = dict(
     key="lean-a", out="brand/identity/splash-lean-a", root_class="static lean", navy="#0F2E4D", blue="#0556A5", ink="#0F2E4D", paper="#FFFFFF", tint="#EAF1F8",
     fonts=S.SIGNATURE_FONTS, font_files={}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="",
     display="'Bricolage Grotesque',system-ui,sans-serif", body="'DM Sans',system-ui,sans-serif", label="'DM Sans',system-ui,sans-serif",
-    h1="Young Mainers on building a life <em>here.</em>", h2_about="What this is", h2_creators="The creators", h2_follow="Where to find it",
+    h1="Young Mainers<br>on building<br>a life <em>here.</em>", h2_about="What this is", h2_creators="The creators", h2_follow="Where to find it",
     site_css=SITE_CSS(F.STATIC_CSS) + "\n" + SITE_CSS(F.FAMILY_A_CSS % dict(blue="#0556A5", navy="#0F2E4D", mg=MG)),
     css="""
 .lean h1,.lean h2,.lean .h2{font-family:var(--display);font-weight:800;letter-spacing:-.01em}
 .lean h1 em{font-style:normal;color:var(--mg)}
 .lean .col b{font-family:var(--body);font-weight:700}
+.lean .hero .k{color:#fff}
 """)
 
 LEAN_B = dict(
     key="lean-b", out="brand/identity/splash-lean-b", root_class="bs static lean", navy="#112337", blue="#006CB5", ink="#112337", paper="#F4F3EE", tint="#EAF1F8",
     fonts=B.FONTS, font_files=B.BARK_SKY["font_files"], logo=F.LOGO_B, mural=None, hero="video", credits=B.BARK_SKY["credits"],
     display="'Hedvig Letters Serif',Georgia,serif", body="'Hedvig Letters Sans',system-ui,sans-serif", label="'Hedvig Letters Sans',system-ui,sans-serif",
-    h1="young mainers on building a life here", h2_about="what this is", h2_creators="the creators", h2_follow="where to find it",
+    h1="young mainers<br>on building<br>a life here", h2_about="what this is", h2_creators="the creators", h2_follow="where to find it",
     site_css=SITE_CSS(F.STATIC_CSS) + "\n" + SITE_CSS(F.FAMILY_B["css"]),
     css="""
 :root{--bark:#112337;--sky:#fff}
@@ -60,11 +61,12 @@ LEAN_B = dict(
 @media (max-width:900px){.lean .hero .credit{position:static;text-align:left;margin-top:28px;max-width:none}}
 """)
 
-COLS = F.COLS[:2]
-FOLLOW = [("instagram", "Instagram", "Short clips, most days.", "[@handle]", "#"),
-          ("tiktok", "TikTok", "The same clips, where most of the audience is.", "[@handle]", "#"),
-          ("youtube", "YouTube", "Longer cuts and the full interviews.", "[@handle]", "#"),
-          ("substack", "Substack", "The full story, with the numbers, by email.", "[name].substack.com", "https://CONFIRM-publication.substack.com/subscribe")]
+COLS = [("What it is", "Nine creators, each in their own town, making short videos about one rule at a time: a lease clause, a license fee, a permit, a line on a pay stub. The clips go out on their own accounts. The newsletter follows the paperwork behind them."),
+        F.COLS[1]]
+FOLLOW = [("instagram", "Instagram", "The clips, and stills from the towns.", "[@handle]", "#"),
+          ("tiktok", "TikTok", "The clips, as they go up.", "[@handle]", "#"),
+          ("youtube", "YouTube", "Longer cuts. [CONFIRM: what YouTube carries]", "[@handle]", "#"),
+          ("substack", "Substack", "The part of each story that does not fit in a clip. [CONFIRM: what the newsletter carries, and how often]", "[name].substack.com", "https://CONFIRM-publication.substack.com/subscribe")]
 
 
 def utm(href):
@@ -96,7 +98,7 @@ h2,.h2{font-size:clamp(34px,4vw,52px);line-height:1.05;margin:0}
 /* the bar: one height, one state */
 .top{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.12)}
 .top .w{display:flex;align-items:center;justify-content:space-between;gap:24px;height:68px}
-.top .lk{height:26px;width:auto;display:block}
+.top .lk{height:32px;width:auto;display:block}
 .top nav{display:flex;gap:30px}
 .top nav a{font:600 13px/1 var(--label);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:12px 0;color:#fff}
 .top nav a:hover{color:var(--mg)}
@@ -108,7 +110,7 @@ h2,.h2{font-size:clamp(34px,4vw,52px);line-height:1.05;margin:0}
 .hero{position:relative;background:var(--blue);color:#fff;min-height:min(calc(100svh - 68px),820px);display:grid;align-items:center;padding-block:72px}
 .hero .w{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px;align-items:center;width:100%%}
 .hero .k{display:block;margin-bottom:18px;color:var(--mg)}
-.hero h1{font-size:clamp(44px,6.2vw,84px);line-height:1;margin:0 0 24px;max-width:12ch}
+.hero h1{font-size:clamp(44px,6.2vw,84px);line-height:1;margin:0 0 24px}
 .hero .lede{max-width:46ch}
 .hero .ctas{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-top:28px}
 .hero .mural{width:min(100%%,440px);justify-self:end;aspect-ratio:1}
@@ -122,10 +124,14 @@ section.block{padding-block:112px}
 .block .head .lede{max-width:56ch}
 .about{background:var(--paper)}
 .about .body{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:stretch}
-.about .media{position:relative;background:var(--tint);min-height:420px;overflow:hidden;display:grid;place-items:center}
-.about .media img{position:absolute;inset:0;width:100%%;height:100%%;object-fit:cover;display:block}
-.about .media .mk{width:58%%;height:auto;display:block}
-.about .media .cap{position:absolute;left:18px;bottom:14px;margin:0;font-size:13px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.about .media{display:grid;grid-template-rows:1fr auto;gap:10px;min-height:420px}
+.about .media .ph{position:relative;overflow:hidden;background:var(--tint);min-height:360px}
+.about .media .ph img{position:absolute;inset:0;width:100%%;height:100%%;object-fit:cover;display:block}
+.about .media .cap{margin:0;font-size:13px;color:rgba(15,46,77,.7)}
+.about .towns{background:var(--navy);color:#fff;padding:32px 28px;display:grid;align-content:space-between;gap:24px}
+.about .towns .k{color:var(--mg)}
+.about .towns ul{list-style:none;margin:0;padding:0;columns:2;column-gap:24px}
+.about .towns li{font-family:var(--display);font-size:clamp(22px,2vw,28px);line-height:1.25;break-inside:avoid;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.14)}
 .about .cols{display:grid;grid-template-rows:1fr 1fr;gap:0}
 .about .col{border-top:1px solid var(--navy);padding:22px 0 28px;display:grid;grid-template-columns:56px 1fr;gap:0 24px;align-content:start}
 .about .col:last-child{border-bottom:1px solid var(--navy)}
@@ -134,23 +140,24 @@ section.block{padding-block:112px}
 .about .col p{margin:0;font-size:17px;line-height:1.6;max-width:52ch;grid-column:2}
 /* the cast: nine faces, the name under each, the town and the handle */
 .roster{background:var(--tint)}
-.roster .grid{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:16px 12px}
+.roster .grid{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:16px 10px}
 .roster .tile{display:grid;gap:12px;text-decoration:none;color:inherit;align-content:start}
 .roster .tile .ph{aspect-ratio:4/5;background:var(--navy);overflow:hidden;position:relative}
 .roster .tile .ph img{width:100%%;height:100%%;object-fit:cover;display:block;filter:saturate(.92)}
-.roster .tile .ph .n{position:absolute;left:10px;top:8px;font:600 13px/1 var(--label);letter-spacing:.1em;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45)}
-.roster .tile .who{display:grid;gap:3px;border-top:1px solid var(--navy);padding-top:10px}
+.roster .tile .who{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;border-top:1px solid var(--navy);padding-top:10px;align-items:baseline}
+.roster .tile .who .n{font:600 13px/1 var(--label);letter-spacing:.1em;color:var(--blue)}
+.roster .tile .who .town{grid-column:2}
 .roster .tile b{font-size:17px;line-height:1.2;font-weight:700;font-family:var(--body)}
 .roster .tile .town{font-size:13px;line-height:1.3;color:rgba(15,46,77,.7)}
-.roster .tile .h{font:600 13px/1.4 var(--label);color:var(--blue);letter-spacing:.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 a.roster-tile:hover .who{border-top-color:var(--blue)}a.roster-tile:hover b{color:var(--blue)}
 /* where to find it: three feeds as an editorial list, then the newsletter band */
 .follow{background:var(--navy);color:#fff}
 .follow .list{border-top:1px solid rgba(255,255,255,.22)}
-.follow .row{display:grid;grid-template-columns:48px minmax(200px,3fr) 6fr auto;gap:0 24px;align-items:center;padding:30px 0;border-bottom:1px solid rgba(255,255,255,.22);text-decoration:none;color:inherit}
+.follow .row{display:grid;grid-template-columns:48px 1fr auto;gap:4px 24px;align-items:center;padding:28px 0;border-bottom:1px solid rgba(255,255,255,.22);text-decoration:none;color:inherit}
+.follow .row .ic{grid-column:1;grid-row:1/3}.follow .row .name{grid-column:2;grid-row:1}.follow .row .h{grid-column:3;grid-row:1/3}
 .follow .row .ic{width:28px;height:28px;color:var(--mg)}
 .follow .row .name{font-family:var(--display);font-size:clamp(26px,2.6vw,34px);line-height:1;transition:color .2s}
-.follow .row p{margin:0;font-size:16px;line-height:1.5;color:rgba(255,255,255,.78);max-width:44ch}
+.follow .row p{margin:0;font-size:15px;line-height:1.5;color:rgba(255,255,255,.72);max-width:52ch;grid-column:2;grid-row:2}
 .follow .row .h{font:600 13px/1 var(--label);letter-spacing:.06em;color:var(--mg);white-space:nowrap;justify-self:end}
 a.row:hover .name{color:var(--mg)}
 .follow .nl{margin-top:72px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:center;padding:48px 0 0;border-top:1px solid var(--mg)}
@@ -181,7 +188,7 @@ a.row:hover .name{color:var(--mg)}
  .block .head{grid-template-columns:1fr;gap:16px;margin-bottom:32px}
  .about .cols{grid-template-columns:1fr;gap:28px}
  .about .body{grid-template-columns:1fr;gap:28px}.about .media{min-height:0;aspect-ratio:4/3}.about .col{grid-template-columns:40px 1fr}
- .follow .row{grid-template-columns:36px 1fr;gap:6px 16px;padding:22px 0}.follow .row .ic{width:24px;height:24px}.follow .row p{grid-column:2}.follow .row .h{grid-column:2;justify-self:start;margin-top:6px}
+ .follow .row{grid-template-columns:36px 1fr;gap:4px 16px;padding:22px 0}.follow .row .ic{width:24px;height:24px;grid-row:1}.follow .row p{grid-column:2;grid-row:2}.follow .row .h{grid-row:3;grid-column:2;justify-self:start;margin-top:6px}
  .follow .nl{grid-template-columns:1fr;gap:24px;margin-top:48px;padding-top:36px}
  .follow form{grid-template-columns:1fr}
 }
@@ -214,13 +221,13 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
     <span class="k rise" id="k">A Maine Policy Institute project</span>
     <h1 class="rise" id="h1">%(h1)s</h1>
     <p class="lede rise" id="lede">Young Mainers film the rules that shape their lives. What rent costs, what a license costs, what it takes to stay. Told from the towns they live in.</p>
-    <div class="ctas rise" id="ctas"><a class="btn b1" href="#follow">Follow along</a><a class="tl" href="#about">What this is</a></div>
+    <div class="ctas rise" id="ctas"><a class="btn b1" href="#follow">Follow along</a></div>
   </div>
   %(hero_side)s
 </div>%(hero_credit)s</section>
 
 <section class="block about" id="about"><div class="w">
-  <div class="head"><h2>%(h2_about)s</h2><p class="lede">Short videos from young people in Maine about the rules behind everyday costs, and a newsletter with the full story. Nothing is published on this page; it points to where the work lives.</p></div>
+  <div class="head"><h2>%(h2_about)s</h2></div>
   <div class="body">%(about_media)s<div class="cols">%(cols)s</div></div>
 </div></section>
 
@@ -230,7 +237,7 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
 </div></section>
 
 <section class="block follow" id="follow"><div class="w">
-  <div class="head"><h2>%(h2_follow)s</h2><p class="lede">The videos are on TikTok, Instagram and YouTube. The full story, with the numbers, is in the newsletter on Substack.</p></div>
+  <div class="head"><h2>%(h2_follow)s</h2><p class="lede">Three feeds for the clips. One newsletter for the rest. Nothing is published on this page.</p></div>
   %(follow)s
 </div></section>
 </main>
@@ -277,8 +284,9 @@ def cols_html():
 
 def about_media(theme):
     if theme["hero"] == "video":
-        return '<div class="media"><img src="media/about.jpg" alt="Downtown Belfast, Maine, from above" width="1400" height="934" loading="lazy"><p class="cap">Belfast. Photograph: Quintin Soloviev, CC BY 4.0</p></div>'
-    return '<div class="media" aria-hidden="true">%s</div>' % S.logo("mark", "mk", theme["logo"])
+        return '<figure class="media" style="margin:0"><div class="ph"><img src="media/about.jpg" alt="Downtown Belfast, Maine, from above" width="1400" height="934" loading="lazy"></div><figcaption class="cap">Belfast. Photograph: Quintin Soloviev, CC BY 4.0</figcaption></figure>'
+    towns = "".join("<li>%s</li>" % c["town"] for c in S.CREATORS)
+    return '<div class="media"><div class="towns"><span class="k">Nine towns</span><ul>%s</ul></div></div>' % towns
 
 
 def tiles_html():
@@ -286,9 +294,10 @@ def tiles_html():
     links out once the account exists, so a tile is a plain block until then."""
     out = []
     for i, c in enumerate(S.CREATORS):
-        inner = ('<span class="ph"><img src="media/portrait-%d.jpg" alt="" width="300" height="400" loading="lazy"><span class="n">%02d</span></span>'
-                 '<span class="who"><b>%s</b><span class="town">%s, Maine</span><span class="h">%s</span></span>' % (i + 1, i + 1, c["name"], c["town"], c["handle"]))
-        out.append('<div class="tile" aria-label="%s, %s, Maine">%s</div>' % (c["name"], c["town"], inner))
+        inner = ('<span class="ph"><img src="media/portrait-%d.jpg" alt="" width="300" height="400"></span>'
+                 '<span class="who"><span class="n">%02d</span><b>%s</b><span class="town">%s, Maine</span></span>' % (i + 1, i + 1, c["name"], c["town"]))
+        # the tile links to the creator's feed once the account exists; until then it is a plain block
+        out.append('<div class="tile" data-handle="%s" aria-label="%s, %s, Maine">%s</div>' % (c["handle"], c["name"], c["town"], inner))
     return "".join(out)
 
 
@@ -298,10 +307,10 @@ def follow_html():
         rows.append('<a class="row" href="%s" rel="noopener"%s>%s<span class="name">%s</span><p>%s</p><span class="h">%s</span></a>'
                     % (utm(href), ' target="_blank"' if href.startswith("http") else "", S.icon(key), name, line, handle))
     key, name, line, handle, href = FOLLOW[3]
-    nl = ('<div class="nl" id="newsletter"><div><span class="k">Substack</span><h3>The full story, by email.</h3><p class="lede">The numbers behind each clip, and what they mean for the people in it. %s</p></div>'
+    nl = ('<div class="nl" id="newsletter"><div><span class="k">Substack</span><h3>The full story, by email.</h3><p class="lede">%s</p></div>'
           '<form id="nl" action="%s" method="get" target="_blank" rel="noopener"><label for="em" style="position:absolute;left:-9999px">Email</label>'
           '<input id="em" name="email" type="email" placeholder="you@example.com" autocomplete="email" required inputmode="email"><button class="btn b1" type="submit">Sign up</button>'
-          '<p class="fine">Runs on Substack. Unsubscribe in one click. [CONFIRM: publication address]</p></form></div>' % (handle, utm(href)))
+          '<p class="fine">Runs on Substack at %s. Unsubscribe in one click. [CONFIRM: publication address]</p></form></div>' % (line, utm(href), handle))
     return '<div class="list">%s</div>%s' % ("".join(rows), nl)
 
 
