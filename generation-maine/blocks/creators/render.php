@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 echo gm_render_creators( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	array(
+		'layout' => isset( $attributes['layout'] ) ? $attributes['layout'] : 'roster',
 		'limit' => isset( $attributes['limit'] ) ? (int) $attributes['limit'] : 24,
 		'next'  => isset( $attributes['next'] ) ? $attributes['next'] : '',
 		'last'  => isset( $attributes['last'] ) ? $attributes['last'] : '',

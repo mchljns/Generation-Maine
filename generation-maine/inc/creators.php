@@ -300,7 +300,42 @@ function gm_who( $c, $on ) {
  * @param array $args Optional. 'limit' (int), 'next' (string), 'last' (string).
  * @return string HTML
  */
+/**
+ * The roster: one tile per creator. A creator marked placeholder shows the numeral and the town only, no face and no link,
+ * so the page can launch before the shoot. A creator with the placeholder unchecked shows the avatar, name, town and handle,
+ * and the tile links to the first of their feeds. Nothing is hosted here; every tile is a door to where the clips live.
+ *
+ * @param array $creators From gm_get_creators().
+ * @return string HTML
+ */
+function gm_render_roster( $creators ) {
+	$out = '<div class="roster-grid">';
+	foreach ( $creators as $i => $c ) {
+		$n     = sprintf( '%02d', $i + 1 );
+		$town  = $c['town'] ? $c['town'] : __( 'Maine', 'generation-maine' );
+		$ready = ! $c['placeholder'] && ( $c['avatar'] || $c['handle'] );
+		if ( ! $ready ) {
+			$out .= '<div class="roster-tile" aria-label="' . esc_attr( sprintf( /* translators: 1: position, 2: town */ __( 'Creator %1$s, %2$s, Maine', 'generation-maine' ), $n, $town ) ) . '">'
+				. '<span class="n">' . esc_html( $n ) . '</span><b>' . esc_html( $town ) . '</b></div>';
+			continue;
+		}
+		$href  = '';
+		foreach ( $c['links'] as $l ) {
+			$href = $l['url'];
+			break;
+		}
+		$av    = $c['avatar'] ? '<img class="av" src="' . esc_url( $c['avatar'] ) . '" alt="" width="56" height="56" loading="lazy">' : '';
+		$inner = '<span class="n">' . esc_html( $n ) . '</span>' . $av . '<b>' . esc_html( $c['name'] ) . '</b><span class="town">' . esc_html( $town ) . '</span>'
+			. ( $c['handle'] ? '<span class="h">' . esc_html( $c['handle'] ) . '</span>' : '' );
+		$out  .= $href
+			? '<a class="roster-tile ready" href="' . esc_url( $href ) . '" target="_blank" rel="noopener">' . $inner . '</a>'
+			: '<div class="roster-tile ready">' . $inner . '</div>';
+	}
+	return $out . '</div>';
+}
+
 function gm_render_creators( $args = array() ) {
+	$layout   = isset( $args['layout'] ) && 'stepper' === $args['layout'] ? 'stepper' : 'roster';
 	$limit    = isset( $args['limit'] ) ? (int) $args['limit'] : 24;
 	$next     = isset( $args['next'] ) && '' !== $args['next'] ? $args['next'] : __( 'Next: ', 'generation-maine' );
 	$last     = isset( $args['last'] ) && '' !== $args['last'] ? $args['last'] : __( 'Last one', 'generation-maine' );
@@ -308,6 +343,9 @@ function gm_render_creators( $args = array() ) {
 	if ( ! $creators ) {
 		return '<section class="stories gm-empty" data-bg="var(--bi)"><div class="w"><p>' . esc_html__( 'The creators are being cast. Their clips and stories will appear here.', 'generation-maine' ) .
 			( current_user_can( 'edit_posts' ) ? ' <a href="' . esc_url( admin_url( 'post-new.php?post_type=gm_creator' ) ) . '">' . esc_html__( 'Add the first creator.', 'generation-maine' ) . '</a>' : '' ) . '</p></div></section>';
+	}
+	if ( 'roster' === $layout ) {
+		return '<section class="roster" data-bg="var(--sand)"><div class="w">' . gm_render_roster( $creators ) . '</div></section>';
 	}
 	$n = count( $creators );
 	$vids = $whos = $panels = $segs = '';
@@ -364,7 +402,7 @@ function gm_render_creators( $args = array() ) {
  * @return string
  */
 function gm_creators_shortcode( $atts ) {
-	$atts = shortcode_atts( array( 'limit' => 24 ), $atts, 'gm_creators' );
+	$atts = shortcode_atts( array( 'limit' => 24, 'layout' => 'roster' ), $atts, 'gm_creators' );
 	return gm_render_creators( $atts );
 }
 add_shortcode( 'gm_creators', 'gm_creators_shortcode' );

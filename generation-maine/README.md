@@ -11,11 +11,11 @@ A one-page block theme for GenerationMaine.org. Every piece of copy on the page 
 | `assets/js/site.js` | The page's motion: the mural, the pulsing period, the color fade on scroll, the capsule bar, the creators stepper, the reveals |
 | `assets/data/mural.json` | The sixteen lines of the hero mural, generated from the state outline |
 | `functions.php` | Loads the stylesheet and script, preloads the headline font, a favicon fallback |
-| `inc/creators.php` | The Creators post type, its fields, and the stepper that renders them |
+| `inc/creators.php` | The Creators post type, its fields, and the two layouts that render them: the roster (default) and the stepper |
 | `inc/newsletter.php` | Settings > Newsletter, the signup form that hands off to Substack, and the latest-posts feed reader |
 | `inc/marks.php` | The hand-drawn platform marks and placeholder avatar (generated) |
 | `inc/seo.php` | Title, description, canonical, Open Graph and Organization schema. Steps aside if an SEO plugin is active |
-| `blocks/creators/` | The Creators block |
+| `blocks/creators/` | The Creators block. Layout setting: Roster, a tile per creator linking to their feeds, town only until the creator is marked ready; or Stepper, one pinned clip at a time |
 | `blocks/newsletter/` | The Newsletter Signup block |
 | `blocks/posts/` | The Latest Newsletter Posts block |
 | `patterns/` | The page sections as block patterns: header, hero, about, creators, words, newsletter, follow, footer |
@@ -57,7 +57,7 @@ Colors, type, the pill shape and the motion are not editable in the page. That i
 4. **Avatar** (right sidebar, "Set avatar") is a square photo. It shows in a circle on the clip.
 5. **Creator details** sits in the Meta Boxes drawer at the bottom of the editor. Click the drawer to open it. It holds the handle, hometown, the clip (upload a short vertical video, or paste a direct link), its length, and the Instagram, TikTok and YouTube links.
 6. **Page Attributes > Order** sets the order on the page. Lower numbers come first.
-7. Publish. The creator appears in the stepper and the position row renames itself.
+7. Publish. In the roster the creator appears as a town tile while "placeholder" is checked, and as a face, name and handle linking to their first feed once it is unchecked. In the stepper the clip appears and the position row renames itself.
 
 Creators have no public pages of their own. With no creators published, the section shows a short note. A creator marked "Placeholder" renders like any other, so the page can be reviewed before casting.
 

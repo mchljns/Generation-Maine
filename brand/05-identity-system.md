@@ -637,3 +637,11 @@ Sheet: `brand/identity/logo-maine/family-b/consistent.png`. Applied to `lockup-c
 The framed mark in the footer draws itself when the footer scrolls into view. The long leg draws first, from the open end up, across the top and down the right, over about two seconds. The two words rise in behind it, generation then maine. The return draws last, from the corner back toward the opening. Reduced motion shows the mark at once. Frames: `brand/identity/logo-maine/family-b/footer-draw.png`.
 
 The `js` class is now set by a one line script in the head, before first paint. Set at the end of the body it arrived after paint, and every hidden starting state transitioned into place at load.
+
+## The lean page, both concepts
+
+Garrick's brief, built: a bare bones page that says what the project is, what it hopes to achieve, and where the content lives, in the family's look. Five blocks: the bar, the hero, two columns, the creators roster, four follow tiles with the newsletter form inside the Substack tile. Then the family footer. Builder: `brand/src/build_splash_lean.py`. Live: `/lean/` toggles `/lean-a/` and `/lean-b/`.
+
+Both audits are folded in. One control height, 48. No text under 13 px. Column labels at body size. The newsletter button and the footer link go to the newsletter tile. The sign up field is a real form: it hands the address to Substack's subscribe page, which prefills it. A share card at 1200 by 630 for each concept, a title with the one line, a skip link, a favicon and app icon. Every outbound link carries a source parameter. The hero loop was re rendered at 1600 by 900 and 1.65 MB. No stepper, no clips, no hidden sections. Family A loads 274 KB; Family B loads 2.3 MB with the loop. Nine dead links remain, all placeholders for accounts and pages that do not exist yet.
+
+The creators roster: nine tiles, numbered, one town each. Before the shoot a tile is a town. After, it takes the face, the name and the handle, and links to the creator's feed. The WordPress Creators block has the same roster as its default layout, with the stepper kept as the second layout.

@@ -5,10 +5,11 @@
 	"title": "Creators",
 	"category": "widgets",
 	"icon": "groups",
-	"description": "The creators section: one pinned clip with the creator's avatar and handle, their details beside it, and a position row. Reads every published creator. Add creators under Creators in the dashboard.",
+	"description": "The creators, read from the Creators posts. Roster: a grid of tiles, one per creator, town only until a creator is marked ready, then the face, name and handle linking to their feeds. Stepper: one pinned clip with the details beside it.",
 	"keywords": [ "creators", "stories", "clips" ],
 	"textdomain": "generation-maine",
 	"attributes": {
+		"layout": { "type": "string", "default": "roster", "enum": [ "roster", "stepper" ] },
 		"limit": { "type": "number", "default": 24 },
 		"next": { "type": "string", "default": "" },
 		"last": { "type": "string", "default": "" }
