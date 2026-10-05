@@ -526,7 +526,12 @@ def page(theme=SIGNATURE, out=None, media=None):
   const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.remove('pre'); so.unobserve(e.target); } }), { threshold: .18 });
   secs.forEach(sc => so.observe(sc));
   document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', () => { const t = document.getElementById(a.getAttribute('href').slice(1)); if (t && t.classList.contains('reveal')) { t.classList.remove('pre'); so.unobserve(t); } }));
-  const site = document.querySelector('.site'); new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) site.classList.add('on'); }), { threshold: .3 }).observe(site);
+  const site = document.querySelector('.site');
+  if (%(footer_at_bottom)s) {
+    // the footer draws only once the page is scrolled to its end
+    const atEnd = () => { if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) { site.classList.add('on'); removeEventListener('scroll', atEnd); } };
+    addEventListener('scroll', atEnd, { passive: true }); atEnd();
+  } else new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) site.classList.add('on'); }), { threshold: .3 }).observe(site);
 
   // The signup form hands off to Substack: the address rides in the query string to the publication's subscribe page, which opens
   // in a new tab and sends the confirmation email. The page shows its own line. Until the publication exists, the hand-off is held.
@@ -550,7 +555,7 @@ def page(theme=SIGNATURE, out=None, media=None):
         band=theme.get("band", "").replace("{media}", media),
         pt1=theme.get("post_thumbs", ["", "", ""])[0].replace("{media}", media), pt2=theme.get("post_thumbs", ["", "", ""])[1].replace("{media}", media), pt3=theme.get("post_thumbs", ["", "", ""])[2].replace("{media}", media),
         qa1=theme.get("quote_stills", ["", "", ""])[0].replace("{media}", media), qa2=theme.get("quote_stills", ["", "", ""])[1].replace("{media}", media), qa3=theme.get("quote_stills", ["", "", ""])[2].replace("{media}", media),
-        two=(ping_dot if theme["footer_ping"] else (lambda t: t))(draw_paths(logo(theme["footer"], "lk", theme["logo"]))), mural=theme["mural"], bg_follow=theme["bg_follow"],
+        two=(ping_dot if theme["footer_ping"] else (lambda t: t))(draw_paths(logo(theme["footer"], "lk", theme["logo"]))), mural=theme["mural"], bg_follow=theme["bg_follow"], footer_at_bottom="true" if theme.get("footer_at_bottom") else "false",
         h1=dot("Young Mainers on building a life here", pulse=True), h2about=dot(theme.get("h2about", "Made by the people it is about")), h2cre=dot("The creators"),
         cols="".join('<div class="row-in"><h3>%s</h3><p>%s</p></div>' % c for c in theme.get("cols", [("Who makes it", "Young Mainers with a phone and a story. They pick what to film and say it their own way."), ("What it is about", "The rules behind everyday costs. Leases, licenses, permits, wages, and the fine print nobody reads until it costs them."), ("Where to find it", "Short videos on TikTok, Instagram and YouTube. The full story, with the numbers, by email.")])),
         footer_line=theme.get("footer_line", "© 2026 Generation Maine. An initiative of Maine Policy Institute. [CONFIRM: legal name, address and contact]"),

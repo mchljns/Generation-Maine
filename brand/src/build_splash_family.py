@@ -137,12 +137,12 @@ FAMILY_B_CSS = """
 @media (prefers-reduced-motion: reduce){.bs.static .site .lk path[stroke]{stroke-dashoffset:0!important;transition:none!important}.bs.static .site .lk g path{opacity:1;transform:none;transition:none!important}}
 """ % dict(blue=BLUE_B, navy=NAVY_B, mg=MG)
 
-FAMILY_A = dict(S.SIGNATURE, css=STATIC_CSS + FAMILY_A_CSS, root_class="static", signup_band=SIGNUP,
+FAMILY_A = dict(S.SIGNATURE, css=STATIC_CSS + FAMILY_A_CSS, root_class="static", signup_band=SIGNUP, footer_at_bottom=True,
                 logo=LOGO_A, nav_light="lockup-compact-reversed", nav_dark="lockup-compact-reversed", footer="lockup-two-line-reversed", mural_data=MURAL_A, title="Generation Maine", out="brand/identity/splash-family-a", media="",
                 lean=True, hero_kicker="A Maine Policy Institute project", h2about="What this is", cols=COLS, footer_line=CREDIT, bg_follow="#EAF1F8", footer_ping=False)
 
 B_CSS = B.CSS.replace("{media}", "") + STATIC_CSS.replace(".static", ".static.bs").replace(".static.bs.js", ".static.bs.js") + FAMILY_B_CSS
-FAMILY_B = dict(B.BARK_SKY, css=B_CSS, title="Generation Maine", out="brand/identity/splash-family-b", media="", root_class="bs static", signup_band=SIGNUP,
+FAMILY_B = dict(B.BARK_SKY, css=B_CSS, title="Generation Maine", out="brand/identity/splash-family-b", media="", root_class="bs static", signup_band=SIGNUP, footer_at_bottom=True,
                 logo=LOGO_B, nav_light="lockup-compact-reversed", nav_dark="lockup-compact-reversed", nav_rest="lockup-compact-reversed", footer="lockup-two-line-reversed",
                 lean=True, hero_kicker="A Maine Policy Institute project", h2about="what this is", cols=COLS, footer_line=CREDIT, bg_follow="#EAF1F8",
                 about_media="", band="", post_thumbs=["", "", ""], quote_stills=["", "", ""])
