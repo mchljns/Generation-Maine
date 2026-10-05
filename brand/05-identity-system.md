@@ -612,3 +612,7 @@ The client wanted the Maine animation back in the hero and footer, and the upper
 ### One preview, two concepts
 
 The client asked for a single link that toggles between the two family concepts. `/family/` is a wrapper page: the concept loads in a full viewport frame, a floating pill at the bottom switches between Concept A and Concept B, the choice rides in the URL hash (`#a`, `#b`) and is remembered, and the A and B keys switch too. Family B now carries the framed wordmark in the bar and footer: the stacked lowercase name inside an open marigold square, maine in marigold, the device Maine Civic Action uses for its own name (`build_logo_family_b.py`). The bar is taller on B to give the frame room.
+
+### Family B, the horizontal lockup
+
+The framed stacked mark lost its frame at bar size: a hairline around 11px type. Six horizontal arrangements were tried at the bar's real size (`build_horizontal_b.py`, `logo-maine/family-b/horizontal.png`). The bar now carries the one line name with the open square beside it as a mark at cap height, heavy enough to read at 16px, maine in marigold. The square alone is the avatar and favicon. The framed stacked mark stays in the footer, where it has room.

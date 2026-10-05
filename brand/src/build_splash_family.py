@@ -122,9 +122,8 @@ FAMILY_B_CSS = """
 .bs .strip img,.bs .ph img{border-radius:0}
 .bs .hero h1{font-size:clamp(42px,6vw,84px)}
 /* the framed wordmark needs height: a taller bar, and room in the footer */
-.bs.static .top .w{height:76px}.bs.static .top .lk{height:48px;width:auto}.bs.static .top.scrolled .lk{height:48px}.bs.static .top.scrolled .w{height:68px}.bs.static .top.scrolled .lk{height:44px}
-.bs.static .hero{padding-top:76px}
-@media (max-width:900px){.bs.static .top .lk{height:44px}}
+.bs.static .top .lk{height:26px;width:auto}.bs.static .top.scrolled .lk{height:26px}
+@media (max-width:900px){.bs.static .top .lk{height:24px}}
 .bs.static .site .lk{height:150px}@media (max-width:900px){.bs.static .site .lk{height:120px}}
 """ % dict(blue=BLUE_B, navy=NAVY_B, mg=MG)
 

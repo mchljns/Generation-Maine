@@ -17,10 +17,19 @@ def one_line(fg1, fg2):
     vb = re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', s); d = re.findall(r'<path[^>]*d="([^"]+)"', s)[0]
     # split the single path at the gap between the words: subpaths whose min x is past the gap belong to maine
     subs = re.findall(r'M[^M]+', d)
-    xs = [min(float(v) for v in re.findall(r'(-?\d+\.?\d*) -?\d+\.?\d*', sp)) for sp in subs]
-    gap_i = max(range(1, len(subs)), key=lambda i: xs[i] - max(xs[:i]))  # the biggest jump in x starts the second word
-    gen = "".join(subs[:gap_i]); maine = "".join(subs[gap_i:])
-    mx = min(xs[gap_i:])
+    boxes = []
+    for sp in subs:
+        xs = [float(v) for v in re.findall(r'(-?\d+\.?\d*) -?\d+\.?\d*', sp)]
+        boxes.append((min(xs), max(xs)))
+    order = sorted(range(len(subs)), key=lambda i: boxes[i][0])
+    # the space between the words is the largest gap between one glyph's right edge and the next glyph's left edge
+    reach = []; m = -1e9
+    for i in order:
+        reach.append(m); m = max(m, boxes[i][1])
+    gaps = [(boxes[i][0] - reach[k], k) for k, i in enumerate(order) if k > 0]
+    _, cut = max(gaps)
+    gen_ids = set(order[:cut]); gen = "".join(subs[i] for i in range(len(subs)) if i in gen_ids); maine = "".join(subs[i] for i in range(len(subs)) if i not in gen_ids)
+    mx = min(boxes[i][0] for i in range(len(subs)) if i not in gen_ids)
     return '<path fill="%s" d="%s"/><path fill="%s" d="%s"/>' % (fg1, gen, fg2, maine), float(vb.group(1)), float(vb.group(2)), mx
 
 
