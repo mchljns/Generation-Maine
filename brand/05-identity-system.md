@@ -665,3 +665,7 @@ Read before rebuilding: nonprofit site guidance on mission content, layout patte
 Built: a split layout. The photograph on the left, a 3 by 4 crop of Lisbon Street in Lewiston, the same on both concepts so the comparison stays about type and color. On the right, in one column: the label, the aim as the statement in display type, then the three facts of how it works as a ruled list. Concept A now carries a photograph; the no photography rule for that concept gave way to the client's wish for the family look, which runs on photography. The nine towns panel is retired.
 
 Sources: Loop, nonprofit website best practices; Wired Impact, effective nonprofit mission pages; Donorbox on mission statement length; Nielsen Norman Group on text over images; SitePoint on split layouts; the eye tracking study of single, two and three column reading.
+
+### Copy, third pass
+
+The aim is now a sentence, not a bracket: "Everyone who leaves Maine has a reason. We want the people who stay to show what it costs, one rule at a time." It is a draft for Maine Policy Institute to edit, and says so in a small line under it. The three facts name what a clip does: one rule, what it says, what it costs. The newsletter is "the paperwork behind each clip, by email", which is the one thing the plan promises it will carry.

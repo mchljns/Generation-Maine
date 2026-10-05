@@ -84,9 +84,9 @@ STEPPER_OVERRIDES = """
 @media (max-width:900px){.stories .pinw{top:calc(84px + env(safe-area-inset-top,0px))}}
 """
 
-HOW = ["Nine creators in nine towns. Each one films where they live.",
-       "One rule per clip: a lease clause, a license fee, a permit, a line on a pay stub.",
-       "The clips go out on the creators' own accounts. The newsletter carries the paperwork behind them."]
+HOW = ["Nine young Mainers, in nine towns, film where they live.",
+       "Each clip takes one rule: a lease clause, a license fee, a permit, a line on a pay stub. What it says, and what it costs.",
+       "The clips go out on their own accounts. The newsletter follows the paperwork, with the numbers."]
 FOLLOW = [("instagram", "Instagram", "[@handle]", "#"),
           ("tiktok", "TikTok", "[@handle]", "#"),
           ("youtube", "YouTube", "[@handle]", "#"),
@@ -159,6 +159,7 @@ section.block{padding-block:112px}
 .about .body{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:center}
 .about .aim .k{display:block;color:var(--blue);margin-bottom:20px}
 .about .aim .big{font-family:var(--display);font-size:clamp(28px,3vw,42px);line-height:1.18;margin:0;max-width:20ch}
+.about .aim .note{margin:14px 0 0;font-size:13px;color:rgba(15,46,77,.6)}
 .about .how{margin-top:40px;border-top:1px solid var(--navy);display:grid;max-width:60ch}
 .about .how div{display:grid;grid-template-columns:40px 1fr;gap:0 12px;align-items:baseline;padding:16px 0;border-bottom:1px solid rgba(15,46,77,.18)}
 .about .how .n{font:600 13px/1 var(--label);letter-spacing:.1em;color:var(--blue)}
@@ -251,16 +252,16 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
 </div>%(hero_credit)s</section>
 
 <section class="block about" id="about"><div class="w">
-  <div class="body">%(about_media)s<div class="aim"><span class="k">What we hope to achieve</span><p class="big">[CONFIRM: the project's aim, in the client's words.] Young people in Maine who understand the rules behind everyday costs, and who say so in their own words.</p><div class="how">%(cols)s</div></div></div>
+  <div class="body">%(about_media)s<div class="aim"><span class="k">What we hope to achieve</span><p class="big">Everyone who leaves Maine has a reason. We want the people who stay to show what it costs, one rule at a time.</p><p class="note">[CONFIRM: the aim, in Maine Policy Institute's words. This is a draft to edit.]</p><div class="how">%(cols)s</div></div></div>
 </div></section>
 
 <section class="block roster stories-head" id="creators"><div class="w">
-  <div class="head" style="margin-bottom:0"><h2>%(h2_creators)s</h2><p class="lede">Names, faces and clips here stand in until the shoot. First clips [CONFIRM: month].</p></div>
+  <div class="head" style="margin-bottom:0"><h2>%(h2_creators)s</h2><p class="lede">The people here are stand-ins until the shoot. First clips [CONFIRM: month].</p></div>
 </div></section>
 %(stepper)s
 
 <section class="block follow" id="follow"><div class="w">
-  <div class="head"><h2>%(h2_follow)s</h2><p class="lede">The clips live on the feeds. The paperwork lives in the newsletter. Nothing is published on this page.</p></div>
+  <div class="head"><h2>%(h2_follow)s</h2><p class="lede">Nothing is published on this page. The clips live on the feeds. The paperwork lives in the newsletter.</p></div>
   %(follow)s
 </div></section>
 </main>
@@ -368,7 +369,7 @@ def follow_html():
     for key, name, handle, href in FOLLOW:
         rows.append('<a class="row" href="%s" rel="noopener"%s>%s<span class="name">%s</span><span class="h">%s</span></a>'
                     % (utm(href), ' target="_blank"' if href.startswith("http") else "", S.icon(key), name, handle))
-    nl = ('<div class="nl" id="newsletter"><div><span class="k">Newsletter</span><h3>The full story, by email.</h3></div>'
+    nl = ('<div class="nl" id="newsletter"><div><span class="k">Newsletter</span><h3>The paperwork behind each clip, by email.</h3></div>'
           '<form id="nl" action="%s" method="get" target="_blank" rel="noopener"><label for="em" style="position:absolute;left:-9999px">Email</label>'
           '<input id="em" name="email" type="email" placeholder="you@example.com" autocomplete="email" required inputmode="email"><button class="btn b1" type="submit">Sign up</button>'
           '<p class="fine">Runs on Substack. Unsubscribe in one click. [CONFIRM: publication address]</p></form></div>' % utm("https://CONFIRM-publication.substack.com/subscribe"))
