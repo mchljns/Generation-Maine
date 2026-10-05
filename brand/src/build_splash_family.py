@@ -130,10 +130,10 @@ FAMILY_B_CSS = """
 .bs.static .site .lk g path{opacity:0;transform-box:fill-box;transform:translateY(5%%)}
 .bs.static:not(.js) .site .lk path[stroke],.bs.static .site.on .lk path[stroke]{stroke-dashoffset:0}
 .bs.static:not(.js) .site .lk g path,.bs.static .site.on .lk g path{opacity:1;transform:none}
-.bs.static.js .site .lk path[stroke]:nth-of-type(1){transition:stroke-dashoffset 1.1s cubic-bezier(.3,.6,.2,1) 0s!important}
-.bs.static.js .site .lk path[stroke]:nth-of-type(2){transition:stroke-dashoffset .5s cubic-bezier(.3,.6,.2,1) 1s!important}
-.bs.static.js .site .lk g path{transition:opacity .6s ease-out,transform .7s cubic-bezier(.2,.7,.2,1)}
-.bs.static.js .site .lk g path:nth-of-type(1){transition-delay:.85s!important}.bs.static.js .site .lk g path:nth-of-type(2){transition-delay:1.05s!important}
+.bs.static.js .site .lk path[stroke]:nth-of-type(1){transition:stroke-dashoffset 1.9s cubic-bezier(.3,.6,.2,1) 0s!important}
+.bs.static.js .site .lk path[stroke]:nth-of-type(2){transition:stroke-dashoffset .9s cubic-bezier(.3,.6,.2,1) 1.7s!important}
+.bs.static.js .site .lk g path{transition:opacity 1s ease-out,transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.bs.static.js .site .lk g path:nth-of-type(1){transition-delay:1.4s!important}.bs.static.js .site .lk g path:nth-of-type(2){transition-delay:1.75s!important}
 @media (prefers-reduced-motion: reduce){.bs.static .site .lk path[stroke]{stroke-dashoffset:0!important;transition:none!important}.bs.static .site .lk g path{opacity:1;transform:none;transition:none!important}}
 """ % dict(blue=BLUE_B, navy=NAVY_B, mg=MG)
 

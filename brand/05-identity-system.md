@@ -634,6 +634,6 @@ Sheet: `brand/identity/logo-maine/family-b/consistent.png`. Applied to `lockup-c
 
 ### Footer draw, Family B
 
-The framed mark in the footer draws itself when the footer scrolls into view. The long leg draws first, from the open end up, across the top and down the right, over 1.1 seconds. The two words rise in behind it, generation then maine. The return draws last, from the corner back toward the opening. Reduced motion shows the mark at once. Frames: `brand/identity/logo-maine/family-b/footer-draw.png`.
+The framed mark in the footer draws itself when the footer scrolls into view. The long leg draws first, from the open end up, across the top and down the right, over about two seconds. The two words rise in behind it, generation then maine. The return draws last, from the corner back toward the opening. Reduced motion shows the mark at once. Frames: `brand/identity/logo-maine/family-b/footer-draw.png`.
 
 The `js` class is now set by a one line script in the head, before first paint. Set at the end of the body it arrived after paint, and every hidden starting state transitioned into place at load.
