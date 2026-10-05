@@ -669,3 +669,7 @@ Sources: Loop, nonprofit website best practices; Wired Impact, effective nonprof
 ### Copy, third pass
 
 The aim is now a sentence, not a bracket: "Everyone who leaves Maine has a reason. We want the people who stay to show what it costs, one rule at a time." It is a draft for Maine Policy Institute to edit, and says so in a small line under it. The three facts name what a clip does: one rule, what it says, what it costs. The newsletter is "the paperwork behind each clip, by email", which is the one thing the plan promises it will carry.
+
+### Garrick's cohesion note, applied to both concepts
+
+Colors: both pages now use Maine Policy's gold (#FAC800) in place of marigold, in the marks, the hero stripe, the buttons and the labels. Concept B moves to Maine Policy's navy and royal blue and to white pages. The bars: three slanted bars, the last in gold, sit before the kicker, the about label and the newsletter label, the way Maine Policy sets its slash before subheads. The typeface stays as each concept had it; the client asked that Red Hat Display not be used. The creators heading lost its placeholder line and gained room above the pinned clip.

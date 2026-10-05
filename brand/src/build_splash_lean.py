@@ -24,7 +24,8 @@ from gmlib import ROOT, write
 
 LIVE = "https://mchljns.github.io/Generation-Maine/"
 UTM = "utm_source=generationmaine&utm_medium=splash"
-MG = "#EFB443"
+MG = "#FAC800"   # Maine Policy's gold
+MPI_NAVY, MPI_BLUE = "#0F2E4D", "#0556A5"
 
 SITE_CSS = lambda css: "\n".join(l for l in css.splitlines() if ".site" in l)
 
@@ -42,19 +43,19 @@ LEAN_A = dict(
 """)
 
 LEAN_B = dict(
-    key="lean-b", out="brand/identity/splash-lean-b", root_class="bs static lean", navy="#112337", blue="#006CB5", ink="#112337", paper="#F4F3EE", tint="#EAF1F8",
+    key="lean-b", out="brand/identity/splash-lean-b", root_class="bs static lean", navy=MPI_NAVY, blue=MPI_BLUE, ink=MPI_NAVY, paper="#FFFFFF", tint="#EAF1F8",
     fonts=B.FONTS, font_files=B.BARK_SKY["font_files"], logo=F.LOGO_B, mural=None, hero="video", credits=B.BARK_SKY["credits"],
     display="'Hedvig Letters Serif',Georgia,serif", body="'Hedvig Letters Sans',system-ui,sans-serif", label="'Hedvig Letters Sans',system-ui,sans-serif",
     h1="young mainers<br>on building<br>a life here", h2_about="what this is", h2_creators="the creators", h2_follow="where to find it",
     site_css=SITE_CSS(F.STATIC_CSS) + "\n" + SITE_CSS(F.FAMILY_B["css"]),
     css="""
-:root{--bark:#112337;--sky:#fff}
+:root{--bark:#0F2E4D;--sky:#fff}
 .lean h1,.lean h2,.lean .h2{font-family:var(--display);font-weight:400;letter-spacing:-.015em}
 .lean .col b{font-family:var(--body);font-weight:400}
 .lean .hero{color:#fff}
 .lean .hero .bg{position:absolute;inset:0;overflow:hidden;background:var(--navy)}
 .lean .hero .bg video{width:100%;height:100%;object-fit:cover;display:block}
-.lean .hero .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(17,35,55,.78) 0%,rgba(17,35,55,.55) 45%,rgba(17,35,55,.18) 100%)}
+.lean .hero .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,46,77,.78) 0%,rgba(15,46,77,.55) 45%,rgba(15,46,77,.18) 100%)}
 .lean .hero .credit{position:absolute;right:var(--M);bottom:14px;margin:0;font-size:13px;color:rgba(255,255,255,.72);max-width:46ch;text-align:right}
 .lean .hero .lede{color:rgba(255,255,255,.92)}
 @media (prefers-reduced-motion: reduce){.lean .hero .bg video{display:none}.lean .hero .bg{background:url(media/hero-poster.jpg) center/cover no-repeat}}
@@ -72,6 +73,7 @@ def stepper_css():
 STEPPER_OVERRIDES = """
 :root{--rule:rgba(15,46,77,.18);--fg:var(--ink);--muted:rgba(15,46,77,.7);--bi:var(--tint)}
 .stories-head{padding-bottom:0!important}
+.stories{padding-top:48px}
 .stories{background:var(--tint)}
 .stories .w{max-width:1280px;margin:0 auto;padding-inline:var(--M)}
 .vid,.vid video,.vid img.clip{border-radius:0}.vid{box-shadow:none;background:var(--navy)}
@@ -95,6 +97,12 @@ FOLLOW = [("instagram", "Instagram", "[@handle]", "#"),
           ("substack", "Substack", "[name].substack.com", "https://CONFIRM-publication.substack.com/")]
 
 
+def bars():
+    """Three slanted bars, the last in gold: the family's mark, at label size, before a kicker."""
+    return ('<svg class="bars" viewBox="0 0 30 12" aria-hidden="true"><path d="M4 12 L8 0 h5 L9 12z" fill="currentColor"/>'
+            '<path d="M12 12 L16 0 h5 L17 12z" fill="currentColor"/><path d="M20 12 L24 0 h5 L25 12z" class="g"/></svg>')
+
+
 def utm(href):
     """Outbound links carry a source so the newsletter and the accounts can see what the page sends them."""
     if not href.startswith("http"):
@@ -104,7 +112,7 @@ def utm(href):
 
 CSS = r"""
 {{FONTS}}
-:root{color-scheme:light;--navy:%(navy)s;--blue:%(blue)s;--mg:#EFB443;--ink:%(ink)s;--paper:%(paper)s;--tint:%(tint)s;--pine:%(navy)s;--snow:#fff;--display:%(display)s;--body:%(body)s;--M:60px;--ctl:48px}
+:root{color-scheme:light;--navy:%(navy)s;--blue:%(blue)s;--mg:#FAC800;--ink:%(ink)s;--paper:%(paper)s;--tint:%(tint)s;--pine:%(navy)s;--snow:#fff;--display:%(display)s;--body:%(body)s;--M:60px;--ctl:48px}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%%;scroll-behavior:smooth;scroll-padding-top:68px}
 body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body);-webkit-font-smoothing:antialiased}
@@ -114,11 +122,13 @@ a{color:inherit}
 .skip{position:absolute;left:var(--M);top:-60px;z-index:50;background:var(--mg);color:var(--navy);padding:0 16px;height:var(--ctl);line-height:var(--ctl);font:600 13px/var(--ctl) var(--label);letter-spacing:.1em;text-transform:uppercase;text-decoration:none}
 .skip:focus{top:8px}
 .w{max-width:1280px;margin:0 auto;padding-inline:var(--M)}
-.k{font:600 13px/1 var(--label);letter-spacing:.1em;text-transform:uppercase}
+.k{font:600 13px/1 var(--label);letter-spacing:.1em;text-transform:uppercase;display:inline-flex;align-items:center;gap:10px}
+.bars{width:30px;height:12px;flex:none;margin-right:10px;vertical-align:-1px}.bars .g{fill:var(--mg)}
+.k{display:inline-flex}.hero .k,.about .aim .k,.follow .nl .k{display:flex}
 .lede{font-size:19px;line-height:1.55;margin:0}
 h2,.h2{font-size:clamp(34px,4vw,52px);line-height:1.05;margin:0}
 .btn,.tl{display:inline-flex;align-items:center;justify-content:center;height:var(--ctl);padding:0 24px;font:600 13px/1 var(--label);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
-.btn.b1{background:var(--mg);color:var(--navy);border-color:var(--mg)}.btn.b1:hover{background:#F3C364;border-color:#F3C364}
+.btn.b1{background:var(--mg);color:var(--navy);border-color:var(--mg)}.btn.b1:hover{background:#FFD633;border-color:#FFD633}
 .btn.b2{background:transparent;color:inherit;border-color:currentColor}.btn.b2:hover{background:var(--mg);color:var(--navy);border-color:var(--mg)}
 .tl{padding:0 4px;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1.5px}
 /* the bar: one height, one state */
@@ -242,7 +252,7 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
 <main id="main">
 <section class="hero" id="top">%(hero_bg)s<div class="w">
   <div>
-    <span class="k rise" id="k">A Maine Policy Institute project</span>
+    <span class="k rise" id="k">%(bars)sA Maine Policy Institute project</span>
     <h1 class="rise" id="h1">%(h1)s</h1>
     <p class="lede rise" id="lede">Young Mainers film the rules that shape their lives. What rent costs, what a license costs, what it takes to stay. Told from the towns they live in.</p>
     <div class="ctas rise" id="ctas"><a class="btn b1" href="#follow">Follow along</a></div>
@@ -251,11 +261,11 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
 </div>%(hero_credit)s</section>
 
 <section class="block about" id="about"><div class="w">
-  <div class="body">%(about_media)s<div class="aim"><span class="k">What we hope to achieve</span><p class="big">Everyone who leaves Maine has a reason. We want the people who stay to show what it costs, one rule at a time.</p><p class="note">[CONFIRM: the aim, in Maine Policy Institute's words. This is a draft to edit.]</p><p class="goal">%(cols)s</p></div></div>
+  <div class="body">%(about_media)s<div class="aim"><span class="k">%(bars)sWhat we hope to achieve</span><p class="big">Everyone who leaves Maine has a reason. We want the people who stay to show what it costs, one rule at a time.</p><p class="note">[CONFIRM: the aim, in Maine Policy Institute's words. This is a draft to edit.]</p><p class="goal">%(cols)s</p></div></div>
 </div></section>
 
 <section class="block roster stories-head" id="creators"><div class="w">
-  <div class="head" style="margin-bottom:0"><h2>%(h2_creators)s</h2><p class="lede">The people here are stand-ins until the shoot. First clips [CONFIRM: month].</p></div>
+  <div class="head" style="margin-bottom:0"><h2>%(h2_creators)s</h2></div>
 </div></section>
 %(stepper)s
 
@@ -368,7 +378,7 @@ def follow_html():
     for key, name, handle, href in FOLLOW:
         rows.append('<a class="row" href="%s" rel="noopener"%s>%s<span class="name">%s</span><span class="h">%s</span></a>'
                     % (utm(href), ' target="_blank"' if href.startswith("http") else "", S.icon(key), name, handle))
-    nl = ('<div class="nl" id="newsletter"><div><span class="k">Newsletter</span><h3>The paperwork behind each clip, by email.</h3></div>'
+    nl = ('<div class="nl" id="newsletter"><div><span class="k">' + bars() + 'Newsletter</span><h3>The paperwork behind each clip, by email.</h3></div>'
           '<form id="nl" action="%s" method="get" target="_blank" rel="noopener"><label for="em" style="position:absolute;left:-9999px">Email</label>'
           '<input id="em" name="email" type="email" placeholder="you@example.com" autocomplete="email" required inputmode="email"><button class="btn b1" type="submit">Sign up</button>'
           '<p class="fine">Runs on Substack. Unsubscribe in one click. [CONFIRM: publication address]</p></form></div>' % utm("https://CONFIRM-publication.substack.com/subscribe"))
@@ -441,7 +451,8 @@ def page(theme):
     url = LIVE + theme["key"] + "/"
     html = HTML % dict(root_class=theme["root_class"], css=css, url=url, bar_logo=S.logo("lockup-compact-reversed", "lk", theme["logo"]), h1=theme["h1"],
                        hero_bg=hero_bg, hero_side=hero_side, hero_credit=hero_credit, h2_about=theme["h2_about"], h2_creators=theme["h2_creators"], h2_follow=theme["h2_follow"],
-                       cols=cols_html(), about_media=about_media(theme), tiles=tiles_html(), stepper=stepper_html(), follow=follow_html(), footer=footer, mural_json=json.dumps(theme["mural"]) if theme["mural"] else "{}")
+                       bars=bars(), cols=cols_html(), about_media=about_media(theme), tiles=tiles_html(), stepper=stepper_html(), follow=follow_html(), footer=footer, mural_json=json.dumps(theme["mural"]) if theme["mural"] else "{}")
+    html = html.replace("#EFB443", MG)
     write(os.path.join(out_dir, "index.html"), html)
     icons(theme, out_dir)
     share_card(theme, out_dir)
