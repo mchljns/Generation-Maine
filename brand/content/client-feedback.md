@@ -18,3 +18,13 @@ Verbatim notes from the client side, kept so decisions can be traced back to the
 2. **Scope is smaller than built.** The site is a splash page: what the project is, what it hopes to achieve, where to find the content. No creator stepper, no newsletter list, no posts. The current page carries much more than that; it should be cut down to those three jobs and the stepper kept only if the client asks for it.
 3. **Budget pressure.** The proposal was $9,500 and sits at the top of their range. An RFP is possible. The reduced scope is the natural place to meet them: a smaller fixed price for the smaller page, with the mark and the social kit as separable options.
 4. **The mark.** With family resemblance now a requirement, the brand mark may be constrained by, or inherited from, the parent brands' system. Pause independent mark exploration until the examples arrive.
+
+## Garrick, after the family pages, October 5, 2026
+
+> We just want it to look cohesive with maine policy's branding (blue/white/gold colors, typeface, possibly the three bars in our logo, etc), but we don't need to overthink or stress about it or anything since it's just a small-ish project of ours
+
+### What this changes
+
+1. **The reference is Maine Policy Institute itself.** Not the family in general. Blue, white and gold, the typeface, and possibly the slanted bars from the mark. Concept A was built on exactly that palette and a heavy grotesk, with a striped state that speaks the same language as the bars. Concept B's lowercase serif and photographic hero are the farther of the two from Maine Policy and should be retired.
+2. **Three adjustments bring Concept A the rest of the way.** Maine Policy's gold is #FAC800; ours is #EFB443. Maine Policy's body face is Red Hat Display, which is under the Open Font License and can be used as is. Maine Policy's heading face, Clash Grotesk, is not under that license; Bricolage Grotesque stays as the nearest open equivalent. The bars can appear as a small device beside labels, the way Maine Policy uses its slash, without redrawing the mark.
+3. **Do not overbuild.** His words: small project, do not overthink it. One page, one concept, the family's parts. Stop the two concept comparison once Concept A is adjusted.
