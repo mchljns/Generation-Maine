@@ -161,8 +161,7 @@ section.block{padding-block:112px}
 .about .aim .big{font-family:var(--display);font-size:clamp(28px,3vw,42px);line-height:1.18;margin:0;max-width:20ch}
 .about .aim .note{margin:14px 0 0;font-size:13px;color:rgba(15,46,77,.6)}
 .about .how{margin-top:40px;border-top:1px solid var(--navy);display:grid;max-width:60ch}
-.about .how div{display:grid;grid-template-columns:40px 1fr;gap:0 12px;align-items:baseline;padding:16px 0;border-bottom:1px solid rgba(15,46,77,.18)}
-.about .how .n{font:600 13px/1 var(--label);letter-spacing:.1em;color:var(--blue)}
+.about .how div{padding:16px 0;border-bottom:1px solid rgba(15,46,77,.18)}
 .about .how p{margin:0;font-size:17px;line-height:1.5}
 /* the cast: nine faces, the name under each, the town and the handle */
 .roster{background:var(--tint)}
@@ -318,7 +317,7 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
 
 
 def cols_html():
-    return "".join('<div><span class="n">%02d</span><p>%s</p></div>' % (i + 1, t) for i, t in enumerate(HOW))
+    return "".join('<div><p>%s</p></div>' % t for t in HOW)
 
 
 ABOUT_PHOTO = ("lewiston-3.jpg", "Lisbon Street, Lewiston, Maine", "Lisbon Street, Lewiston. Photograph: David Wilson, CC BY 2.0")
