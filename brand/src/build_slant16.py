@@ -18,24 +18,40 @@ OUT = os.path.join(ROOT, "brand", "identity", "logo-maine", "family")
 
 
 def slant16(h, fg, accent, x=0, y=0, angle=62, fill=0.6, accent_at=8, idn="s16", n=16):
-    """Sixteen stripes across the state's width on the given slant. fill is the stripe's share of the pitch."""
+    """Sixteen stripes that all cross the state. The state's extent is measured along the stripe normal, in the rotated frame,
+    and the sixteen pitches are fitted to exactly that extent, so none is clipped away. Returns (body, width, visible count)."""
+    import math
     ring = simplified(maine2.fit(x, y, h * maine2.ASPECT, h), h * 0.01)
     minx, miny, maxx, maxy = maine2.bbox(ring)
     w = maxx - minx
     cx, cy = (minx + maxx) / 2, (miny + maxy) / 2
-    import math
-    # the stripes must cover the state's diagonal extent at this angle
-    extent = (w * abs(math.sin(math.radians(angle))) + h * abs(math.cos(math.radians(angle)))) * 1.02
-    pitch = extent / n
+    rot = 90 - angle  # the bars are drawn vertical, then rotated by this
+    r = math.radians(-rot)
+    # the ring in the bars' frame
+    px = [cx + (X - cx) * math.cos(r) - (Y - cy) * math.sin(r) for X, Y in ring]
+    py = [cy + (X - cx) * math.sin(r) + (Y - cy) * math.cos(r) for X, Y in ring]
+    lo, hi = min(px), max(px)
+    pitch = (hi - lo) / n
     sw = pitch * fill
-    L = h * 2.2
+    L = h * 2.4
     stripes = ""
+    # a stripe is visible if the ring crosses its band; check with the polygon edges in the rotated frame
+    def crosses(a, b):
+        for i in range(len(px)):
+            x0, x1 = px[i], px[(i + 1) % len(px)]
+            if max(x0, x1) >= a and min(x0, x1) <= b:
+                return True
+        return False
+    visible = 0
     for i in range(n):
-        off = (i - (n - 1) / 2) * pitch
+        c = lo + (i + 0.5) * pitch
         col = accent if i == accent_at else fg
-        stripes += '<rect x="%.2f" y="%.2f" width="%.2f" height="%.2f" fill="%s"/>' % (cx + off - sw / 2, cy - L / 2, sw, L, col)
-    return ('<defs><clipPath id="%s"><path d="%s"/></clipPath></defs><g clip-path="url(#%s)"><g transform="rotate(%s %s %s)">%s</g></g>'
-            % (idn, maine2.path(ring), idn, 90 - angle, cx, cy, stripes)), w
+        if crosses(c - sw / 2, c + sw / 2):
+            visible += 1
+        stripes += '<rect x="%.2f" y="%.2f" width="%.2f" height="%.2f" fill="%s"/>' % (c - sw / 2, cy - L / 2, sw, L, col)
+    body = ('<defs><clipPath id="%s"><path d="%s"/></clipPath></defs><g clip-path="url(#%s)"><g transform="rotate(%s %s %s)">%s</g></g>'
+            % (idn, maine2.path(ring), idn, rot, cx, cy, stripes))
+    return body, w, visible
 
 
 def disc(body, bg):
@@ -52,7 +68,7 @@ VARIANTS = [
     ("62°, heavier", "The same angle, stripes at 62 percent of the pitch. Holds the silhouette better when small.", dict(angle=62, fill=0.62)),
     ("55°", "A little more upright, so the stripes read as the state's own lines rather than the parent's exact mark.", dict(angle=55, fill=0.58)),
     ("45°", "A plain diagonal. Furthest from the parent, closest to a hatch.", dict(angle=45, fill=0.58)),
-    ("62°, accent low", "The marigold stripe set lower, where the lined state had its gold line (the widest run, through the middle of the state).", dict(angle=62, fill=0.6, accent_at=9)),
+    ("62°, accent low", "The marigold stripe set one further down, through the widest part of the state.", dict(angle=62, fill=0.6, accent_at=10)),
     ("62°, no accent", "One color, for the favicon and anywhere one color is all there is.", dict(angle=62, fill=0.6, accent_at=-1)),
 ]
 
@@ -69,12 +85,13 @@ def build():
     h = ['<!doctype html><meta charset="utf-8"><title>sixteen stripes</title><style>%s%s</style>' % (css, fonts)]
     h.append("<h1>The slanted state, sixteen stripes</h1><p class='in'>One stripe per county, like the horizontal lined state. Six cuts, each on Paper and on navy, as the avatar at 110, 40 and 16, and in the title case lockup.</p><div class='grid'>")
     for i, (name, note, kw) in enumerate(VARIANTS):
-        body, w = slant16(240, NAVY, MG, idn="v%d" % i, **kw)
-        body_r, _ = slant16(240, PAPER, MG, idn="r%d" % i, **kw)
+        body, w, vis = slant16(240, NAVY, MG, idn="v%d" % i, **kw)
+        body_r, _, _ = slant16(240, PAPER, MG, idn="r%d" % i, **kw)
+        print(name, "visible stripes:", vis)
         write(os.path.join(OUT, "slant16-%d.svg" % (i + 1)), svg(w, 240, body))
         write(os.path.join(OUT, "slant16-%d-reversed.svg" % (i + 1)), svg(w, 240, body_r))
         av = lambda fg, bg, j: disc(slant16(156, fg, MG, x=(240 - 156 * maine2.ASPECT) / 2, y=42, idn="a%d%s" % (i, j), **kw)[0], bg)
-        mk, mw = slant16(100, NAVY, MG, idn="l%d" % i, **kw)
+        mk, mw, _ = slant16(100, NAVY, MG, idn="l%d" % i, **kw)
         t1, w1 = word("Generation ", 70, NAVY, mw + 26, 80)
         t2, w2 = word("Maine", 70, MG, mw + 26 + w1, 80)
         lk = svg(mw + 26 + w1 + w2 + 4, 100, mk + t1 + t2)
