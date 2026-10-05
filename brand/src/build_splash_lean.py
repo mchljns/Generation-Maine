@@ -85,10 +85,10 @@ STEPPER_OVERRIDES = """
 """
 
 GOAL = ("Generation Maine wants young people in Maine to see the rules behind what their lives cost, and to say so in public. "
-        "Nine young Mainers in nine towns will film where they live. Each clip takes one rule, a lease clause, a license fee, a permit, "
-        "a line on a pay stub, and shows what it says and what it costs. The clips go out on the creators' own accounts, where their friends "
-        "already are. The newsletter follows the paperwork behind each one, with the numbers. If enough people see the same rule from nine towns, "
-        "the rule gets harder to ignore.")
+        "Young Mainers film where they live. Each clip takes one rule, a lease clause, a license fee, a permit, a line on a pay stub, "
+        "and shows what it says and what it costs. The clips go out on the creators' own accounts, where their friends already are. "
+        "The newsletter follows the paperwork behind each one, with the numbers. The more people see the same rule from different towns, "
+        "the harder it gets to ignore.")
 FOLLOW = [("instagram", "Instagram", "[@handle]", "#"),
           ("tiktok", "TikTok", "[@handle]", "#"),
           ("youtube", "YouTube", "[@handle]", "#"),
