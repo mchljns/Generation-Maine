@@ -15,6 +15,7 @@ import build_splash_barksky as B
 import json
 
 LOGO_A = os.path.join(S.ROOT, "brand", "identity", "logo-maine", "family-a")
+LOGO_B = os.path.join(S.ROOT, "brand", "identity", "logo-maine", "family-b")
 MURAL_A = json.load(open(os.path.join(LOGO_A, "mural.json")))
 
 NAVY_A, BLUE_A, MG = "#0F2E4D", "#0556A5", "#EFB443"
@@ -120,6 +121,11 @@ FAMILY_B_CSS = """
 .bs.static .top.scrolled{background:%(navy)s}
 .bs .strip img,.bs .ph img{border-radius:0}
 .bs .hero h1{font-size:clamp(42px,6vw,84px)}
+/* the framed wordmark needs height: a taller bar, and room in the footer */
+.bs.static .top .w{height:76px}.bs.static .top .lk{height:48px;width:auto}.bs.static .top.scrolled .lk{height:48px}.bs.static .top.scrolled .w{height:68px}.bs.static .top.scrolled .lk{height:44px}
+.bs.static .hero{padding-top:76px}
+@media (max-width:900px){.bs.static .top .lk{height:44px}}
+.bs.static .site .lk{height:150px}@media (max-width:900px){.bs.static .site .lk{height:120px}}
 """ % dict(blue=BLUE_B, navy=NAVY_B, mg=MG)
 
 FAMILY_A = dict(S.SIGNATURE, css=STATIC_CSS + FAMILY_A_CSS, root_class="static", signup_band=SIGNUP,
@@ -128,6 +134,7 @@ FAMILY_A = dict(S.SIGNATURE, css=STATIC_CSS + FAMILY_A_CSS, root_class="static",
 
 B_CSS = B.CSS.replace("{media}", "") + STATIC_CSS.replace(".static", ".static.bs").replace(".static.bs.js", ".static.bs.js") + FAMILY_B_CSS
 FAMILY_B = dict(B.BARK_SKY, css=B_CSS, title="Generation Maine", out="brand/identity/splash-family-b", media="", root_class="bs static", signup_band=SIGNUP,
+                logo=LOGO_B, nav_light="lockup-compact-reversed", nav_dark="lockup-compact-reversed", nav_rest="lockup-compact-reversed", footer="lockup-two-line-reversed",
                 lean=True, hero_kicker="A Maine Policy Institute project", h2about="what this is", cols=COLS, footer_line=CREDIT, bg_follow="#EAF1F8",
                 about_media="", band="", post_thumbs=["", "", ""], quote_stills=["", "", ""])
 
