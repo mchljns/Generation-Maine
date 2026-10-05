@@ -24,9 +24,15 @@ THEMES = {
                       media=os.path.join(ROOT, "brand", "identity", "splash", "media"), lower=False),
     "bark-sky": dict(band=(38, 32, 28), dot=None, font=os.path.join(ROOT, "brand", "fonts", "d", "HedvigLettersSans-Regular.ttf"),
                      media=os.path.join(ROOT, "brand", "identity", "splash-bark-sky", "media"), lower=True),
+    # the family: a marigold caption band with navy text, the thing that makes a clip ours in a feed
+    "family-a": dict(band=(239, 180, 67), dot=None, font=os.path.join(ROOT, "generation-maine", "assets", "fonts", "dm-sans-var.ttf"),
+                     media=os.path.join(ROOT, "brand", "identity", "splash-family-a", "media"), lower=False, ink=(15, 46, 77)),
+    "family-b": dict(band=(239, 180, 67), dot=None, font=os.path.join(ROOT, "brand", "fonts", "d", "HedvigLettersSans-Regular.ttf"),
+                     media=os.path.join(ROOT, "brand", "identity", "splash-family-b", "media"), lower=True, ink=(17, 35, 55)),
 }
-THEME = THEMES["bark-sky" if "--theme" in sys.argv and "bark-sky" in sys.argv else "signature"]
+THEME = THEMES[next((a for a in sys.argv if a in THEMES), "signature")]
 PINE = THEME["band"]
+INK = THEME.get("ink", (255, 255, 255))
 MG = THEME["dot"]
 FONT = THEME["font"]
 MEDIA = THEME["media"]
@@ -100,18 +106,18 @@ def build_one(i, c):
         d.rectangle((0, H - band_h, W, H), fill=PINE + (225,))
         y = H - band_h + 16
         for ln in lines:
-            d.text((20, y), ln, font=cap_f, fill=(255, 255, 255))
+            d.text((20, y), ln, font=cap_f, fill=INK)
             y += 27
         town = ("%s, maine" % c["town"].lower()) if THEME["lower"] else ("%s, Maine" % c["town"].upper())
-        d.text((20, H - 26), town, font=k_f, fill=(255, 255, 255, 220))
+        d.text((20, H - 26), town, font=k_f, fill=INK + (220,))
         tw = d.textlength(town, font=k_f)
         if MG:
             d.ellipse((20 + tw + 8, H - 24, 20 + tw + 15, H - 17), fill=MG)
         # the tag: this is a stand-in
         tag = "PLACEHOLDER"
         tl = d.textlength(tag, font=tag_f)
-        d.rounded_rectangle((W - tl - 34, H - 33, W - 16, H - 15), radius=4, fill=(255, 255, 255, 40))
-        d.text((W - tl - 25, H - 29), tag, font=tag_f, fill=(255, 255, 255, 210))
+        d.rounded_rectangle((W - tl - 34, H - 33, W - 16, H - 15), radius=0 if "ink" in THEME else 4, fill=INK + (40,))
+        d.text((W - tl - 25, H - 29), tag, font=tag_f, fill=INK + (210,))
         frames.append(fr.quantize(colors=72, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE))
     os.makedirs(MEDIA, exist_ok=True)
     out = os.path.join(MEDIA, "creator-%d.gif" % (i + 1))

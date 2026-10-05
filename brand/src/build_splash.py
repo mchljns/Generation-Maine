@@ -404,6 +404,7 @@ def page(theme=SIGNATURE, out=None, media=None):
   <p class="ctas rise" id="ctas"><a class="btn b1" href="#creators">Watch the stories</a><a class="tl" href="#news">Get the newsletter</a></p></div>
   %(hero_media)s
 </div></section>
+%(signup_band)s
 
 <section class="about reveal" id="about"><div class="w">
   <div><h2 class="h2">%(h2about)s</h2>%(about_media)s</div>
@@ -470,7 +471,9 @@ def page(theme=SIGNATURE, out=None, media=None):
   const aboutEl = document.getElementById('about'), bgs = [...document.querySelectorAll('[data-bg]')];
   let bgNow = '';
   const canMix = CSS.supports('color', 'color-mix(in oklab, red, blue)');
+  const STATIC = document.documentElement.classList.contains('static') || document.querySelector('.static');
   function paint() {
+    if (STATIC) { aboutEl.classList.add('lit'); return; }
     const top = aboutEl.getBoundingClientRect().top, start = top + scrollY, end = innerHeight * .6, t = Math.min(1, Math.max(0, (start - top) / (start - end)));
     aboutEl.classList.toggle('lit', t >= .4);
     let c; if (t <= 0) c = 'var(--sp)'; else if (t < 1) c = canMix ? 'color-mix(in oklab, var(--sp), var(--bi) ' + (t * 100).toFixed(1) + '%%)' : (t < .4 ? 'var(--sp)' : 'var(--bi)'); else { c = 'var(--bi)'; const mid = innerHeight / 2; for (const el of bgs) { if (el.getBoundingClientRect().top <= mid) c = el.dataset.bg; } }
@@ -505,7 +508,7 @@ def page(theme=SIGNATURE, out=None, media=None):
   const bar = document.getElementById('topbar'), heroEl = document.querySelector('.hero');
   const prog = document.getElementById('prog');
   let lastY = scrollY, ticking = false;
-  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; bar.classList.toggle('scrolled', y > 12); paint(); if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%%'; ticking = false; }); }, { passive: true });
+  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; bar.classList.toggle('scrolled', y > 12); paint(); if (!STATIC) { if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); } lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%%'; ticking = false; }); }, { passive: true });
   const links = [...bar.querySelectorAll('nav a')];
   const ao = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.dataset.for === e.target.id)); }), { rootMargin: '-40%% 0px -55%% 0px', threshold: 0 });
   ['about', 'creators', 'words', 'follow'].forEach(id => { const el = document.getElementById(id); if (el) ao.observe(el); });
@@ -540,6 +543,7 @@ def page(theme=SIGNATURE, out=None, media=None):
         head_extra=theme.get("head_extra", "").replace("{media}", media),
         hero_media=theme.get("hero_media", '<div class="mural" id="mural" aria-hidden="true"></div>').replace("{media}", media),
         credits=('<p class="fine credits">%s</p>' % theme["credits"]) if theme.get("credits") else "",
+        signup_band=theme.get("signup_band", ""),
         about_media=theme.get("about_media", "").replace("{media}", media),
         band=theme.get("band", "").replace("{media}", media),
         pt1=theme.get("post_thumbs", ["", "", ""])[0].replace("{media}", media), pt2=theme.get("post_thumbs", ["", "", ""])[1].replace("{media}", media), pt3=theme.get("post_thumbs", ["", "", ""])[2].replace("{media}", media),

@@ -598,3 +598,9 @@ Two new pages apply those rules to the existing concepts, trimmed to what it is,
 The marigold is the one thing Generation Maine keeps for itself: yellow belongs to Maine Policy and the Wire, coral to Civic Action, and marigold sits between them.
 
 The "what we hope to achieve" column is a [CONFIRM] placeholder in the client's words. The Maine Policy credit now appears in the footer of all four pages.
+
+## The audit applied to the family pages, October 5
+
+Everything in `07-family-ui-audit.md` sections 3 and 5 is now on Family A and Family B, through a `.static` root class and a CSS layer the two original concepts never load. The header is a plain sticky navy bar: no capsule morph, no hide on scroll, no progress bar, no nav dot. Corners are zero on buttons, inputs, clips, the strip and thumbnails. Button hover is color only. The page background no longer cross fades; each section sits on its own flat band. Column rules are static. The footer logo does not draw or ping. The dot stays on the hero headline only. A full width navy sign up band with one field and one button sits under the hero, the way the parents do it. Family A's hero headline is clamped to 84px with -1 percent tracking. The clip placeholders were recut (`make_gifs.py --theme family-a` and `family-b`) with the marigold caption band and navy text, which is the thing that will make a Generation Maine clip recognizable in a feed. Load rise, section reveal, the stepper crossfade and the hero video stay.
+
+The sign up band's address is a [CONFIRM] until the Substack publication exists.

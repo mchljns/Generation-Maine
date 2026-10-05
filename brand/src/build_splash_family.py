@@ -20,6 +20,50 @@ COLS = [("What it is", "Young Mainers film the rules that shape their lives. Lea
         ("What we hope to achieve", "[CONFIRM: the project's aims in the client's words.] Young people in Maine who understand the rules behind everyday costs, and who say so in their own words."),
         ("Where to find it", "The videos are on TikTok, Instagram and YouTube. The full story, with the numbers, is in the newsletter on Substack. Nothing is published here.")]
 
+# The audit (brand/07-family-ui-audit.md), applied. Keyed on the .static root class so the two original concepts are untouched.
+STATIC_CSS = """
+/* header: a plain sticky bar. No capsule morph, no hide on scroll, no progress bar, no nav dot. */
+.static .top.scrolled .w{height:60px;max-width:1280px;margin:0 auto;padding-inline:var(--M);background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;border-radius:0}
+.static .top.scrolled{background:var(--pine);color:#fff}
+.static .top.scrolled .lk{height:24px}.static .top.scrolled .lk.light{display:block}.static .top.scrolled .lk.dark{display:none}
+.static .top.scrolled nav{gap:30px}.static .top.scrolled nav a{padding:12px 0;font-size:13px;background:none;color:inherit}
+.static .top.scrolled nav a.on{background:none;color:inherit;text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1.5px}
+.static .top nav a::before{display:none}.static .top.scrolled nav a::before{display:none}
+.static .top.scrolled .cta{padding:12px 16px;font-size:13px}
+.static .top.hide{transform:none}.static .prog{display:none}
+.static .top.scrolled .w{box-shadow:0 1px 0 rgba(255,255,255,.12)}
+/* corners: zero everywhere */
+.static .btn,.static .top .cta,.static .form input,.static .form button,.static .top nav a,.static .sheet .foot .cta,.static .vid,.static .strip img,.static .ph img,.static .post .th,.static .qs-im,.static .who .av,.static .pv .av{border-radius:0}
+.static .vid video,.static .vid img.clip{border-radius:0}
+/* hover: color only */
+.static .btn:hover{transform:none}
+/* motion: static rules, no draw in; shorter section reveal; no page background cross fade */
+.static .rule,.static .about .cols div::before,.static .words blockquote::before{transition:none;transform:none}
+.static.js .reveal.pre .rule,.static.js .reveal.pre .cols div::before,.static.js .reveal.pre blockquote::before{transform:none}
+.static .reveal .row-in{transition-duration:.5s}
+.static body,.static .about{transition:none}
+/* footer: no ping, no draw */
+.static .site.on .lk .ping{animation:none}.static .site .lk .ping{display:none}.static .site .lk path{stroke-dashoffset:0!important;transition:none}
+/* the dot stays on the hero only */
+.static .h2 .d{display:none}
+/* the sign up band under the hero: full width navy, one field, one button, like the parents */
+.static .signup{background:var(--pine);color:#fff;padding:22px 0}
+.static .signup .w{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center}
+.static .signup b{font:600 14px/1.3 var(--body);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.static .signup input{height:48px;border:0;padding:0 16px;font:16px var(--body);background:#fff;color:var(--ink);min-width:0;width:100%%}
+.static .signup .btn{padding:16px 28px}
+.static .signup .note{grid-column:1/-1;margin:0;font-size:12px;opacity:.75}
+@media (max-width:900px){.static .signup .w{grid-template-columns:1fr}.static .signup .btn{justify-self:start}}
+/* about on its own flat band, not the page background */
+.static .about{background:#fff;color:var(--ink)}.static .about .cols p{color:var(--muted)}
+.static .stories-head,.static .stories{background:#fff}
+"""
+
+SIGNUP = ('<section class="signup" aria-label="Newsletter sign up"><div class="w"><b>Get the newsletter</b>'
+          '<input type="email" placeholder="you@example.com" aria-label="Email" autocomplete="email">'
+          '<a class="btn b1" href="https://CONFIRM-publication.substack.com/subscribe" target="_blank" rel="noopener">Sign up</a>'
+          '<p class="note">Runs on Substack. Unsubscribe in one click. [CONFIRM: publication address]</p></div></section>')
+
 FAMILY_A_CSS = """
 /* Family A: Signature's type in the family's clothes */
 :root{--sp:%(blue)s;--pine:%(navy)s;--ink:%(navy)s;--moss:#2191FF;--stone:#5B6B7A;--muted:#4B5A68;--sage:#EAF1F8;--sand:#F3F7FB;--card:#F3F7FB;--rule:rgba(15,46,77,.14);--bi:#FFFFFF}
@@ -32,7 +76,11 @@ FAMILY_A_CSS = """
 .top{background:%(navy)s}.top .cta{border-color:%(mg)s;color:%(mg)s}.top .cta:hover{background:%(mg)s;color:%(navy)s}
 .top nav a::before{display:none}
 .hero{background:%(blue)s}.hero h1 .nw{color:%(mg)s}.hero h1 .d{background:%(mg)s}.hero .k{color:#fff}
-.hero .w{min-height:min(620px,78vh)}
+.hero .w{min-height:min(560px,72vh);padding-block:72px 80px}
+.hero h1{font-size:clamp(44px,6vw,84px);letter-spacing:-.01em;line-height:1.0}
+h2,h3{letter-spacing:-.01em}
+.h2{font-size:clamp(34px,4vw,52px)}
+.signup .btn{background:%(mg)s;color:%(navy)s}
 .mural{display:none}
 .about .cols div::before{background:%(mg)s}.about.lit .cols div::before{background:%(mg)s}
 .about .cols h3{font:800 18px/1.2 var(--display);letter-spacing:-.01em;text-transform:none}
@@ -55,13 +103,17 @@ FAMILY_B_CSS = """
 .bs .follow{background:#EAF1F8}
 .bs .site .fine{color:rgba(244,243,238,.75)}
 .bs .top.scrolled .w{border-radius:0}
+.bs.static .signup .btn{background:%(mg)s;color:%(navy)s}
+.bs.static .top.scrolled{background:%(navy)s}
+.bs .strip img,.bs .ph img{border-radius:0}
+.bs .hero h1{font-size:clamp(42px,6vw,84px)}
 """ % dict(blue=BLUE_B, navy=NAVY_B, mg=MG)
 
-FAMILY_A = dict(S.SIGNATURE, css=FAMILY_A_CSS, title="Generation Maine", out="brand/identity/splash-family-a", media="",
+FAMILY_A = dict(S.SIGNATURE, css=STATIC_CSS + FAMILY_A_CSS, root_class="static", signup_band=SIGNUP, title="Generation Maine", out="brand/identity/splash-family-a", media="",
                 lean=True, hero_kicker="A Maine Policy Institute project", h2about="What this is", cols=COLS, footer_line=CREDIT, bg_follow="#EAF1F8", footer_ping=False)
 
-B_CSS = B.CSS.replace("{media}", "") + FAMILY_B_CSS
-FAMILY_B = dict(B.BARK_SKY, css=B_CSS, title="Generation Maine", out="brand/identity/splash-family-b", media="",
+B_CSS = B.CSS.replace("{media}", "") + STATIC_CSS.replace(".static", ".static.bs").replace(".static.bs.js", ".static.bs.js") + FAMILY_B_CSS
+FAMILY_B = dict(B.BARK_SKY, css=B_CSS, title="Generation Maine", out="brand/identity/splash-family-b", media="", root_class="bs static", signup_band=SIGNUP,
                 lean=True, hero_kicker="A Maine Policy Institute project", h2about="what this is", cols=COLS, footer_line=CREDIT, bg_follow="#EAF1F8",
                 about_media="", band="", post_thumbs=["", "", ""], quote_stills=["", "", ""])
 

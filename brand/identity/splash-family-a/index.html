@@ -1,4 +1,4 @@
-<!doctype html><html lang="en" class=""><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Generation Maine</title>
+<!doctype html><html lang="en" class="static"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Generation Maine</title>
 <meta name="description" content="Young Mainers film the rules that shape their lives. Short videos and a newsletter, made in Maine.">
 <style>
 /* Layout: one column. The page background changes color as sections enter, and every section pairs ink text with a light field.
@@ -249,6 +249,42 @@ body.scrub{transition:none}
 .site .fine{margin-top:12px;font-size:13px}
 @media (max-width:640px){.site .w{grid-template-columns:1fr}.site .lk{height:90px}}
 
+/* header: a plain sticky bar. No capsule morph, no hide on scroll, no progress bar, no nav dot. */
+.static .top.scrolled .w{height:60px;max-width:1280px;margin:0 auto;padding-inline:var(--M);background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;border-radius:0}
+.static .top.scrolled{background:var(--pine);color:#fff}
+.static .top.scrolled .lk{height:24px}.static .top.scrolled .lk.light{display:block}.static .top.scrolled .lk.dark{display:none}
+.static .top.scrolled nav{gap:30px}.static .top.scrolled nav a{padding:12px 0;font-size:13px;background:none;color:inherit}
+.static .top.scrolled nav a.on{background:none;color:inherit;text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:1.5px}
+.static .top nav a::before{display:none}.static .top.scrolled nav a::before{display:none}
+.static .top.scrolled .cta{padding:12px 16px;font-size:13px}
+.static .top.hide{transform:none}.static .prog{display:none}
+.static .top.scrolled .w{box-shadow:0 1px 0 rgba(255,255,255,.12)}
+/* corners: zero everywhere */
+.static .btn,.static .top .cta,.static .form input,.static .form button,.static .top nav a,.static .sheet .foot .cta,.static .vid,.static .strip img,.static .ph img,.static .post .th,.static .qs-im,.static .who .av,.static .pv .av{border-radius:0}
+.static .vid video,.static .vid img.clip{border-radius:0}
+/* hover: color only */
+.static .btn:hover{transform:none}
+/* motion: static rules, no draw in; shorter section reveal; no page background cross fade */
+.static .rule,.static .about .cols div::before,.static .words blockquote::before{transition:none;transform:none}
+.static.js .reveal.pre .rule,.static.js .reveal.pre .cols div::before,.static.js .reveal.pre blockquote::before{transform:none}
+.static .reveal .row-in{transition-duration:.5s}
+.static body,.static .about{transition:none}
+/* footer: no ping, no draw */
+.static .site.on .lk .ping{animation:none}.static .site .lk .ping{display:none}.static .site .lk path{stroke-dashoffset:0!important;transition:none}
+/* the dot stays on the hero only */
+.static .h2 .d{display:none}
+/* the sign up band under the hero: full width navy, one field, one button, like the parents */
+.static .signup{background:var(--pine);color:#fff;padding:22px 0}
+.static .signup .w{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center}
+.static .signup b{font:600 14px/1.3 var(--body);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.static .signup input{height:48px;border:0;padding:0 16px;font:16px var(--body);background:#fff;color:var(--ink);min-width:0;width:100%%}
+.static .signup .btn{padding:16px 28px}
+.static .signup .note{grid-column:1/-1;margin:0;font-size:12px;opacity:.75}
+@media (max-width:900px){.static .signup .w{grid-template-columns:1fr}.static .signup .btn{justify-self:start}}
+/* about on its own flat band, not the page background */
+.static .about{background:#fff;color:var(--ink)}.static .about .cols p{color:var(--muted)}
+.static .stories-head,.static .stories{background:#fff}
+
 /* Family A: Signature's type in the family's clothes */
 :root{--sp:#0556A5;--pine:#0F2E4D;--ink:#0F2E4D;--moss:#2191FF;--stone:#5B6B7A;--muted:#4B5A68;--sage:#EAF1F8;--sand:#F3F7FB;--card:#F3F7FB;--rule:rgba(15,46,77,.14);--bi:#FFFFFF}
 .btn,.top .cta,.form input,.form button,.top nav a{border-radius:0}
@@ -260,7 +296,11 @@ body.scrub{transition:none}
 .top{background:#0F2E4D}.top .cta{border-color:#EFB443;color:#EFB443}.top .cta:hover{background:#EFB443;color:#0F2E4D}
 .top nav a::before{display:none}
 .hero{background:#0556A5}.hero h1 .nw{color:#EFB443}.hero h1 .d{background:#EFB443}.hero .k{color:#fff}
-.hero .w{min-height:min(620px,78vh)}
+.hero .w{min-height:min(560px,72vh);padding-block:72px 80px}
+.hero h1{font-size:clamp(44px,6vw,84px);letter-spacing:-.01em;line-height:1.0}
+h2,h3{letter-spacing:-.01em}
+.h2{font-size:clamp(34px,4vw,52px)}
+.signup .btn{background:#EFB443;color:#0F2E4D}
 .mural{display:none}
 .about .cols div::before{background:#EFB443}.about.lit .cols div::before{background:#EFB443}
 .about .cols h3{font:800 18px/1.2 var(--display);letter-spacing:-.01em;text-transform:none}
@@ -282,6 +322,7 @@ body.scrub{transition:none}
   <p class="ctas rise" id="ctas"><a class="btn b1" href="#creators">Watch the stories</a><a class="tl" href="#follow">Get the newsletter</a></p></div>
   <div class="mural" id="mural" aria-hidden="true"></div>
 </div></section>
+<section class="signup" aria-label="Newsletter sign up"><div class="w"><b>Get the newsletter</b><input type="email" placeholder="you@example.com" aria-label="Email" autocomplete="email"><a class="btn b1" href="https://CONFIRM-publication.substack.com/subscribe" target="_blank" rel="noopener">Sign up</a><p class="note">Runs on Substack. Unsubscribe in one click. [CONFIRM: publication address]</p></div></section>
 
 <section class="about reveal" id="about"><div class="w">
   <div><h2 class="h2"><span class="">What this <b class="nw">is<i class="d"></i></b></span></h2></div>
@@ -348,7 +389,9 @@ body.scrub{transition:none}
   const aboutEl = document.getElementById('about'), bgs = [...document.querySelectorAll('[data-bg]')];
   let bgNow = '';
   const canMix = CSS.supports('color', 'color-mix(in oklab, red, blue)');
+  const STATIC = document.documentElement.classList.contains('static') || document.querySelector('.static');
   function paint() {
+    if (STATIC) { aboutEl.classList.add('lit'); return; }
     const top = aboutEl.getBoundingClientRect().top, start = top + scrollY, end = innerHeight * .6, t = Math.min(1, Math.max(0, (start - top) / (start - end)));
     aboutEl.classList.toggle('lit', t >= .4);
     let c; if (t <= 0) c = 'var(--sp)'; else if (t < 1) c = canMix ? 'color-mix(in oklab, var(--sp), var(--bi) ' + (t * 100).toFixed(1) + '%)' : (t < .4 ? 'var(--sp)' : 'var(--bi)'); else { c = 'var(--bi)'; const mid = innerHeight / 2; for (const el of bgs) { if (el.getBoundingClientRect().top <= mid) c = el.dataset.bg; } }
@@ -383,7 +426,7 @@ body.scrub{transition:none}
   const bar = document.getElementById('topbar'), heroEl = document.querySelector('.hero');
   const prog = document.getElementById('prog');
   let lastY = scrollY, ticking = false;
-  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; bar.classList.toggle('scrolled', y > 12); paint(); if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%'; ticking = false; }); }, { passive: true });
+  addEventListener('scroll', () => { if (ticking) return; ticking = true; requestAnimationFrame(() => { const y = scrollY, dy = y - lastY; bar.classList.toggle('scrolled', y > 12); paint(); if (!STATIC) { if (y > heroEl.offsetHeight && dy > 6) bar.classList.add('hide'); else if (dy < -6 || y <= heroEl.offsetHeight) bar.classList.remove('hide'); } lastY = y; const max = document.documentElement.scrollHeight - innerHeight; if (prog) prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%'; ticking = false; }); }, { passive: true });
   const links = [...bar.querySelectorAll('nav a')];
   const ao = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(l => l.classList.toggle('on', l.dataset.for === e.target.id)); }), { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
   ['about', 'creators', 'words', 'follow'].forEach(id => { const el = document.getElementById(id); if (el) ao.observe(el); });
