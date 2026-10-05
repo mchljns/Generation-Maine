@@ -17,7 +17,7 @@ A news site, so the loosest of the family. Screenshots and the logo are in `refe
 
 - **Color.** Near-black navy #071326 and #102747 for the masthead band, yellow #FFCC00 as the one accent, white pages, a royal blue #0B5FB8 for category tags and links. Grey rules.
 - **Type.** Futura PT for the masthead and headlines (via Adobe Fonts), Lato for navigation and buttons in uppercase with letterspacing, Hind for article titles. Three sans faces, which is the sprawl of a news theme rather than a design decision.
-- **Mark.** A horizontal wordmark: "THE MAINE WIRE" in a geometric sans, with a yellow element. Reads as a newspaper masthead.
+- **Mark.** An "MW" monogram, a blue M and a yellow W interlocked between yellow and blue bars, beside "MAINE WIRE" in a heavy extended sans, "MAINE" in yellow and "WIRE" in blue. Reads as a cable news masthead.
 - **Layout.** Dense card grid, black top band with a trending ticker, uppercase navigation on a white bar, blue "NEWS" tags, a boxed newsletter sign-up in the sidebar.
 
 ## Maine Civic Action, from the live site
