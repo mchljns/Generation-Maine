@@ -21,9 +21,9 @@ NAVY, BLUE, MG, WHITE, PAPER = "#0F2E4D", "#0556A5", "#EFB443", "#FFFFFF", "#F4F
 ANGLE, N, FILL, ACCENT_AT = 62, 16, 0.62, 10
 
 
-def segments(h, x=0, y=0, angle=ANGLE, n=N, fill=FILL):
+def segments(h, x=0, y=0, angle=ANGLE, n=N, fill=FILL, tol=0.01, chip=0.3):
     """Sixteen stripes as line segments crossing the state, in page coordinates. Returns (ring, [(x0,y0,x1,y1), ...] per stripe, stroke width, state width)."""
-    ring = simplified(maine2.fit(x, y, h * maine2.ASPECT, h), h * 0.01)
+    ring = simplified(maine2.fit(x, y, h * maine2.ASPECT, h), h * tol)
     minx, miny, maxx, maxy = maine2.bbox(ring)
     cx, cy = (minx + maxx) / 2, (miny + maxy) / 2
     rot = math.radians(90 - angle)
@@ -48,7 +48,7 @@ def segments(h, x=0, y=0, angle=ANGLE, n=N, fill=FILL):
         ys.sort()
         segs = []
         for a, b in zip(ys[0::2], ys[1::2]):
-            if b - a < sw * 0.3:
+            if b - a < sw * chip:
                 continue
             p0, p1 = back(c, a - sw), back(c, b + sw)  # overshoot; the clip trims to the outline
             segs.append((round(p0[0], 2), round(p0[1], 2), round(p1[0], 2), round(p1[1], 2)))
@@ -117,7 +117,7 @@ def build():
     for k, v in files.items():
         write(os.path.join(OUT, k + ".svg"), v)
     # the hero mural: the state at 720, centered in a 720 square, white stripes, the accent in marigold, as lines for the draw-in
-    ring, stripes, sw, w = segments(720, (720 - 720 * maine2.ASPECT) / 2, 0)
+    ring, stripes, sw, w = segments(720, (720 - 720 * maine2.ASPECT) / 2, 0, tol=0.004, chip=0.8)
     lines = []
     for i, segs in enumerate(stripes):
         for x0, y0, x1, y1 in segs:
