@@ -616,3 +616,18 @@ The client asked for a single link that toggles between the two family concepts.
 ### Family B, the horizontal lockup
 
 The framed stacked mark lost its frame at bar size: a hairline around 11px type. Six horizontal arrangements were tried at the bar's real size (`build_horizontal_b.py`, `logo-maine/family-b/horizontal.png`). The bar now carries the one line name with the open square beside it as a mark at cap height, heavy enough to read at 16px, maine in marigold. The square alone is the avatar and favicon. The framed stacked mark stays in the footer, where it has room.
+
+## Family B: one frame, one set of rules
+
+The horizontal lockup and the framed stacked lockup were drawn separately and did not match. The square beside the one line name was stroke 16 and sat 11 units below the baseline. The frame around the stacked name was stroke 9, a 1.28 to 1 rectangle. Side by side they read as two different devices.
+
+Both are now drawn from the same rules, in `brand/src/build_b_consistent.py`:
+
+- The frame is open at the bottom left. The left leg stops at 62 percent of the height. The bottom returns from 42 percent of the width.
+- The stroke is a quarter of the x-height of the type it sits with. At the wordmark's drawing scale that is 13.
+- Beside one line of type the frame is a square that runs from the ascender to the baseline. The gap to the type is twice the stroke.
+- Around two lines of type the frame keeps a pad of two and a half strokes on each side and keeps its 1.28 to 1 proportion. A square frame around two lines was tried and left too much air.
+- The frame and the word maine take the accent. Generation takes the text color of the field.
+- The avatar is the frame alone on a disc, at the stroke to side ratio of the horizontal device.
+
+Sheet: `brand/identity/logo-maine/family-b/consistent.png`. Applied to `lockup-compact*`, `lockup-two-line*`, `lockup-framed*` and `avatar-square*`, and to the Family B page.
