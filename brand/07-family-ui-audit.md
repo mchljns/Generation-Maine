@@ -134,3 +134,30 @@ Both family pages now carry the proposed footer, built in `family_footer()` in `
 ### Bar and hero draw, corrected
 
 The bar shifted on scroll on both family pages: the static layer still set a 60 px scrolled height against 68 px at rest, the logo took a 12 px pad once scrolled, the button changed size on Family A, and on a phone the menu button moved and the Family B mark changed height. All of it was left over from the capsule bar. Every measurement of the bar is now identical before and after scroll at 1400 and 390 wide. The Family A hero mural drew in about 1.4 seconds; it now draws over about three, the same pace as the footer.
+
+## Spacing, padding and sizing audit, both family pages
+
+Measured from the built pages at 1400 and 390 wide: section padding, container widths, heading and paragraph sizes, grid gaps, control sizes, and the gap between each block. Contact sheets of every section sit beside the numbers.
+
+What holds together:
+
+- One section rhythm. Every main section pads 112 px top and bottom on desktop and 56 on a phone. The footer pads 56 over 28. The sign up band pads 22 and is meant to read as a strip.
+- One container. 1280 px, 60 px side gutters on desktop, the same on both pages.
+- One bar. 68 px tall, 13 px labels, 26 px mark, identical before and after scroll.
+- Column paragraphs, the creators intro, and the follow row share the same sizes on both pages: 19 over 29 body, 28 px icons, 22 px row padding.
+
+Findings, heaviest first:
+
+1. **Controls do not share a height.** The sign up input is 48 px. The button beside it is 49 on Family A and 47 on Family B. The hero button is 49 on A and 47 on B, and the hero text link is 45 on both. Set one control height, 48, and let the hero and sign up buttons, the input and the text link all meet it.
+2. **Family A mixes two sizes in one row.** The hero button is 15 px and the text link next to it is 13. The sign up button is 15 beside a 14 px label and 12 px fine print. Family B holds 13 throughout. Pick one label size per page for buttons and links.
+3. **The follow row's handle is wrong size on both.** On Family A the handle is 17 px under a 15 px label, so the secondary line is larger than the primary. On Family B the handle is 13 on desktop and 11 on a phone, under the 12 px floor the audit set. Handle 14 under a 15 label on both.
+4. **The three columns are too narrow for their type.** Each column in the about section is 198 px wide with 19 px text, about 20 characters a line. The ragged edge is visible in the sheet. Either set the columns at 17 over 27 or give the column group more of the row than the heading takes.
+5. **Column labels are smaller than their body.** 18 px bold over 19 px body on A, 17 regular over 19 on B. A label should sit at or above its body size. 19 or 20 on both.
+6. **Family A's hero has dead space on desktop.** The text block starts 86 px below the bar and ends around 400 px, and the section runs to 825 with nothing in the lower third but blue. Either center the block on the section as Family B does, or trim the minimum height.
+7. **Family A's kicker is cramped.** Zero margin between "A Maine Policy Institute project" and the headline. Family B gives it 18 px. Give A the same.
+8. **The creator's name outruns the section headings.** Panel name 64 px against 52 px section headings on Family A, 62 against 60 on B. On a phone it flips: 31 against 34 on A. Settle the scale: the name can lead, but by the same step at every width. 60 and 36 on both pages.
+9. **The clip fills the phone.** The clip is 536 px tall on A and 502 on B in an 844 px viewport, so the name and the story fall below the fold on every panel. Cap the clip at about 58 vh on phones.
+10. **Small text sits at the floor.** Kickers, place labels and fine print are 12 px on A and 12 to 13 on B. The parents use 13 to 14 for the same jobs. Hold 13 as the minimum.
+11. **Off grid values.** The phone gutter is 17.55 px (4.5 vw), the hero button row sits 19 px below the paragraph, the follow heading has 28 px below it on A and 32 on B. Fix the gutter at 18 or 20, the row at 20, the heading at one value.
+
+Sheets: `brand/identity/splash-family-b/audit-spacing-1400.png` and `audit-spacing-390.png`.
