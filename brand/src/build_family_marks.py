@@ -33,14 +33,14 @@ def state_lined(h, fg, accent, x=0, y=0):
     return body, w
 
 
-def state_slanted(h, fg, accent, x=0, y=0, angle=62, n=7, idn="st"):
+def state_slanted(h, fg, accent, x=0, y=0, angle=62, n=13, idn="st"):
     """The state as a clip, filled with stripes on the parent's slant. One stripe in the accent, the widest, like the lined state's gold line."""
     ring = simplified(maine2.fit(x, y, h * maine2.ASPECT, h), h * 0.012)
     minx, miny, maxx, maxy = maine2.bbox(ring)
     w = maxx - minx
     import math
-    pitch = (w * 1.4) / n
-    sw = pitch * 0.56
+    pitch = (w * 1.5) / n
+    sw = pitch * 0.64
     stripes = ""
     # stripes are vertical bars rotated about the state's centre; the longest after clipping gets the accent, which for Maine is the one through the middle
     cx, cy = (minx + maxx) / 2, (miny + maxy) / 2
@@ -76,7 +76,7 @@ def b_paths(fg1, fg2):
     return body, float(vb.group(1)), float(vb.group(2))
 
 
-def b_framed(fg, accent, pad=46, stroke=7):
+def b_framed(fg, accent, pad=40, stroke=9):
     """The stacked wordmark inside an open square, open at the bottom left, the way Civic Action frames its name."""
     body, w, h = b_paths(fg, accent)
     W = w + pad * 2
@@ -170,7 +170,7 @@ def build():
         ("The bar", "A single marigold bar beside the wordmark. A blaze on bark, and the thing that can stand alone as a favicon.", "b-bar"),
     ]
     for title, note, key in rows:
-        h.append("<div class='row'><div class='lab'><b>%s</b><p>%s</p></div><div class='t pa'>%s</div><div class='t nb'>%s</div></div>" % (title, note, img(files[key], None, 96), img(files[key + "-reversed"], None, 96)))
+        h.append("<div class='row'><div class='lab'><b>%s</b><p>%s</p></div><div class='t pa'>%s</div><div class='t nb'>%s</div></div>" % (title, note, img(files[key], None, 150 if key == "b-framed" else 96), img(files[key + "-reversed"], None, 150 if key == "b-framed" else 96)))
     h.append("<div class='row'><div class='lab'><b>Avatar</b><p>The two tone wordmark at 110 and 40, which is where it stops reading, and the bar at 110, 40 and 16, which is what carries the small sizes.</p></div><div class='t pa'><div class='sz'>%s%s%s%s%s</div></div><div class='t nb'><div class='sz'>%s%s%s%s%s</div></div></div>" % (
         img(av_b(NAVY_B, "#FFFFFF", MG), 110), img(av_b(NAVY_B, "#FFFFFF", MG), 40), img(av_bar(NAVY_B, "#FFFFFF", MG), 110), img(av_bar(NAVY_B, "#FFFFFF", MG), 40), img(av_bar(NAVY_B, "#FFFFFF", MG), 16),
         img(av_b(PAPER, NAVY_B, MG), 110), img(av_b(PAPER, NAVY_B, MG), 40), img(av_bar(PAPER, NAVY_B, MG), 110), img(av_bar(PAPER, NAVY_B, MG), 40), img(av_bar(PAPER, NAVY_B, MG), 16)))
