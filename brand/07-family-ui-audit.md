@@ -93,3 +93,36 @@ Net: the family pages lose the background cross fade, the capsule header, the pr
 6. Sign up band under the hero, one field, one button.
 7. Static rules, no footer ping, no nav dot, no progress bar.
 8. Recut the clip placeholders with the marigold caption band.
+
+## Footer audit, both family pages
+
+Checked at 1400 and 390 wide after the draw finishes, against the footers of Maine Policy Institute and Maine Civic Action read from their home pages on October 5, 2026. The Maine Wire footer could not be read; its page is built by script.
+
+What the parents put in a footer:
+
+- Maine Policy: a support band (Donate, Sign Up), four link columns (Who We Are, What We Do, Events, Donate), a social row (Facebook, Twitter, LinkedIn, Instagram, YouTube), the copyright and a one sentence 501(c)3 statement.
+- Maine Civic Action: link columns, an Our Partners column that lists Maine Policy, Maine Wire, Maine Education Initiative and Robinson Report, the copyright, Privacy Policy and Text Terms.
+
+What ours has: the mark, one sentence, a legal line with a placeholder, and on Family B five lines of photo credits. No links of any kind.
+
+Findings, in order of weight:
+
+1. **No links.** The footer is the one place both parents repeat navigation, partners, social accounts and legal pages. Ours has none. Garrick's brief for the page was to point at the social accounts and the Substack. The footer should carry them a second time, where every parent site does.
+2. **The parent credit is plain text.** "An initiative of Maine Policy Institute" should link to mainepolicy.org. Civic Action links to each partner; Maine Policy links to The Maine Wire and Maine Education Initiative.
+3. **No partner row.** A line naming Maine Policy, The Maine Wire, Maine Civic Action and Maine Education Initiative, each linked, is the single cheapest signal that this page belongs to the family. Civic Action does exactly this.
+4. **The photo credits outweigh everything else on Family B.** Five lines at 13 px, the longest block in the footer, longer than the legal line. On a phone it runs eight lines. Keep the credit, but as one line that opens, or on a credits page linked from one line. Family A has no video, so no credits, so the two footers are different heights: 170 px against 330 px on desktop.
+5. **No privacy link.** The sign up band collects email addresses. Both parents link a privacy policy. Civic Action also links text terms because it sends SMS. [CONFIRM: whether Maine Policy's privacy policy covers this project or a page is needed]
+6. **The legal line is unfinished.** The placeholder for legal name, address and contact is visible. Maine Policy closes its footer with a one sentence statement of what it is. Ours should say the same in one sentence once confirmed. The year is written by hand.
+
+What passes:
+
+- Contrast. Body 14 px at 9.4 to 1, fine print 13 px at 8.6 to 1, both on navy.
+- Type sizes match the parents' footers.
+- The mark. Framed stacked at 150 px on Family B, the state lockup at 96 px on Family A, each the strongest showing of its mark on the page. The draw when the page reaches its end is the one piece of motion the family pages keep below the fold, and it is quiet.
+- Stacking on a phone: mark, then text, in one column.
+
+Proposed structure, same for both pages:
+
+- Row one: the mark. Beside it the one sentence, then the page links (About, Creators, Follow, Newsletter), then the social row (Instagram, TikTok, YouTube, Substack) in the same icon set as the follow section.
+- Row two: "A project of Maine Policy Institute" linked, then the partner row: The Maine Wire, Maine Civic Action, Maine Education Initiative, each linked.
+- Row three, fine print: copyright with the year set by script, Privacy, Contact, and Photo credits as one line that opens the full list.
