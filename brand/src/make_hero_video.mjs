@@ -8,12 +8,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 const { chromium } = pkg;
 const root = '/home/user/Generation-Maine';
-const media = path.join(root, 'brand', 'identity', 'splash-bark-sky', 'media');
+const media = process.env.OUT || path.join(root, 'brand', 'identity', 'splash-bark-sky', 'media');
 const fd = path.join(root, 'brand', 'content', 'photos', 'hero-frames');
-const W = 1920, H = 1080;
+const W = +process.env.W || 1920, H = +process.env.H || 1080;
 const HOLD = 2600;      // each setting is on screen this long
 const XF = 900;         // and dissolves into the next over this long, inside the hold
-const FPS = 30, KBPS = 2600;
+const FPS = 30, KBPS = +process.env.KBPS || 2600;
 // per setting: drift direction across the spare width and height, and the scale from start to end (push in or pull out)
 const MOVES = [
   { dx: 1, dy: -0.2, z0: 1.00, z1: 1.06 },  // Katahdin: drift right, push toward the summit
