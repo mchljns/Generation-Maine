@@ -19,3 +19,7 @@ brand/content/photos/commons/*.jpg
 
 # cairn reference photographs are study material, not brand assets
 brand/content/photos/cairns/*.jpg
+
+# clip and photo copies beside the family pages are build outputs of the originals
+brand/identity/splash-family-a/media/
+brand/identity/splash-family-b/media/

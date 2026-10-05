@@ -1,8 +1,8 @@
 """Two splash pages that live in the Maine Policy Institute family: the shared rules are a navy top bar, a blue primary, one
 warm accent on flat buttons, uppercase letterspaced labels and navigation, hard corners, and the Maine Policy credit in the
 footer. Family A keeps Signature's type (Bricolage Grotesque, DM Sans) and lined state mark. Family B keeps Bark & Sky's
-type (Hedvig Letters Serif, lowercase) and photographic hero. Both are trimmed to the three jobs the client asked for:
-what it is, what it hopes to achieve, where to find it.
+type (Hedvig Letters Serif, lowercase) and photographic hero. Both keep the creators and are trimmed of the quotes and newsletter
+sections: what it is, what it hopes to achieve, the creators, where to find it.
 
   python3 brand/src/build_splash_family.py   # writes brand/identity/splash-family-a and splash-family-b
 """
@@ -63,7 +63,7 @@ FAMILY_A = dict(S.SIGNATURE, css=FAMILY_A_CSS, title="Generation Maine", out="br
 B_CSS = B.CSS.replace("{media}", "") + FAMILY_B_CSS
 FAMILY_B = dict(B.BARK_SKY, css=B_CSS, title="Generation Maine", out="brand/identity/splash-family-b", media="",
                 lean=True, hero_kicker="A Maine Policy Institute project", h2about="what this is", cols=COLS, footer_line=CREDIT, bg_follow="#EAF1F8",
-                about_media="", band="", post_thumbs=["", "", ""], quote_stills=["", "", ""], head_extra="")
+                about_media="", band="", post_thumbs=["", "", ""], quote_stills=["", "", ""])
 
 if __name__ == "__main__":
     S.page(FAMILY_A)

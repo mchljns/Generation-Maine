@@ -552,11 +552,11 @@ def page(theme=SIGNATURE, out=None, media=None):
         ic_ig=icon("instagram"), ic_tt=icon("tiktok"), ic_yt=icon("youtube"), ic_ss=icon("substack"),
         stagevids=stagevids, whos=whos, panels=panels, segs=idx, json=json.dumps(rows, separators=(",", ":")))
     if theme.get("lean"):
-        body = body.replace('<a href="#creators" data-for="creators">Creators</a><a href="#words" data-for="words">In their words</a>', '')
-        body = body.replace('<a href="#creators">Creators<i class="d"></i></a><a href="#words">In their words<i class="d"></i></a>', '')
+        body = body.replace('<a href="#words" data-for="words">In their words</a>', '')
+        body = body.replace('<a href="#words">In their words<i class="d"></i></a>', '')
         body = body.replace('<a class="cta" href="#news">Get the newsletter</a>', '<a class="cta" href="#follow">Get the newsletter</a>')
-        body = body.replace('<a class="btn b1" href="#creators">Watch the stories</a><a class="tl" href="#news">Get the newsletter</a>', '<a class="btn b1" href="#follow">Watch the stories</a><a class="tl" href="#follow">Get the newsletter</a>')
-        theme = dict(theme, css=theme["css"] + "\n.stories-head,.stories,.words,.news,.band,.strip{display:none!important}")
+        body = body.replace('<a class="tl" href="#news">Get the newsletter</a>', '<a class="tl" href="#follow">Get the newsletter</a>')
+        theme = dict(theme, css=theme["css"] + "\n.words,.news,.band{display:none!important}")
     css = (CSS.replace("{{FONTS}}", theme["fonts"]) + theme["css"]).replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("brand/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))
     for k, v in theme.get("font_files", {}).items():
         css = css.replace("{{%s}}" % k, K.font64(v))
