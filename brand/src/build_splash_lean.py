@@ -84,12 +84,13 @@ STEPPER_OVERRIDES = """
 @media (max-width:900px){.stories .pinw{top:calc(84px + env(safe-area-inset-top,0px))}}
 """
 
-COLS = [("What it is", "Nine creators, each in their own town, making short videos about one rule at a time: a lease clause, a license fee, a permit, a line on a pay stub. The clips go out on their own accounts. The newsletter follows the paperwork behind them."),
-        F.COLS[1]]
-FOLLOW = [("instagram", "Instagram", "The clips, and stills from the towns.", "[@handle]", "#"),
-          ("tiktok", "TikTok", "The clips, as they go up.", "[@handle]", "#"),
-          ("youtube", "YouTube", "Longer cuts. [CONFIRM: what YouTube carries]", "[@handle]", "#"),
-          ("substack", "Substack", "The part of each story that does not fit in a clip. [CONFIRM: what the newsletter carries, and how often]", "[name].substack.com", "https://CONFIRM-publication.substack.com/subscribe")]
+HOW = ["Nine creators in nine towns. Each one films where they live.",
+       "One rule per clip: a lease clause, a license fee, a permit, a line on a pay stub.",
+       "The clips go out on the creators' own accounts. The newsletter carries the paperwork behind them."]
+FOLLOW = [("instagram", "Instagram", "[@handle]", "#"),
+          ("tiktok", "TikTok", "[@handle]", "#"),
+          ("youtube", "YouTube", "[@handle]", "#"),
+          ("substack", "Substack", "[name].substack.com", "https://CONFIRM-publication.substack.com/")]
 
 
 def utm(href):
@@ -147,20 +148,21 @@ section.block{padding-block:112px}
 .block .head .lede{max-width:56ch}
 .about{background:var(--paper)}
 .about .body{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:stretch}
-.about .media{display:grid;grid-template-rows:1fr auto;gap:10px;min-height:420px}
+.about .media{display:grid;grid-template-rows:1fr auto;gap:10px;min-height:360px}
 .about .media .ph{position:relative;overflow:hidden;background:var(--tint);min-height:360px}
 .about .media .ph img{position:absolute;inset:0;width:100%%;height:100%%;object-fit:cover;display:block}
 .about .media .cap{margin:0;font-size:13px;color:rgba(15,46,77,.7)}
-.about .towns{background:var(--navy);color:#fff;padding:32px 28px;display:grid;align-content:space-between;gap:24px}
+.about .towns{background:var(--navy);color:#fff;padding:32px 28px;display:grid;align-content:start;gap:22px}
 .about .towns .k{color:var(--mg)}
 .about .towns ul{list-style:none;margin:0;padding:0;columns:2;column-gap:24px}
-.about .towns li{font-family:var(--display);font-size:clamp(22px,2vw,28px);line-height:1.25;break-inside:avoid;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.14)}
-.about .cols{display:grid;grid-template-rows:1fr 1fr;gap:0}
-.about .col{border-top:1px solid var(--navy);padding:22px 0 28px;display:grid;grid-template-columns:56px 1fr;gap:0 24px;align-content:start}
-.about .col:last-child{border-bottom:1px solid var(--navy)}
-.about .col .n{font:600 13px/1.6 var(--label);letter-spacing:.1em;color:var(--blue)}
-.about .col b{display:block;font-size:22px;line-height:1.25;margin-bottom:10px}
-.about .col p{margin:0;font-size:17px;line-height:1.6;max-width:52ch;grid-column:2}
+.about .towns li{font-family:var(--display);font-size:clamp(22px,2vw,28px);line-height:1.25;break-inside:avoid;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.14)}
+.about .body{align-items:center}
+.about .aim .k{display:block;color:var(--blue);margin-bottom:20px}
+.about .aim .big{font-family:var(--display);font-size:clamp(26px,2.7vw,38px);line-height:1.2;margin:0;max-width:22ch}
+.about .how{margin-top:64px;padding-top:28px;border-top:1px solid var(--navy);display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.about .how div{display:grid;grid-template-columns:40px 1fr;gap:0 12px;align-items:baseline}
+.about .how .n{font:600 13px/1 var(--label);letter-spacing:.1em;color:var(--blue)}
+.about .how p{margin:0;font-size:17px;line-height:1.5}
 /* the cast: nine faces, the name under each, the town and the handle */
 .roster{background:var(--tint)}
 .roster .grid{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:16px 10px}
@@ -176,16 +178,14 @@ a.roster-tile:hover .who{border-top-color:var(--blue)}a.roster-tile:hover b{colo
 /* where to find it: three feeds as an editorial list, then the newsletter band */
 .follow{background:var(--navy);color:#fff}
 .follow .list{border-top:1px solid rgba(255,255,255,.22)}
-.follow .row{display:grid;grid-template-columns:48px 1fr auto;gap:4px 24px;align-items:center;padding:28px 0;border-bottom:1px solid rgba(255,255,255,.22);text-decoration:none;color:inherit}
-.follow .row .ic{grid-column:1;grid-row:1/3}.follow .row .name{grid-column:2;grid-row:1}.follow .row .h{grid-column:3;grid-row:1/3}
+.follow .row{display:grid;grid-template-columns:48px 1fr auto;gap:0 24px;align-items:center;padding:26px 0;border-bottom:1px solid rgba(255,255,255,.22);text-decoration:none;color:inherit}
 .follow .row .ic{width:28px;height:28px;color:var(--mg)}
 .follow .row .name{font-family:var(--display);font-size:clamp(26px,2.6vw,34px);line-height:1;transition:color .2s}
-.follow .row p{margin:0;font-size:15px;line-height:1.5;color:rgba(255,255,255,.72);max-width:52ch;grid-column:2;grid-row:2}
 .follow .row .h{font:600 13px/1 var(--label);letter-spacing:.06em;color:var(--mg);white-space:nowrap;justify-self:end}
 a.row:hover .name{color:var(--mg)}
 .follow .nl{margin-top:72px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:center;padding:48px 0 0;border-top:1px solid var(--mg)}
 .follow .nl .k{display:block;color:var(--mg);margin-bottom:16px}
-.follow .nl h3{font-family:var(--display);font-size:clamp(30px,3.2vw,44px);line-height:1.05;margin:0 0 14px}
+.follow .nl h3{font-family:var(--display);font-size:clamp(30px,3.2vw,44px);line-height:1.05;margin:0}
 .follow .nl .lede{color:rgba(255,255,255,.85);font-size:17px;max-width:40ch}
 .follow form{display:grid;grid-template-columns:1fr auto;gap:12px}
 .follow input{height:var(--ctl);border:1px solid rgba(255,255,255,.4);background:#fff;color:var(--ink);padding:0 16px;font:16px var(--body);width:100%%}
@@ -210,8 +210,8 @@ a.row:hover .name{color:var(--mg)}
  section.block{padding-block:56px}
  .block .head{grid-template-columns:1fr;gap:16px;margin-bottom:32px}
  .about .cols{grid-template-columns:1fr;gap:28px}
- .about .body{grid-template-columns:1fr;gap:28px}.about .media{min-height:0;aspect-ratio:4/3}.about .col{grid-template-columns:40px 1fr}
- .follow .row{grid-template-columns:36px 1fr;gap:4px 16px;padding:22px 0}.follow .row .ic{width:24px;height:24px;grid-row:1}.follow .row p{grid-column:2;grid-row:2}.follow .row .h{grid-row:3;grid-column:2;justify-self:start;margin-top:6px}
+ .about .body{grid-template-columns:1fr;gap:28px}.about .media{min-height:0}.about .media .ph{min-height:0;aspect-ratio:4/3}.about .how{grid-template-columns:1fr;gap:20px;margin-top:40px}
+ .follow .row{grid-template-columns:36px 1fr;gap:4px 16px;padding:20px 0}.follow .row .ic{width:24px;height:24px;grid-row:1/3}.follow .row .h{grid-column:2;justify-self:start;margin-top:4px}
  .follow .nl{grid-template-columns:1fr;gap:24px;margin-top:48px;padding-top:36px}
  .follow form{grid-template-columns:1fr}
 }
@@ -251,17 +251,17 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
 </div>%(hero_credit)s</section>
 
 <section class="block about" id="about"><div class="w">
-  <div class="head"><h2>%(h2_about)s</h2></div>
-  <div class="body">%(about_media)s<div class="cols">%(cols)s</div></div>
+  <div class="body">%(about_media)s<div class="aim"><span class="k">What we hope to achieve</span><p class="big">[CONFIRM: the project's aim, in the client's words.] Young people in Maine who understand the rules behind everyday costs, and who say so in their own words.</p></div></div>
+  <div class="how">%(cols)s</div>
 </div></section>
 
 <section class="block roster stories-head" id="creators"><div class="w">
-  <div class="head" style="margin-bottom:0"><h2>%(h2_creators)s</h2><p class="lede">Nine young Mainers in nine towns. Each one films where they live and says it their own way. Names, faces and clips here stand in until the shoot. First clips [CONFIRM: month].</p></div>
+  <div class="head" style="margin-bottom:0"><h2>%(h2_creators)s</h2><p class="lede">Names, faces and clips here stand in until the shoot. First clips [CONFIRM: month].</p></div>
 </div></section>
 %(stepper)s
 
 <section class="block follow" id="follow"><div class="w">
-  <div class="head"><h2>%(h2_follow)s</h2><p class="lede">Three feeds for the clips. One newsletter for the rest. Nothing is published on this page.</p></div>
+  <div class="head"><h2>%(h2_follow)s</h2><p class="lede">The clips live on the feeds. The paperwork lives in the newsletter. Nothing is published on this page.</p></div>
   %(follow)s
 </div></section>
 </main>
@@ -318,7 +318,7 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
 
 
 def cols_html():
-    return "".join('<div class="col"><span class="n">%02d</span><div><b>%s</b></div><p>%s</p></div>' % (i + 1, t, p) for i, (t, p) in enumerate(COLS))
+    return "".join('<div><span class="n">%02d</span><p>%s</p></div>' % (i + 1, t) for i, t in enumerate(HOW))
 
 
 def about_media(theme):
@@ -365,14 +365,13 @@ def stepper_html():
 
 def follow_html():
     rows = []
-    for key, name, line, handle, href in FOLLOW[:3]:
-        rows.append('<a class="row" href="%s" rel="noopener"%s>%s<span class="name">%s</span><p>%s</p><span class="h">%s</span></a>'
-                    % (utm(href), ' target="_blank"' if href.startswith("http") else "", S.icon(key), name, line, handle))
-    key, name, line, handle, href = FOLLOW[3]
-    nl = ('<div class="nl" id="newsletter"><div><span class="k">Substack</span><h3>The full story, by email.</h3><p class="lede">%s</p></div>'
+    for key, name, handle, href in FOLLOW:
+        rows.append('<a class="row" href="%s" rel="noopener"%s>%s<span class="name">%s</span><span class="h">%s</span></a>'
+                    % (utm(href), ' target="_blank"' if href.startswith("http") else "", S.icon(key), name, handle))
+    nl = ('<div class="nl" id="newsletter"><div><span class="k">Newsletter</span><h3>The full story, by email.</h3></div>'
           '<form id="nl" action="%s" method="get" target="_blank" rel="noopener"><label for="em" style="position:absolute;left:-9999px">Email</label>'
           '<input id="em" name="email" type="email" placeholder="you@example.com" autocomplete="email" required inputmode="email"><button class="btn b1" type="submit">Sign up</button>'
-          '<p class="fine">Runs on Substack at %s. Unsubscribe in one click. [CONFIRM: publication address]</p></form></div>' % (line, utm(href), handle))
+          '<p class="fine">Runs on Substack. Unsubscribe in one click. [CONFIRM: publication address]</p></form></div>' % utm("https://CONFIRM-publication.substack.com/subscribe"))
     return '<div class="list">%s</div>%s' % ("".join(rows), nl)
 
 

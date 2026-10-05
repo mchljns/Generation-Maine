@@ -653,3 +653,7 @@ Thirteen fixes from the critical read, on both concepts. Concept A's about panel
 ### The lean page, with the stepper back
 
 The creators section is the pinned clip stepper from the first preview, carried over whole: one clip on the stage, the creator's details beside it, the position row, scroll stepping through the nine. Flat corners, the family's blue and navy, the sticky bar allowed for on a phone. The roster grid is kept in the builder but not on the page. The nine placeholder clips bring the page back to about 9 MB on Concept A and 12 MB on Concept B; the clips should be muted video, not GIF, before launch.
+
+### Copy with a job
+
+Every line on the lean page now does one thing. Hero: what it is. About: what we hope to achieve, as the statement, with how it works as three one line facts. Creators: the clips, and one line that sets expectations. Where to find it: the four places, as a list with the handles, then the form. The descriptions under each feed are gone; they promised cadence and plans nobody has agreed. Substack sits in the list with the other three, and the form stands under it.
