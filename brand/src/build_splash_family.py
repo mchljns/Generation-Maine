@@ -12,6 +12,10 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 import build_splash as S
 import build_splash_barksky as B
+import json
+
+LOGO_A = os.path.join(S.ROOT, "brand", "identity", "logo-maine", "family-a")
+MURAL_A = json.load(open(os.path.join(LOGO_A, "mural.json")))
 
 NAVY_A, BLUE_A, MG = "#0F2E4D", "#0556A5", "#EFB443"
 NAVY_B, BLUE_B = "#112337", "#006CB5"
@@ -43,7 +47,7 @@ STATIC_CSS = """
 .static .reveal .row-in{transition-duration:.5s}
 .static body,.static .about{transition:none}
 /* footer: no ping, no draw */
-.static .site.on .lk .ping{animation:none}.static .site .lk .ping{display:none}.static .site .lk path{stroke-dashoffset:0!important;transition:none}
+.static .site.on .lk .ping{animation:none}.static .site .lk .ping{display:none}.static.bs .site .lk path{stroke-dashoffset:0!important;transition:none}
 /* the dot stays on the hero only */
 .static .h2 .d{display:none}
 /* the sign up band under the hero: full width navy, one field, one button, like the parents */
@@ -81,7 +85,14 @@ FAMILY_A_CSS = """
 h2,h3{letter-spacing:-.01em}
 .h2{font-size:clamp(34px,4vw,52px)}
 .signup .btn{background:%(mg)s;color:%(navy)s}
-.mural{display:none}
+/* the mural and the footer draw come back for Family A, with the slanted state */
+.static .mural{display:block}.static .mural path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .9s cubic-bezier(.2,.7,.2,1)}.static .mural.on path{stroke-dashoffset:0}
+.static.js .site .lk path[stroke]{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .8s cubic-bezier(.2,.7,.2,1)}.static.js .site.on .lk path[stroke]{stroke-dashoffset:0}
+.static .site .lk path:not([stroke]){stroke-dasharray:none}
+@media (prefers-reduced-motion: reduce){.static .mural path,.static.js .site .lk path[stroke]{stroke-dashoffset:0;transition:none}}
+.hero .w{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+.site .lk{height:96px}
+.top .lk{height:26px}.static .top.scrolled .lk{height:26px}
 .about .cols div::before{background:%(mg)s}.about.lit .cols div::before{background:%(mg)s}
 .about .cols h3{font:800 18px/1.2 var(--display);letter-spacing:-.01em;text-transform:none}
 .follow{background:#EAF1F8}
@@ -109,7 +120,8 @@ FAMILY_B_CSS = """
 .bs .hero h1{font-size:clamp(42px,6vw,84px)}
 """ % dict(blue=BLUE_B, navy=NAVY_B, mg=MG)
 
-FAMILY_A = dict(S.SIGNATURE, css=STATIC_CSS + FAMILY_A_CSS, root_class="static", signup_band=SIGNUP, title="Generation Maine", out="brand/identity/splash-family-a", media="",
+FAMILY_A = dict(S.SIGNATURE, css=STATIC_CSS + FAMILY_A_CSS, root_class="static", signup_band=SIGNUP,
+                logo=LOGO_A, nav_light="lockup-compact-reversed", nav_dark="lockup-compact-reversed", footer="lockup-two-line-reversed", mural_data=MURAL_A, title="Generation Maine", out="brand/identity/splash-family-a", media="",
                 lean=True, hero_kicker="A Maine Policy Institute project", h2about="What this is", cols=COLS, footer_line=CREDIT, bg_follow="#EAF1F8", footer_ping=False)
 
 B_CSS = B.CSS.replace("{media}", "") + STATIC_CSS.replace(".static", ".static.bs").replace(".static.bs.js", ".static.bs.js") + FAMILY_B_CSS

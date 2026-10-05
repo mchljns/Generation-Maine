@@ -462,7 +462,9 @@ def page(theme=SIGNATURE, out=None, media=None):
   // The mural: the logo's sixteen lines at hero scale, drawing themselves in from the top.
   const d = JSON.parse(document.getElementById('maine-data').textContent), ns = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 720 720');
-  d.rows.forEach((row, i) => row.runs.forEach(([a, b]) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + a + ' ' + row.y + ' L' + b + ' ' + row.y); p.setAttribute('stroke', BI); p.setAttribute('stroke-width', row.w); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 45) + 'ms'; svg.appendChild(p); }));
+  if (d.lines) { const defs = document.createElementNS(ns, 'defs'), cp = document.createElementNS(ns, 'clipPath'); cp.setAttribute('id', 'muralclip'); const cpp = document.createElementNS(ns, 'path'); cpp.setAttribute('d', d.clip); cp.appendChild(cpp); defs.appendChild(cp); svg.appendChild(defs); const g = document.createElementNS(ns, 'g'); g.setAttribute('clip-path', 'url(#muralclip)'); svg.appendChild(g);
+    d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || BI); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 35) + 'ms'; g.appendChild(p); }); }
+  (d.rows || []).forEach((row, i) => row.runs.forEach(([a, b]) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + a + ' ' + row.y + ' L' + b + ' ' + row.y); p.setAttribute('stroke', BI); p.setAttribute('stroke-width', row.w); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 45) + 'ms'; svg.appendChild(p); }));
   const m = document.getElementById('mural'); if (m) { m.appendChild(svg); new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) m.classList.add('on'); }), { threshold: .2 }).observe(m); }
 
   // The page background changes as each section passes the middle of the screen.
@@ -554,7 +556,7 @@ def page(theme=SIGNATURE, out=None, media=None):
         footer_line=theme.get("footer_line", "© 2026 Generation Maine. An initiative of Maine Policy Institute. [CONFIRM: legal name, address and contact]"),
         h2words=dot("In their words"), h2news=dot("The full story, by email"), h2follow=dot("Follow along"),
         ic_ig=icon("instagram"), ic_tt=icon("tiktok"), ic_yt=icon("youtube"), ic_ss=icon("substack"),
-        stagevids=stagevids, whos=whos, panels=panels, segs=idx, json=json.dumps(rows, separators=(",", ":")))
+        stagevids=stagevids, whos=whos, panels=panels, segs=idx, json=json.dumps(theme.get("mural_data") or rows, separators=(",", ":")))
     if theme.get("lean"):
         body = body.replace('<a href="#words" data-for="words">In their words</a>', '')
         body = body.replace('<a href="#words">In their words<i class="d"></i></a>', '')
