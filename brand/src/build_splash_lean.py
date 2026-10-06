@@ -44,6 +44,7 @@ LEAN_A = dict(
 @media (prefers-reduced-motion: reduce){.lean h1 .d::after{animation:none}}
 .lean .col b{font-family:var(--body);font-weight:700}
 .lean .hero .k{color:#fff}
+.site .flegal .ph{color:rgba(255,255,255,.75)}
 """)
 
 LEAN_B = dict(
@@ -57,6 +58,7 @@ LEAN_B = dict(
 .lean h1,.lean h2,.lean .h2{font-family:var(--display);font-weight:400;letter-spacing:-.015em}
 .lean .col b{font-family:var(--body);font-weight:400}
 .lean .hero{color:#fff}
+.site .flegal .ph{color:rgba(255,255,255,.75)}
 .bs.static .site .lk{height:124px}@media (max-width:900px){.bs.static .site .lk{height:104px}}
 .lean .hero .bg{position:absolute;inset:0;overflow:hidden;background:var(--navy)}
 .lean .hero .bg video{width:100%;height:100%;object-fit:cover;display:block}
@@ -124,9 +126,9 @@ GOAL = ("Generation Maine wants young people in Maine to see the rules behind wh
         "and shows what it says and what it costs. The clips go out on the creators' own accounts, where their friends already are. "
         "The newsletter follows the paperwork behind each one, with the numbers. The more people see the same rule from different towns, "
         "the harder it gets to ignore.")
-FOLLOW = [("instagram", "Instagram", "[@handle]", "#"),
-          ("tiktok", "TikTok", "[@handle]", "#"),
-          ("youtube", "YouTube", "[@handle]", "#"),
+FOLLOW = [("instagram", "Instagram", "[@handle]", "#follow"),
+          ("tiktok", "TikTok", "[@handle]", "#follow"),
+          ("youtube", "YouTube", "[@handle]", "#follow"),
           ("substack", "Substack", "[name].substack.com", "https://CONFIRM-publication.substack.com/")]
 
 
@@ -403,7 +405,7 @@ def stepper_html():
         who = '<div class="who%s">%s<span><b>%s</b>%s</span></div>' % (' on' if i == 0 else '', S.avatar(), cr["handle"], cr["name"])
         whos += who
         idx += '<button type="button" aria-label="Creator %d, %s, %s" data-name="%s"%s></button>' % (i + 1, cr["name"], town, cr["name"], ' class="on"' if i == 0 else "")
-        socials = ''.join('<a href="#" aria-label="%s">%s<span>%s</span></a>' % (n.capitalize(), S.icon(n), cr["handle"]) for n in ("instagram", "tiktok", "youtube"))
+        socials = ''.join('<a href="#follow" aria-label="%s">%s<span>%s</span></a>' % (n.capitalize(), S.icon(n), cr["handle"]) for n in ("instagram", "tiktok", "youtube"))
         panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv">%s</div><p class="k">%s, Maine</p><h2>%s</h2><p class="bio">%s</p><div class="soc">%s</div></article>'
                    % (" on" if i == 0 else "", i + 1, i, who, town, cr["name"], cr["bio"], socials))
     return ('<section class="stories" id="stories"><div class="pinw"><div class="w">'
@@ -491,6 +493,9 @@ def page(theme):
     im.crop((x0, 0, x0 + tw, h)).resize((1200, 1600), Image.LANCZOS).save(os.path.join(ROOT, out_dir, "media", "about.jpg"), quality=84)
     footer = F.family_footer(S.draw_paths(S.logo("lockup-two-line-reversed", "lk", theme["logo"])), dict(credits=theme["credits"]))
     footer = footer.replace('href="#signup"', 'href="#newsletter"')
+    footer = footer.replace('<a href="#" aria-label=', '<a href="#follow" aria-label=')
+    footer = footer.replace('<a href="#">Privacy</a>', '<span class="ph" title="[CONFIRM: privacy policy page]">Privacy</span>')
+    footer = footer.replace('<a href="#">Contact</a>', '<a href="%s" rel="noopener" title="Maine Policy Institute, contact [CONFIRM: a Generation Maine address]">Contact</a>' % utm("https://mainepolicy.org/contact/"))
     footer = re.sub(r'href="(https?://[^"]+)"', lambda m: 'href="%s"' % utm(m.group(1)), footer)
     url = LIVE + theme["key"] + "/"
     html = HTML % dict(root_class=theme["root_class"], css=css, url=url, bar_logo=S.logo("lockup-compact-reversed", "lk", theme["logo"]), h1=theme["h1"],
