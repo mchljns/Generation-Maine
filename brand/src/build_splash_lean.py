@@ -30,7 +30,7 @@ MPI_NAVY, MPI_BLUE = "#0F2E4D", "#0556A5"
 SITE_CSS = lambda css: "\n".join(l for l in css.splitlines() if ".site" in l)
 
 LEAN_A = dict(
-    key="lean-a", out="brand/identity/splash-lean-a", root_class="static lean", navy="#0F2E4D", blue="#0556A5", ink="#0F2E4D", paper="#FFFFFF", tint="#EAF1F8",
+    key="v2-a", out="brand/identity/splash-lean-a", root_class="static lean", navy="#0F2E4D", blue="#0556A5", ink="#0F2E4D", paper="#FFFFFF", tint="#EAF1F8",
     fonts=S.SIGNATURE_FONTS, font_files={}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="Photograph via Wikimedia Commons: David Wilson, Lisbon Street, Lewiston (CC BY 2.0).",
     display="'Bricolage Grotesque',system-ui,sans-serif", body="'DM Sans',system-ui,sans-serif", label="'DM Sans',system-ui,sans-serif",
     h1="Young Mainers<br>on building<br>a life <em>here.</em>", h2_about="What this is", h2_creators="The creators", h2_follow="Where to find it",
@@ -43,7 +43,7 @@ LEAN_A = dict(
 """)
 
 LEAN_B = dict(
-    key="lean-b", out="brand/identity/splash-lean-b", root_class="bs static lean", navy=MPI_NAVY, blue=MPI_BLUE, ink=MPI_NAVY, paper="#FFFFFF", tint="#EAF1F8",
+    key="v2-b", out="brand/identity/splash-lean-b", root_class="bs static lean", navy=MPI_NAVY, blue=MPI_BLUE, ink=MPI_NAVY, paper="#FFFFFF", tint="#EAF1F8",
     fonts=B.FONTS, font_files=B.BARK_SKY["font_files"], logo=F.LOGO_B, mural=None, hero="video", credits=B.BARK_SKY["credits"],
     display="'Hedvig Letters Serif',Georgia,serif", body="'Hedvig Letters Sans',system-ui,sans-serif", label="'Hedvig Letters Sans',system-ui,sans-serif",
     h1="young mainers<br>on building<br>a life here", h2_about="what this is", h2_creators="the creators", h2_follow="where to find it",
