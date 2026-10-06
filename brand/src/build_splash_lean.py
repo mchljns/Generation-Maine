@@ -495,7 +495,7 @@ def page(theme):
     footer = footer.replace('href="#signup"', 'href="#newsletter"')
     footer = footer.replace('<a href="#" aria-label=', '<a href="#follow" aria-label=')
     footer = footer.replace('<a href="#">Privacy</a>', '<span class="ph" title="[CONFIRM: privacy policy page]">Privacy</span>')
-    footer = footer.replace('<a href="#">Contact</a>', '<a href="%s" rel="noopener" title="Maine Policy Institute, contact [CONFIRM: a Generation Maine address]">Contact</a>' % utm("https://mainepolicy.org/contact/"))
+    footer = footer.replace('<a href="#">Contact</a>', '<a href="%s" rel="noopener" title="Maine Policy Institute, contact [CONFIRM: a Generation Maine address]">Contact</a>' % "https://mainepolicy.org/contact/")   # the source parameter is added with the other outbound links below
     footer = re.sub(r'href="(https?://[^"]+)"', lambda m: 'href="%s"' % utm(m.group(1)), footer)
     url = LIVE + theme["key"] + "/"
     html = HTML % dict(root_class=theme["root_class"], css=css, url=url, bar_logo=S.logo("lockup-compact-reversed", "lk", theme["logo"]), h1=theme["h1"],
