@@ -31,7 +31,7 @@ SITE_CSS = lambda css: "\n".join(l for l in css.splitlines() if ".site" in l)
 
 LEAN_A = dict(
     key="v2-a", out="brand/identity/splash-lean-a", root_class="static lean", navy="#0F2E4D", blue="#0556A5", ink="#0F2E4D", paper="#FFFFFF", tint="#EAF1F8",
-    fonts=S.SIGNATURE_FONTS, font_files={}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="Photograph via Wikimedia Commons: David Wilson, Lisbon Street, Lewiston (CC BY 2.0).",
+    fonts=S.SIGNATURE_FONTS, font_files={}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="",
     display="'Bricolage Grotesque',system-ui,sans-serif", body="'DM Sans',system-ui,sans-serif", label="'DM Sans',system-ui,sans-serif",
     h1="Young Mainers<br>on building<br>a life <em>here.</em>", h2_about="What this is", h2_creators="The creators", h2_follow="Where to find it",
     site_css=SITE_CSS(F.STATIC_CSS) + "\n" + SITE_CSS(F.FAMILY_A_CSS % dict(blue="#0556A5", navy="#0F2E4D", mg=MG)),
@@ -44,7 +44,7 @@ LEAN_A = dict(
 
 LEAN_B = dict(
     key="v2-b", out="brand/identity/splash-lean-b", root_class="bs static lean", navy=MPI_NAVY, blue=MPI_BLUE, ink=MPI_NAVY, paper="#FFFFFF", tint="#EAF1F8",
-    fonts=B.FONTS, font_files=B.BARK_SKY["font_files"], logo=F.LOGO_B, mural=None, hero="video", credits=B.BARK_SKY["credits"],
+    fonts=B.FONTS, font_files=B.BARK_SKY["font_files"], logo=F.LOGO_B, mural=None, hero="video", credits="",
     display="'Hedvig Letters Serif',Georgia,serif", body="'Hedvig Letters Sans',system-ui,sans-serif", label="'Hedvig Letters Sans',system-ui,sans-serif",
     h1="young mainers<br>on building<br>a life here", h2_about="what this is", h2_creators="the creators", h2_follow="where to find it",
     site_css=SITE_CSS(F.STATIC_CSS) + "\n" + SITE_CSS(F.FAMILY_B["css"]),
@@ -334,8 +334,7 @@ ABOUT_PHOTO = ("lewiston-3.jpg", "Lisbon Street, Lewiston, Maine", "Lisbon Stree
 
 
 def about_media(theme):
-    return ('<figure class="media" style="margin:0"><div class="ph"><img src="media/about.jpg" alt="%s" width="1200" height="1600" loading="lazy"></div>'
-            '<figcaption class="cap">%s</figcaption></figure>' % (ABOUT_PHOTO[1], ABOUT_PHOTO[2]))
+    return '<figure class="media" style="margin:0"><div class="ph"><img src="media/about.jpg" alt="%s" width="1200" height="1600" loading="lazy"></div></figure>' % ABOUT_PHOTO[1]
 
 
 def tiles_html():
@@ -426,7 +425,7 @@ def page(theme):
     if theme["hero"] == "video":
         hero_bg = '<div class="bg" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata" poster="media/hero-poster.jpg"><source src="media/hero.webm" type="video/webm"></video></div>'
         hero_side = ""
-        hero_credit = '<p class="credit">Katahdin, Aroostook County, Cadillac Mountain, Portland Head Light, the Old Port. Photographs via Wikimedia Commons, credits in the footer.</p>'
+        hero_credit = ""   # placeholder footage; credits for the sources stay in brand/content/photos/CREDITS.md
         # the loop and its poster: the lighter render if present, else the one the family page uses
         fam = os.path.join(ROOT, "brand", "identity", "splash-family-b", "media")
         for f in ("hero.webm", "hero-poster.jpg"):

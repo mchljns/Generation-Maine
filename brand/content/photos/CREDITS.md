@@ -17,3 +17,7 @@ Portland Head Light is a client-directed exception to the direction's rule again
 - post-1.jpg: FujiAppleSan, CC0, 4032x2268. https://commons.wikimedia.org/wiki/File:Downtown_Belfast_Maine,_February_2025.jpg
 - post-2.jpg: Zedmaster375, CC BY-SA 3.0, 4896x3672. https://commons.wikimedia.org/wiki/File:Main_Street,_Machias,_Maine.JPG
 - post-3.jpg: David Wilson, CC BY 2.0, 4000x3000. https://commons.wikimedia.org/wiki/File:119_Lewiston,_Maine.jpg
+
+## Placeholder media on the v2 pages, October 2026
+
+The v2 pages show no credits on the page, at the client's request: every photograph and clip there is a stand-in to be replaced with media the project owns. Sources used while the placeholders are up: the hero loop plates listed above; Lisbon Street, Lewiston, David Wilson, CC BY 2.0 (about section); the creator portraits and clips from the placeholder set.
