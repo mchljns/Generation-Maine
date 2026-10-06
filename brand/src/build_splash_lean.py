@@ -83,7 +83,7 @@ STEPPER_OVERRIDES = """
 .where{color:var(--muted)}.where .n{color:var(--ink)}
 .where .segs button::before{background:rgba(15,46,77,.2);border-radius:0}.where .segs button.on::before,.where .segs button.done::before{background:var(--navy)}
 .soc a{color:var(--ink)}.soc .ic{color:var(--blue)}
-@media (max-width:900px){.stories .pinw{top:calc(84px + env(safe-area-inset-top,0px))}}
+@media (max-width:900px){.stories .pinw{top:calc(84px + env(safe-area-inset-top,0px))}.stories .w{display:grid}.stage{order:0}.where{order:1;margin:4px 0 2px}.panels{order:2}}
 """
 
 GOAL = ("Generation Maine wants young people in Maine to see the rules behind what their lives cost, and to say so in public. "
@@ -301,7 +301,7 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
     wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.dataset.name : 'Last one'; }
   const panelsEl = document.getElementById('panels'), stageEl = document.querySelector('.stage');
   const fit = () => { if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
-    const top = 16, row = 28 + 12, room = innerHeight - top - (h + 6) - 14 * 2 - row - 12, colw = stageEl.clientWidth || (innerWidth - 32);
+    const top = 84 + 16, row = 40 + 6, room = innerHeight - top - (h + 6) - 14 * 2 - row - 16, colw = stageEl.clientWidth || (innerWidth - 32);
     stageEl.style.setProperty('--stageh', Math.round(Math.max(200, Math.min(innerHeight * .62, colw * 16 / 9, room))) + 'px'); };
   const step = () => { const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
   fit(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fit(); step(); }); addEventListener('load', fit);
