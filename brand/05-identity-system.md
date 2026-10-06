@@ -701,3 +701,7 @@ Around two lines of type the frame now keeps three and a half strokes of air ins
 ### The frame's height
 
 The frame no longer forces its height to 78 percent of its width. It is the height of the two lines plus a quarter more air above and below than beside: 57 to 46 at the drawing scale. The footer mark on the v2 page sits at 124 px tall, 104 on phones, so the shorter frame keeps about the width it had.
+
+### Phone tap targets
+
+Every interactive element on the v2 pages measured at phone width. Hero, about, follow list and form were already at or over 44 pt. Fixed: the bar's mark link, the footer's page links, social links, partner links and legal links, all now 44 pt tall or more with the visual unchanged; the vertical selector's segments widened to the full 40 px track. Social links are now labeled: in the creator panel, outlined chips with the icon and the platform name, 44 pt tall and 10 px apart; in the footer, a two column list of 48 pt rows. The nine selector segments are the only targets under 44 pt, at 40 by 35, which is what a 420 px track allows and well over the 24 pt minimum.

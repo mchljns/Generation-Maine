@@ -111,9 +111,9 @@ STEPPER_OVERRIDES = """
 .stories .w{display:grid;grid-template-columns:40px minmax(0,1fr);grid-template-rows:auto auto;gap:14px 12px;align-items:stretch}
 .where{grid-column:1;grid-row:1;order:0;margin:0;flex-direction:column;align-items:center;gap:12px;height:var(--stageh,52vh)}
 .where .n{writing-mode:vertical-rl;transform:rotate(180deg);min-width:0;line-height:1}
-.where .segs{flex-direction:column;flex:1;width:14px;gap:6px}
-.where .segs button{flex:1;width:14px;height:auto}
-.where .segs button::before{left:6px;right:auto;top:0;bottom:0;width:2px;height:auto}
+.where .segs{flex-direction:column;flex:1;width:40px;gap:4px}
+.where .segs button{flex:1;width:40px;height:auto}
+.where .segs button::before{left:19px;right:auto;top:0;bottom:0;width:2px;height:auto}
 .where .segs button:hover::before{transform:scaleX(1.5)}
 .where .next{display:none}
 .stage{grid-column:2;grid-row:1;order:1;justify-content:flex-start}
@@ -144,6 +144,14 @@ def utm(href):
         return href
     return href + ("&" if "?" in href else "?") + UTM
 
+
+PHONE_SITE = """
+@media (max-width:900px){
+.static .site .fsocial{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.static .site .fsocial a{display:flex;align-items:center;min-height:48px;padding:0;border-top:1px solid rgba(255,255,255,.14);gap:12px;font-size:15px}
+.static .site .fsocial .ic{width:22px;height:22px}
+}
+"""
 
 CSS = r"""
 {{FONTS}}
@@ -252,6 +260,21 @@ a.row:hover .name{color:var(--mg)}
  .hero .mural path{transition-duration:1.1s}
  .follow.block{padding-bottom:40px}
  .static .site{padding-block:36px 24px}
+ /* tap targets: 44 pt tall where a finger lands; the visual stays the same */
+ .top .w>a:first-child{display:flex;align-items:center;min-height:44px}
+ .static .site .flinks{gap:0 20px}.static .site .flinks a{display:inline-flex;align-items:center;min-height:44px;padding:0}
+ .static .site .fsocial{gap:0 18px}.static .site .fsocial a{min-height:44px;padding:0}
+ .static .site .fpartners a,.static .site .plist a{display:inline-flex;align-items:center;min-height:44px;margin:0 18px 0 0}
+ .static .site .plist a{display:flex;margin:0}
+ .static .site .flegal a,.static .site .flegal .ph{display:inline-flex;align-items:center;min-height:44px}
+ .static .site .ffine{gap:0}.static .site .fpartners{gap:0}
+ /* social links on phones: labeled chips, 44 pt tall, a thumb's width apart */
+ .stories .soc{gap:10px;margin-top:4px}
+ .stories .soc a{min-height:44px;padding:0 14px 0 12px;border:1px solid rgba(15,46,77,.3);gap:9px;font-size:13px;font-weight:600;letter-spacing:.02em}
+ .stories .soc a span{display:none}
+ .stories .soc a::after{content:attr(aria-label)}
+ .stories .soc .ic{width:20px;height:20px}
+
  .hero .w{grid-template-columns:1fr;gap:28px}
  .hero .mural{order:-1;width:min(56vw,300px);justify-self:start}
  .hero h1{max-width:none}
@@ -266,6 +289,7 @@ a.row:hover .name{color:var(--mg)}
 %(stepper_css)s
 %(site_css)s
 %(css)s
+%(phone_site)s
 """
 
 HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>document.documentElement.classList.add("js")</script>
@@ -405,7 +429,7 @@ def stepper_html():
         who = '<div class="who%s">%s<span><b>%s</b>%s</span></div>' % (' on' if i == 0 else '', S.avatar(), cr["handle"], cr["name"])
         whos += who
         idx += '<button type="button" aria-label="Creator %d, %s, %s" data-name="%s"%s></button>' % (i + 1, cr["name"], town, cr["name"], ' class="on"' if i == 0 else "")
-        socials = ''.join('<a href="#follow" aria-label="%s">%s<span>%s</span></a>' % (n.capitalize(), S.icon(n), cr["handle"]) for n in ("instagram", "tiktok", "youtube"))
+        socials = ''.join('<a href="#follow" aria-label="%s">%s<span>%s</span></a>' % (lbl, S.icon(n), cr["handle"]) for n, lbl in (("instagram", "Instagram"), ("tiktok", "TikTok"), ("youtube", "YouTube")))
         panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv">%s</div><p class="k">%s, Maine</p><h2>%s</h2><p class="bio">%s</p><div class="soc">%s</div></article>'
                    % (" on" if i == 0 else "", i + 1, i, who, town, cr["name"], cr["bio"], socials))
     return ('<section class="stories" id="stories"><div class="pinw"><div class="w">'
@@ -461,7 +485,7 @@ def icons(theme, out_dir):
 def page(theme):
     out_dir = theme["out"]
     os.makedirs(os.path.join(ROOT, out_dir, "media"), exist_ok=True)
-    css = (CSS % dict(theme, site_css=theme["site_css"], stepper_css=stepper_css() + STEPPER_OVERRIDES))
+    css = (CSS % dict(theme, site_css=theme["site_css"], stepper_css=stepper_css() + STEPPER_OVERRIDES, phone_site=PHONE_SITE))
     css = css.replace("{{FONTS}}", theme["fonts"]).replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("brand/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))
     for k, v in theme["font_files"].items():
         css = css.replace("{{%s}}" % k, K.font64(v))
