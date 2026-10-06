@@ -153,7 +153,7 @@ FAMILY_B_CSS = """
 @media (max-width:900px){.bs.static .top .lk,.bs.static .top.scrolled .lk{height:24px}}
 .bs.static .site .lk{height:150px}@media (max-width:900px){.bs.static .site .lk{height:120px}}
 /* footer: the frame draws itself. The long leg first, from the open end up and around; then the return from the corner back toward the opening; then the two words rise in. Hidden states do not depend on .js, or they would transition in at load; without script everything shows at once */
-.bs.static .site .lk path[stroke]{stroke-dasharray:1;stroke-dashoffset:1}.bs.static .site .lk path[stroke]:nth-of-type(2){stroke-dashoffset:-1}
+.bs.static .site .lk path[stroke]{stroke-dasharray:1;stroke-dashoffset:1}
 .bs.static .site .lk g path{opacity:0;transform-box:fill-box;transform:translateY(5%%)}
 .bs.static:not(.js) .site .lk path[stroke],.bs.static .site.on .lk path[stroke]{stroke-dashoffset:0}
 .bs.static:not(.js) .site .lk g path,.bs.static .site.on .lk g path{opacity:1;transform:none}

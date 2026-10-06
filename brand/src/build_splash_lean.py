@@ -83,7 +83,7 @@ STEPPER_OVERRIDES = """
 .where{color:var(--muted)}.where .n{color:var(--ink)}
 .where .segs button::before{background:rgba(15,46,77,.2);border-radius:0}.where .segs button.on::before,.where .segs button.done::before{background:var(--navy)}
 .soc a{color:var(--ink)}.soc .ic{color:var(--blue)}
-@media (max-width:900px){.stories .pinw{top:calc(84px + env(safe-area-inset-top,0px))}.stories .w{display:grid}.stage{order:0}.where{order:1;margin:4px 0 2px}.panels{order:2}}
+@media (max-width:900px){.stories .pinw{top:calc(84px + env(safe-area-inset-top,0px))}.stories .w{display:grid}.where{order:0;margin:0 0 6px}.stage{order:1}.panels{order:2}}
 """
 
 GOAL = ("Generation Maine wants young people in Maine to see the rules behind what their lives cost, and to say so in public. "
@@ -213,7 +213,10 @@ a.row:hover .name{color:var(--mg)}
  .sheet.open{opacity:1;transform:none;pointer-events:auto}
  .sheet nav{display:grid;gap:6px}.sheet nav a{font:600 15px/1 var(--label);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:#fff;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.12)}
  .sheet .btn{margin-top:20px;width:100%%}
- .hero{padding-block:48px 56px;min-height:0}
+ .hero{padding-block:32px 48px;min-height:0}
+ .hero .mural path{transition-duration:1.1s}
+ .follow.block{padding-bottom:40px}
+ .static .site{padding-block:36px 24px}
  .hero .w{grid-template-columns:1fr;gap:28px}
  .hero .mural{order:-1;width:min(56vw,300px);justify-self:start}
  .hero h1{max-width:none}
@@ -290,7 +293,7 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
     const defs = document.createElementNS(ns, 'defs'), cp = document.createElementNS(ns, 'clipPath'); cp.setAttribute('id', 'muralclip');
     const cpp = document.createElementNS(ns, 'path'); cpp.setAttribute('d', d.clip); cp.appendChild(cpp); defs.appendChild(cp); svg.appendChild(defs);
     const g = document.createElementNS(ns, 'g'); g.setAttribute('clip-path', 'url(#muralclip)'); svg.appendChild(g);
-    d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || '#FFFFFF'); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * (d.stagger || 35)) + 'ms'; g.appendChild(p); });
+    d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || '#FFFFFF'); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * (matchMedia('(max-width: 900px)').matches ? 35 : (d.stagger || 35))) + 'ms'; g.appendChild(p); });
     m.appendChild(svg); requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('on')));
   }
   // The stage: one pinned clip that changes as each story panel reaches the middle of the screen.
@@ -301,8 +304,8 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
     wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.dataset.name : 'Last one'; }
   const panelsEl = document.getElementById('panels'), stageEl = document.querySelector('.stage');
   const fit = () => { if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
-    const top = 84 + 16, row = 40 + 6, room = innerHeight - top - (h + 6) - 14 * 2 - row - 16, colw = stageEl.clientWidth || (innerWidth - 32);
-    stageEl.style.setProperty('--stageh', Math.round(Math.max(200, Math.min(innerHeight * .62, colw * 16 / 9, room))) + 'px'); };
+    const top = 84 + 16, row = 40 + 6, room = innerHeight - top - row - 24, colw = stageEl.clientWidth || (innerWidth - 32);
+    stageEl.style.setProperty('--stageh', Math.round(Math.max(240, Math.min(colw * 16 / 9, room))) + 'px'); };
   const step = () => { const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
   fit(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fit(); step(); }); addEventListener('load', fit);
   marks.forEach((m, k) => m.addEventListener('click', () => { const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
