@@ -147,9 +147,10 @@ def utm(href):
 
 PHONE_SITE = """
 @media (max-width:900px){
-.static .site .fsocial{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
-.static .site .fsocial a{display:flex;align-items:center;min-height:48px;padding:0;border-top:1px solid rgba(255,255,255,.14);gap:12px;font-size:15px}
-.static .site .fsocial .ic{width:22px;height:22px}
+/* .static.lean outranks the family sheet's .static.bs copy of these rules */
+.static.lean .site .fsocial{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.static.lean .site .fsocial a{display:flex;align-items:center;min-height:48px;padding:0;border-top:1px solid rgba(255,255,255,.14);gap:12px;font-size:15px}
+.static.lean .site .fsocial .ic{width:22px;height:22px}
 }
 """
 
