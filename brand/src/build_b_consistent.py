@@ -42,7 +42,7 @@ def horizontal(fg, acc, ratio=1.0, st=STROKE):
 def stacked(fg, acc, square=False, low=False, st=STROKE):
     """Two lines of type inside the frame."""
     body, w, h = b_paths(fg, acc)
-    pad = st * 1.5 + st          # a stroke and a half of air past the stroke itself
+    pad = st * 2.5 + st          # two and a half strokes of air past the stroke itself; a stroke and a half was tight around generation
     W = w + pad * 2
     H = W if square else max(h + pad * 2, W * 0.78)
     oy = (H - h - pad) if low else (H - h) / 2

@@ -693,3 +693,7 @@ Browsers that cannot play WebM, which includes most iPhones, now get the same lo
 ### Concept B hero on phones
 
 Picture first. The loop fills the first screen and the words sit in its lower third over a gradient that rises from the bottom, so the picture reads clean above and the type reads clean below. The kicker stays on one line. The button ends about 40 px above the bottom of the screen on an iPhone and on a 740 px phone.
+
+### The frame's padding
+
+Around two lines of type the frame now keeps three and a half strokes of air inside the stroke, about nine tenths of the x-height, up from two and a half. At the old setting the word generation nearly touched the sides at footer size. The horizontal lockup and the avatar are unchanged.
