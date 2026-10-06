@@ -107,20 +107,45 @@ STEPPER_OVERRIDES = """
 .where .segs button::before{background:rgba(15,46,77,.2);border-radius:0}.where .segs button.on::before,.where .segs button.done::before{background:var(--navy)}
 .soc a{color:var(--ink)}.soc .ic{color:var(--blue)}
 @media (max-width:900px){
-.stories .pinw{top:calc(84px + env(safe-area-inset-top,0px))}
-/* phones: the position row stands on its side along the left of the clip, so the clip and the creator's details share one screen */
-.stories .w{display:grid;grid-template-columns:40px minmax(0,1fr);grid-template-rows:auto auto;gap:14px 12px;align-items:stretch}
-.where{grid-column:1;grid-row:1;order:0;margin:0;flex-direction:column;align-items:center;gap:12px;height:var(--stageh,52vh)}
-.where .n{writing-mode:vertical-rl;transform:rotate(180deg);min-width:0;line-height:1}
-.where .segs{flex-direction:column;flex:1;width:40px;gap:4px}
-.where .segs button{flex:1;width:40px;height:auto}
-.where .segs button::before{left:19px;right:auto;top:0;bottom:0;width:2px;height:auto}
-.where .segs button:hover::before{transform:scaleX(1.5)}
-.where .next{display:none}
-.stage{grid-column:2;grid-row:1;order:1;justify-content:flex-start}
-.panels{grid-column:1/-1;grid-row:2;order:2}
+/* phones: the creators are a left to right carousel. Each card carries its own clip, name and story; the page scrolls
+   normally; the row under the track shows where you are; the section's tint follows the creator in view */
+.stories{height:auto!important;min-height:0!important;padding:8px 0 44px;overflow:visible;transition:background-color .6s ease}
+.stories .pinw{position:static;top:auto}
+.stories .w{display:block}
+.stage{display:none}
+.panels{position:static;height:auto!important;display:flex;gap:14px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding:0 var(--M);padding:0 var(--M) 6px;margin:0 calc(-1 * var(--M));scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.panels::-webkit-scrollbar{display:none}
+.panel{position:static;flex:0 0 min(78vw,330px);scroll-snap-align:center;display:block;opacity:1;visibility:visible;pointer-events:auto;transition:none;padding-top:0}
+.panel>*{transform:none!important;opacity:1!important;transition:none!important}
+.panel .pv{display:block;position:relative;aspect-ratio:9/16;overflow:hidden;background:var(--navy);margin-bottom:14px}
+.panel .pv img.clip{width:100%;height:100%;object-fit:cover;display:block}
+.panel .pv .who{opacity:1;left:10px;top:10px;right:56px}
+.panel .pv .dur{position:absolute;right:8px;top:8px;font:600 12px/1 var(--body);letter-spacing:.06em;color:#fff;background:rgba(15,46,77,.6);padding:5px 7px}
+.panel .k{margin-bottom:6px}
+.panel h2{font-size:clamp(28px,8vw,36px);max-width:none}
+.panel .bio{font-size:15px;line-height:1.45;margin:8px 0 12px}
+.where{display:flex;flex-direction:row;align-items:center;height:auto;margin:18px 0 0;gap:16px}
+.where .next{display:block;min-width:0;text-align:right}
 }
 """
+
+MICHROMA = "@font-face{font-family:Michroma;font-weight:400;font-display:swap;src:url(data:font/ttf;base64,{{FMICH}}) format('truetype')}"
+# Concept A with a Eurostile voice for the label layer. Michroma stands in under the Open Font License until a Eurostile web
+# license is confirmed. Labels, navigation, buttons, the stepper counter and the footer's small links take it; nothing else does.
+LEAN_A_LABELS = dict(LEAN_A, key="v2-a-labels", out="brand/identity/splash-lean-a-labels", root_class="static lean euro",
+    fonts=S.SIGNATURE_FONTS + MICHROMA, font_files={"FMICH": "brand/fonts/michroma/Michroma-Regular.ttf"},
+    label="Michroma,Eurostile,system-ui,sans-serif",
+    css=LEAN_A["css"] + """
+/* Michroma is wide and sits large on the body: labels drop two sizes and loosen less */
+.euro .k,.euro .top nav a,.euro .where,.euro .roster .tile .n{font-size:11px;letter-spacing:.06em;font-weight:400}
+.euro .btn,.euro .tl,.euro .top .cta{font-size:11px;letter-spacing:.06em;font-weight:400}
+.euro .hero .k,.euro .where .n{font-size:11px}
+.euro .follow .row .h{font-family:var(--label);font-size:11px;letter-spacing:.04em;font-weight:400}
+.euro .static .site .flinks a{font-family:var(--label);font-size:11px;letter-spacing:.06em;font-weight:400}
+.euro .panel .k{font-family:var(--label);font-size:11px;letter-spacing:.06em;font-weight:400}
+.euro .where .n,.euro .where .next{font-family:var(--label);font-weight:400}
+.euro .stories .soc a{font-family:var(--body)}
+""")
 
 GOAL = ("Generation Maine wants young people in Maine to see the rules behind what their lives cost, and to say so in public. "
         "Young Mainers film where they live. Each clip takes one rule, a lease clause, a license fee, a permit, a line on a pay stub, "
@@ -157,7 +182,7 @@ PHONE_SITE = """
 
 CSS = r"""
 {{FONTS}}
-:root{color-scheme:light;--navy:%(navy)s;--blue:%(blue)s;--mg:#FAC800;--ink:%(ink)s;--paper:%(paper)s;--tint:%(tint)s;--pine:%(navy)s;--snow:#fff;--display:%(display)s;--body:%(body)s;--M:60px;--ctl:48px}
+:root{color-scheme:light;--navy:%(navy)s;--blue:%(blue)s;--mg:#FAC800;--ink:%(ink)s;--paper:%(paper)s;--tint:%(tint)s;--pine:%(navy)s;--snow:#fff;--display:%(display)s;--body:%(body)s;--label:%(label)s;--M:60px;--ctl:48px}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%%;scroll-behavior:smooth;scroll-padding-top:68px}
 body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 var(--body);-webkit-font-smoothing:antialiased}
@@ -362,15 +387,22 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   const panels = [...document.querySelectorAll('.panel')], storiesEl = document.getElementById('stories'); let cur = -1;
   function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i;
     stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (!v.play) return; if (on) { v.play().catch(() => {}); } else v.pause(); }); whos.forEach((w, k) => w.classList.toggle('on', k === i)); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur;
-    wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.dataset.name : 'Last one'; }
+    wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.dataset.name : 'Last one'; tint(i); }
   const panelsEl = document.getElementById('panels'), stageEl = document.querySelector('.stage');
-  const fit = () => { if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
+  const phone = matchMedia('(max-width: 900px)');
+  // the section's tint on phones, one per creator, cycling through the family's light fields
+  const TINTS = ['#EAF1F8', '#F8F3E2', '#E3ECF6', '#FFFFFF', '#EEF3F9', '#F6EFDC', '#E8EFF7', '#FBF7EA', '#EAF1F8'];
+  const tint = i => { if (phone.matches) storiesEl.style.backgroundColor = TINTS[i %% TINTS.length]; else storiesEl.style.backgroundColor = ''; };
+  const slideW = () => (panels[0] ? panels[0].offsetWidth : 0) + 14;
+  const onTrack = () => { if (!phone.matches) return; const i = Math.min(panels.length - 1, Math.max(0, Math.round(panelsEl.scrollLeft / slideW()))); show(i); };
+  panelsEl.addEventListener('scroll', onTrack, { passive: true });
+  const fit = () => { if (phone.matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
     const top = 84 + 16, room = innerHeight - top - (h + 6) - 14 - 20, colw = stageEl.clientWidth || (innerWidth - 72);
     const sh = Math.round(Math.max(240, Math.min(colw * 16 / 9, room))); stageEl.style.setProperty('--stageh', sh + 'px'); document.querySelector('.where').style.height = sh + 'px'; };
-  const step = () => { const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
+  const step = () => { if (phone.matches) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
   fit(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fit(); step(); }); addEventListener('load', fit);
-  marks.forEach((m, k) => m.addEventListener('click', () => { const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
-  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); }); step(); if (cur < 0) show(0);
+  marks.forEach((m, k) => m.addEventListener('click', () => { if (phone.matches) { panelsEl.scrollTo({ left: k * slideW(), behavior: 'smooth' }); return; } const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
+  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); onTrack(); }); step(); if (cur < 0) show(0); tint(cur);
   if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
   // the hero loop: where WebM cannot play, the five plates drift and dissolve in CSS instead
   const hv = document.querySelector('.hero .bg video');
@@ -432,8 +464,9 @@ def stepper_html():
         whos += who
         idx += '<button type="button" aria-label="Creator %d, %s, %s" data-name="%s"%s></button>' % (i + 1, cr["name"], town, cr["name"], ' class="on"' if i == 0 else "")
         socials = ''.join('<a href="#follow" aria-label="%s">%s<span>%s</span></a>' % (lbl, S.icon(n), cr["handle"]) for n, lbl in (("instagram", "Instagram"), ("tiktok", "TikTok"), ("youtube", "YouTube")))
+        pv = '<img class="clip" src="media/%s" alt="" loading="lazy">%s<span class="dur">%s</span>' % (clip, who, dur) if clip.endswith((".gif", ".png", ".jpg", ".webp")) else who
         panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv">%s</div><p class="k">%s, Maine</p><h2>%s</h2><p class="bio">%s</p><div class="soc">%s</div></article>'
-                   % (" on" if i == 0 else "", i + 1, i, who, town, cr["name"], cr["bio"], socials))
+                   % (" on" if i == 0 else "", i + 1, i, pv, town, cr["name"], cr["bio"], socials))
     return ('<section class="stories" id="stories"><div class="pinw"><div class="w">'
             '<div class="stage"><div class="vid" id="stage">%s%s<span class="dur" id="dur">0:52</span></div></div>'
             '<div class="panels" id="panels">%s</div>'
@@ -535,5 +568,5 @@ def page(theme):
 
 
 if __name__ == "__main__":
-    for t in (LEAN_A, LEAN_B):
+    for t in (LEAN_A, LEAN_B, LEAN_A_LABELS):
         page(t)

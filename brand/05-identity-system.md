@@ -709,3 +709,9 @@ Every interactive element on the v2 pages measured at phone width. Hero, about, 
 ### Concept B hero text over the loop
 
 The scrim is now two gradients: a left weighted one from 92 percent navy behind the text column to 22 percent at the right edge, and a light top and bottom band. The headline, line and kicker carry a soft two layer shadow. Measured behind the headline on each of the five plates, white text sits between 7.4 and 8.7 to 1 against the darkened picture; the floor for large text is 3 to 1 and for body text 4.5 to 1. The social links in the creator panel on phones are icon and name with no box.
+
+### Concept A proceeds; a Eurostile label voice to compare; the creators as a carousel on phones
+
+The client is going forward with Concept A. The toggle at /v2/ now compares Concept A with Concept A plus a Eurostile voice for the label layer: kickers, navigation, buttons, the stepper counter and the footer's small links. Michroma stands in under the Open Font License, at 11 px with tighter spacing because it is wide; Eurostile itself is a commercial family and needs a web license, or Adobe Fonts, before it can ship. Headlines, body and the mark are unchanged in both.
+
+On phones the creators are a left to right snap carousel: each card carries its own clip, name and story; the page scrolls normally; the row under the track shows the position; the section's tint changes with the creator in view, cycling through the family's light fields. The pinned stepper stays on wider screens. Page height on a phone drops from about 10,500 px to about 4,800.
