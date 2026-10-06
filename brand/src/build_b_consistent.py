@@ -27,7 +27,8 @@ LEG, RET = 0.62, 0.42                       # the opening
 
 def frame(x, y, W, H, st, col):
     s = st / 2
-    return ('<path d="M%s %s L%s %s L%s %s L%s %s" fill="none" stroke="%s" stroke-width="%s"/>' % (x + s, y + H * LEG, x + s, y + s, x + W - s, y + s, x + W - s, y + H - s, col, st)
+    # the long leg runs through the bottom right corner to the outer edge, so the two paths meet without a notch
+    return ('<path d="M%s %s L%s %s L%s %s L%s %s" fill="none" stroke="%s" stroke-width="%s"/>' % (x + s, y + H * LEG, x + s, y + s, x + W - s, y + s, x + W - s, y + H, col, st)
             + '<path d="M%s %s L%s %s" fill="none" stroke="%s" stroke-width="%s"/>' % (x + W * RET, y + H - s, x + W - s, y + H - s, col, st))
 
 
