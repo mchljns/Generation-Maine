@@ -321,10 +321,15 @@ a.row:hover .name{color:var(--mg)}
   marks.forEach((m, k) => m.addEventListener('click', () => { const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
   addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); }); step(); if (cur < 0) show(0);
   if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
+  // the hero loop: where WebM cannot play, the five plates drift and dissolve in CSS instead
+  const hv = document.querySelector('.hero .bg video');
+  if (hv) { const ok = hv.canPlayType('video/webm; codecs="vp9"') || hv.canPlayType('video/webm'); if (!ok) document.querySelector('.hero').classList.add('plates-on'); else { hv.play().catch(() => document.querySelector('.hero').classList.add('plates-on')); } }
   // the footer mark draws once the page is scrolled to its end
   const site = document.querySelector('.site');
-  const atEnd = () => { if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) { site.classList.add('on'); removeEventListener('scroll', atEnd); } };
+  const fire = () => { site.classList.add('on'); removeEventListener('scroll', atEnd); };
+  const atEnd = () => { if (innerHeight + scrollY >= document.documentElement.scrollHeight - 24) fire(); };
   addEventListener('scroll', atEnd, { passive: true }); atEnd();
+  new IntersectionObserver(es => es.forEach(e => { if (e.intersectionRatio >= .95) fire(); }), { threshold: [.95, 1] }).observe(site.querySelector('.lk'));
   // phone menu
   const sheet = document.getElementById('sheet'), menu = document.getElementById('menu');
   const setMenu = o => { sheet.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };

@@ -59,10 +59,17 @@ LEAN_B = dict(
 .lean .hero{color:#fff}
 .lean .hero .bg{position:absolute;inset:0;overflow:hidden;background:var(--navy)}
 .lean .hero .bg video{width:100%;height:100%;object-fit:cover;display:block}
+.lean .hero .bg .plates{display:none;position:absolute;inset:0;overflow:hidden}
+.lean .hero .bg .plate{position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;opacity:0;animation:plate 26s linear infinite}
+.lean .hero .bg .p1{animation-delay:0s}.lean .hero .bg .p2{animation-delay:5.2s}.lean .hero .bg .p3{animation-delay:10.4s}.lean .hero .bg .p4{animation-delay:15.6s}.lean .hero .bg .p5{animation-delay:20.8s}
+.lean .hero .bg .p2,.lean .hero .bg .p4{animation-name:plate-r}
+@keyframes plate{0%{opacity:0;transform:translateX(-1.5%) scale(1)}5%{opacity:1}20%{opacity:1}25%{opacity:0;transform:translateX(1.5%) scale(1.05)}100%{opacity:0;transform:translateX(1.5%) scale(1.05)}}
+@keyframes plate-r{0%{opacity:0;transform:translateX(1.5%) scale(1.05)}5%{opacity:1}20%{opacity:1}25%{opacity:0;transform:translateX(-1.5%) scale(1)}100%{opacity:0;transform:translateX(-1.5%) scale(1)}}
+.lean .hero.plates-on .bg video{display:none}.lean .hero.plates-on .bg .plates{display:block}
 .lean .hero .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,46,77,.78) 0%,rgba(15,46,77,.55) 45%,rgba(15,46,77,.18) 100%)}
 .lean .hero .credit{position:absolute;right:var(--M);bottom:14px;margin:0;font-size:13px;color:rgba(255,255,255,.72);max-width:46ch;text-align:right}
 .lean .hero .lede{color:rgba(255,255,255,.92)}
-@media (prefers-reduced-motion: reduce){.lean .hero .bg video{display:none}.lean .hero .bg{background:url(media/hero-poster.jpg) center/cover no-repeat}}
+@media (prefers-reduced-motion: reduce){.lean .hero .bg video,.lean .hero .bg .plates{display:none!important}.lean .hero .bg{background:url(media/hero-poster.jpg) center/cover no-repeat}}
 @media (max-width:900px){.lean .hero .credit{position:static;text-align:left;margin-top:28px;max-width:none}}
 """)
 
@@ -328,10 +335,15 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   marks.forEach((m, k) => m.addEventListener('click', () => { const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
   addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); }); step(); if (cur < 0) show(0);
   if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
+  // the hero loop: where WebM cannot play, the five plates drift and dissolve in CSS instead
+  const hv = document.querySelector('.hero .bg video');
+  if (hv) { const ok = hv.canPlayType('video/webm; codecs="vp9"') || hv.canPlayType('video/webm'); if (!ok) document.querySelector('.hero').classList.add('plates-on'); else { hv.play().catch(() => document.querySelector('.hero').classList.add('plates-on')); } }
   // the footer mark draws once the page is scrolled to its end
   const site = document.querySelector('.site');
-  const atEnd = () => { if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) { site.classList.add('on'); removeEventListener('scroll', atEnd); } };
+  const fire = () => { site.classList.add('on'); removeEventListener('scroll', atEnd); };
+  const atEnd = () => { if (innerHeight + scrollY >= document.documentElement.scrollHeight - 24) fire(); };
   addEventListener('scroll', atEnd, { passive: true }); atEnd();
+  new IntersectionObserver(es => es.forEach(e => { if (e.intersectionRatio >= .95) fire(); }), { threshold: [.95, 1] }).observe(site.querySelector('.lk'));
   // phone menu
   const sheet = document.getElementById('sheet'), menu = document.getElementById('menu');
   const setMenu = o => { sheet.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
@@ -443,11 +455,15 @@ def page(theme):
     for k, v in theme["font_files"].items():
         css = css.replace("{{%s}}" % k, K.font64(v))
     if theme["hero"] == "video":
-        hero_bg = '<div class="bg" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata" poster="media/hero-poster.jpg"><source src="media/hero.webm" type="video/webm"></video></div>'
+        plates = "".join('<img class="plate p%d" src="media/plate-%d.jpg" alt="" width="1600" height="900" loading="lazy">' % (i, i) for i in range(1, 6))
+        hero_bg = '<div class="bg" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata" poster="media/hero-poster.jpg"><source src="media/hero.webm" type="video/webm"></video><div class="plates">%s</div></div>' % plates
         hero_side = ""
         hero_credit = ""   # placeholder footage; credits for the sources stay in brand/content/photos/CREDITS.md
         # the loop and its poster: the lighter render if present, else the one the family page uses
         fam = os.path.join(ROOT, "brand", "identity", "splash-family-b", "media")
+        from PIL import Image
+        for i in range(1, 6):
+            Image.open(os.path.join(ROOT, "brand", "content", "photos", "hero-frames", "scene-%d.jpg" % i)).convert("RGB").resize((1600, 900), Image.LANCZOS).save(os.path.join(ROOT, out_dir, "media", "plate-%d.jpg" % i), quality=80)
         for f in ("hero.webm", "hero-poster.jpg"):
             dst = os.path.join(ROOT, out_dir, "media", f)
             if not os.path.exists(dst):
