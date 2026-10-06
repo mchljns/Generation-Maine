@@ -57,6 +57,7 @@ LEAN_B = dict(
 .lean h1,.lean h2,.lean .h2{font-family:var(--display);font-weight:400;letter-spacing:-.015em}
 .lean .col b{font-family:var(--body);font-weight:400}
 .lean .hero{color:#fff}
+.bs.static .site .lk{height:124px}@media (max-width:900px){.bs.static .site .lk{height:104px}}
 .lean .hero .bg{position:absolute;inset:0;overflow:hidden;background:var(--navy)}
 .lean .hero .bg video{width:100%;height:100%;object-fit:cover;display:block}
 .lean .hero .bg .plates{display:none;position:absolute;inset:0;overflow:hidden}

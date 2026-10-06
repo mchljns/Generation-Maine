@@ -697,3 +697,7 @@ Picture first. The loop fills the first screen and the words sit in its lower th
 ### The frame's padding
 
 Around two lines of type the frame now keeps three and a half strokes of air inside the stroke, about nine tenths of the x-height, up from two and a half. At the old setting the word generation nearly touched the sides at footer size. The horizontal lockup and the avatar are unchanged.
+
+### The frame's height
+
+The frame no longer forces its height to 78 percent of its width. It is the height of the two lines plus a quarter more air above and below than beside: 57 to 46 at the drawing scale. The footer mark on the v2 page sits at 124 px tall, 104 on phones, so the shorter frame keeps about the width it had.

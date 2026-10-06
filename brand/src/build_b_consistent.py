@@ -44,7 +44,7 @@ def stacked(fg, acc, square=False, low=False, st=STROKE):
     body, w, h = b_paths(fg, acc)
     pad = st * 2.5 + st          # two and a half strokes of air past the stroke itself; a stroke and a half was tight around generation
     W = w + pad * 2
-    H = W if square else max(h + pad * 2, W * 0.78)
+    H = W if square else h + pad * 2 * 1.25   # a quarter more air above and below than beside; lowercase with ascenders reads even that way
     oy = (H - h - pad) if low else (H - h) / 2
     return svg(W, H, frame(0, 0, W, H, st, acc) + '<g transform="translate(%s %s)">%s</g>' % (pad, oy, body))
 
