@@ -145,6 +145,10 @@ LEAN_A_LABELS = dict(LEAN_A, key="v2-a-labels", out="brand/identity/splash-lean-
 .euro .panel .k{font-family:var(--label);font-size:11px;letter-spacing:.06em;font-weight:400}
 .euro .where .n,.euro .where .next{font-family:var(--label);font-weight:400}
 .euro .stories .soc a{font-family:var(--body)}
+/* the footer's utility text, all of it: social row, parent and partner row, legal line, the privacy and contact links */
+.euro .static .site .fsocial a,.euro .static .site .fpartners p,.euro .static .site .fpartners a,.euro .static .site .plist span,.euro .static .site .ffine p,.euro .static .site .flegal a,.euro .static .site .flegal .ph{font-family:var(--label);font-size:11px;letter-spacing:.02em;font-weight:400;line-height:1.5}
+.euro .static .site .fsocial .ic{width:16px;height:16px}
+@media (max-width:900px){.euro .static.lean .site .fsocial a{font-size:12px}}
 """)
 
 GOAL = ("Generation Maine wants young people in Maine to see the rules behind what their lives cost, and to say so in public. "
