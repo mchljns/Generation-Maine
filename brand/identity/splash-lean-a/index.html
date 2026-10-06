@@ -233,6 +233,10 @@ a.row:hover .name{color:var(--mg)}
 
 .lean h1,.lean h2,.lean .h2{font-family:var(--display);font-weight:800;letter-spacing:-.01em}
 .lean h1 em{font-style:normal;color:var(--mg)}
+.lean h1 .d{display:inline-block;width:.2em;height:.2em;border-radius:50%;background:var(--mg);margin-left:.05em;vertical-align:baseline;position:relative}
+.lean h1 .d::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:50%;background:var(--mg);opacity:0;animation:pulse 2.4s cubic-bezier(.2,.6,.3,1) infinite 1.4s}
+@keyframes pulse{0%{transform:scale(1);opacity:.6}65%{transform:scale(3);opacity:0}100%{transform:scale(3);opacity:0}}
+@media (prefers-reduced-motion: reduce){.lean h1 .d::after{animation:none}}
 .lean .col b{font-family:var(--body);font-weight:700}
 .lean .hero .k{color:#fff}
 
@@ -249,7 +253,7 @@ a.row:hover .name{color:var(--mg)}
 <section class="hero" id="top"><div class="w">
   <div>
     <span class="k rise" id="k"><svg class="bars" viewBox="0 0 30 12" aria-hidden="true"><path d="M4 12 L8 0 h5 L9 12z" fill="currentColor"/><path d="M12 12 L16 0 h5 L17 12z" fill="currentColor"/><path d="M20 12 L24 0 h5 L25 12z" class="g"/></svg>A Maine Policy Institute project</span>
-    <h1 class="rise" id="h1">Young Mainers<br>on building<br>a life <em>here.</em></h1>
+    <h1 class="rise" id="h1">Young Mainers<br>on building<br>a life <em>here<i class="d pulse" aria-hidden="true"></i></em></h1>
     <p class="lede rise" id="lede">Young Mainers film the rules that shape their lives. What rent costs, what a license costs, what it takes to stay. Told from the towns they live in.</p>
     <div class="ctas rise" id="ctas"><a class="btn b1" href="#follow">Follow along</a></div>
   </div>
