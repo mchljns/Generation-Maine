@@ -681,3 +681,7 @@ Concept B's loop re rendered at half the pan speed: each setting holds 5.2 secon
 ### Phone pass on the v2 pages
 
 The position row sits above the clip on phones, the clip takes the full column at 9 by 16, and the creator's details flow under it. The hero mark on Concept A draws in about 1.3 seconds on phones. Less air above the hero and between the sign up and the footer. The frame's return stroke now draws from the corner toward the opening, the same direction of travel as the leg, which removes the jump at the end of the footer draw on Concept B. Known gap: the hero loop is WebM only, and iPhones show the poster frame instead. An H.264 MP4 rendition needs ffmpeg, which this environment does not have; it is on the delivery list.
+
+### Phone stepper: the vertical selector
+
+On phones the position row stands on its side along the left of the clip: the counter reads up the track, nine segments run down it, and the next name is dropped. That frees the row's height, so the clip is sized to leave room for the creator's details and both share one screen on an iPhone and on a 740 px phone.
