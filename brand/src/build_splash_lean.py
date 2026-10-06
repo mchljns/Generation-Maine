@@ -70,7 +70,15 @@ LEAN_B = dict(
 .lean .hero .credit{position:absolute;right:var(--M);bottom:14px;margin:0;font-size:13px;color:rgba(255,255,255,.72);max-width:46ch;text-align:right}
 .lean .hero .lede{color:rgba(255,255,255,.92)}
 @media (prefers-reduced-motion: reduce){.lean .hero .bg video,.lean .hero .bg .plates{display:none!important}.lean .hero .bg{background:url(media/hero-poster.jpg) center/cover no-repeat}}
-@media (max-width:900px){.lean .hero .credit{position:static;text-align:left;margin-top:28px;max-width:none}}
+@media (max-width:900px){
+/* phones: the picture fills the first screen and the words sit in its lower third over a gradient that rises from the bottom */
+.lean .hero{min-height:calc(100svh - 68px);align-items:end;padding-block:0 40px}
+.lean .hero .bg::after{background:linear-gradient(180deg,rgba(15,46,77,0) 0%,rgba(15,46,77,.12) 35%,rgba(15,46,77,.72) 62%,rgba(15,46,77,.94) 100%)}
+.lean .hero .k{font-size:12px;letter-spacing:.08em;margin-bottom:14px}
+.lean .hero h1{font-size:clamp(40px,11.5vw,48px);margin-bottom:16px}
+.lean .hero .lede{font-size:16px;max-width:none}
+.lean .hero .ctas{margin-top:22px}
+}
 """)
 
 def stepper_css():

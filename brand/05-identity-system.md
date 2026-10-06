@@ -689,3 +689,7 @@ On phones the position row stands on its side along the left of the clip: the co
 ### Phones: the hero loop and the footer draw
 
 Browsers that cannot play WebM, which includes most iPhones, now get the same loop in CSS: the five plates as JPEGs, each drifting and dissolving on the video's timing. The page tests whether the video can play and switches when it cannot. The footer mark draws when it is fully in view rather than only at the exact end of the page, which phone toolbars and rubber band scrolling often kept out of reach; that is why Concept B's footer mark was not appearing on phones while Concept A's static type still did.
+
+### Concept B hero on phones
+
+Picture first. The loop fills the first screen and the words sit in its lower third over a gradient that rises from the bottom, so the picture reads clean above and the type reads clean below. The kicker stays on one line. The button ends about 40 px above the bottom of the screen on an iPhone and on a 740 px phone.
