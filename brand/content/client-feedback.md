@@ -28,3 +28,7 @@ Verbatim notes from the client side, kept so decisions can be traced back to the
 1. **The reference is Maine Policy Institute itself.** Not the family in general. Blue, white and gold, the typeface, and possibly the slanted bars from the mark. Concept A was built on exactly that palette and a heavy grotesk, with a striped state that speaks the same language as the bars. Concept B's lowercase serif and photographic hero are the farther of the two from Maine Policy and should be retired.
 2. **Three adjustments bring Concept A the rest of the way.** Maine Policy's gold is #FAC800; ours is #EFB443. Maine Policy's body face is Red Hat Display, which is under the Open Font License and can be used as is. Maine Policy's heading face, Clash Grotesk, is not under that license; Bricolage Grotesque stays as the nearest open equivalent. The bars can appear as a small device beside labels, the way Maine Policy uses its slash, without redrawing the mark.
 3. **Do not overbuild.** His words: small project, do not overthink it. One page, one concept, the family's parts. Stop the two concept comparison once Concept A is adjusted.
+
+## Decision, October 6, 2026
+
+Concept B is not going forward. The client is proceeding with Concept A. Work from here is on Concept A alone; Concept B's pages stay published for the record but are no longer developed.
