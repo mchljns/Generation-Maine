@@ -673,3 +673,7 @@ The aim is now a sentence, not a bracket: "Everyone who leaves Maine has a reaso
 ### Garrick's cohesion note, applied to both concepts
 
 Colors: both pages now use Maine Policy's gold (#FAC800) in place of marigold, in the marks, the hero stripe, the buttons and the labels. Concept B moves to Maine Policy's navy and royal blue and to white pages. The bars: three slanted bars, the last in gold, sit before the kicker, the about label and the newsletter label, the way Maine Policy sets its slash before subheads. The typeface stays as each concept had it; the client asked that Red Hat Display not be used. The creators heading lost its placeholder line and gained room above the pinned clip.
+
+### Hero loop, slower
+
+Concept B's loop re rendered at half the pan speed: each setting holds 5.2 seconds instead of 2.6, travels 60 percent of the distance, and dissolves over 1.4 seconds. The loop runs 26 seconds and weighs 3.3 MB at 1600 by 900.

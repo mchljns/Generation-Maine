@@ -11,8 +11,9 @@ const root = '/home/user/Generation-Maine';
 const media = process.env.OUT || path.join(root, 'brand', 'identity', 'splash-bark-sky', 'media');
 const fd = path.join(root, 'brand', 'content', 'photos', 'hero-frames');
 const W = +process.env.W || 1920, H = +process.env.H || 1080;
-const HOLD = 2600;      // each setting is on screen this long
-const XF = 900;         // and dissolves into the next over this long, inside the hold
+const HOLD = +process.env.HOLD || 2600;      // each setting is on screen this long
+const XF = +process.env.XF || 900;         // and dissolves into the next over this long, inside the hold
+const DRIFT = +process.env.DRIFT || 1;      // scales how far each setting travels and how much it pushes in
 const FPS = 30, KBPS = +process.env.KBPS || 2600;
 // per setting: drift direction across the spare width and height, and the scale from start to end (push in or pull out)
 const MOVES = [
@@ -28,14 +29,14 @@ const html = `<!doctype html><html><head><meta charset="utf-8"><style>html,body{
 <body><canvas id="c" width="${W}" height="${H}"></canvas>
 ${imgs.map((g, i) => `<img id="i${i}" src="${g}" hidden>`).join('')}
 <script>
-const MV=${JSON.stringify(MOVES)}, HOLD=${HOLD}, XF=${XF}, W=${W}, H=${H};
+const MV=${JSON.stringify(MOVES)}, HOLD=${HOLD}, XF=${XF}, W=${W}, H=${H}, DRIFT=${DRIFT};
 const smooth=t=>t*t*(3-2*t);
 const c=document.getElementById('c'), g=c.getContext('2d'); g.imageSmoothingQuality='high';
 const im=MV.map((_,i)=>document.getElementById('i'+i)); const N=im.length;
 function draw(i,t,alpha){ // t 0..1 through the hold: a near constant drift with the gentlest ease at the ends
   const m=MV[i],pw=im[i].naturalWidth,ph=im[i].naturalHeight,sx=pw-W,sy=ph-H;
-  const e=0.15*smooth(t)+0.85*t, z=m.z0+(m.z1-m.z0)*e;
-  const x=-(sx/2)-m.dx*(sx/2)*(2*e-1)*0.7, y=-(sy/2)-m.dy*(sy/2)*(2*e-1);
+  const e=0.15*smooth(t)+0.85*t, z=m.z0+(m.z1-m.z0)*e*DRIFT;
+  const x=-(sx/2)-m.dx*(sx/2)*(2*e-1)*0.7*DRIFT, y=-(sy/2)-m.dy*(sy/2)*(2*e-1)*DRIFT;
   g.save(); g.globalAlpha=alpha; g.translate(W/2,H/2); g.scale(z,z); g.translate(-W/2,-H/2); g.drawImage(im[i],x,y); g.restore(); }
 function paint(T){ const i=Math.floor(T/HOLD)%N, u=(T-Math.floor(T/HOLD)*HOLD)/HOLD, nxt=(i+1)%N, into=T-Math.floor(T/HOLD)*HOLD-(HOLD-XF);
   g.fillStyle='#141110'; g.fillRect(0,0,W,H); draw(i,u,1); if(into>0) draw(nxt,0,smooth(into/XF)); }
