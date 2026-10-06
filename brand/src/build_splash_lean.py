@@ -270,8 +270,8 @@ a.row:hover .name{color:var(--mg)}
  .static .site .flegal a,.static .site .flegal .ph{display:inline-flex;align-items:center;min-height:44px}
  .static .site .ffine{gap:0}.static .site .fpartners{gap:0}
  /* social links on phones: labeled chips, 44 pt tall, a thumb's width apart */
- .stories .soc{gap:10px;margin-top:4px}
- .stories .soc a{min-height:44px;padding:0 14px 0 12px;border:1px solid rgba(15,46,77,.3);gap:9px;font-size:13px;font-weight:600;letter-spacing:.02em}
+ .stories .soc{gap:0 22px;margin-top:4px}
+ .stories .soc a{min-height:44px;padding:0;gap:9px;font-size:13px;font-weight:600;letter-spacing:.02em}
  .stories .soc a span{display:none}
  .stories .soc a::after{content:attr(aria-label)}
  .stories .soc .ic{width:20px;height:20px}
