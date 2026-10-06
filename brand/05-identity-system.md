@@ -705,3 +705,7 @@ The frame no longer forces its height to 78 percent of its width. It is the heig
 ### Phone tap targets
 
 Every interactive element on the v2 pages measured at phone width. Hero, about, follow list and form were already at or over 44 pt. Fixed: the bar's mark link, the footer's page links, social links, partner links and legal links, all now 44 pt tall or more with the visual unchanged; the vertical selector's segments widened to the full 40 px track. Social links are now labeled: in the creator panel, outlined chips with the icon and the platform name, 44 pt tall and 10 px apart; in the footer, a two column list of 48 pt rows. The nine selector segments are the only targets under 44 pt, at 40 by 35, which is what a 420 px track allows and well over the 24 pt minimum.
+
+### Concept B hero text over the loop
+
+The scrim is now two gradients: a left weighted one from 92 percent navy behind the text column to 22 percent at the right edge, and a light top and bottom band. The headline, line and kicker carry a soft two layer shadow. Measured behind the headline on each of the five plates, white text sits between 7.4 and 8.7 to 1 against the darkened picture; the floor for large text is 3 to 1 and for body text 4.5 to 1. The social links in the creator panel on phones are icon and name with no box.
