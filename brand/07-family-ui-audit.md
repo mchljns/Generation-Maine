@@ -191,3 +191,21 @@ Findings, heaviest first:
 What already works: one headline, one promise, one primary action. Plain copy throughout. The hero button lands on the first clip. The bar stays visible with the newsletter action on every scroll position. Reduced motion is honored, the video is muted and has a poster, and the footer now repeats every path out.
 
 Quick wins, under a day: 1, 2, 3, 8, 9. Strategic: 4, 5, 6.
+
+## Phone carousel QA, Concept A creators section (Oct 7, 2026)
+
+Measured at 320, 360, 375, 390, 430, 768 wide and 844 by 390 landscape, with a real nudge of the track, a segment tap, arrow keys and a resize across the breakpoint.
+
+Found and fixed:
+
+- All nine clip GIFs loaded at page open, about 8.7 MB on a phone. Clips now carry a data-src and load when their card is current or next door. Two load at open.
+- The card index was derived from scroll distance divided by a fixed card width. It lagged by one on tablets and landscape phones, and a segment tap landed the card off the gutter. The current card is now the one whose left edge sits nearest the gutter, and taps scroll by measured geometry.
+- Cards snapped to center, so the first card sat at the gutter and the rest did not. Cards now snap to the gutter.
+- A card was 730 to 840 px tall, so the clip alone filled a phone screen and the name and story sat below the fold. The clip is a 4:5 crop capped at 44 percent of the screen height, so the name and the first lines of the story share the screen with it. Real clips will be shot knowing the top of frame shows here.
+- Segment buttons were 4 to 16 px wide and 28 px tall. The position row now sits above the cards, counter and next name on one line, nine segments 44 px tall across the full width on the next.
+- The three social links overflowed the card by 3 px at 320. They wrap now.
+- The heading block kept the first tint while the carousel changed color, leaving a seam. Both change together.
+- The track was not reachable by keyboard. It is a labeled carousel region, focusable, with left and right arrow keys, and the current segment carries aria-current.
+- Resizing from phone to desktop could leave the stage clip without a source. The resize handler loads it.
+
+Known and accepted: on a landscape phone the clip cap gives a wide crop of a vertical clip. On a 320 by 568 screen the social links of the first card sit just below the fold.

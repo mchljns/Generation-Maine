@@ -123,22 +123,32 @@ STEPPER_OVERRIDES = """
 /* phones: the creators are a left to right carousel. Each card carries its own clip, name and story; the page scrolls
    normally; the row under the track shows where you are; the section's tint follows the creator in view */
 .stories{height:auto!important;min-height:0!important;padding:8px 0 44px;overflow:visible;transition:background-color .6s ease}
+.stories-head{transition:background-color .6s ease}
 .stories .pinw{position:static;top:auto}
-.stories .w{display:block}
+.stories .w{display:grid;grid-template-columns:minmax(0,1fr)}
 .stage{display:none}
-.panels{position:static;height:auto!important;display:flex;gap:14px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding:0 var(--M);padding:0 var(--M) 6px;margin:0 calc(-1 * var(--M));scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.panels{position:static;height:auto!important;display:flex;gap:14px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding:0 var(--M);padding:0 var(--M) 6px;margin:0 calc(-1 * var(--M));scrollbar-width:none;-webkit-overflow-scrolling:touch;outline-offset:-2px;min-width:0;width:auto}
+.panels:focus-visible{outline:2px solid var(--blue)}
 .panels::-webkit-scrollbar{display:none}
-.panel{position:static;flex:0 0 min(78vw,330px);scroll-snap-align:center;display:block;opacity:1;visibility:visible;pointer-events:auto;transition:none;padding-top:0}
+.panel{position:static;flex:0 0 min(78vw,330px);scroll-snap-align:start;display:block;opacity:1;visibility:visible;pointer-events:auto;transition:none;padding-top:0}
 .panel>*{transform:none!important;opacity:1!important;transition:none!important}
-.panel .pv{display:block;position:relative;aspect-ratio:9/16;overflow:hidden;background:var(--navy);margin-bottom:14px}
-.panel .pv img.clip{width:100%;height:100%;object-fit:cover;display:block}
+/* the clip shows as a 4:5 crop, capped so the name and the first lines of the story share the screen with it */
+.panel .pv{display:block;position:relative;width:100%;aspect-ratio:4/5;max-height:44vh;max-height:44svh;overflow:hidden;background:var(--navy);margin-bottom:14px}
+.panel .soc{flex-wrap:wrap;gap:0 18px}
+.panel .pv img.clip{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block}
 .panel .pv .who{opacity:1;left:10px;top:10px;right:56px}
 .panel .pv .dur{position:absolute;right:8px;top:8px;font:600 12px/1 var(--body);letter-spacing:.06em;color:#fff;background:rgba(15,46,77,.6);padding:5px 7px}
 .panel .k{margin-bottom:6px}
 .panel h2{font-size:clamp(28px,8vw,36px);max-width:none}
 .panel .bio{font-size:15px;line-height:1.45;margin:8px 0 12px}
-.where{display:flex;flex-direction:row;align-items:center;height:auto;margin:18px 0 0;gap:16px}
-.where .next{display:block;min-width:0;text-align:right}
+/* the position row sits above the cards: counter and next name on one line, nine 44px segments on the next */
+.where{order:-1;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;height:auto;margin:0 0 6px;gap:0 16px;padding-bottom:0}
+.where .n{flex:none}
+.where .next{display:block;flex:1;min-width:0;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.where .segs{order:3;flex:0 0 100%;display:flex;gap:4px;height:44px}
+.where .segs button{flex:1;min-width:0;height:44px;-webkit-tap-highlight-color:transparent}
+.where .segs button::before{top:20px;height:3px}
+.where .segs button:hover::before{transform:none}
 }
 """
 
@@ -382,22 +392,28 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   const panels = [...document.querySelectorAll('.panel')], storiesEl = document.getElementById('stories'); let cur = -1;
   function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i;
     stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (!v.play) return; if (on) { v.play().catch(() => {}); } else v.pause(); }); whos.forEach((w, k) => w.classList.toggle('on', k === i)); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur;
-    wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.dataset.name : 'Last one'; tint(i); }
+    wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.dataset.name : 'Last one'; marks.forEach((m, k) => { if (k === i) m.setAttribute('aria-current', 'true'); else m.removeAttribute('aria-current'); }); hydrate(i); tint(i); }
   const panelsEl = document.getElementById('panels'), stageEl = document.querySelector('.stage');
   const phone = matchMedia('(max-width: 900px)');
   // the section's tint on phones, one per creator, cycling through the family's light fields
   const TINTS = ['#EAF1F8', '#F8F3E2', '#E3ECF6', '#FFFFFF', '#EEF3F9', '#F6EFDC', '#E8EFF7', '#FBF7EA', '#EAF1F8'];
-  const tint = i => { if (phone.matches) storiesEl.style.backgroundColor = TINTS[i %% TINTS.length]; else storiesEl.style.backgroundColor = ''; };
-  const slideW = () => (panels[0] ? panels[0].offsetWidth : 0) + 14;
-  const onTrack = () => { if (!phone.matches) return; const i = Math.min(panels.length - 1, Math.max(0, Math.round(panelsEl.scrollLeft / slideW()))); show(i); };
+  const headEl = document.getElementById('creators'); const tint = i => { const c = phone.matches ? TINTS[i %% TINTS.length] : ''; storiesEl.style.backgroundColor = c; if (headEl) headEl.style.backgroundColor = c; };
+  // clips load when their card is current or next door, not all nine at once
+  const hydrate = i => { const pick = els => els.filter((e, k) => Math.abs(k - i) <= 1); const imgs = pick(panels.map(p => p.querySelector('img.clip'))).concat(phone.matches ? [] : pick(stageVids)); imgs.forEach(im => { if (im && im.dataset.src && !im.src) im.src = im.dataset.src; }); };
+  const gutter = () => parseFloat(getComputedStyle(panelsEl).paddingLeft) || 0;
+  // the current card is the one whose left edge sits nearest the gutter
+  const nearest = () => { const edge = panelsEl.getBoundingClientRect().left + gutter(); let best = 0, bd = Infinity; panels.forEach((p, k) => { const d = Math.abs(p.getBoundingClientRect().left - edge); if (d < bd) { bd = d; best = k; } }); return best; };
+  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); const r = panels[k].getBoundingClientRect(), c = panelsEl.getBoundingClientRect(); panelsEl.scrollTo({ left: panelsEl.scrollLeft + r.left - c.left - gutter(), behavior: reduced ? 'auto' : 'smooth' }); hydrate(k); };
+  const onTrack = () => { if (!phone.matches) return; show(nearest()); };
   panelsEl.addEventListener('scroll', onTrack, { passive: true });
+  panelsEl.addEventListener('keydown', e => { if (!phone.matches) return; if (e.key === 'ArrowRight') { e.preventDefault(); goTo(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(cur - 1); } });
   const fit = () => { if (phone.matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
     const top = 84 + 16, room = innerHeight - top - (h + 6) - 14 - 20, colw = stageEl.clientWidth || (innerWidth - 72);
     const sh = Math.round(Math.max(240, Math.min(colw * 16 / 9, room))); stageEl.style.setProperty('--stageh', sh + 'px'); document.querySelector('.where').style.height = sh + 'px'; };
   const step = () => { if (phone.matches) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
   fit(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fit(); step(); }); addEventListener('load', fit);
-  marks.forEach((m, k) => m.addEventListener('click', () => { if (phone.matches) { panelsEl.scrollTo({ left: k * slideW(), behavior: 'smooth' }); return; } const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
-  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); onTrack(); }); step(); if (cur < 0) show(0); tint(cur);
+  marks.forEach((m, k) => m.addEventListener('click', () => { if (phone.matches) { goTo(k); return; } const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
+  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); onTrack(); hydrate(cur); }); step(); if (cur < 0) show(0); tint(cur);
   if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
   // the hero loop: where WebM cannot play, the five plates drift and dissolve in CSS instead
   const hv = document.querySelector('.hero .bg video');
@@ -452,19 +468,19 @@ def stepper_html():
         cr = S.CREATORS[i]
         clip = cr.get("clip", "creator-%d.webm" % (i + 1))
         if clip.endswith((".gif", ".png", ".jpg", ".webp")):
-            stagevids += '<img class="clip%s" data-i="%d" data-dur="%s" src="media/%s" alt="" loading="%s">' % (' on' if i == 0 else '', i, dur, clip, "eager" if i < 2 else "lazy")
+            stagevids += '<img class="clip%s" data-i="%d" data-dur="%s" data-src="media/%s" alt="">' % (' on' if i == 0 else '', i, dur, clip)
         else:
             stagevids += '<video data-i="%d" data-dur="%s" src="media/%s" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (i, dur, clip, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
         who = '<div class="who%s">%s<span><b>%s</b>%s</span></div>' % (' on' if i == 0 else '', S.avatar(), cr["handle"], cr["name"])
         whos += who
         idx += '<button type="button" aria-label="Creator %d, %s, %s" data-name="%s"%s></button>' % (i + 1, cr["name"], town, cr["name"], ' class="on"' if i == 0 else "")
         socials = ''.join('<a href="#follow" aria-label="%s">%s<span>%s</span></a>' % (lbl, S.icon(n), cr["handle"]) for n, lbl in (("instagram", "Instagram"), ("tiktok", "TikTok"), ("youtube", "YouTube")))
-        pv = '<img class="clip" src="media/%s" alt="" loading="lazy">%s<span class="dur">%s</span>' % (clip, who, dur) if clip.endswith((".gif", ".png", ".jpg", ".webp")) else who
+        pv = '<img class="clip" data-src="media/%s" alt="">%s<span class="dur">%s</span>' % (clip, who, dur) if clip.endswith((".gif", ".png", ".jpg", ".webp")) else who
         panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv">%s</div><p class="k">%s, Maine</p><h2>%s</h2><p class="bio">%s</p><div class="soc">%s</div></article>'
                    % (" on" if i == 0 else "", i + 1, i, pv, town, cr["name"], cr["bio"], socials))
     return ('<section class="stories" id="stories"><div class="pinw"><div class="w">'
             '<div class="stage"><div class="vid" id="stage">%s%s<span class="dur" id="dur">0:52</span></div></div>'
-            '<div class="panels" id="panels">%s</div>'
+            '<div class="panels" id="panels" role="group" aria-roledescription="carousel" aria-label="The creators" tabindex="0">%s</div>'
             '<div class="where" id="where"><span class="n" id="wn">01 / 09</span><span class="segs" id="segs">%s</span><span class="next" id="wnext"></span></div>'
             '</div></div></section>' % (stagevids, whos, panels, idx))
 
