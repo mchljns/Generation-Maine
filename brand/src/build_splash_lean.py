@@ -151,6 +151,20 @@ LEAN_A_LABELS = dict(LEAN_A, key="v2-a-labels", out="brand/identity/splash-lean-
 @media (max-width:900px){.euro.lean .site .fsocial a{font-size:12px}}
 """)
 
+JURA = "@font-face{font-family:Jura;font-weight:300 700;font-display:swap;src:url(data:font/ttf;base64,{{FJURA}}) format('truetype')}"
+# the second open stand-in: Jura, narrower than Michroma and in five weights, closer to Eurostile's normal width
+LEAN_A_JURA = dict(LEAN_A_LABELS, key="v2-a-jura", out="brand/identity/splash-lean-a-jura", root_class="static lean euro jura",
+    fonts=S.SIGNATURE_FONTS + JURA, font_files={"FJURA": "brand/fonts/jura/Jura-VariableFont_wght.ttf"},
+    label="Jura,Eurostile,system-ui,sans-serif",
+    css=LEAN_A_LABELS["css"] + """
+/* Jura runs narrower and lighter than Michroma: back up a size, add weight, loosen the tracking a little */
+.jura .k,.jura .top nav a,.jura .where,.jura .roster .tile .n,.jura .hero .k,.jura .where .n,.jura .panel .k,.jura .site .flinks a{font-size:13px;letter-spacing:.1em;font-weight:600}
+.jura .btn,.jura .tl,.jura .top .cta{font-size:13px;letter-spacing:.1em;font-weight:600}
+.jura .follow .row .h{font-size:13px;font-weight:600}
+.jura .where .n,.jura .where .next{font-weight:600}
+.jura .site .fsocial a,.jura .site .fpartners p,.jura .site .fpartners a,.jura .site .plist span,.jura .site .ffine p,.jura .site .flegal a,.jura .site .flegal .ph{font-size:13px;font-weight:500;letter-spacing:.02em}
+""")
+
 GOAL = ("Generation Maine wants young people in Maine to see the rules behind what their lives cost, and to say so in public. "
         "Young Mainers film where they live. Each clip takes one rule, a lease clause, a license fee, a permit, a line on a pay stub, "
         "and shows what it says and what it costs. The clips go out on the creators' own accounts, where their friends already are. "
@@ -572,5 +586,5 @@ def page(theme):
 
 
 if __name__ == "__main__":
-    for t in (LEAN_A, LEAN_B, LEAN_A_LABELS):
+    for t in (LEAN_A, LEAN_B, LEAN_A_LABELS, LEAN_A_JURA):
         page(t)
