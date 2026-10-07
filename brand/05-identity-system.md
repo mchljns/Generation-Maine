@@ -715,3 +715,7 @@ The scrim is now two gradients: a left weighted one from 92 percent navy behind 
 The client is going forward with Concept A. The toggle at /v2/ now compares Concept A with Concept A plus a Eurostile voice for the label layer: kickers, navigation, buttons, the stepper counter and the footer's small links. Michroma stands in under the Open Font License, at 11 px with tighter spacing because it is wide; Eurostile itself is a commercial family and needs a web license, or Adobe Fonts, before it can ship. Headlines, body and the mark are unchanged in both.
 
 On phones the creators are a left to right snap carousel: each card carries its own clip, name and story; the page scrolls normally; the row under the track shows the position; the section's tint changes with the creator in view, cycling through the family's light fields. The pinned stepper stays on wider screens. Page height on a phone drops from about 10,500 px to about 4,800.
+
+### Decision: Michroma for the label layer; one page at /v2/
+
+The label layer, kickers, navigation, buttons, the stepper counter and every piece of footer utility text, is set in Michroma, under the Open Font License, as the open stand-in for Eurostile. Jura was tried and set aside. The concept toggle is retired: Concept A is the page, published at /v2/. The archive the client sent contained Michroma and Jura, not Eurostile; if a Eurostile web license arrives, it replaces Michroma in the same slot.

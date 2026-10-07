@@ -30,9 +30,9 @@ MPI_NAVY, MPI_BLUE = "#0F2E4D", "#0556A5"
 SITE_CSS = lambda css: "\n".join(l for l in css.splitlines() if ".site" in l)
 
 LEAN_A = dict(
-    key="v2-a", out="brand/identity/splash-lean-a", root_class="static lean", navy="#0F2E4D", blue="#0556A5", ink="#0F2E4D", paper="#FFFFFF", tint="#EAF1F8",
-    fonts=S.SIGNATURE_FONTS, font_files={}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="",
-    display="'Bricolage Grotesque',system-ui,sans-serif", body="'DM Sans',system-ui,sans-serif", label="'DM Sans',system-ui,sans-serif",
+    key="v2", out="brand/identity/splash-lean-a", root_class="static lean euro", navy="#0F2E4D", blue="#0556A5", ink="#0F2E4D", paper="#FFFFFF", tint="#EAF1F8",
+    fonts=S.SIGNATURE_FONTS + "@font-face{font-family:Michroma;font-weight:400;font-display:swap;src:url(data:font/ttf;base64,{{FMICH}}) format('truetype')}", font_files={"FMICH": "brand/fonts/michroma/Michroma-Regular.ttf"}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="",
+    display="'Bricolage Grotesque',system-ui,sans-serif", body="'DM Sans',system-ui,sans-serif", label="Michroma,Eurostile,system-ui,sans-serif",
     h1="Young Mainers<br>on building<br>a life <em>here<i class=\"d pulse\" aria-hidden=\"true\"></i></em>", h2_about="What this is", h2_creators="The creators", h2_follow="Where to find it",
     site_css=SITE_CSS(F.STATIC_CSS) + "\n" + SITE_CSS(F.FAMILY_A_CSS % dict(blue="#0556A5", navy="#0F2E4D", mg=MG)),
     css="""
@@ -44,6 +44,19 @@ LEAN_A = dict(
 @media (prefers-reduced-motion: reduce){.lean h1 .d::after{animation:none}}
 .lean .col b{font-family:var(--body);font-weight:700}
 .lean .hero .k{color:#fff}
+/* Michroma is wide and sits large on the body: labels drop two sizes and loosen less */
+.euro .k,.euro .top nav a,.euro .where,.euro .roster .tile .n{font-size:11px;letter-spacing:.06em;font-weight:400}
+.euro .btn,.euro .tl,.euro .top .cta{font-size:11px;letter-spacing:.06em;font-weight:400}
+.euro .hero .k,.euro .where .n{font-size:11px}
+.euro .follow .row .h{font-family:var(--label);font-size:11px;letter-spacing:.04em;font-weight:400}
+.euro .site .flinks a{font-family:var(--label);font-size:11px;letter-spacing:.06em;font-weight:400}
+.euro .panel .k{font-family:var(--label);font-size:11px;letter-spacing:.06em;font-weight:400}
+.euro .where .n,.euro .where .next{font-family:var(--label);font-weight:400}
+.euro .stories .soc a{font-family:var(--body)}
+/* the footer's utility text, all of it: social row, parent and partner row, legal line, the privacy and contact links */
+.euro .site .fsocial a,.euro .site .fpartners p,.euro .site .fpartners a,.euro .site .plist span,.euro .site .ffine p,.euro .site .flegal a,.euro .site .flegal .ph{font-family:var(--label);font-size:11px;letter-spacing:.02em;font-weight:400;line-height:1.5}
+.euro .site .fsocial .ic{width:16px;height:16px}
+@media (max-width:900px){.euro.lean .site .fsocial a{font-size:12px}}
 .site .flegal .ph{color:rgba(255,255,255,.75)}
 """)
 
@@ -128,42 +141,6 @@ STEPPER_OVERRIDES = """
 .where .next{display:block;min-width:0;text-align:right}
 }
 """
-
-MICHROMA = "@font-face{font-family:Michroma;font-weight:400;font-display:swap;src:url(data:font/ttf;base64,{{FMICH}}) format('truetype')}"
-# Concept A with a Eurostile voice for the label layer. Michroma stands in under the Open Font License until a Eurostile web
-# license is confirmed. Labels, navigation, buttons, the stepper counter and the footer's small links take it; nothing else does.
-LEAN_A_LABELS = dict(LEAN_A, key="v2-a-labels", out="brand/identity/splash-lean-a-labels", root_class="static lean euro",
-    fonts=S.SIGNATURE_FONTS + MICHROMA, font_files={"FMICH": "brand/fonts/michroma/Michroma-Regular.ttf"},
-    label="Michroma,Eurostile,system-ui,sans-serif",
-    css=LEAN_A["css"] + """
-/* Michroma is wide and sits large on the body: labels drop two sizes and loosen less */
-.euro .k,.euro .top nav a,.euro .where,.euro .roster .tile .n{font-size:11px;letter-spacing:.06em;font-weight:400}
-.euro .btn,.euro .tl,.euro .top .cta{font-size:11px;letter-spacing:.06em;font-weight:400}
-.euro .hero .k,.euro .where .n{font-size:11px}
-.euro .follow .row .h{font-family:var(--label);font-size:11px;letter-spacing:.04em;font-weight:400}
-.euro .site .flinks a{font-family:var(--label);font-size:11px;letter-spacing:.06em;font-weight:400}
-.euro .panel .k{font-family:var(--label);font-size:11px;letter-spacing:.06em;font-weight:400}
-.euro .where .n,.euro .where .next{font-family:var(--label);font-weight:400}
-.euro .stories .soc a{font-family:var(--body)}
-/* the footer's utility text, all of it: social row, parent and partner row, legal line, the privacy and contact links */
-.euro .site .fsocial a,.euro .site .fpartners p,.euro .site .fpartners a,.euro .site .plist span,.euro .site .ffine p,.euro .site .flegal a,.euro .site .flegal .ph{font-family:var(--label);font-size:11px;letter-spacing:.02em;font-weight:400;line-height:1.5}
-.euro .site .fsocial .ic{width:16px;height:16px}
-@media (max-width:900px){.euro.lean .site .fsocial a{font-size:12px}}
-""")
-
-JURA = "@font-face{font-family:Jura;font-weight:300 700;font-display:swap;src:url(data:font/ttf;base64,{{FJURA}}) format('truetype')}"
-# the second open stand-in: Jura, narrower than Michroma and in five weights, closer to Eurostile's normal width
-LEAN_A_JURA = dict(LEAN_A_LABELS, key="v2-a-jura", out="brand/identity/splash-lean-a-jura", root_class="static lean euro jura",
-    fonts=S.SIGNATURE_FONTS + JURA, font_files={"FJURA": "brand/fonts/jura/Jura-VariableFont_wght.ttf"},
-    label="Jura,Eurostile,system-ui,sans-serif",
-    css=LEAN_A_LABELS["css"] + """
-/* Jura runs narrower and lighter than Michroma: back up a size, add weight, loosen the tracking a little */
-.jura .k,.jura .top nav a,.jura .where,.jura .roster .tile .n,.jura .hero .k,.jura .where .n,.jura .panel .k,.jura .site .flinks a{font-size:13px;letter-spacing:.1em;font-weight:600}
-.jura .btn,.jura .tl,.jura .top .cta{font-size:13px;letter-spacing:.1em;font-weight:600}
-.jura .follow .row .h{font-size:13px;font-weight:600}
-.jura .where .n,.jura .where .next{font-weight:600}
-.jura .site .fsocial a,.jura .site .fpartners p,.jura .site .fpartners a,.jura .site .plist span,.jura .site .ffine p,.jura .site .flegal a,.jura .site .flegal .ph{font-size:13px;font-weight:500;letter-spacing:.02em}
-""")
 
 GOAL = ("Generation Maine wants young people in Maine to see the rules behind what their lives cost, and to say so in public. "
         "Young Mainers film where they live. Each clip takes one rule, a lease clause, a license fee, a permit, a line on a pay stub, "
@@ -586,5 +563,5 @@ def page(theme):
 
 
 if __name__ == "__main__":
-    for t in (LEAN_A, LEAN_B, LEAN_A_LABELS, LEAN_A_JURA):
+    for t in (LEAN_A, LEAN_B):
         page(t)
