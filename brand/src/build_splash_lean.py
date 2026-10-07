@@ -56,6 +56,7 @@ LEAN_A = dict(
 /* the footer's utility text, all of it: social row, parent and partner row, legal line, the privacy and contact links */
 .euro .site .fsocial a,.euro .site .fpartners p,.euro .site .fpartners a,.euro .site .plist span,.euro .site .ffine p,.euro .site .flegal a,.euro .site .flegal .ph{font-family:var(--label);font-size:11px;letter-spacing:.02em;font-weight:400;line-height:1.5}
 .euro .site .fsocial .ic{width:16px;height:16px}
+.site .flegal .build{margin-left:auto;color:rgba(255,255,255,.45);font-variant-numeric:tabular-nums}
 @media (max-width:900px){.euro.lean .site .fsocial a{font-size:12px}}
 .site .flegal .ph{color:rgba(255,255,255,.75)}
 """)
@@ -627,6 +628,11 @@ def page(theme):
                        hero_bg=hero_bg, hero_side=hero_side, hero_credit=hero_credit, h2_about=theme["h2_about"], h2_creators=theme["h2_creators"], h2_follow=theme["h2_follow"],
                        bars=bars(), cols=cols_html(), about_media=about_media(theme), tiles=tiles_html(), stepper=stepper_html(), follow=follow_html(), footer=footer, mural_json=json.dumps(theme["mural"]) if theme["mural"] else "{}")
     html = html.replace("#EFB443", MG)
+    # preview build stamp in the footer legal row, so a stale copy can be told from the current one; remove at delivery
+    import hashlib, datetime
+    stamp = hashlib.sha1(html.encode()).hexdigest()[:7] + " " + datetime.datetime.utcnow().strftime("%b %d %H:%M UTC")
+    html = html.replace('<span class="ph" title="[CONFIRM: privacy policy page]">Privacy</span>',
+                        '<span class="ph" title="[CONFIRM: privacy policy page]">Privacy</span><span class="ph build" aria-label="Preview build">Build ' + stamp + '</span>', 1)
     write(os.path.join(out_dir, "index.html"), html)
     icons(theme, out_dir)
     share_card(theme, out_dir)
