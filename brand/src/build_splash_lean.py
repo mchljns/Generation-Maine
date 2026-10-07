@@ -109,6 +109,7 @@ def stepper_css():
 STEPPER_OVERRIDES = """
 :root{--rule:rgba(15,46,77,.18);--fg:var(--ink);--muted:rgba(15,46,77,.7);--bi:var(--tint)}
 .stories-head{padding-bottom:0!important}
+.viewer{display:none}
 .stories{padding-top:48px}
 .stories{background:var(--tint)}
 .stories .w{max-width:1280px;margin:0 auto;padding-inline:var(--M)}
@@ -135,6 +136,32 @@ STEPPER_OVERRIDES = """
 /* the clip shows as a 4:5 crop, capped so the name and the first lines of the story share the screen with it */
 .panel .pv{display:block;position:relative;width:100%;aspect-ratio:4/5;max-height:44vh;max-height:44svh;overflow:hidden;background:var(--navy);margin-bottom:14px}
 .panel .soc{flex-wrap:wrap;gap:0 18px}
+.panel .pv{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.panel .pv:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.panel .pv .ex{position:absolute;right:8px;bottom:8px;width:32px;height:32px;display:grid;place-items:center;color:#fff;background:rgba(15,46,77,.6)}
+.panel .pv .ex svg{width:16px;height:16px}
+/* the viewer: tap a clip and the full 9:16 frame opens over the page; swipe between creators; close returns to the same card */
+.viewer{position:fixed;inset:0;z-index:60;background:#0B1A2C;color:#fff;display:flex;flex-direction:column;opacity:0;transition:opacity .22s ease}
+.viewer.in{opacity:1}
+.viewer[hidden]{display:none}
+.vbar{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 8px 0 20px;padding-top:env(safe-area-inset-top,0px);flex:none}
+.vbar .n{font:400 12px/1 var(--label);letter-spacing:.1em;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.8)}
+.vclose{width:48px;height:48px;display:grid;place-items:center;border:0;background:none;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.vclose svg{width:20px;height:20px}
+.vclose:focus-visible{outline:2px solid var(--mg);outline-offset:-4px}
+.vtrack{flex:1;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.vtrack::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.slide .fr{position:relative;aspect-ratio:9/16;height:min(calc(100dvh - 150px),calc((100vw - 32px) * 16 / 9));background:var(--navy);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45);transform:scale(.97);transition:transform .3s ease}
+.viewer.in .slide .fr{transform:none}
+.slide .fr img.clip{width:100%;height:100%;object-fit:cover;display:block}
+.slide .fr .who{opacity:1;left:12px;top:12px;right:64px}
+.slide .fr .dur{position:absolute;right:10px;top:10px;font:600 12px/1 var(--body);letter-spacing:.06em;color:#fff;background:rgba(15,46,77,.6);padding:5px 7px}
+.slide .cap{display:flex;align-items:baseline;gap:12px;width:min(100%,420px);justify-content:center;text-align:center}
+.slide .cap .k{font:400 11px/1 var(--label);letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.slide .cap strong{font:700 16px/1.2 var(--display);color:#fff}
+@media (prefers-reduced-motion:reduce){.viewer,.slide .fr{transition:none}}
+html.vopen,html.vopen body{overflow:hidden}
 .panel .pv img.clip{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block}
 .panel .pv .who{opacity:1;left:10px;top:10px;right:56px}
 .panel .pv .dur{position:absolute;right:8px;top:8px;font:600 12px/1 var(--body);letter-spacing:.06em;color:#fff;background:rgba(15,46,77,.6);padding:5px 7px}
@@ -415,6 +442,28 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   marks.forEach((m, k) => m.addEventListener('click', () => { if (phone.matches) { goTo(k); return; } const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
   addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); onTrack(); hydrate(cur); }); step(); if (cur < 0) show(0); tint(cur);
   if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
+  // tap to expand: the full frame over the page, one slide per creator
+  const viewer = document.getElementById('viewer'), vtrack = document.getElementById('vtrack'), vn = document.getElementById('vn'), vclose = document.getElementById('vclose');
+  if (viewer && vtrack) {
+    const slides = [...vtrack.querySelectorAll('.slide')]; let vcur = -1, lastFocus = null, pushed = false;
+    const vhydrate = i => slides.forEach((sl, k) => { const im = sl.querySelector('img.clip'); if (Math.abs(k - i) <= 1 && im.dataset.src && !im.src) im.src = im.dataset.src; });
+    const vshow = i => { if (i === vcur) return; vcur = i; vn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0'); vhydrate(i); };
+    const vnearest = () => { const c = vtrack.getBoundingClientRect(), cx = c.left + c.width / 2; let best = 0, bd = Infinity; slides.forEach((sl, k) => { const r = sl.getBoundingClientRect(), d = Math.abs(r.left + r.width / 2 - cx); if (d < bd) { bd = d; best = k; } }); return best; };
+    const openViewer = i => { if (!phone.matches) return; lastFocus = document.activeElement; vcur = -1; viewer.hidden = false; vtrack.scrollLeft = slides[i].offsetLeft; vshow(i);
+      document.documentElement.classList.add('vopen'); requestAnimationFrame(() => viewer.classList.add('in')); vclose.focus({ preventScroll: true });
+      try { history.pushState({ gmViewer: true }, ''); pushed = true; } catch (e) { pushed = false; } };
+    const closeViewer = (fromHistory) => { if (viewer.hidden) return; viewer.classList.remove('in'); document.documentElement.classList.remove('vopen');
+      const done = () => { viewer.hidden = true; if (vcur >= 0) { goTo(vcur); show(vcur); } if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true }); };
+      if (reduced) done(); else setTimeout(done, 220);
+      if (pushed && !fromHistory) { pushed = false; history.back(); } else pushed = false; };
+    panels.forEach((p, k) => { const pv = p.querySelector('.pv'); if (!pv) return; pv.addEventListener('click', () => openViewer(k)); pv.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openViewer(k); } }); });
+    vclose.addEventListener('click', () => closeViewer(false));
+    viewer.addEventListener('click', e => { if (!e.target.closest('.fr, .vbar, .cap')) closeViewer(false); });
+    addEventListener('keydown', e => { if (viewer.hidden) return; if (e.key === 'Escape') closeViewer(false); if (e.key === 'ArrowRight') vtrack.scrollBy({ left: vtrack.clientWidth, behavior: reduced ? 'auto' : 'smooth' }); if (e.key === 'ArrowLeft') vtrack.scrollBy({ left: -vtrack.clientWidth, behavior: reduced ? 'auto' : 'smooth' }); });
+    vtrack.addEventListener('scroll', () => vshow(vnearest()), { passive: true });
+    addEventListener('popstate', () => { if (!viewer.hidden) closeViewer(true); });
+    phone.addEventListener('change', () => { if (!phone.matches && !viewer.hidden) closeViewer(false); });
+  }
   // the hero loop: where WebM cannot play, the five plates drift and dissolve in CSS instead
   const hv = document.querySelector('.hero .bg video');
   if (hv) { const ok = hv.canPlayType('video/webm; codecs="vp9"') || hv.canPlayType('video/webm'); if (!ok) document.querySelector('.hero').classList.add('plates-on'); else { hv.play().catch(() => document.querySelector('.hero').classList.add('plates-on')); } }
@@ -463,7 +512,7 @@ def tiles_html():
 
 def stepper_html():
     """The pinned clip stepper from the first preview: one clip on the stage, the creator's details beside it, the position row."""
-    stagevids, panels, idx, whos = "", "", "", ""
+    stagevids, panels, idx, whos, slides = "", "", "", "", ""
     for i, (tone, town, topic, cap, dur) in enumerate(S.CARDS):
         cr = S.CREATORS[i]
         clip = cr.get("clip", "creator-%d.webm" % (i + 1))
@@ -475,14 +524,20 @@ def stepper_html():
         whos += who
         idx += '<button type="button" aria-label="Creator %d, %s, %s" data-name="%s"%s></button>' % (i + 1, cr["name"], town, cr["name"], ' class="on"' if i == 0 else "")
         socials = ''.join('<a href="#follow" aria-label="%s">%s<span>%s</span></a>' % (lbl, S.icon(n), cr["handle"]) for n, lbl in (("instagram", "Instagram"), ("tiktok", "TikTok"), ("youtube", "YouTube")))
-        pv = '<img class="clip" data-src="media/%s" alt="">%s<span class="dur">%s</span>' % (clip, who, dur) if clip.endswith((".gif", ".png", ".jpg", ".webp")) else who
-        panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv">%s</div><p class="k">%s, Maine</p><h2>%s</h2><p class="bio">%s</p><div class="soc">%s</div></article>'
-                   % (" on" if i == 0 else "", i + 1, i, pv, town, cr["name"], cr["bio"], socials))
+        pv = '<img class="clip" data-src="media/%s" alt="">%s<span class="dur">%s</span><span class="ex" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg></span>' % (clip, who, dur)
+        slides += ('<div class="slide" data-i="%d"><div class="fr"><img class="clip" data-src="media/%s" alt="Placeholder clip, %s, %s, Maine">%s<span class="dur">%s</span></div>'
+                   '<div class="cap"><span class="k">%s, Maine</span><strong>%s</strong></div></div>' % (i, clip, topic, town, who, dur, town, cr["name"])) if clip.endswith((".gif", ".png", ".jpg", ".webp")) else who
+        panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv" role="button" tabindex="0" aria-label="Open the clip from %s full size">%s</div><p class="k">%s, Maine</p><h2>%s</h2><p class="bio">%s</p><div class="soc">%s</div></article>'
+                   % (" on" if i == 0 else "", i + 1, i, cr["name"], pv, town, cr["name"], cr["bio"], socials))
     return ('<section class="stories" id="stories"><div class="pinw"><div class="w">'
             '<div class="stage"><div class="vid" id="stage">%s%s<span class="dur" id="dur">0:52</span></div></div>'
             '<div class="panels" id="panels" role="group" aria-roledescription="carousel" aria-label="The creators" tabindex="0">%s</div>'
             '<div class="where" id="where"><span class="n" id="wn">01 / 09</span><span class="segs" id="segs">%s</span><span class="next" id="wnext"></span></div>'
-            '</div></div></section>' % (stagevids, whos, panels, idx))
+            '</div></div></section>'
+            '<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Clip preview" hidden>'
+            '<div class="vbar"><span class="n" id="vn">01 / 09</span><button type="button" class="vclose" id="vclose" aria-label="Close">'
+            '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3l10 10M13 3 3 13"/></svg></button></div>'
+            '<div class="vtrack" id="vtrack">%s</div></div>' % (stagevids, whos, panels, idx, slides))
 
 
 def follow_html():

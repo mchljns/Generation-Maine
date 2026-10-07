@@ -209,3 +209,5 @@ Found and fixed:
 - Resizing from phone to desktop could leave the stage clip without a source. The resize handler loads it.
 
 Known and accepted: on a landscape phone the clip cap gives a wide crop of a vertical clip. On a 320 by 568 screen the social links of the first card sit just below the fold.
+
+Follow-up, same day: the 4:5 crop limited the social preview, so a tap-to-expand viewer was added. Tested at 320, 375 and 390 wide: the frame holds 9:16 within 1 percent, the close button is 48 px, focus moves to it on open and back to the clip on close, body scroll locks, slides load on demand, Escape, backdrop tap and the back button all close it, and the page scroll position is unchanged after closing. On desktop the viewer is display none and a click does nothing.

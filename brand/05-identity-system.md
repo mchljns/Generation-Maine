@@ -719,3 +719,7 @@ On phones the creators are a left to right snap carousel: each card carries its 
 ### Decision: Michroma for the label layer; one page at /v2/
 
 The label layer, kickers, navigation, buttons, the stepper counter and every piece of footer utility text, is set in Michroma, under the Open Font License, as the open stand-in for Eurostile. Jura was tried and set aside. The concept toggle is retired: Concept A is the page, published at /v2/. The archive the client sent contained Michroma and Jura, not Eurostile; if a Eurostile web license arrives, it replaces Michroma in the same slot.
+
+### Decision: tap to expand on phones (Oct 7, 2026)
+
+On phones the creator card shows a 4:5 crop of the clip so the name and the first lines of the story share the screen with it. Tapping the clip opens the full 9:16 frame over the page on a solid navy field, with the handle, the duration and the town and name under it. Swiping moves between creators and the counter follows. Closing by the X, the backdrop, Escape or the phone's back button returns to the card that was open in the viewer. The card carries a small expand glyph in the clip's corner. The viewer does not exist above 900 px; the pinned stepper shows the full frame there already.
