@@ -19,7 +19,7 @@ references/build.md      builders, templates, media, fonts, head checklist, comm
 references/qa.md         the measurement harness, the audits in order, phone QA, accessibility, report format
 references/deploy.md     hosting, hash verification, cache windows, build stamps, redirects, "not live yet"
 references/client.md     feedback, corrections, pushback, records, how to talk about the work
-scripts/measure.mjs      Playwright: overflow, tap targets, text overflow, alt, fonts, media at load, errors
+scripts/measure.mjs      Playwright: overflow, tap targets, text overflow, alt, fonts, media at load, errors (PLAYWRIGHT_DIR, PW_CHROMIUM)
 scripts/contrast.mjs     text color against the background it sits on, flags under 4.5:1 (3:1 large)
 scripts/copy_check.py    dashes, italics, banned and hype words, long sentences, placeholders
 scripts/textdiff.py      visible-text diff between two built pages, so variant copy differs on purpose

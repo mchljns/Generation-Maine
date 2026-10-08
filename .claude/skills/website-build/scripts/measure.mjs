@@ -5,14 +5,21 @@
 //
 //   node measure.mjs <url-or-file> [--out dir] [--viewports 390x844,1400x900] [--full] [--selector css]
 //
-// Needs Playwright (npm i playwright) and a Chromium. Set PW_CHROMIUM to a browser binary when the
+// Needs Playwright (npm i playwright, or PLAYWRIGHT_DIR pointing at a project that has it) and a Chromium.
+// Set PW_CHROMIUM to a browser binary when the
 // bundled download is not available (for example /opt/pw-browsers/chromium in some sandboxes).
 import { createRequire } from 'node:module'
 import { mkdirSync } from 'node:fs'
 import { resolve } from 'node:path'
-const require = createRequire(resolve(process.cwd(), 'noop.js'))
+// Playwright is resolved from, in order: PLAYWRIGHT_DIR (a project that has it installed), the current
+// directory, and this script's own directory, so the script runs from anywhere once one of them has it.
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 let chromium
-try { ({ chromium } = require('playwright')) } catch { console.error('playwright not found: npm i playwright (run from the project root)'); process.exit(2) }
+for (const base of [process.env.PLAYWRIGHT_DIR, process.cwd(), dirname(fileURLToPath(import.meta.url))].filter(Boolean)) {
+  try { ({ chromium } = createRequire(resolve(base, 'noop.js'))('playwright')); break } catch {}
+}
+if (!chromium) { console.error('playwright not found: npm i playwright in the project, or set PLAYWRIGHT_DIR to a project that has it'); process.exit(2) }
 const args = process.argv.slice(2)
 const opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d }
 const target = args.find(a => !a.startsWith('--') && !['--out', '--viewports', '--selector'].includes(args[args.indexOf(a) - 1]))

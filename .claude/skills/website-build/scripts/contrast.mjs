@@ -10,9 +10,15 @@
 // Needs Playwright (npm i playwright). Set PW_CHROMIUM to a browser binary when needed.
 import { createRequire } from 'node:module'
 import { resolve } from 'node:path'
-const require = createRequire(resolve(process.cwd(), 'noop.js'))
+// Playwright is resolved from, in order: PLAYWRIGHT_DIR (a project that has it installed), the current
+// directory, and this script's own directory, so the script runs from anywhere once one of them has it.
+import { dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
 let chromium
-try { ({ chromium } = require('playwright')) } catch { console.error('playwright not found: npm i playwright'); process.exit(2) }
+for (const base of [process.env.PLAYWRIGHT_DIR, process.cwd(), dirname(fileURLToPath(import.meta.url))].filter(Boolean)) {
+  try { ({ chromium } = createRequire(resolve(base, 'noop.js'))('playwright')); break } catch {}
+}
+if (!chromium) { console.error('playwright not found: npm i playwright in the project, or set PLAYWRIGHT_DIR to a project that has it'); process.exit(2) }
 const args = process.argv.slice(2)
 const opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d }
 const target = args.find((a, i) => !a.startsWith('--') && !['--viewports', '--selector'].includes(args[i - 1]))
