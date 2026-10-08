@@ -185,9 +185,10 @@ A push is not a deploy. Never say "live" until you have proved it, per `referenc
    without a query. `scripts/verify_deploy.sh` does both.
 3. Say it is live and name the build. Keep a small build stamp in the footer during previews so a stale
    copy on the client's phone can be told from the current one in one message.
-4. If the client still sees the old page, the copy is in their browser or the change is phone-only. Ask
-   for the stamp and the device. Do not redeploy to fix a cache, and do not hand out cache-busting links
-   as if they were a second address.
+4. If the client still sees the old page, either their browser holds the old copy or they are looking
+   at a width where the change does not show (a phone-only change is invisible on a desktop, and the
+   reverse). Ask for the stamp and the device. Do not redeploy to fix a cache, and do not hand out
+   cache-busting links as if they were a second address.
 
 ## 9. Client feedback and pushback
 

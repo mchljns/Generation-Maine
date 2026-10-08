@@ -87,8 +87,8 @@ scaffolding once it is no longer needed.
 The server side is settled by the loop above. If it passes and the client still sees the old page:
 
 1. Ask what the footer stamp says and what device and width they are on.
-2. Say which changes are phone-only. A carousel or a tap-to-expand viewer is invisible in a desktop
-   window wider than the breakpoint.
+2. Say which changes only show at some widths. A carousel or a tap-to-expand viewer is invisible in a
+   desktop window wider than the breakpoint, and a desktop-only change is invisible on a phone.
 3. If the stamp is old, the copy is in their browser. Give the private-tab or hard-reload step. Explain
    once that the plain address serves the current build. Do not hand out cache-busting links as if they
    were a second address; they read as a second site.
