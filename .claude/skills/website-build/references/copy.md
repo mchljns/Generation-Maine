@@ -26,7 +26,8 @@ brochure is the one thing a client can get anywhere.
 9. **Nothing invented.** Names, handles, addresses, numbers, dates, legal lines: `[CONFIRM: what is
    needed]` until the client confirms. Placeholders are visible on purpose, so they get resolved, and the
    UI degrades gracefully while one is unset (a form confirms in the page instead of opening a dead
-   tab). Repeat the open placeholders at the end of every report.
+   tab). Repeat the open placeholders at the end of every report. A phone number in the 555-01XX block or an
+    address at example.com is fiction even when it came from an earlier draft; bracket it.
 10. **Every section has a job.** Before adding a section, say what the reader does after reading it. If
     the answer is "nothing", cut it. Audit copy line by line for repetition across blocks; no block
     restates the hero, no phrase appears four times on one page.
