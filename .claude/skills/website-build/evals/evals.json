@@ -1,0 +1,59 @@
+{
+  "skill_name": "website-build",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need a one-page site for a client, Ridge Road Bakery in Rockland, Maine. They're launching a wholesale program for cafes and restaurants and want a page that says what it is, who it's for, and how to get in touch. I don't have their photos or copy yet, just this: family bakery since 2011, sourdough and rye, deliveries Tuesday and Friday along the midcoast. Build it as a static page in ./ridge-road/ (no deploy needed), make it work on phones, and show me what it looks like.",
+      "expected_output": "A built static page in ./ridge-road/ with plain, non-hype copy, [CONFIRM: ...] placeholders for unknown facts (contact details, prices, minimums, handles), open-licensed fonts recorded, no Maine cliches, phone-first layout with 44px tap targets, a measurement pass at phone and desktop widths, a screenshot sheet sent to the user, and a decision record started.",
+      "files": [],
+      "expectations": [
+        "ridge-road/index.html exists and renders without page errors",
+        "Unknown facts (contact details, prices, minimums, handles, hours) appear as [CONFIRM: ...] placeholders; no phone number, email, street address, price or minimum order is stated as fact",
+        "The page copy contains no em dashes and no italic emphasis",
+        "The page copy contains none of: seamless, elevate, unlock, empower, journey, cutting-edge, world-class, artisan, crafted, experience",
+        "No lobster, lighthouse, moose or flag imagery or wording is used as decoration",
+        "The page was measured or tested at a phone width between 320 and 430 px and the results (overflow, tap targets) were reported, not only a screenshot taken",
+        "Every link and button is at least 44 px tall at phone width",
+        "A screenshot or screenshot sheet was produced and the final message points the user to it",
+        "Fonts are system fonts or open-licensed faces, and the license status is stated",
+        "A decision record or notes file for the project was started with what was decided and what is open",
+        "The final message leads with the outcome and lists what is unconfirmed"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "A client sent over the landing page their last agency made (evals/files/wholesale.html). They feel it looks generic and 'AI-written' but can't say why. Audit it, tell me what's wrong, and fix it in place. Keep it a single HTML file.",
+      "expected_output": "A written audit naming the copy tells (em dashes, italics, hype words, invented statistics, anonymous quote, contrast tics), the design slop (gradient hero, three-column icon grid, boxed social icons, fixed-width layout that overflows on phones, tiny tap targets, missing alt, lobster hero), measured findings (overflow at 320/390, tap targets under 44px), and a fixed file where facts the author cannot verify become [CONFIRM] placeholders rather than new invented facts.",
+      "files": [
+        "evals/files/wholesale.html"
+      ],
+      "expectations": [
+        "The audit names at least four of these copy tells present in the file: em dashes, italics, hype words, invented statistics, an anonymous testimonial, the 'not just X, it's Y' tic",
+        "The audit names at least four of these design tells: gradient hero or buttons, three-column icon feature grid, boxed social icons, fixed 1100 px layout that overflows on phones, tap targets under 44 px, missing alt text, the lobster hero image",
+        "Overflow or tap-target problems were measured with a tool run that produced numbers, not only asserted by reading the CSS",
+        "The fixed file contains no em dashes, no italics for emphasis, and none of: seamless, elevate, unlock, empower, journey, cutting-edge, tapestry, 'in today's', 'whether you're', 'we believe'",
+        "Unverifiable facts (the statistics, phone, email, minimum order, delivery radius, founding year, family name) became [CONFIRM: ...] placeholders or were removed; no new facts were invented in their place",
+        "The fixed page has no horizontal overflow at 320 and 390 px wide",
+        "The fixed page remains a single HTML file",
+        "Every image in the fixed page has an alt attribute and the lobster hero is removed or replaced",
+        "Social links in the fixed page are at least 44 px in both dimensions and are not drawn as boxes or circles"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I just pushed the new build of our campaign page to the gh-pages branch (it serves at https://example.github.io/campaign/v2/). The client texted that they're still seeing the old version on their phone. What do I do, and how do I avoid this next time?",
+      "expected_output": "An answer that separates server state from the client's browser cache: verify by comparing the sha1 of the local built file against the served file fetched with a cache-busting query, then re-check every address form after the ten-minute GitHub Pages cache window; do not redeploy to fix a cache; give the client a cache-busting link or a private tab; add a visible build stamp in the footer during previews; never announce 'live' before verification; mention that phone-only changes are invisible on desktop.",
+      "files": [],
+      "expectations": [
+        "Separates what the server is serving from what the client's browser or a CDN edge has cached, and says how to tell which it is",
+        "Describes verifying the deploy by fetching the served file with a cache-busting query and comparing its hash (or content) with the local build",
+        "Mentions the GitHub Pages cache window of about ten minutes and advises re-checking after it has passed",
+        "Advises against redeploying as a way to fix a cached copy",
+        "Gives the client a cache-busting link, a private tab or a hard reload as the fix on their phone",
+        "Recommends a visible build stamp or version marker on preview pages so the version on screen can be read back",
+        "Says not to tell the client a page is live until the served version has been verified",
+        "Asks or notes whether the change is visible at the width the client is using (phone-only changes do not show on desktop)"
+      ]
+    }
+  ]
+}
