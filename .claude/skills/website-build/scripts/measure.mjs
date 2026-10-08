@@ -50,7 +50,7 @@ for (const [w, h] of vps) {
     const tiny = [...root.querySelectorAll('p,a,li,span,td,label,button')].filter(vis).filter(e => parseFloat(getComputedStyle(e).fontSize) < 12 && e.textContent.trim().length > 2).map(e => ({ el: label(e), px: parseFloat(getComputedStyle(e).fontSize) })).slice(0, 20)
     const h1s = root.querySelectorAll('h1').length
     const landmarks = ['main', 'nav', 'header', 'footer'].filter(t => root.querySelector(t) || root.querySelector(`[role=${t === 'main' ? 'main' : t === 'nav' ? 'navigation' : t === 'header' ? 'banner' : 'contentinfo'}]`))
-    return { docOverflowPx: document.documentElement.scrollWidth - innerWidth, pageHeight: document.documentElement.scrollHeight, tapTargetsUnder44: small, textOverflow: overflowText, imagesWithoutAlt: noAlt, textUnder12px: tiny, fonts, h1Count: h1s, landmarks, title: document.title, metaDescription: !!document.querySelector('meta[name=description]'), viewportMeta: !!document.querySelector('meta[name=viewport]') }
+    return { docOverflowPx: document.documentElement.scrollWidth - document.documentElement.clientWidth, layoutViewport: document.documentElement.clientWidth, innerWidth, pageHeight: document.documentElement.scrollHeight, tapTargetsUnder44: small, textOverflow: overflowText, imagesWithoutAlt: noAlt, textUnder12px: tiny, fonts, h1Count: h1s, landmarks, title: document.title, metaDescription: !!document.querySelector('meta[name=description]'), viewportMeta: !!document.querySelector('meta[name=viewport]') }
   }, { sel })
   r.mediaRequestedAtLoad = { count: media.length, files: media.slice(0, 30) }
   r.errors = errors

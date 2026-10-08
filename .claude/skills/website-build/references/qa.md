@@ -20,7 +20,8 @@ node scripts/contrast.mjs dist/index.html --viewports 390x844,1440x900
 
 For each viewport the harness reports:
 
-- `docOverflowPx`: horizontal page overflow. Any value above 0 is a bug. A negative-margin track inside
+- `docOverflowPx`: horizontal page overflow, measured against the layout viewport (`clientWidth`), since
+  phone emulation inflates `innerWidth` and hides small overflows. Any value above 0 is a bug. A negative-margin track inside
   a flex or grid parent is the usual cause; give the track `min-width: 0`.
 - `tapTargetsUnder44`: every visible link, button and control under 44 px in either dimension.
 - `textOverflow`: text wider than its box (handles, names, long words in narrow columns).
