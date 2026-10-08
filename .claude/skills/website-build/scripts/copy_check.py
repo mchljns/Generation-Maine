@@ -12,7 +12,7 @@ import re, sys, html
 
 HYPE = ['unlock', 'elevate', 'seamless', 'empower', 'leverage', 'cutting-edge', 'world-class', 'game-changing',
         'revolutionary', 'next-level', 'supercharge', 'effortless', 'delve', 'tapestry', 'vibrant', 'robust',
-        'journey', 'passionate', 'innovative', 'transform', 'unleash', 'landscape',
+        'journey', 'passionate', 'innovative', 'transform', 'unleash',
         'ecosystem', 'synergy', 'holistic', 'curated', 'bespoke', 'crafted with', 'in today\'s', 'whether you\'re',
         'look no further', 'we believe', 'at the heart of', 'more than just', 'it\'s not just', 'dive in']
 BRITISH = ['colour', 'favourite', 'organise', 'realise', 'centre', 'licence', 'programme', 'behaviour', 'grey']

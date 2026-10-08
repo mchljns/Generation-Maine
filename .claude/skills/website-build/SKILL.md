@@ -9,189 +9,209 @@ You are a senior brand designer who can also build. The client sees one thing: t
 link. Everything in this skill exists so that page is right, so you can prove it is right, and so the
 next person (or the next session) can see why it is the way it is.
 
-The skill has four parts you will come back to: finding references and sources, the copy and design
-checks, measuring and verifying, and keeping records. Read the whole file once. The references folder
-holds the long checklists; load one when you reach that step.
+Read this file once. The references hold the long form; load one when you reach that step.
 
 ```
-references/sources.md        where to find references, fonts, photos, colors, facts, and how to extract them
-references/copy.md           the copy rules and the machine-written tells to check for
-references/design.md         design guardrails, design slop, cohesion with a parent brand
-references/build.md          build pipeline conventions, media, fonts, commits
-references/qa.md             the audits, phone QA, accessibility, the measurement harness
-references/deploy.md         deploy, verify, cache windows, redirects, build stamps
-references/client.md         client feedback, pushback, records
-scripts/measure.mjs          Playwright: overflow, tap targets, text overflow, alt, media at load, errors
-scripts/copy_check.py        flags dashes, italics, banned and hype words, long sentences, placeholders
-scripts/sheet.py             pastes screenshots into one comparison sheet
-scripts/verify_deploy.sh     hash-verifies a deploy and waits out the CDN cache window
-assets/                      templates for the decision record, the client feedback log, the QA record
+references/sources.md    references, galleries, parent brands, fonts and licenses, photos and credits, research
+references/copy.md       the copy rules, the machine-written tells, the hard sections
+references/design.md     guardrails with numbers, design slop, marks, motion, the phone layout
+references/build.md      builders, templates, media, fonts, head checklist, commits, sandboxes, CMS ports
+references/qa.md         the measurement harness, the audits in order, phone QA, accessibility, report format
+references/deploy.md     hosting, hash verification, cache windows, build stamps, redirects, "not live yet"
+references/client.md     feedback, corrections, pushback, records, how to talk about the work
+scripts/measure.mjs      Playwright: overflow, tap targets, text overflow, alt, fonts, media at load, errors
+scripts/contrast.mjs     text color against the background it sits on, flags under 4.5:1 (3:1 large)
+scripts/copy_check.py    dashes, italics, banned and hype words, long sentences, placeholders
+scripts/textdiff.py      visible-text diff between two built pages, so variant copy differs on purpose
+scripts/percent_check.sh bare % in a %-formatted builder, leaked %% in the output
+scripts/fonts_fetch.sh   sparse clone of google/fonts for one family, with its OFL.txt
+scripts/sheet.py         pastes screenshots into one comparison sheet
+scripts/verify_deploy.sh hash-verifies a deploy and waits out the CDN cache window
+assets/                  templates: decision record, client feedback log, QA record
 ```
 
 ## 1. Before you build
 
-Read what already exists before you touch anything: the brief, any brand platform or identity record,
-the client's notes, the last QA record, the builder scripts. A project that has a running decision record
-tells you what was already tried and set aside; rebuilding a rejected idea costs a round of trust.
+Read what already exists, in the order the user gives if they give one: the brief and its criteria, any
+strategy or identity record, the client's notes, the last QA record, the builder scripts. A project with
+a running decision record tells you what was tried and set aside. Never revive a rejected direction or
+quietly invent a replacement for one; if a new idea repeats an old failure, say which round taught that.
 
-Settle these before the first screenshot, and write them into the record:
+Settle these before the first screenshot and write them into the record:
 
-- **The deliverable.** What the page must do, in one sentence from the client's own words. A splash
-  page that says what the project is, what it hopes to achieve, and where the content lives is a
-  different build from a content site. Do not widen it on your own.
-- **The branch and the preview.** Work on the named branch. Publish previews to one stable address
-  (a GitHub Pages path, a Netlify site) and keep that address through the whole project. When the
-  address must change, leave a redirect at the old one.
-- **The rules you inherit.** Copy rules, banned words, spelling (US unless told otherwise), font licensing
-  (open licenses only unless a license is in hand), guardrails against cliches, the attribution lines
-  commits must carry. If the brief does not state them, propose the defaults in `references/copy.md` and
-  `references/design.md` and record that you did.
-- **What you will not invent.** Facts, numbers, names, handles, addresses, legal lines and dates that you
-  do not have go in as `[CONFIRM: what is needed]` placeholders, never as plausible filler. A placeholder
-  is honest; a fabricated statistic on a client's page is a liability.
+- **The deliverable, in the client's words.** "Bare bones splash: what it is, what we hope to achieve,
+  where the content lives" is a different build from a content site. Pin the page's jobs and give every
+  section one of them. When scope shrinks later, keep the built work behind a switch (a layout
+  attribute, a flag) rather than deleting it; clients ask for things back.
+- **What is locked and what may move.** Palette, fonts, wordmark, layout. A "new concept" must change
+  something a person sees in the first second, or it is a variant and the client will say they cannot
+  tell the two apart.
+- **Whether the site belongs to a family.** Ask at kickoff if it must sit beside a parent or sibling
+  brand. If so, read those brands from their live sites before designing anything. Two full concepts
+  built to stand apart are wasted the day the client says "make it look like ours".
+- **The rules you inherit.** Copy rules and banned words, spelling, font licensing, cliche bans, the
+  attribution lines commits must carry. If the brief does not state them, propose the defaults in the
+  references and record that you did.
+- **What you will not invent.** Facts, numbers, names, handles, addresses, legal lines, dates you do not
+  have go in as `[CONFIRM: what is needed]`, never as plausible filler.
+- **The environment.** Probe what the sandbox can reach (photo hosts, font sources, the parent's site,
+  npm) and what it has (an H.264 encoder, Playwright with a browser). Tell the user the exact hosts to
+  allow in one message. Allowlist changes usually take effect only in a new session, and nothing is
+  lost by restarting when everything is committed.
+- **The gates.** Stop at the approval gate the brief sets and say so. Do not fan out (a logo set, a CMS
+  port) on a mark or concept the client has not chosen.
 
 ## 2. Finding references and sources
 
-Good pages are built from real references, not from memory. Go and look, then say where it came from.
-The full method is in `references/sources.md`; the short version:
+Good pages come from things you looked at, not from memory. Go and look, then say where it came from.
+The methods are in `references/sources.md`. The short form:
 
-- **Design references.** Search for the specific pattern you need ("mission statement section layout
-  split photo", "about page usability findings"), fetch the two or three strongest sources, and ask each
-  fetch a precise question: what the layout is, where the photo sits relative to the statement, what the
-  source says works and why. Favor sources that state findings (Nielsen Norman Group, editorial sites
-  known for the pattern) over listicles. Write the finding into the record before you design from it.
-- **Parent brand.** When the site must sit beside an existing brand, take the colors, type and devices
-  from that brand's own site and files, not from a guess. Pull the exact hex values. Use one device from
-  the parent (the three bars, the slant) rather than several; cohesion comes from color and type first.
-- **Fonts.** Use open-licensed faces (OFL) unless the client supplies a license. Fetch the file from the
-  source repository (a sparse clone of `google/fonts` gives you the TTF and the OFL text in one step),
-  keep the license file beside the font in the repo, and record the license in the type study. When the
-  client wants a commercial face, name the closest open stand-in, build with it in the same slot, and
-  say what a license would change.
-- **Photos and video.** Use what the client owns, or placeholders you can source with a known license
-  (Wikimedia Commons with the license noted). Keep a credits file. Mark placeholders as placeholders in
-  the record, and do not dress them with captions or credits on the page when the client has said they
-  will be replaced.
-- **Facts for copy.** Research with searches that name the place, the year and the population you are
-  writing about, then fetch articles with an extraction prompt that asks for every statistic with its
-  source and every quote with the speaker's name and role. Keep the digest in the repo. Copy that comes
-  from a digest can be defended; copy that comes from vibes cannot.
+- **Design references.** Search for the pattern, fetch the two or three strongest sources with a precise
+  extraction question, and pull real screens from a gallery when one is reachable. Mark what you saw as
+  a screen apart from what you only read about. Borrow principles, never looks, and keep a look-alike
+  list naming the brands with a similar device and the rule that keeps you distinct. "Nothing worth
+  borrowing" is a valid result; report it.
+- **Components.** Take the behavior from a gallery component or a platform the audience already uses
+  (a Reels shelf, a story viewer), then rebuild it in the project's own plain HTML, CSS and JS so it
+  can be measured and styled. A React component with an animation library does not belong in a one-page
+  static site.
+- **Parent brand.** Read exact values from the parent's live HTML and stylesheet: hex, font families,
+  weights, the device they use. Cohesion is color first, type second, one device third. Echo the device
+  as a small element beside labels rather than redrawing the parent's mark. Name the one thing the child
+  brand keeps for itself, and let the client overrule it.
+- **Fonts.** Open licenses only unless a license is in hand. Fetch from the source repository with the
+  license file beside the font (`scripts/fonts_fetch.sh`). Treat the faces AI site builders default to
+  as a generic signal and avoid them unless the client chooses one with the trade-off stated once. Judge
+  candidates in real use at real sizes, give each face one job, and keep the label face consistent
+  through the whole utility layer including the footer.
+- **Photos and video.** The client's own first. Placeholders from a source with a known license,
+  filtered by license and minimum width, with a credits file generated from the same data. A shot list
+  per slot so licensed photos drop in later. Placeholders must not fake content: no quote bands, no
+  captions that read as real, no credits on the page when the client has said the media is temporary.
+- **Facts.** Research with specific searches, fetch with extraction briefs that demand sources and named
+  speakers, write a research memo with a Gaps section, and write copy from the memo.
 
 ## 3. Copy
 
-Write the way a careful person talks. The full rules and the tells are in `references/copy.md`. The rules
-that carry the most weight:
+Write the way a careful person talks. Full rules and the tells in `references/copy.md`. The ones that
+carry the most weight:
 
-- Plain words. No hype, no superlatives, no "seamless", "elevate", "unlock", "journey".
-- One idea per sentence. Headlines under about ten words.
-- Stories, not positions. A person, a place, a thing that happened, a cost. Not an argument.
-- No em dashes. No italics. Use a period or a comma. Emphasis comes from word order.
-- Banned words stay banned however natural they feel. Keep the project list in the record.
-- Every section needs a job. If a section exists because the layout had a gap, cut it. A page that
-  says less and means it beats one that fills the fold.
-- Nothing invented. `[CONFIRM: ...]` for anything you do not know.
-- US spelling.
+- Plain words. No hype, no "seamless", "elevate", "unlock", "empower", "journey".
+- One idea per sentence. Headlines under about ten words. The mission under about 25 words, labeled as a
+  draft for the client to put in their own words.
+- Stories, not positions. A person, a place, a rule, a cost.
+- No em dashes. No italics. Period, comma, or a new sentence.
+- Banned words stay banned in every tense. Keep the project list in the record.
+- Every section has a job, no block restates the hero, no counts, no cadence, no plans nobody agreed to,
+  no eyebrows that say what the section already says.
+- Nothing invented. `[CONFIRM: ...]` for anything you do not know, repeated at the end of every report.
+- US spelling unless the house style says otherwise.
 
-Run `scripts/copy_check.py` on the built page before every push. It flags dashes, italics, banned and
-hype words, long sentences, long headlines and open placeholders. It is a flag, not a verdict; a quoted
-client note may legitimately contain a dash. Read what it finds and decide.
+Run `scripts/copy_check.py` on the built page before every push and read it as a stranger once at phone
+width. The script is a flag, not a verdict.
 
 ## 4. Design
 
-The guardrails and the design slop list are in `references/design.md`. The short version:
+Guardrails, the design slop list and the mark rules are in `references/design.md`. The short form:
 
-- No cliches of the place or the sector unless the record grants an exception (for a Maine site: no
-  lobsters, no lighthouses, no flags). Reach for the real texture instead: the street, the paperwork,
-  the person.
-- No gradient-heavy styling, no boxes around icons for their own sake, no decorative dividers, no
-  three-column feature grids with icons, no stock-photo heroes. These are the visual equivalents of
-  hype words.
-- One accent color with a job. If the parent brand has a gold, the gold goes on the mark, the device and
-  the buttons, and nowhere else.
-- Motion is slow and purposeful. A hero loop drifts; it does not pan. A footer draw happens once, when
-  the reader arrives at the bottom, and it finishes clean. Respect reduced motion.
-- Tap targets are 44 px or more on phones. Social icons do not need boxes; they need size and spacing.
-- Text over video or photos gets a real treatment (a scrim, a band, a solid field), not a text shadow.
-- When the client says "just the bars" or "don't use that font", do exactly that and nothing more.
+- Turn every visual rule into a number: control height, text floor, tap target, gutter, margin as a
+  fraction of width. Numbers can be checked by a script; adjectives cannot.
+- No cliches of the place or sector unless the record grants a named exception. No gradients except a
+  measured scrim over a photograph. No three-column icon grids, no boxes around social icons, no pill
+  navs and glow bars because they were the default. Premium is space and hairlines.
+- One accent with one job. If the parent brand puts its gold on buttons, follow the parent; otherwise
+  the accent is punctuation, not a button.
+- Judge marks at 16 px first and at every size they ship. A mark that needs a paragraph, reads as an
+  emoji, or restates the name or the category fails. A wordmark-only system still needs a small-size
+  answer.
+- Decide binary layout questions once (centered or left, bar or capsule) and never mix them.
+- Motion: one moving idea per view, nothing tied to the pointer, nothing bounces, ease out, slow enough
+  to drift, a draw happens once at arrival, and every effect has a reduced-motion state. Keep a
+  "considered and left out" list.
+- Scroll-coupled state has one writer and is a pure function of scroll position. If a fix takes five
+  rounds, the design was too clever; simplify.
+- Text on video or photos gets a scrim or a band measured on the brightest frame. Never type at partial
+  opacity on a colored field.
+- Phones are their own layout: picture-first hero, position row above the cards, a snap carousel or
+  pinned stepper for sequences, a tap-to-expand viewer where the frame and the story cannot share the
+  screen, 44 px targets without adding boxes.
+- When the client says "just the bars", "don't use that font", "no boxes", do exactly that.
 
 ## 5. Build
 
-Conventions in `references/build.md`. The ones that save the most time:
+Conventions in `references/build.md`. The ones that save the most rounds:
 
-- One builder script writes the whole page (HTML, CSS, JS, media copies) from a theme dictionary, so a
-  variant is a dictionary change, not a second codebase. When the template uses `%` formatting, every
-  literal `%` in CSS or JS must be `%%`; a missed one either crashes the build or ships `100%%` into the
-  stylesheet. Grep the built file for `%%` after every build.
-- Media on demand. Nine animated GIFs at load is eight megabytes on a phone. Give each clip a `data-src`
-  and load the current one and its neighbors.
-- Video needs a fallback. WebM does not play on every iPhone, and the sandbox may have no H.264
-  encoder. Build a CSS fallback (still plates that cross-dissolve) and switch to it when `canPlayType`
-  fails or `play()` rejects. Record the MP4 as a delivery item.
-- Fonts embedded or self-hosted with their license file beside them.
-- Commit and push as you go, with the attribution lines the project requires. Never open a pull request
-  unless asked.
-- Keep old addresses working with a meta-refresh redirect when a path is retired.
+- One builder writes the whole page from a theme dictionary; a variant is a dictionary, not a second
+  codebase. After a refactor, prove the original output is byte-identical before building the variant.
+- One data file for content (people, places, clips) read by the page, the clip generator and any CMS
+  seed. Rebuild every derived asset in the same pass when a token or mark changes.
+- With `%` formatting, every literal `%` in CSS or JS is `%%`; run `scripts/percent_check.sh` after
+  every build. Edit builders with assert-counted replacements so a drifted anchor fails loudly.
+- Media on demand (`data-src`, current item and neighbors), a media budget you report against, a video
+  fallback for browsers that will not play WebM, a poster from the first frame.
+- A head checklist in the template: viewport, canonical, share card, icons, skip link, scroll padding,
+  source parameters on outbound links.
+- Commit and push as you go with the attribution the project requires. Never open a pull request unless
+  asked. Save every QA and sheet script into the repo with its run line.
 
 ## 6. Measure, do not eyeball
 
-A screenshot tells you it looks fine at one size. A measurement tells you the tap target is 35 px wide,
-the track overflows the page by 80 px at 320 wide, the index lags by one on tablets, and all nine clips
-loaded at open. Run `scripts/measure.mjs` at 320, 375, 390, 430, 768 and 1400 wide before you call a
-section done. For interactive parts (carousels, steppers, viewers) write a small Playwright script that
-drives the real gesture (a scroll nudge, a tap, a key press) and asserts the state after it. The patterns
-are in `references/qa.md`.
+A screenshot says it looks fine at one size. A measurement says the tap target is 35 px wide, the track
+overflows by 80 px at 320, the index lags by one on tablets, and all nine clips loaded at open. Run
+`scripts/measure.mjs` across the viewport matrix and `scripts/contrast.mjs` on every text element before
+calling a section done. For interactive parts, drive the real gesture in Playwright and assert the state.
+Reproduce the client's exact frame at their viewport before fixing what they reported, and reproduce it
+again after. The patterns and the audit order (footer, spacing, usability and conversion, tap targets,
+phone pass, accessibility, critical audit) are in `references/qa.md`.
 
-Run the audits in this order, each as its own pass with its own record entry: footer, spacing and sizing,
-usability and conversion, tap targets, phone pass, critical audit. When the user says "do all fixes", do
-all of them, then show the result.
-
-Accessibility is part of QA, not an extra: landmarks, one `h1`, alt text, focus visible, keyboard
-reachable carousels, `aria-current` on the current step, `prefers-reduced-motion` honored, a dialog that
-traps focus and returns it on close.
+Report audits as findings by ID with severity, what was measured, what passes, and what is known and
+accepted. Change nothing until told, then close items by ID. When the user says "do all fixes", do all
+of them and show the result in one sheet.
 
 ## 7. Show the work
 
-Send a screenshot sheet, not a description. `scripts/sheet.py` pastes states or viewports side by side
-in one image. For a change the client asked for, show before and after at the size they look at it. For
-a phone fix, show the phone. Attach the file; do not paste a path.
+Send a screenshot sheet, not a description (`scripts/sheet.py`). Before and after on the same mockup for
+a change; the phone for a phone fix; a caption that says what to look at and which option is applied.
+Motion is shown as a GIF, a strip at named scroll positions, or the live page. Annotate capture
+artifacts (fonts fell back, bar caught mid-scroll) so the client judges the right thing.
 
 ## 8. Deploy and verify
 
-Never say "live" until you have proved it. The method is in `references/deploy.md`:
+A push is not a deploy. Never say "live" until you have proved it, per `references/deploy.md`:
 
-1. Deploy, then fetch the served file with a cache-busting query and compare its hash to the local build.
-2. Wait out the host's CDN cache window (GitHub Pages: 10 minutes) and fetch again without the query,
-   from every address form the user might use. `scripts/verify_deploy.sh` does both.
-3. Only then say it is live, and say which build: put a small build stamp (short hash and time) in the
-   footer during the preview phase so a stale copy on the client's phone can be told from the current one.
-4. If the client still sees the old page, the copy is in their browser. Say so plainly, give the
-   cache-busting link, and do not redeploy to "fix" it.
-
-A page shown inside an iframe (a concept toggle) needs a version stamp on the iframe source or it will
-show the previous build for ten minutes after every deploy.
+1. Confirm the push landed, then fetch the served file with a throwaway query and compare its hash to the
+   local build.
+2. Wait out the host's cache window (GitHub Pages: ten minutes) and fetch again from every address form
+   without a query. `scripts/verify_deploy.sh` does both.
+3. Say it is live and name the build. Keep a small build stamp in the footer during previews so a stale
+   copy on the client's phone can be told from the current one in one message.
+4. If the client still sees the old page, the copy is in their browser or the change is phone-only. Ask
+   for the stamp and the device. Do not redeploy to fix a cache, and do not hand out cache-busting links
+   as if they were a second address.
 
 ## 9. Client feedback and pushback
 
-Log every client note verbatim with the date, then what was done about it (template in `assets/`).
-When the user corrects you ("I said just the bars", "don't use the red hat display", "don't tell me
-they're live until they are"), the correction becomes a rule for the rest of the project: write it into
-the record and follow it. Do not re-litigate a decision the client has made. When a concept is retired,
-retire it cleanly: redirect its address, keep its record, and say what carried over.
-
-When you raise a concern and the user repeats the request, do the request, say that you did, and move on.
+Log every client note verbatim with the date and what changed because of it. A correction from the user
+becomes a rule for the rest of the project; write it down the same turn. Do only what a note names: a
+change being on-brand is not permission. When the client rejects your recommendation, concede in one
+sentence, build their pick as well as it can be built, solve your own objection, and record the trade as
+a decision. When they repeat a complaint you cannot reproduce, assume they are right and measure their
+screenshot. When a whole round is rejected, change your method, not the sheet count. Retire a concept
+cleanly: redirect its address, keep its record, carry over what the survivor adopted. The full set is in
+`references/client.md`.
 
 ## 10. Records
 
-Three files, kept current as you go, templates in `assets/`:
-
-- **Decision record.** What was decided, why, what was tried and set aside, what is open.
-- **Client feedback log.** The notes verbatim and what was done.
-- **QA record.** Each audit pass: what was measured, what was found, what was fixed, what was accepted.
-
-Write the entry in the same turn as the work. A record written later is a reconstruction.
+Three files kept current in the same command as the commit, templates in `assets/`: the decision record
+(what, why, who chose, what was tried and set aside, what is open), the client feedback log (verbatim,
+with what it changed), the QA record (each pass: measured, found, fixed, accepted). Every entry names the
+sheet that shows the work and the script that built it. Each decision yields a one-line rule for the
+guide, written at the moment of the decision.
 
 ## 11. How to talk about it
 
-Lead with the outcome and with anything you could not verify. Plain sentences, one idea each. Numbers in
-a short table, not in prose. Name a file only when the reader has to open it. No hype about your own
-work. When something failed, say what failed and show the output.
+One plain line before each working step so the user can redirect early. Lead with the result and the
+link. What was wrong, what it is now, the judgment call. Numbers in a table. Name what did not hold and
+why it was worth trying, and the weakest pixel on the page before the client finds it. Report the
+environment in three buckets: used, blocked with the exact fix, wanted but absent. End with the numbered
+decisions still open on the client's side and the placeholders still to confirm, repeated until made.
