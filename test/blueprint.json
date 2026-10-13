@@ -1,0 +1,17 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "meta": {
+    "title": "Generation Maine theme test site",
+    "description": "A throwaway WordPress with the Generation Maine theme installed and nine placeholder creators. Nothing is saved when the tab closes.",
+    "author": "Green Falls"
+  },
+  "landingPage": "/",
+  "preferredVersions": { "php": "8.3", "wp": "latest" },
+  "features": { "networking": true },
+  "login": true,
+  "steps": [
+    { "step": "installTheme", "themeData": { "resource": "url", "url": "https://mchljns.github.io/Generation-Maine/test/generation-maine.zip" }, "options": { "activate": true } },
+    { "step": "setSiteOptions", "options": { "blogname": "Generation Maine", "permalink_structure": "/%postname%/" } },
+    { "step": "runPHP", "code": "<?php require '/wordpress/wp-load.php'; wp_set_current_user( 1 ); $args = array( 9, 'https://mchljns.github.io/Generation-Maine/v2/media' ); include get_theme_file_path( 'bin/seed-creators.php' ); flush_rewrite_rules();" }
+  ]
+}
