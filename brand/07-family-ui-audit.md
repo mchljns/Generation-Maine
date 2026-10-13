@@ -214,7 +214,7 @@ Follow-up, same day: the 4:5 crop limited the social preview, so a tap-to-expand
 
 ## WordPress theme against the v2 page (Oct 13, 2026)
 
-Tested in a local WordPress 7.2 (alpha) on PHP 8.4 with nine placeholder creators seeded from the v2 media. Scripts: `qa/wordpress/` (compare, states, editor, qa) and the website-build skill's `measure.mjs`, `contrast.mjs` and `copy_check.py`.
+Tested in a local WordPress 7.2 (alpha) on PHP 8.4 with nine placeholder creators seeded from the v2 media. Sheets: `qa/wordpress/sheet-desktop.png` and `qa/wordpress/sheet-phone.png`. Scripts: `qa/wordpress/` (compare, states, editor, qa) and the website-build skill's `measure.mjs`, `contrast.mjs` and `copy_check.py`.
 
 Measured and matching: at 1440 by 900 every section height is identical to the v2 page (bar 68, hero 820, about 847, creators 167, stories 6588, follow 921, newsletter 169, footer 323) and so is the page height, 9734. Fonts match on every sampled element. The carousel, the stepper and the tap to expand viewer pass the same checks as the v2 page at 320, 375, 390, 430, 768, 844 by 390 and 1440. Overflow 0 and no console errors at every size. The phone menu sits outside the bar, its links are 44 px and its button 48 px, and it closes on a link tap. Logged in, the bar sits under the admin bar. In the editor the front page has 48 blocks, none invalid, in the page's fonts.
 
