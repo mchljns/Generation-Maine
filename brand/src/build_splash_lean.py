@@ -33,11 +33,11 @@ LEAN_A = dict(
     key="v2", out="brand/identity/splash-lean-a", root_class="static lean euro", navy="#0F2E4D", blue="#0556A5", ink="#0F2E4D", paper="#FFFFFF", tint="#EAF1F8",
     fonts=S.SIGNATURE_FONTS + "@font-face{font-family:Michroma;font-weight:400;font-display:swap;src:url(data:font/ttf;base64,{{FMICH}}) format('truetype')}", font_files={"FMICH": "brand/fonts/michroma/Michroma-Regular.ttf"}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="",
     display="'Bricolage Grotesque',system-ui,sans-serif", body="'DM Sans',system-ui,sans-serif", label="Michroma,Eurostile,system-ui,sans-serif",
-    h1="Young Mainers<br>on building<br>a life <em>here<i class=\"d pulse\" aria-hidden=\"true\"></i></em>", h2_about="What this is", h2_creators="The creators", h2_follow="Where to find it",
+    h1="Young Mainers<br>on building<br>a life <span class=\"here\">here<i class=\"d pulse\" aria-hidden=\"true\"></i></span>", h2_about="What this is", h2_creators="The creators", h2_follow="Where to find it",
     site_css=SITE_CSS(F.STATIC_CSS) + "\n" + SITE_CSS(F.FAMILY_A_CSS % dict(blue="#0556A5", navy="#0F2E4D", mg=MG)),
     css="""
 .lean h1,.lean h2,.lean .h2{font-family:var(--display);font-weight:800;letter-spacing:-.01em}
-.lean h1 em{font-style:normal;color:var(--mg)}
+.lean h1 .here{color:var(--mg)}
 .lean h1 .d{display:inline-block;width:.2em;height:.2em;border-radius:50%;background:var(--mg);margin-left:.05em;vertical-align:baseline;position:relative}
 .lean h1 .d::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:50%;background:var(--mg);opacity:0;animation:pulse 2.4s cubic-bezier(.2,.6,.3,1) infinite 1.4s}
 @keyframes pulse{0%{transform:scale(1);opacity:.6}65%{transform:scale(3);opacity:0}100%{transform:scale(3);opacity:0}}
@@ -155,7 +155,7 @@ STEPPER_OVERRIDES = """
 .slide{flex:0 0 100%;scroll-snap-align:center;scroll-snap-stop:always;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:0 16px calc(16px + env(safe-area-inset-bottom,0px))}
 .slide .fr{position:relative;aspect-ratio:9/16;height:min(calc(100dvh - 150px),calc((100vw - 32px) * 16 / 9));background:var(--navy);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45);transform:scale(.97);transition:transform .3s ease}
 .viewer.in .slide .fr{transform:none}
-.slide .fr img.clip{width:100%;height:100%;object-fit:cover;display:block}
+.slide .fr .clip{width:100%;height:100%;object-fit:cover;display:block}
 .slide .fr .who{opacity:1;left:12px;top:12px;right:64px}
 .slide .fr .dur{position:absolute;right:10px;top:10px;font:600 12px/1 var(--body);letter-spacing:.06em;color:#fff;background:rgba(15,46,77,.6);padding:5px 7px}
 .slide .cap{display:flex;align-items:baseline;gap:12px;width:min(100%,420px);justify-content:center;text-align:center}
@@ -163,7 +163,7 @@ STEPPER_OVERRIDES = """
 .slide .cap strong{font:700 16px/1.2 var(--display);color:#fff}
 @media (prefers-reduced-motion:reduce){.viewer,.slide .fr{transition:none}}
 html.vopen,html.vopen body{overflow:hidden}
-.panel .pv img.clip{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block}
+.panel .pv .clip{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block}
 .panel .pv .who{opacity:1;left:10px;top:10px;right:56px}
 .panel .pv .dur{position:absolute;right:8px;top:8px;font:600 12px/1 var(--body);letter-spacing:.06em;color:#fff;background:rgba(15,46,77,.6);padding:5px 7px}
 .panel .k{margin-bottom:6px}
@@ -274,7 +274,7 @@ section.block{padding-block:112px}
 .about .body{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:56px;align-items:center}
 .about .aim .k{display:block;color:var(--blue);margin-bottom:20px}
 .about .aim .big{font-family:var(--display);font-size:clamp(28px,3vw,42px);line-height:1.18;margin:0;max-width:20ch}
-.about .aim .note{margin:14px 0 0;font-size:13px;color:rgba(15,46,77,.6)}
+.about .aim .note{margin:14px 0 0;font-size:13px;color:rgba(15,46,77,.74)}
 .about .goal{margin:28px 0 0;padding-top:24px;border-top:1px solid var(--navy);font-size:17px;line-height:1.65;max-width:58ch}
 /* the cast: nine faces, the name under each, the town and the handle */
 .roster{background:var(--tint)}
@@ -342,7 +342,7 @@ a.row:hover .name{color:var(--mg)}
  .block .head{grid-template-columns:1fr;gap:16px;margin-bottom:32px}
  .about .cols{grid-template-columns:1fr;gap:28px}
  .about .body{grid-template-columns:1fr;gap:28px}.about .media .ph{aspect-ratio:4/3}.about .goal{margin-top:24px}
- .follow .row{grid-template-columns:36px 1fr;gap:4px 16px;padding:20px 0}.follow .row .ic{width:24px;height:24px;grid-row:1/3}.follow .row .h{grid-column:2;justify-self:start;margin-top:4px}
+ .follow .row{grid-template-columns:36px minmax(0,1fr);gap:4px 16px;padding:20px 0}.follow .row .ic{width:24px;height:24px;grid-row:1/3}.follow .row .h{grid-column:2;justify-self:start;margin-top:4px;white-space:normal;overflow-wrap:anywhere;max-width:100%%}
  .follow .nl{grid-template-columns:1fr;gap:24px;margin-top:48px;padding-top:36px}
  .follow form{grid-template-columns:1fr}
 }
@@ -415,19 +415,25 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
     d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || '#FFFFFF'); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * (matchMedia('(max-width: 900px)').matches ? 35 : (d.stagger || 35))) + 'ms'; g.appendChild(p); });
     m.appendChild(svg); requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('on')));
   }
-  // The stage: one pinned clip that changes as each story panel reaches the middle of the screen.
-  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('video, img.clip')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
-  const panels = [...document.querySelectorAll('.panel')], storiesEl = document.getElementById('stories'); let cur = -1;
-  function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i;
-    stageVids.forEach((v, k) => { const on = k === i; v.classList.toggle('on', on); if (!v.play) return; if (on) { v.play().catch(() => {}); } else v.pause(); }); whos.forEach((w, k) => w.classList.toggle('on', k === i)); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) dur.textContent = stageVids[i].dataset.dur;
-    wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? 'Next: ' + nx.dataset.name : 'Last one'; marks.forEach((m, k) => { if (k === i) m.setAttribute('aria-current', 'true'); else m.removeAttribute('aria-current'); }); hydrate(i); tint(i); }
-  const panelsEl = document.getElementById('panels'), stageEl = document.querySelector('.stage');
+  // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Clips are images or videos;
+  // either way they carry data-src and load when their card is current or next door.
   const phone = matchMedia('(max-width: 900px)');
+  const panelsEl = document.getElementById('panels'), storiesEl = document.getElementById('stories');
+  if (panelsEl && storiesEl) {
+  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('.clip')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
+  const panels = [...document.querySelectorAll('.panel')]; let cur = -1;
+  const load = el => { if (el && el.dataset.src && !el.getAttribute('src')) el.src = el.dataset.src; };
+  const playOnly = (els, i) => els.forEach((v, k) => { if (!v || !v.play) return; if (k === i) v.play().catch(() => {}); else v.pause(); });
+  // clips load when their card is current or next door, not all nine at once
+  const hydrate = i => { const near = (els) => els.filter((e, k) => Math.abs(k - i) <= 1); near(panels.map(p => p.querySelector('.clip'))).forEach(load); if (!phone.matches) near(stageVids).forEach(load); };
   // the section's tint on phones, one per creator, cycling through the family's light fields
   const TINTS = ['#EAF1F8', '#F8F3E2', '#E3ECF6', '#FFFFFF', '#EEF3F9', '#F6EFDC', '#E8EFF7', '#FBF7EA', '#EAF1F8'];
   const headEl = document.getElementById('creators'); const tint = i => { const c = phone.matches ? TINTS[i %% TINTS.length] : ''; storiesEl.style.backgroundColor = c; if (headEl) headEl.style.backgroundColor = c; };
-  // clips load when their card is current or next door, not all nine at once
-  const hydrate = i => { const pick = els => els.filter((e, k) => Math.abs(k - i) <= 1); const imgs = pick(panels.map(p => p.querySelector('img.clip'))).concat(phone.matches ? [] : pick(stageVids)); imgs.forEach(im => { if (im && im.dataset.src && !im.src) im.src = im.dataset.src; }); };
+  function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i; hydrate(i);
+    stageVids.forEach((v, k) => v.classList.toggle('on', k === i)); playOnly(phone.matches ? [] : stageVids, i); playOnly(phone.matches ? panels.map(p => p.querySelector('video.clip')) : [], i); if (phone.matches) stageVids.forEach(v => v.pause && v.pause()); else panels.forEach(p => { const v = p.querySelector('video.clip'); if (v) v.pause(); });
+    whos.forEach((w, k) => w.classList.toggle('on', k === i)); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) { dur.textContent = stageVids[i].dataset.dur || ''; dur.hidden = !stageVids[i].dataset.dur; }
+    wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? (wnext.dataset.next || 'Next: ') + nx.dataset.name : (wnext.dataset.last || 'Last one'); marks.forEach((m, k) => { if (k === i) m.setAttribute('aria-current', 'true'); else m.removeAttribute('aria-current'); }); tint(i); }
+  const stageEl = document.querySelector('.stage');
   const gutter = () => parseFloat(getComputedStyle(panelsEl).paddingLeft) || 0;
   // the current card is the one whose left edge sits nearest the gutter
   const nearest = () => { const edge = panelsEl.getBoundingClientRect().left + gutter(); let best = 0, bd = Infinity; panels.forEach((p, k) => { const d = Math.abs(p.getBoundingClientRect().left - edge); if (d < bd) { bd = d; best = k; } }); return best; };
@@ -435,7 +441,7 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   const onTrack = () => { if (!phone.matches) return; show(nearest()); };
   panelsEl.addEventListener('scroll', onTrack, { passive: true });
   panelsEl.addEventListener('keydown', e => { if (!phone.matches) return; if (e.key === 'ArrowRight') { e.preventDefault(); goTo(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(cur - 1); } });
-  const fit = () => { if (phone.matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
+  const fit = () => { if (!stageEl || phone.matches) { panelsEl.style.height = ''; if (stageEl) stageEl.style.removeProperty('--stageh'); return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
     const top = 84 + 16, room = innerHeight - top - (h + 6) - 14 - 20, colw = stageEl.clientWidth || (innerWidth - 72);
     const sh = Math.round(Math.max(240, Math.min(colw * 16 / 9, room))); stageEl.style.setProperty('--stageh', sh + 'px'); document.querySelector('.where').style.height = sh + 'px'; };
   const step = () => { if (phone.matches) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
@@ -447,13 +453,14 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   const viewer = document.getElementById('viewer'), vtrack = document.getElementById('vtrack'), vn = document.getElementById('vn'), vclose = document.getElementById('vclose');
   if (viewer && vtrack) {
     const slides = [...vtrack.querySelectorAll('.slide')]; let vcur = -1, lastFocus = null, pushed = false;
-    const vhydrate = i => slides.forEach((sl, k) => { const im = sl.querySelector('img.clip'); if (Math.abs(k - i) <= 1 && im.dataset.src && !im.src) im.src = im.dataset.src; });
-    const vshow = i => { if (i === vcur) return; vcur = i; vn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0'); vhydrate(i); };
+    const svids = slides.map(sl => sl.querySelector('video.clip'));
+    const vhydrate = i => slides.forEach((sl, k) => { if (Math.abs(k - i) <= 1) load(sl.querySelector('.clip')); });
+    const vshow = i => { if (i === vcur) return; vcur = i; vn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0'); vhydrate(i); playOnly(svids, i); };
     const vnearest = () => { const c = vtrack.getBoundingClientRect(), cx = c.left + c.width / 2; let best = 0, bd = Infinity; slides.forEach((sl, k) => { const r = sl.getBoundingClientRect(), d = Math.abs(r.left + r.width / 2 - cx); if (d < bd) { bd = d; best = k; } }); return best; };
     const openViewer = i => { if (!phone.matches) return; lastFocus = document.activeElement; vcur = -1; viewer.hidden = false; vtrack.scrollLeft = slides[i].offsetLeft; vshow(i);
       document.documentElement.classList.add('vopen'); requestAnimationFrame(() => viewer.classList.add('in')); vclose.focus({ preventScroll: true });
       try { history.pushState({ gmViewer: true }, ''); pushed = true; } catch (e) { pushed = false; } };
-    const closeViewer = (fromHistory) => { if (viewer.hidden) return; viewer.classList.remove('in'); document.documentElement.classList.remove('vopen');
+    const closeViewer = (fromHistory) => { if (viewer.hidden) return; viewer.classList.remove('in'); document.documentElement.classList.remove('vopen'); playOnly(svids, -1);
       const done = () => { viewer.hidden = true; if (vcur >= 0) { goTo(vcur); show(vcur); } if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true }); };
       if (reduced) done(); else setTimeout(done, 220);
       if (pushed && !fromHistory) { pushed = false; history.back(); } else pushed = false; };
@@ -465,21 +472,29 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
     addEventListener('popstate', () => { if (!viewer.hidden) closeViewer(true); });
     phone.addEventListener('change', () => { if (!phone.matches && !viewer.hidden) closeViewer(false); });
   }
+  }
   // the hero loop: where WebM cannot play, the five plates drift and dissolve in CSS instead
   const hv = document.querySelector('.hero .bg video');
   if (hv) { const ok = hv.canPlayType('video/webm; codecs="vp9"') || hv.canPlayType('video/webm'); if (!ok) document.querySelector('.hero').classList.add('plates-on'); else { hv.play().catch(() => document.querySelector('.hero').classList.add('plates-on')); } }
   // the footer mark draws once the page is scrolled to its end
-  const site = document.querySelector('.site');
-  const fire = () => { site.classList.add('on'); removeEventListener('scroll', atEnd); };
-  const atEnd = () => { if (innerHeight + scrollY >= document.documentElement.scrollHeight - 24) fire(); };
-  addEventListener('scroll', atEnd, { passive: true }); atEnd();
-  new IntersectionObserver(es => es.forEach(e => { if (e.intersectionRatio >= .95) fire(); }), { threshold: [.95, 1] }).observe(site.querySelector('.lk'));
+  const site = document.querySelector('.site'), siteMark = site && site.querySelector('.lk');
+  if (siteMark) {
+    const fire = () => { site.classList.add('on'); removeEventListener('scroll', atEnd); };
+    const atEnd = () => { if (innerHeight + scrollY >= document.documentElement.scrollHeight - 24) fire(); };
+    addEventListener('scroll', atEnd, { passive: true }); atEnd();
+    new IntersectionObserver(es => es.forEach(e => { if (e.intersectionRatio >= .95) fire(); }), { threshold: [.95, 1] }).observe(siteMark);
+  }
   // phone menu
   const sheet = document.getElementById('sheet'), menu = document.getElementById('menu');
+  if (sheet && menu) {
+  const sn = sheet.querySelector('nav');
+  if (sn && !sn.children.length) document.querySelectorAll('.top nav a').forEach(a => sn.appendChild(a.cloneNode(true)));
+  if (!sheet.querySelector('.btn')) { const c = document.querySelector('.top .cta a, .top a.cta'); if (c) { const b = document.createElement('a'); b.className = 'btn b1'; b.href = c.getAttribute('href'); b.textContent = c.textContent; sheet.appendChild(b); } }
   const setMenu = o => { sheet.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
   menu.addEventListener('click', () => setMenu(!sheet.classList.contains('open')));
   sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
   addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+  }
   // the newsletter form hands the address to Substack, which prefills it
   const f = document.getElementById('nl');
   if (f) f.addEventListener('submit', e => { e.preventDefault(); const em = f.email.value.trim(); if (!em) { f.email.focus(); return; } const u = new URL(f.action); u.searchParams.set('email', em); window.open(u.toString(), '_blank', 'noopener'); });

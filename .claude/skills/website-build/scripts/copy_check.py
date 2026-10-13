@@ -28,6 +28,9 @@ def text_of(path):
         body = html.unescape(re.sub(r'<[^>]+>', ' ', s))
     else:
         heads = [h.strip('# ').strip() for h in re.findall(r'^#{1,3} .*$', s, flags=re.M)]
+        # code is not prose: file names and function names carry underscores that read as italics
+        s = re.sub(r'```.*?```', ' ', s, flags=re.S)
+        s = re.sub(r'`[^`\n]*`', 'code', s)
         italics = len(re.findall(r'(?<![*_])[*_](?![*_\s])[^*_\n]+[*_](?![*_])', s))
         body = s
     body = re.sub(r'[ \t]+', ' ', body)

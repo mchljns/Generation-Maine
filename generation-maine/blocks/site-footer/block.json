@@ -1,0 +1,14 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "generation-maine/site-footer",
+	"title": "Site Footer",
+	"category": "theme",
+	"icon": "align-wide",
+	"description": "The family footer: the drawn mark, the line beside it, the page links, the channels, Maine Policy Institute and the family, and the legal line. The lines are set under Settings > Generation Maine.",
+	"keywords": [ "footer", "legal", "maine policy" ],
+	"textdomain": "generation-maine",
+	"supports": { "html": false, "inserter": false, "multiple": false },
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}

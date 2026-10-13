@@ -1,6 +1,6 @@
 <?php
 /**
- * Creators: a private post type and the stepper that shows them.
+ * Creators: a private post type, and the stepper and roster that show them.
  *
  * Everything about a creator lives on the Creator post, under "Creators" in the dashboard:
  *   name (title), bio (content), avatar (featured image), handle, hometown, clip (a video upload or a link),
@@ -273,6 +273,7 @@ function gm_get_creators( $limit = 24 ) {
 			'clip'        => $clip ? $clip : '',
 			'len'         => get_post_meta( $id, 'gm_clip_len', true ),
 			'avatar'      => has_post_thumbnail( $id ) ? get_the_post_thumbnail_url( $id, 'thumbnail' ) : '',
+			'portrait'    => has_post_thumbnail( $id ) ? get_the_post_thumbnail_url( $id, 'medium' ) : '',
 			'links'       => $links,
 			'placeholder' => (bool) get_post_meta( $id, 'gm_placeholder', true ),
 		);
@@ -294,105 +295,115 @@ function gm_who( $c, $on ) {
 }
 
 /**
- * Render the creators section: the pinned clip, the details that step with the scroll, and the position row.
- * With no creators it shows a short empty state. The markup matches the splash mockup so the shared CSS and script apply.
+ * One clip element. Images and videos both carry data-src and load when their card is current or next door;
+ * a creator with no clip gets a plain navy field.
  *
- * @param array $args Optional. 'limit' (int), 'next' (string), 'last' (string).
- * @return string HTML
+ * @param array  $c       Creator.
+ * @param string $class   Extra classes.
+ * @param string $attrs   Extra attributes.
+ * @param string $alt     Accessible name for the clip.
+ * @return string
  */
+function gm_clip( $c, $class, $attrs, $alt ) {
+	$cls = trim( 'clip ' . $class );
+	if ( ! $c['clip'] ) {
+		return '<div class="' . esc_attr( $cls . ' noclip' ) . '"' . $attrs . '></div>';
+	}
+	if ( preg_match( '/\.(gif|png|jpe?g|webp|avif)(\?|$)/i', $c['clip'] ) ) {
+		return '<img class="' . esc_attr( $cls ) . '"' . $attrs . ' data-src="' . esc_url( $c['clip'] ) . '" alt="' . esc_attr( $alt ) . '">';
+	}
+	return '<video class="' . esc_attr( $cls ) . '"' . $attrs . ' data-src="' . esc_url( $c['clip'] ) . '" muted loop playsinline preload="none" aria-label="' . esc_attr( $alt ) . '"></video>';
+}
+
 /**
- * The roster: one tile per creator. A creator marked placeholder shows the numeral and the town only, no face and no link,
- * so the page can launch before the shoot. A creator with the placeholder unchecked shows the avatar, name, town and handle,
- * and the tile links to the first of their feeds. Nothing is hosted here; every tile is a door to where the clips live.
+ * The roster: one tile per creator, the face above the name and town. A tile links to the creator's first feed once they
+ * are no longer a placeholder; until then it is a plain block. Nothing is hosted here.
  *
  * @param array $creators From gm_get_creators().
  * @return string HTML
  */
 function gm_render_roster( $creators ) {
-	$out = '<div class="roster-grid">';
+	$out = '';
 	foreach ( $creators as $i => $c ) {
-		$n     = sprintf( '%02d', $i + 1 );
 		$town  = $c['town'] ? $c['town'] : __( 'Maine', 'generation-maine' );
-		$ready = ! $c['placeholder'] && ( $c['avatar'] || $c['handle'] );
-		if ( ! $ready ) {
-			$out .= '<div class="roster-tile" aria-label="' . esc_attr( sprintf( /* translators: 1: position, 2: town */ __( 'Creator %1$s, %2$s, Maine', 'generation-maine' ), $n, $town ) ) . '">'
-				. '<span class="n">' . esc_html( $n ) . '</span><b>' . esc_html( $town ) . '</b></div>';
-			continue;
-		}
+		$inner = '<span class="ph">' . ( $c['portrait'] ? '<img src="' . esc_url( $c['portrait'] ) . '" alt="" width="300" height="400" loading="lazy">' : '' ) . '</span>'
+			. '<span class="who"><span class="n">' . esc_html( sprintf( '%02d', $i + 1 ) ) . '</span><b>' . esc_html( $c['name'] ) . '</b><span class="town">' . esc_html( $town ) . ', Maine</span></span>';
 		$href  = '';
-		foreach ( $c['links'] as $l ) {
-			$href = $l['url'];
-			break;
+		if ( ! $c['placeholder'] ) {
+			foreach ( $c['links'] as $l ) {
+				$href = $l['url'];
+				break;
+			}
 		}
-		$av    = $c['avatar'] ? '<img class="av" src="' . esc_url( $c['avatar'] ) . '" alt="" width="56" height="56" loading="lazy">' : '';
-		$inner = '<span class="n">' . esc_html( $n ) . '</span>' . $av . '<b>' . esc_html( $c['name'] ) . '</b><span class="town">' . esc_html( $town ) . '</span>'
-			. ( $c['handle'] ? '<span class="h">' . esc_html( $c['handle'] ) . '</span>' : '' );
-		$out  .= $href
-			? '<a class="roster-tile ready" href="' . esc_url( $href ) . '" target="_blank" rel="noopener">' . $inner . '</a>'
-			: '<div class="roster-tile ready">' . $inner . '</div>';
+		$out .= $href
+			? '<a class="tile roster-tile" href="' . esc_url( gm_utm( $href ) ) . '" target="_blank" rel="noopener">' . $inner . '</a>'
+			: '<div class="tile" aria-label="' . esc_attr( $c['name'] . ', ' . $town . ', Maine' ) . '">' . $inner . '</div>';
 	}
-	return $out . '</div>';
+	return '<section class="block roster"><div class="w"><div class="grid">' . $out . '</div></div></section>';
 }
 
+/**
+ * Render the creators. Stepper (the page's layout): on wide screens one pinned clip changes as each story reaches the middle
+ * of the screen; on phones the stories are a left to right carousel, and a tap opens the clip full size. Roster: a grid of tiles.
+ * With no creators it shows a short note. The markup matches the v2 page, so its stylesheet and script apply unchanged.
+ *
+ * @param array $args Optional. 'layout' (stepper|roster), 'limit' (int), 'next' (string), 'last' (string).
+ * @return string HTML
+ */
 function gm_render_creators( $args = array() ) {
-	$layout   = isset( $args['layout'] ) && 'stepper' === $args['layout'] ? 'stepper' : 'roster';
+	$layout   = isset( $args['layout'] ) && 'roster' === $args['layout'] ? 'roster' : 'stepper';
 	$limit    = isset( $args['limit'] ) ? (int) $args['limit'] : 24;
 	$next     = isset( $args['next'] ) && '' !== $args['next'] ? $args['next'] : __( 'Next: ', 'generation-maine' );
 	$last     = isset( $args['last'] ) && '' !== $args['last'] ? $args['last'] : __( 'Last one', 'generation-maine' );
 	$creators = gm_get_creators( $limit );
 	if ( ! $creators ) {
-		return '<section class="stories gm-empty" data-bg="var(--bi)"><div class="w"><p>' . esc_html__( 'The creators are being cast. Their clips and stories will appear here.', 'generation-maine' ) .
-			( current_user_can( 'edit_posts' ) ? ' <a href="' . esc_url( admin_url( 'post-new.php?post_type=gm_creator' ) ) . '">' . esc_html__( 'Add the first creator.', 'generation-maine' ) . '</a>' : '' ) . '</p></div></section>';
+		return '<section class="stories gm-empty"><div class="w"><p>' . esc_html__( 'The creators are being cast. Their clips and stories will appear here.', 'generation-maine' )
+			. ( current_user_can( 'edit_posts' ) ? ' <a href="' . esc_url( admin_url( 'post-new.php?post_type=gm_creator' ) ) . '">' . esc_html__( 'Add the first creator.', 'generation-maine' ) . '</a>' : '' ) . '</p></div></section>';
 	}
 	if ( 'roster' === $layout ) {
-		return '<section class="roster" data-bg="var(--sand)"><div class="w">' . gm_render_roster( $creators ) . '</div></section>';
+		return gm_render_roster( $creators );
 	}
-	$n = count( $creators );
-	$vids = $whos = $panels = $segs = '';
+	$n      = count( $creators );
+	$expand = '<span class="ex" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg></span>';
+	$stage  = $whos = $panels = $segs = $slides = '';
 	foreach ( $creators as $i => $c ) {
-		$on = 0 === $i;
-		if ( $c['clip'] && preg_match( '/\.(gif|png|jpe?g|webp)(\?|$)/i', $c['clip'] ) ) {
-			$vids .= sprintf( '<img class="clip%1$s" data-i="%2$d" data-dur="%3$s" src="%4$s" alt="" loading="%5$s">', $on ? ' on' : '', $i, esc_attr( $c['len'] ), esc_url( $c['clip'] ), $i < 2 ? 'eager' : 'lazy' );
-		} elseif ( $c['clip'] ) {
-			$vids .= sprintf(
-				'<video data-i="%1$d" data-dur="%2$s" src="%3$s" muted loop playsinline preload="%4$s" aria-label="%5$s"%6$s></video>',
-				$i,
-				esc_attr( $c['len'] ),
-				esc_url( $c['clip'] ),
-				$i < 2 ? 'auto' : 'metadata',
-				/* translators: 1: creator name, 2: town */
-				esc_attr( sprintf( __( 'Clip by %1$s, %2$s, Maine', 'generation-maine' ), $c['name'], $c['town'] ) ),
-				$on ? ' class="on"' : ''
-			);
-		} else {
-			$vids .= '<div class="noclip' . ( $on ? ' on' : '' ) . '" data-i="' . $i . '" data-dur=""></div>';
-		}
-		$whos .= gm_who( $c, $on );
-		$segs .= sprintf( '<button type="button" aria-label="%1$s" data-name="%2$s"%3$s></button>', esc_attr( sprintf( '%d, %s', $i + 1, $c['name'] ) ), esc_attr( $c['name'] ), $on ? ' class="on"' : '' );
-		$soc   = '';
+		$on    = 0 === $i;
+		$town  = $c['town'] ? $c['town'] : __( 'Maine', 'generation-maine' );
+		/* translators: 1: creator name, 2: town */
+		$alt   = sprintf( __( 'Clip by %1$s, %2$s, Maine', 'generation-maine' ), $c['name'], $town );
+		$len   = $c['len'] ? '<span class="dur">' . esc_html( $c['len'] ) . '</span>' : '';
+		$who   = gm_who( $c, $on );
+		$stage .= gm_clip( $c, $on ? 'on' : '', ' data-i="' . $i . '" data-dur="' . esc_attr( $c['len'] ) . '"', $alt );
+		$whos  .= $who;
+		/* translators: 1: position, 2: creator name, 3: town */
+		$segs  .= '<button type="button" aria-label="' . esc_attr( sprintf( __( 'Creator %1$d, %2$s, %3$s', 'generation-maine' ), $i + 1, $c['name'], $town ) ) . '" data-name="' . esc_attr( $c['name'] ) . '"' . ( $on ? ' class="on"' : '' ) . '></button>';
+		$soc    = '';
 		foreach ( $c['links'] as $key => $l ) {
-			$soc .= '<a href="' . esc_url( $l['url'] ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr( $l['label'] ) . '">' . gm_mark( $key ) . '<span>' . esc_html( $c['handle'] ? $c['handle'] : $l['label'] ) . '</span></a>';
+			$soc .= '<a href="' . esc_url( gm_utm( $l['url'] ) ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr( $l['label'] ) . '">' . gm_mark( $key ) . '<span>' . esc_html( $c['handle'] ? $c['handle'] : $l['label'] ) . '</span></a>';
 		}
-		$panels .= '<article class="panel' . ( $on ? ' on' : '' ) . '" id="creator-' . (int) $c['id'] . '" data-i="' . $i . '">';
-		if ( $c['town'] ) {
-			$panels .= '<p class="k">' . esc_html( $c['town'] ) . ', Maine<i class="d pulse"></i></p>';
-		}
-		$panels .= '<h2>' . esc_html( $c['name'] ) . '</h2>';
-		if ( $c['bio'] ) {
-			$panels .= '<p class="bio">' . esc_html( $c['bio'] ) . '</p>';
-		}
-		if ( $soc ) {
-			$panels .= '<div class="soc">' . $soc . '</div>';
-		}
-		$panels .= '</article>';
+		/* translators: %s: creator name */
+		$open    = sprintf( __( 'Open the clip from %s full size', 'generation-maine' ), $c['name'] );
+		$panels .= '<article class="panel' . ( $on ? ' on' : '' ) . '" id="story-' . ( $i + 1 ) . '" data-i="' . $i . '">'
+			. '<div class="pv" role="button" tabindex="0" aria-label="' . esc_attr( $open ) . '">' . gm_clip( $c, '', '', '' ) . $who . $len . $expand . '</div>'
+			. '<p class="k">' . esc_html( $town ) . ', Maine</p><h2>' . esc_html( $c['name'] ) . '</h2>'
+			. ( $c['bio'] ? '<p class="bio">' . esc_html( $c['bio'] ) . '</p>' : '' )
+			. ( $soc ? '<div class="soc">' . $soc . '</div>' : '' )
+			. '</article>';
+		$slides .= '<div class="slide" data-i="' . $i . '"><div class="fr">' . gm_clip( $c, '', '', $alt ) . $who . $len . '</div>'
+			. '<div class="cap"><span class="k">' . esc_html( $town ) . ', Maine</span><strong>' . esc_html( $c['name'] ) . '</strong></div></div>';
 	}
-	$first_len = $creators[0]['len'];
-	return '<section class="stories" id="stories" data-bg="var(--bi)" style="--n:' . (int) $n . '"><div class="pinw"><div class="w">'
-		. '<div class="stage"><div class="vid" id="stage">' . $vids . $whos . '<span class="dur" id="dur"' . ( $first_len ? '' : ' hidden' ) . '>' . esc_html( $first_len ) . '</span></div></div>'
-		. '<div class="panels" id="panels">' . $panels . '</div>'
-		. '<div class="where" id="where"><span class="n" id="wn">01 / ' . esc_html( str_pad( (string) $n, 2, '0', STR_PAD_LEFT ) ) . '</span><span class="segs" id="segs">' . $segs . '</span>'
+	$count = str_pad( (string) $n, 2, '0', STR_PAD_LEFT );
+	$first = $creators[0]['len'];
+	return '<section class="stories" id="stories" style="--n:' . (int) $n . '"><div class="pinw"><div class="w">'
+		. '<div class="stage"><div class="vid" id="stage">' . $stage . $whos . '<span class="dur" id="dur"' . ( $first ? '' : ' hidden' ) . '>' . esc_html( $first ) . '</span></div></div>'
+		. '<div class="panels" id="panels" role="group" aria-roledescription="carousel" aria-label="' . esc_attr__( 'The creators', 'generation-maine' ) . '" tabindex="0">' . $panels . '</div>'
+		. '<div class="where" id="where"><span class="n" id="wn">01 / ' . esc_html( $count ) . '</span><span class="segs" id="segs">' . $segs . '</span>'
 		. '<span class="next" id="wnext" data-next="' . esc_attr( $next ) . '" data-last="' . esc_attr( $last ) . '"></span></div>'
-		. '</div></div></section>';
+		. '</div></div></section>'
+		. '<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="' . esc_attr__( 'Clip preview', 'generation-maine' ) . '" hidden>'
+		. '<div class="vbar"><span class="n" id="vn">01 / ' . esc_html( $count ) . '</span><button type="button" class="vclose" id="vclose" aria-label="' . esc_attr__( 'Close', 'generation-maine' ) . '">'
+		. '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3l10 10M13 3 3 13"/></svg></button></div>'
+		. '<div class="vtrack" id="vtrack">' . $slides . '</div></div>';
 }
 
 /**
@@ -402,7 +413,7 @@ function gm_render_creators( $args = array() ) {
  * @return string
  */
 function gm_creators_shortcode( $atts ) {
-	$atts = shortcode_atts( array( 'limit' => 24, 'layout' => 'roster' ), $atts, 'gm_creators' );
+	$atts = shortcode_atts( array( 'limit' => 24, 'layout' => 'stepper' ), $atts, 'gm_creators' );
 	return gm_render_creators( $atts );
 }
 add_shortcode( 'gm_creators', 'gm_creators_shortcode' );

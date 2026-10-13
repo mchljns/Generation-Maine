@@ -211,3 +211,13 @@ Found and fixed:
 Known and accepted: on a landscape phone the clip cap gives a wide crop of a vertical clip. On a 320 by 568 screen the social links of the first card sit just below the fold.
 
 Follow-up, same day: the 4:5 crop limited the social preview, so a tap-to-expand viewer was added. Tested at 320, 375 and 390 wide: the frame holds 9:16 within 1 percent, the close button is 48 px, focus moves to it on open and back to the clip on close, body scroll locks, slides load on demand, Escape, backdrop tap and the back button all close it, and the page scroll position is unchanged after closing. On desktop the viewer is display none and a click does nothing.
+
+## WordPress theme against the v2 page (Oct 13, 2026)
+
+Tested in a local WordPress 7.2 (alpha) on PHP 8.4 with nine placeholder creators seeded from the v2 media. Scripts: `qa/wordpress/` (compare, states, editor, qa) and the website-build skill's `measure.mjs`, `contrast.mjs` and `copy_check.py`.
+
+Measured and matching: at 1440 by 900 every section height is identical to the v2 page (bar 68, hero 820, about 847, creators 167, stories 6588, follow 921, newsletter 169, footer 323) and so is the page height, 9734. Fonts match on every sampled element. The carousel, the stepper and the tap to expand viewer pass the same checks as the v2 page at 320, 375, 390, 430, 768, 844 by 390 and 1440. Overflow 0 and no console errors at every size. The phone menu sits outside the bar, its links are 44 px and its button 48 px, and it closes on a link tap. Logged in, the bar sits under the admin bar. In the editor the front page has 48 blocks, none invalid, in the page's fonts.
+
+Found and fixed: the old marigold #EFB443 was still in the theme's logos, icon and mural; a long Substack address overflowed the follow row by 22 px at 320 (fixed in the v2 page too); the phone menu was hidden inside the bar on phones; the bars in the editor did not show; option registration failed under the REST API; a PHP 8 only function would have broken PHP 7.4; the copy check flagged the headline's gold word as italic markup, so it is now a span in both builds; the draft note in the about section failed contrast and was darkened in both.
+
+Known and accepted: at 390 the WordPress page is shorter than the v2 preview because the placeholder creators carry no social links and, until the Substack address is set, visitors see no signup form. Nine 150 px portraits load at open on desktop because they sit within the browser's lazy-load distance.

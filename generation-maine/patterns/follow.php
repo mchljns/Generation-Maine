@@ -3,61 +3,37 @@
  * Title: Follow
  * Slug: generation-maine/follow
  * Categories: generation-maine
- * Description: The four channels. Edit each handle and link. The marks come from the stylesheet.
+ * Description: Where the content lives: the channels as a list, then the newsletter signup. Channel addresses, handles and the Substack page are set under Settings > Generation Maine.
  *
  * @package generation-maine
  */
 ?>
-<!-- wp:group {"tagName":"section","anchor":"follow","className":"follow reveal bg-sage","layout":{"type":"default"}} -->
-<section id="follow" class="wp-block-group follow reveal bg-sage"><!-- wp:group {"className":"w","layout":{"type":"default"}} -->
-<div class="wp-block-group w"><!-- wp:heading {"className":"h2 gm-dot"} -->
-<h2 class="wp-block-heading h2 gm-dot">Follow along</h2>
+<!-- wp:group {"tagName":"section","anchor":"follow","className":"block follow","layout":{"type":"default"}} -->
+<section id="follow" class="wp-block-group block follow"><!-- wp:group {"className":"w","layout":{"type":"default"}} -->
+<div class="wp-block-group w"><!-- wp:group {"className":"head","layout":{"type":"default"}} -->
+<div class="wp-block-group head"><!-- wp:heading -->
+<h2 class="wp-block-heading">Where to find it</h2>
 <!-- /wp:heading -->
 
-<!-- wp:html -->
-<span class="rule" aria-hidden="true"></span>
-<!-- /wp:html -->
-
-<!-- wp:group {"className":"row","layout":{"type":"default"}} -->
-<div class="wp-block-group row"><!-- wp:group {"className":"row-in instagram","layout":{"type":"default"}} -->
-<div class="wp-block-group row-in instagram"><!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Instagram</h3>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p><a href="#">[@handle]</a></p>
+<!-- wp:paragraph {"className":"lede"} -->
+<p class="lede">Nothing is published on this page. The clips live on the feeds. The paperwork lives in the newsletter.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
-<!-- wp:group {"className":"row-in tiktok","layout":{"type":"default"}} -->
-<div class="wp-block-group row-in tiktok"><!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">TikTok</h3>
-<!-- /wp:heading -->
+<!-- wp:generation-maine/follow /-->
 
-<!-- wp:paragraph -->
-<p><a href="#">[@handle]</a></p>
-<!-- /wp:paragraph --></div>
+<!-- wp:group {"anchor":"newsletter","className":"nl","layout":{"type":"default"}} -->
+<div id="newsletter" class="wp-block-group nl"><!-- wp:group {"layout":{"type":"default"}} -->
+<div class="wp-block-group"><!-- wp:paragraph {"className":"k k-bars"} -->
+<p class="k k-bars">Newsletter</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">The paperwork behind each clip, by email.</h3>
+<!-- /wp:heading --></div>
 <!-- /wp:group -->
 
-<!-- wp:group {"className":"row-in youtube","layout":{"type":"default"}} -->
-<div class="wp-block-group row-in youtube"><!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">YouTube</h3>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p><a href="#">[@handle]</a></p>
-<!-- /wp:paragraph --></div>
-<!-- /wp:group -->
-
-<!-- wp:group {"className":"row-in substack","layout":{"type":"default"}} -->
-<div class="wp-block-group row-in substack"><!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Substack</h3>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p><a href="#">[name].substack.com</a></p>
-<!-- /wp:paragraph --></div>
-<!-- /wp:group --></div>
+<!-- wp:generation-maine/newsletter /--></div>
 <!-- /wp:group --></div>
 <!-- /wp:group --></section>
 <!-- /wp:group -->

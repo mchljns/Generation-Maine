@@ -3,45 +3,35 @@
  * Title: About
  * Slug: generation-maine/about
  * Categories: generation-maine
- * Description: Who makes it, what it is about, where to find it. Starts on the green and turns white as it reaches the top of the screen.
+ * Description: What the project hopes to achieve: a photograph of a real Maine street beside one statement and the paragraph behind it. Replace the photograph and the draft statement before launch.
  *
  * @package generation-maine
  */
 ?>
-<!-- wp:group {"tagName":"section","anchor":"about","className":"about reveal","layout":{"type":"default"}} -->
-<section id="about" class="wp-block-group about reveal"><!-- wp:group {"className":"w","layout":{"type":"default"}} -->
-<div class="wp-block-group w"><!-- wp:heading {"className":"h2 gm-dot"} -->
-<h2 class="wp-block-heading h2 gm-dot">Made by the people it is about</h2>
-<!-- /wp:heading -->
-
-<!-- wp:group {"className":"cols","layout":{"type":"default"}} -->
-<div class="wp-block-group cols"><!-- wp:group {"className":"row-in","layout":{"type":"default"}} -->
-<div class="wp-block-group row-in"><!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Who makes it</h3>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>Young Mainers with a phone and a story. They pick what to film and say it their own way.</p>
-<!-- /wp:paragraph --></div>
+<!-- wp:group {"tagName":"section","anchor":"about","className":"block about","layout":{"type":"default"}} -->
+<section id="about" class="wp-block-group block about"><!-- wp:group {"className":"w","layout":{"type":"default"}} -->
+<div class="wp-block-group w"><!-- wp:group {"className":"body","layout":{"type":"default"}} -->
+<div class="wp-block-group body"><!-- wp:group {"className":"media","layout":{"type":"default"}} -->
+<div class="wp-block-group media"><!-- wp:image {"sizeSlug":"full","linkDestination":"none","className":"ph"} -->
+<figure class="wp-block-image size-full ph"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/img/about.jpg' ) ); ?>" alt="<?php esc_attr_e( 'Lisbon Street, Lewiston, Maine', 'generation-maine' ); ?>"/></figure>
+<!-- /wp:image --></div>
 <!-- /wp:group -->
 
-<!-- wp:group {"className":"row-in","layout":{"type":"default"}} -->
-<div class="wp-block-group row-in"><!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">What it is about</h3>
-<!-- /wp:heading -->
+<!-- wp:group {"className":"aim","layout":{"type":"default"}} -->
+<div class="wp-block-group aim"><!-- wp:paragraph {"className":"k k-bars"} -->
+<p class="k k-bars">What we hope to achieve</p>
+<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
-<p>The rules behind everyday costs. Leases, licenses, permits, wages, and the fine print nobody reads until it costs them.</p>
-<!-- /wp:paragraph --></div>
-<!-- /wp:group -->
+<!-- wp:paragraph {"className":"big"} -->
+<p class="big">Everyone who leaves Maine has a reason. We want the people who stay to show what it costs, one rule at a time.</p>
+<!-- /wp:paragraph -->
 
-<!-- wp:group {"className":"row-in","layout":{"type":"default"}} -->
-<div class="wp-block-group row-in"><!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Where to find it</h3>
-<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"note"} -->
+<p class="note">[CONFIRM: the aim, in Maine Policy Institute's words. This is a draft to edit.]</p>
+<!-- /wp:paragraph -->
 
-<!-- wp:paragraph -->
-<p>Short videos on TikTok, Instagram and YouTube. The full story, with the numbers, by email.</p>
+<!-- wp:paragraph {"className":"goal"} -->
+<p class="goal">Generation Maine wants young people in Maine to see the rules behind what their lives cost, and to say so in public. Young Mainers film where they live. Each clip takes one rule, a lease clause, a license fee, a permit, a line on a pay stub, and shows what it says and what it costs. The clips go out on the creators' own accounts, where their friends already are. The newsletter follows the paperwork behind each one, with the numbers. The more people see the same rule from different towns, the harder it gets to ignore.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group --></div>
 <!-- /wp:group --></div>

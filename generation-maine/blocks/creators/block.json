@@ -5,16 +5,42 @@
 	"title": "Creators",
 	"category": "widgets",
 	"icon": "groups",
-	"description": "The creators, read from the Creators posts. Roster: a grid of tiles, one per creator, town only until a creator is marked ready, then the face, name and handle linking to their feeds. Stepper: one pinned clip with the details beside it.",
-	"keywords": [ "creators", "stories", "clips" ],
+	"description": "The creators, read from the Creators posts. Stepper (the page's layout): one pinned clip that changes as each story reaches the middle of the screen, and on phones a left to right carousel with a tap to open each clip full size. Roster: a grid of tiles linking to each creator's feeds.",
+	"keywords": [
+		"creators",
+		"stories",
+		"clips"
+	],
 	"textdomain": "generation-maine",
 	"attributes": {
-		"layout": { "type": "string", "default": "roster", "enum": [ "roster", "stepper" ] },
-		"limit": { "type": "number", "default": 24 },
-		"next": { "type": "string", "default": "" },
-		"last": { "type": "string", "default": "" }
+		"layout": {
+			"type": "string",
+			"default": "stepper",
+			"enum": [
+				"roster",
+				"stepper"
+			]
+		},
+		"limit": {
+			"type": "number",
+			"default": 24
+		},
+		"next": {
+			"type": "string",
+			"default": ""
+		},
+		"last": {
+			"type": "string",
+			"default": ""
+		}
 	},
-	"supports": { "html": false, "align": [ "full" ], "anchor": true },
+	"supports": {
+		"html": false,
+		"align": [
+			"full"
+		],
+		"anchor": true
+	},
 	"editorScript": "file:./index.js",
 	"render": "file:./render.php"
 }

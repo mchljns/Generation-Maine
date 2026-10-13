@@ -18,16 +18,22 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function gm_seo() {
+	$same_as = array();
+	foreach ( gm_channels() as $c ) {
+		if ( $c['url'] ) {
+			$same_as[] = $c['url'];
+		}
+	}
 	return apply_filters(
 		'gm_seo',
 		array(
-			'title'       => 'Generation Maine | Young Mainers on building a life here',
-			'description' => 'Short videos by young Maine creators about housing, jobs and staying in Maine. An initiative of Maine Policy Institute.',
+			'title'       => 'Generation Maine: young Mainers on the rules that shape their lives',
+			'description' => 'Young Mainers film the rules that shape their lives. Short videos on TikTok, Instagram and YouTube, and the full story by email. A Maine Policy Institute project.',
 			'image'       => get_theme_file_uri( 'assets/img/share-card.jpg' ),
-			'image_alt'   => 'Generation Maine. Young Mainers on building a life here. An initiative of Maine Policy Institute.',
+			'image_alt'   => 'Generation Maine',
 			'parent_name' => 'Maine Policy Institute',
-			'parent_url'  => 'https://mainepolicy.org/', // [CONFIRM: Maine Policy Institute URL].
-			'same_as'     => array(), // Add channel URLs once handles exist, e.g. 'https://www.instagram.com/HANDLE/'.
+			'parent_url'  => 'https://mainepolicy.org/',
+			'same_as'     => $same_as,
 		)
 	);
 }

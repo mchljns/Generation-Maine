@@ -1,133 +1,102 @@
-/* Generation Maine: the page's motion. One file, no dependencies.
-   The hero mural draws the mark; the period pulses like a place; the page scrubs from green to white with the scroll;
-   the bar folds into a capsule; the creators step through while pinned; rules and rows arrive as sections enter.
-   Everything respects prefers-reduced-motion. Every piece checks for its element so any section can be removed. */
-(function () {
-	var D = window.GMDATA || { rows: [], towns: [] };
-	var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-	var $ = function (s, r) { return (r || document).querySelector(s); };
-	var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-	document.documentElement.classList.add('js');
-
-	// Headings marked .gm-dot end in the Marigold period: the last word and the dot stay together on one line.
-	$$('.gm-dot').forEach(function (h) {
-		if ($('.d', h)) { return; }
-		var walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT), last = null, n;
-		while ((n = walker.nextNode())) { if (n.nodeValue.trim()) { last = n; } }
-		if (!last) { return; }
-		var text = last.nodeValue.replace(/\s+$/, ''), i = text.lastIndexOf(' ');
-		var head = i >= 0 ? text.slice(0, i + 1) : '', word = i >= 0 ? text.slice(i + 1) : text;
-		var b = document.createElement('b'); b.className = 'nw'; b.textContent = word;
-		var d = document.createElement('i'); d.className = 'd' + (h.classList.contains('gm-pulse') ? ' pulse' : ''); b.appendChild(d);
-		last.nodeValue = head; last.parentNode.insertBefore(b, last.nextSibling);
-	});
-
-	// The hero: headline, lede and buttons rise in.
-	var rises = $$('.hero .rise');
-	if (!reduced && rises.length) {
-		rises.forEach(function (el) { el.classList.add('pre'); });
-		requestAnimationFrame(function () { requestAnimationFrame(function () { rises.forEach(function (el, k) { setTimeout(function () { el.classList.remove('pre'); }, k * 120); }); }); });
-	}
-
-	// The mural: the logo's sixteen lines at hero scale, drawing in from the top.
-	var m = $('#mural');
-	if (m && D.rows && D.rows.length) {
-		var ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 720 720');
-		D.rows.forEach(function (row, i) { row.runs.forEach(function (r) { var p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + r[0] + ' ' + row.y + ' L' + r[1] + ' ' + row.y); p.setAttribute('stroke', '#FFFFFF'); p.setAttribute('stroke-width', row.w); p.setAttribute('stroke-linecap', 'round'); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * 45) + 'ms'; svg.appendChild(p); }); });
-		m.appendChild(svg);
-		new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { m.classList.add('on'); } }); }, { threshold: 0.2 }).observe(m);
-	}
-
-	// The page color, worked out on every frame from scroll position: green under the hero, scrubbing to white as the about
-	// section rises, then whatever the section at the middle of the screen asks for (data-bg, or a bg-* class).
-	var aboutEl = $('.about'), bgs = $$('[data-bg], [class*="bg-"]'), bgNow = '';
-	var canMix = window.CSS && CSS.supports && CSS.supports('color', 'color-mix(in oklab, red, blue)');
-	function bgOf(el) { if (el.dataset.bg) { return el.dataset.bg; } var mm = /(?:^|\s)bg-([a-z]+)/.exec(el.className); return mm ? 'var(--' + mm[1] + ')' : 'var(--bi)'; }
-	function paint() {
-		var c = 'var(--bi)', t = 1;
-		if (aboutEl) {
-			var top = aboutEl.getBoundingClientRect().top, start = top + scrollY, end = innerHeight * 0.6;
-			t = Math.min(1, Math.max(0, (start - top) / (start - end)));
-			aboutEl.classList.toggle('lit', t >= 0.4);
-			document.body.classList.toggle('scrub', t > 0 && aboutEl.getBoundingClientRect().bottom > 0);
-		}
-		if (t <= 0) { c = 'var(--sp)'; }
-		else if (t < 1) { c = canMix ? 'color-mix(in oklab, var(--sp), var(--bi) ' + (t * 100).toFixed(1) + '%)' : (t < 0.4 ? 'var(--sp)' : 'var(--bi)'); }
-		else { var mid = innerHeight / 2; bgs.forEach(function (el) { if (el.getBoundingClientRect().top <= mid) { c = bgOf(el); } }); }
-		if (c !== bgNow) { bgNow = c; document.body.style.background = c; }
-	}
-
-	// The creators: one pinned clip and one set of details that step with the scroll.
-	var stage = $('#stage'), stageVids = stage ? $$('video, img.clip', stage) : [], whos = stage ? $$('.who', stage) : [], marks = $$('#segs button'), dur = $('#dur'), wn = $('#wn'), wnext = $('#wnext');
-	var panels = $$('.panel'), panelsEl = $('#panels'), storiesEl = $('#stories'), cur = -1;
-	function show(i) {
-		if (i === cur || !panels[i]) { return; }
-		var back = i < cur;
-		panels.forEach(function (p, k) { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); });
-		cur = i;
-		stageVids.forEach(function (v, k) { var on = k === i; v.classList.toggle('on', on); if (!v.play) { return; } if (on) { var pr = v.play(); if (pr && pr.catch) { pr.catch(function () {}); } } else { v.pause(); } });
-		whos.forEach(function (w, k) { w.classList.toggle('on', k === i); });
-		marks.forEach(function (mk, k) { mk.classList.toggle('on', k === i); mk.classList.toggle('done', k < i); });
-		if (dur && stageVids[i]) { dur.textContent = stageVids[i].dataset.dur || ''; dur.hidden = !stageVids[i].dataset.dur; }
-		if (wn) { wn.textContent = String(i + 1).replace(/^(\d)$/, '0$1') + ' / ' + String(panels.length).replace(/^(\d)$/, '0$1'); }
-		if (wnext) { var nx = marks[i + 1]; wnext.textContent = nx ? (wnext.dataset.next || 'Next: ') + nx.dataset.name : (wnext.dataset.last || 'Last one'); }
-	}
-	var stageEl = $('.stage');
-	function fit() { if (!panelsEl) { return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; if (stageEl) { stageEl.style.removeProperty('--stageh'); } return; } var h = 0; panels.forEach(function (p) { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px'; if (stageEl) { var top = 16, row = 28 + 12, room = innerHeight - top - (h + 6) - 14 * 2 - row - 12, colw = stageEl.clientWidth || (innerWidth - 32); stageEl.style.setProperty('--stageh', Math.round(Math.max(200, Math.min(innerHeight * 0.66, colw * 16 / 9, room))) + 'px'); } }
-	function step() { if (!storiesEl || !panels.length) { return; } var total = storiesEl.offsetHeight - innerHeight; var t = total > 0 ? Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)) : 0; show(Math.min(panels.length - 1, Math.floor(t * panels.length))); }
-	marks.forEach(function (mk, k) { mk.addEventListener('click', function () { var total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + 0.5) / panels.length * total }); }); });
-	if (reduced) { stageVids.forEach(function (v) { if (v.play) { v.controls = true; } }); }
-	fit(); step(); if (cur < 0 && panels.length) { show(0); }
-	if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { fit(); step(); }); }
-	addEventListener('load', fit);
-
-	// The bar: folds into the capsule on the first scroll, hides on the way down past the hero, returns on the way up.
-	var bar = $('#topbar'), heroEl = $('.hero'), prog = $('#prog'), lastY = scrollY, ticking = false;
-	var links = bar ? $$('nav a', bar) : [];
-	links.forEach(function (l) { var hsh = (l.getAttribute('href') || '').split('#')[1]; if (hsh) { l.dataset.for = hsh; } });
-	var ao = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { links.forEach(function (l) { l.classList.toggle('on', l.dataset.for === e.target.id); }); } }); }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
-	links.forEach(function (l) { var el = l.dataset.for && document.getElementById(l.dataset.for); if (el) { ao.observe(el); } });
-	addEventListener('scroll', function () {
-		if (ticking) { return; } ticking = true;
-		requestAnimationFrame(function () {
-			var y = scrollY, dy = y - lastY;
-			if (bar) {
-				bar.classList.toggle('scrolled', y > 12);
-				var hh = heroEl ? heroEl.offsetHeight : 0;
-				if (y > hh && dy > 6) { bar.classList.add('hide'); } else if (dy < -6 || y <= hh) { bar.classList.remove('hide'); }
-				var max = document.documentElement.scrollHeight - innerHeight; if (prog) { prog.style.width = (Math.min(1, y / max) * 100).toFixed(1) + '%'; }
-			}
-			lastY = y; paint(); step(); ticking = false;
-		});
-	}, { passive: true });
-	addEventListener('resize', function () { fit(); step(); paint(); });
-	paint();
-
-	// The phone menu: the sheet takes a copy of the bar's links, with the dot after each.
-	var sheet = $('#sheet'), menu = $('#menu');
-	if (sheet && menu && bar) {
-		var sn = $('nav', sheet);
-		if (sn && !sn.children.length) { links.forEach(function (l) { var a = document.createElement('a'); a.href = l.getAttribute('href'); a.textContent = l.textContent; var d = document.createElement('i'); d.className = 'd'; a.appendChild(d); sn.appendChild(a); }); }
-		var setMenu = function (o) { sheet.classList.toggle('open', o); bar.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
-		menu.addEventListener('click', function () { setMenu(!sheet.classList.contains('open')); });
-		$$('a', sheet).forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
-		addEventListener('keydown', function (e) { if (e.key === 'Escape') { setMenu(false); } });
-	}
-
-	// Sections: marked before they enter, released as they do. The footer mark draws in and its dot pings.
-	var secs = $$('.reveal'); secs.forEach(function (sc) { sc.classList.add('pre'); });
-	var so = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.remove('pre'); so.unobserve(e.target); } }); }, { threshold: 0.18 });
-	secs.forEach(function (sc) { so.observe(sc); });
-	var site = $('.site'); if (site) { new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { site.classList.add('on'); } }); }, { threshold: 0.3 }).observe(site); }
-
-	// The signup form hands off to Substack; the page shows its own line.
-	$$('form.gm-newsletter').forEach(function (f) {
-		f.addEventListener('submit', function (ev) {
-			var em = $('input[type=email]', f), ok = $('.gm-newsletter__ok', f), btn = $('button', f);
-			if (em && !em.checkValidity()) { ev.preventDefault(); em.focus(); em.setAttribute('aria-invalid', 'true'); return; }
-			if (em) { em.removeAttribute('aria-invalid'); }
-			if (ok && f.dataset.confirm) { ok.textContent = f.dataset.confirm; ok.hidden = false; requestAnimationFrame(function () { ok.classList.add('show'); }); }
-			if (btn) { btn.disabled = true; }
-		});
-	});
+/* Generation Maine: the page's one script. Generated by brand/src/build_theme.py from the v2 page; edit
+   brand/src/build_splash_lean.py and rebuild. */
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // hero type rises in
+  const rise = [...document.querySelectorAll('.hero .rise')];
+  requestAnimationFrame(() => requestAnimationFrame(() => rise.forEach((el, i) => setTimeout(() => el.classList.add('in'), reduced ? 0 : 90 * i))));
+  // the mural, on Family A: sixteen stripes drawing themselves in
+  const m = document.getElementById('mural');
+  if (m) {
+    const d = JSON.parse(document.getElementById('maine-data').textContent), ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 720 720'); svg.setAttribute('aria-hidden', 'true');
+    const defs = document.createElementNS(ns, 'defs'), cp = document.createElementNS(ns, 'clipPath'); cp.setAttribute('id', 'muralclip');
+    const cpp = document.createElementNS(ns, 'path'); cpp.setAttribute('d', d.clip); cp.appendChild(cpp); defs.appendChild(cp); svg.appendChild(defs);
+    const g = document.createElementNS(ns, 'g'); g.setAttribute('clip-path', 'url(#muralclip)'); svg.appendChild(g);
+    d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || '#FFFFFF'); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * (matchMedia('(max-width: 900px)').matches ? 35 : (d.stagger || 35))) + 'ms'; g.appendChild(p); });
+    m.appendChild(svg); requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('on')));
+  }
+  // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Clips are images or videos;
+  // either way they carry data-src and load when their card is current or next door.
+  const phone = matchMedia('(max-width: 900px)');
+  const panelsEl = document.getElementById('panels'), storiesEl = document.getElementById('stories');
+  if (panelsEl && storiesEl) {
+  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('.clip')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
+  const panels = [...document.querySelectorAll('.panel')]; let cur = -1;
+  const load = el => { if (el && el.dataset.src && !el.getAttribute('src')) el.src = el.dataset.src; };
+  const playOnly = (els, i) => els.forEach((v, k) => { if (!v || !v.play) return; if (k === i) v.play().catch(() => {}); else v.pause(); });
+  // clips load when their card is current or next door, not all nine at once
+  const hydrate = i => { const near = (els) => els.filter((e, k) => Math.abs(k - i) <= 1); near(panels.map(p => p.querySelector('.clip'))).forEach(load); if (!phone.matches) near(stageVids).forEach(load); };
+  // the section's tint on phones, one per creator, cycling through the family's light fields
+  const TINTS = ['#EAF1F8', '#F8F3E2', '#E3ECF6', '#FFFFFF', '#EEF3F9', '#F6EFDC', '#E8EFF7', '#FBF7EA', '#EAF1F8'];
+  const headEl = document.getElementById('creators'); const tint = i => { const c = phone.matches ? TINTS[i % TINTS.length] : ''; storiesEl.style.backgroundColor = c; if (headEl) headEl.style.backgroundColor = c; };
+  function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i; hydrate(i);
+    stageVids.forEach((v, k) => v.classList.toggle('on', k === i)); playOnly(phone.matches ? [] : stageVids, i); playOnly(phone.matches ? panels.map(p => p.querySelector('video.clip')) : [], i); if (phone.matches) stageVids.forEach(v => v.pause && v.pause()); else panels.forEach(p => { const v = p.querySelector('video.clip'); if (v) v.pause(); });
+    whos.forEach((w, k) => w.classList.toggle('on', k === i)); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) { dur.textContent = stageVids[i].dataset.dur || ''; dur.hidden = !stageVids[i].dataset.dur; }
+    wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? (wnext.dataset.next || 'Next: ') + nx.dataset.name : (wnext.dataset.last || 'Last one'); marks.forEach((m, k) => { if (k === i) m.setAttribute('aria-current', 'true'); else m.removeAttribute('aria-current'); }); tint(i); }
+  const stageEl = document.querySelector('.stage');
+  const gutter = () => parseFloat(getComputedStyle(panelsEl).paddingLeft) || 0;
+  // the current card is the one whose left edge sits nearest the gutter
+  const nearest = () => { const edge = panelsEl.getBoundingClientRect().left + gutter(); let best = 0, bd = Infinity; panels.forEach((p, k) => { const d = Math.abs(p.getBoundingClientRect().left - edge); if (d < bd) { bd = d; best = k; } }); return best; };
+  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); const r = panels[k].getBoundingClientRect(), c = panelsEl.getBoundingClientRect(); panelsEl.scrollTo({ left: panelsEl.scrollLeft + r.left - c.left - gutter(), behavior: reduced ? 'auto' : 'smooth' }); hydrate(k); };
+  const onTrack = () => { if (!phone.matches) return; show(nearest()); };
+  panelsEl.addEventListener('scroll', onTrack, { passive: true });
+  panelsEl.addEventListener('keydown', e => { if (!phone.matches) return; if (e.key === 'ArrowRight') { e.preventDefault(); goTo(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(cur - 1); } });
+  const fit = () => { if (!stageEl || phone.matches) { panelsEl.style.height = ''; if (stageEl) stageEl.style.removeProperty('--stageh'); return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
+    const top = 84 + 16, room = innerHeight - top - (h + 6) - 14 - 20, colw = stageEl.clientWidth || (innerWidth - 72);
+    const sh = Math.round(Math.max(240, Math.min(colw * 16 / 9, room))); stageEl.style.setProperty('--stageh', sh + 'px'); document.querySelector('.where').style.height = sh + 'px'; };
+  const step = () => { if (phone.matches) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
+  fit(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fit(); step(); }); addEventListener('load', fit);
+  marks.forEach((m, k) => m.addEventListener('click', () => { if (phone.matches) { goTo(k); return; } const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
+  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); onTrack(); hydrate(cur); }); step(); if (cur < 0) show(0); tint(cur);
+  if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
+  // tap to expand: the full frame over the page, one slide per creator
+  const viewer = document.getElementById('viewer'), vtrack = document.getElementById('vtrack'), vn = document.getElementById('vn'), vclose = document.getElementById('vclose');
+  if (viewer && vtrack) {
+    const slides = [...vtrack.querySelectorAll('.slide')]; let vcur = -1, lastFocus = null, pushed = false;
+    const svids = slides.map(sl => sl.querySelector('video.clip'));
+    const vhydrate = i => slides.forEach((sl, k) => { if (Math.abs(k - i) <= 1) load(sl.querySelector('.clip')); });
+    const vshow = i => { if (i === vcur) return; vcur = i; vn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0'); vhydrate(i); playOnly(svids, i); };
+    const vnearest = () => { const c = vtrack.getBoundingClientRect(), cx = c.left + c.width / 2; let best = 0, bd = Infinity; slides.forEach((sl, k) => { const r = sl.getBoundingClientRect(), d = Math.abs(r.left + r.width / 2 - cx); if (d < bd) { bd = d; best = k; } }); return best; };
+    const openViewer = i => { if (!phone.matches) return; lastFocus = document.activeElement; vcur = -1; viewer.hidden = false; vtrack.scrollLeft = slides[i].offsetLeft; vshow(i);
+      document.documentElement.classList.add('vopen'); requestAnimationFrame(() => viewer.classList.add('in')); vclose.focus({ preventScroll: true });
+      try { history.pushState({ gmViewer: true }, ''); pushed = true; } catch (e) { pushed = false; } };
+    const closeViewer = (fromHistory) => { if (viewer.hidden) return; viewer.classList.remove('in'); document.documentElement.classList.remove('vopen'); playOnly(svids, -1);
+      const done = () => { viewer.hidden = true; if (vcur >= 0) { goTo(vcur); show(vcur); } if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true }); };
+      if (reduced) done(); else setTimeout(done, 220);
+      if (pushed && !fromHistory) { pushed = false; history.back(); } else pushed = false; };
+    panels.forEach((p, k) => { const pv = p.querySelector('.pv'); if (!pv) return; pv.addEventListener('click', () => openViewer(k)); pv.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openViewer(k); } }); });
+    vclose.addEventListener('click', () => closeViewer(false));
+    viewer.addEventListener('click', e => { if (!e.target.closest('.fr, .vbar, .cap')) closeViewer(false); });
+    addEventListener('keydown', e => { if (viewer.hidden) return; if (e.key === 'Escape') closeViewer(false); if (e.key === 'ArrowRight') vtrack.scrollBy({ left: vtrack.clientWidth, behavior: reduced ? 'auto' : 'smooth' }); if (e.key === 'ArrowLeft') vtrack.scrollBy({ left: -vtrack.clientWidth, behavior: reduced ? 'auto' : 'smooth' }); });
+    vtrack.addEventListener('scroll', () => vshow(vnearest()), { passive: true });
+    addEventListener('popstate', () => { if (!viewer.hidden) closeViewer(true); });
+    phone.addEventListener('change', () => { if (!phone.matches && !viewer.hidden) closeViewer(false); });
+  }
+  }
+  // the hero loop: where WebM cannot play, the five plates drift and dissolve in CSS instead
+  const hv = document.querySelector('.hero .bg video');
+  if (hv) { const ok = hv.canPlayType('video/webm; codecs="vp9"') || hv.canPlayType('video/webm'); if (!ok) document.querySelector('.hero').classList.add('plates-on'); else { hv.play().catch(() => document.querySelector('.hero').classList.add('plates-on')); } }
+  // the footer mark draws once the page is scrolled to its end
+  const site = document.querySelector('.site'), siteMark = site && site.querySelector('.lk');
+  if (siteMark) {
+    const fire = () => { site.classList.add('on'); removeEventListener('scroll', atEnd); };
+    const atEnd = () => { if (innerHeight + scrollY >= document.documentElement.scrollHeight - 24) fire(); };
+    addEventListener('scroll', atEnd, { passive: true }); atEnd();
+    new IntersectionObserver(es => es.forEach(e => { if (e.intersectionRatio >= .95) fire(); }), { threshold: [.95, 1] }).observe(siteMark);
+  }
+  // phone menu
+  const sheet = document.getElementById('sheet'), menu = document.getElementById('menu');
+  if (sheet && menu) {
+  const sn = sheet.querySelector('nav');
+  if (sn && !sn.children.length) document.querySelectorAll('.top nav a').forEach(a => sn.appendChild(a.cloneNode(true)));
+  if (!sheet.querySelector('.btn')) { const c = document.querySelector('.top .cta a, .top a.cta'); if (c) { const b = document.createElement('a'); b.className = 'btn b1'; b.href = c.getAttribute('href'); b.textContent = c.textContent; sheet.appendChild(b); } }
+  const setMenu = o => { sheet.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
+  menu.addEventListener('click', () => setMenu(!sheet.classList.contains('open')));
+  sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+  }
+  // the newsletter form hands the address to Substack, which prefills it
+  const f = document.getElementById('nl');
+  if (f) f.addEventListener('submit', e => { e.preventDefault(); const em = f.email.value.trim(); if (!em) { f.email.focus(); return; } const u = new URL(f.action); u.searchParams.set('email', em); window.open(u.toString(), '_blank', 'noopener'); });
 })();
