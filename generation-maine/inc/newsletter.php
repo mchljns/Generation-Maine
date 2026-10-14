@@ -40,7 +40,16 @@ function gm_render_newsletter_form() {
 			: '';
 	}
 	$note = gm_setting( 'gm_newsletter_note' );
-	return '<form id="nl" action="' . esc_url( gm_utm( $url ) ) . '" method="get" target="_blank" rel="noopener">'
+	// a GET form replaces the query string of its action, so the tracking tags (and anything in the saved address) also
+	// travel as hidden fields for visitors without JavaScript
+	$hidden = '';
+	wp_parse_str( (string) wp_parse_url( gm_utm( $url ), PHP_URL_QUERY ), $query );
+	foreach ( $query as $k => $v ) {
+		if ( is_string( $v ) && 'email' !== $k ) {
+			$hidden .= '<input type="hidden" name="' . esc_attr( $k ) . '" value="' . esc_attr( $v ) . '">';
+		}
+	}
+	return '<form id="nl" action="' . esc_url( gm_utm( $url ) ) . '" method="get" target="_blank" rel="noopener">' . $hidden
 		. '<label for="em" style="position:absolute;left:-9999px">' . esc_html__( 'Email', 'generation-maine' ) . '</label>'
 		. '<input id="em" name="email" type="email" placeholder="you@example.com" autocomplete="email" required inputmode="email">'
 		. '<button class="btn b1" type="submit">' . esc_html__( 'Sign up', 'generation-maine' ) . '</button>'

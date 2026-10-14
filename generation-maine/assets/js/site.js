@@ -8,13 +8,17 @@
   // the mural, on Family A: sixteen stripes drawing themselves in
   const m = document.getElementById('mural');
   if (m) {
-    const d = JSON.parse(document.getElementById('maine-data').textContent), ns = 'http://www.w3.org/2000/svg';
+    const de = document.getElementById('maine-data'), d = de ? JSON.parse(de.textContent) : {}, ns = 'http://www.w3.org/2000/svg';
+    // the theme draws the mural on the server; the static page builds it here. Either way the script only animates it.
+    if (!m.querySelector('svg') && d.lines) {
     const svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 720 720'); svg.setAttribute('aria-hidden', 'true');
     const defs = document.createElementNS(ns, 'defs'), cp = document.createElementNS(ns, 'clipPath'); cp.setAttribute('id', 'muralclip');
     const cpp = document.createElementNS(ns, 'path'); cpp.setAttribute('d', d.clip); cp.appendChild(cpp); defs.appendChild(cp); svg.appendChild(defs);
     const g = document.createElementNS(ns, 'g'); g.setAttribute('clip-path', 'url(#muralclip)'); svg.appendChild(g);
-    d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || '#FFFFFF'); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * (matchMedia('(max-width: 900px)').matches ? 35 : (d.stagger || 35))) + 'ms'; g.appendChild(p); });
-    m.appendChild(svg); requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('on')));
+    d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || '#FFFFFF'); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); g.appendChild(p); });
+    m.appendChild(svg); }
+    m.querySelectorAll('g path').forEach((p, i) => { p.style.transitionDelay = (i * (matchMedia('(max-width: 900px)').matches ? 35 : (d.stagger || 35))) + 'ms'; });
+    requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('on')));
   }
   // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Clips are images or videos;
   // either way they carry data-src and load when their card is current or next door.
@@ -23,8 +27,11 @@
   if (panelsEl && storiesEl) {
   const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('.clip')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
   const panels = [...document.querySelectorAll('.panel')]; let cur = -1;
-  const load = el => { if (el && el.dataset.src && !el.getAttribute('src')) el.src = el.dataset.src; };
-  const playOnly = (els, i) => els.forEach((v, k) => { if (!v || !v.play) return; if (k === i) v.play().catch(() => {}); else v.pause(); });
+  const pauseBtn = document.getElementById('cpause'); let paused = reduced;
+  // a loaded clip shows its moving source, or its still while the clips are paused (a GIF cannot be paused any other way)
+  const setSrc = el => { if (!el || !el.dataset.src || !el.dataset.on) return; const want = paused && el.tagName === 'IMG' ? (el.dataset.still || '') : el.dataset.src; if (!want) el.removeAttribute('src'); else if (el.getAttribute('src') !== want) el.src = want; };
+  const load = el => { if (el && el.dataset.src && !el.dataset.on) { el.dataset.on = '1'; setSrc(el); } };
+  const playOnly = (els, i) => els.forEach((v, k) => { if (!v || !v.play) return; if (k === i && !paused) v.play().catch(() => {}); else v.pause(); });
   // clips load when their card is current or next door, not all nine at once
   const hydrate = i => { const near = (els) => els.filter((e, k) => Math.abs(k - i) <= 1); near(panels.map(p => p.querySelector('.clip'))).forEach(load); if (!phone.matches) near(stageVids).forEach(load); };
   // the section's tint on phones, one per creator, cycling through the family's light fields
@@ -36,11 +43,16 @@
     wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? (wnext.dataset.next || 'Next: ') + nx.dataset.name : (wnext.dataset.last || 'Last one'); marks.forEach((m, k) => { if (k === i) m.setAttribute('aria-current', 'true'); else m.removeAttribute('aria-current'); }); tint(i); }
   const stageEl = document.querySelector('.stage');
   const gutter = () => parseFloat(getComputedStyle(panelsEl).paddingLeft) || 0;
-  // the current card is the one whose left edge sits nearest the gutter
-  const nearest = () => { const edge = panelsEl.getBoundingClientRect().left + gutter(); let best = 0, bd = Infinity; panels.forEach((p, k) => { const d = Math.abs(p.getBoundingClientRect().left - edge); if (d < bd) { bd = d; best = k; } }); return best; };
-  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); const r = panels[k].getBoundingClientRect(), c = panelsEl.getBoundingClientRect(); panelsEl.scrollTo({ left: panelsEl.scrollLeft + r.left - c.left - gutter(), behavior: reduced ? 'auto' : 'smooth' }); hydrate(k); };
+  // the current card is the one whose left edge sits nearest the gutter; at the end of the track, where the last cards can
+  // never reach the gutter, it is the card asked for, or the last one
+  let want = -1;
+  const nearest = () => { if (panelsEl.scrollLeft >= panelsEl.scrollWidth - panelsEl.clientWidth - 2) return want >= 0 ? want : panels.length - 1; const edge = panelsEl.getBoundingClientRect().left + gutter(); let best = 0, bd = Infinity; panels.forEach((p, k) => { const d = Math.abs(p.getBoundingClientRect().left - edge); if (d < bd) { bd = d; best = k; } }); return best; };
+  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); want = k; const r = panels[k].getBoundingClientRect(), c = panelsEl.getBoundingClientRect(); panelsEl.scrollTo({ left: panelsEl.scrollLeft + r.left - c.left - gutter(), behavior: reduced ? 'auto' : 'smooth' }); hydrate(k);
+    // at the end of the track there may be nothing left to scroll, so no scroll event comes to update the row
+    if (phone.matches) show(k); };
   const onTrack = () => { if (!phone.matches) return; show(nearest()); };
   panelsEl.addEventListener('scroll', onTrack, { passive: true });
+  ['pointerdown', 'wheel', 'touchstart'].forEach(t => panelsEl.addEventListener(t, () => { want = -1; }, { passive: true }));
   panelsEl.addEventListener('keydown', e => { if (!phone.matches) return; if (e.key === 'ArrowRight') { e.preventDefault(); goTo(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(cur - 1); } });
   const fit = () => { if (!stageEl || phone.matches) { panelsEl.style.height = ''; if (stageEl) stageEl.style.removeProperty('--stageh'); return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
     const top = 84 + 16, room = innerHeight - top - (h + 6) - 14 - 20, colw = stageEl.clientWidth || (innerWidth - 72);
@@ -50,6 +62,12 @@
   marks.forEach((m, k) => m.addEventListener('click', () => { if (phone.matches) { goTo(k); return; } const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
   addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); onTrack(); hydrate(cur); }); step(); if (cur < 0) show(0); tint(cur);
   if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
+  const allClips = () => [...document.querySelectorAll('#stories .clip, #vtrack .clip')];
+  const setPaused = p => { paused = p; if (pauseBtn) { pauseBtn.setAttribute('aria-pressed', String(p)); pauseBtn.setAttribute('aria-label', p ? 'Play the clips' : 'Pause the clips'); }
+    allClips().forEach(setSrc); const c = cur; cur = -1; show(c < 0 ? 0 : c); };
+  if (pauseBtn) { pauseBtn.addEventListener('click', () => setPaused(!paused)); if (paused) setPaused(true); }
+  // with many creators the phone segments get too thin to tap; swiping and the arrow keys still move the cards
+  if (marks.length > 12) { const segsEl = document.getElementById('segs'); if (segsEl) segsEl.classList.add('many'); }
   // tap to expand: the full frame over the page, one slide per creator
   const viewer = document.getElementById('viewer'), vtrack = document.getElementById('vtrack'), vn = document.getElementById('vn'), vclose = document.getElementById('vclose');
   if (viewer && vtrack) {
@@ -57,12 +75,17 @@
     const svids = slides.map(sl => sl.querySelector('video.clip'));
     const vhydrate = i => slides.forEach((sl, k) => { if (Math.abs(k - i) <= 1) load(sl.querySelector('.clip')); });
     const vshow = i => { if (i === vcur) return; vcur = i; vn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0'); vhydrate(i); playOnly(svids, i); };
+    const focusables = () => [...viewer.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])')].filter(x => x.offsetParent !== null);
+    viewer.addEventListener('keydown', e => { if (e.key !== 'Tab') return; const f = focusables(); if (!f.length) return; const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } });
+    document.addEventListener('focusin', e => { if (!viewer.hidden && !viewer.contains(e.target)) vclose.focus({ preventScroll: true }); });
     const vnearest = () => { const c = vtrack.getBoundingClientRect(), cx = c.left + c.width / 2; let best = 0, bd = Infinity; slides.forEach((sl, k) => { const r = sl.getBoundingClientRect(), d = Math.abs(r.left + r.width / 2 - cx); if (d < bd) { bd = d; best = k; } }); return best; };
     const openViewer = i => { if (!phone.matches) return; lastFocus = document.activeElement; vcur = -1; viewer.hidden = false; vtrack.scrollLeft = slides[i].offsetLeft; vshow(i);
+      panels.forEach(p => { const v = p.querySelector('video.clip'); if (v && v.pause) v.pause(); });
       document.documentElement.classList.add('vopen'); requestAnimationFrame(() => viewer.classList.add('in')); vclose.focus({ preventScroll: true });
       try { history.pushState({ gmViewer: true }, ''); pushed = true; } catch (e) { pushed = false; } };
     const closeViewer = (fromHistory) => { if (viewer.hidden) return; viewer.classList.remove('in'); document.documentElement.classList.remove('vopen'); playOnly(svids, -1);
-      const done = () => { viewer.hidden = true; if (vcur >= 0) { goTo(vcur); show(vcur); } if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true }); };
+      const done = () => { viewer.hidden = true; if (vcur >= 0) { goTo(vcur); show(vcur); } const back = vcur >= 0 && panels[vcur] ? panels[vcur].querySelector('.pv') : lastFocus; if (back && back.focus) back.focus({ preventScroll: true }); };
       if (reduced) done(); else setTimeout(done, 220);
       if (pushed && !fromHistory) { pushed = false; history.back(); } else pushed = false; };
     panels.forEach((p, k) => { const pv = p.querySelector('.pv'); if (!pv) return; pv.addEventListener('click', () => openViewer(k)); pv.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openViewer(k); } }); });
@@ -88,13 +111,16 @@
   // phone menu
   const sheet = document.getElementById('sheet'), menu = document.getElementById('menu');
   if (sheet && menu) {
+  const bar = document.querySelector('.top');
+  if (bar && bar.nextElementSibling !== sheet) bar.after(sheet);
+  sheet.inert = true;
   const sn = sheet.querySelector('nav');
   if (sn && !sn.children.length) document.querySelectorAll('.top nav a').forEach(a => sn.appendChild(a.cloneNode(true)));
   if (!sheet.querySelector('.btn')) { const c = document.querySelector('.top .cta a, .top a.cta'); if (c) { const b = document.createElement('a'); b.className = 'btn b1'; b.href = c.getAttribute('href'); b.textContent = c.textContent; sheet.appendChild(b); } }
-  const setMenu = o => { sheet.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
+  const setMenu = o => { if (o && bar) sheet.style.top = Math.max(0, bar.getBoundingClientRect().bottom) + 'px'; sheet.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); sheet.inert = !o; menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
   menu.addEventListener('click', () => setMenu(!sheet.classList.contains('open')));
   sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
-  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && sheet.classList.contains('open')) { const inside = sheet.contains(document.activeElement); setMenu(false); if (inside) menu.focus(); } });
   }
   // the newsletter form hands the address to Substack, which prefills it
   const f = document.getElementById('nl');

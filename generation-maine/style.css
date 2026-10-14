@@ -3,9 +3,9 @@ Theme Name: Generation Maine
 Theme URI: https://generationmaine.org
 Author: Green Falls
 Description: One-page block theme for Generation Maine, a Maine Policy Institute project. Every piece of copy is a block, every creator is a post, and the channels, newsletter and footer lines live under Settings > Generation Maine. No build step, no plugins.
-Version: 3.0.0
+Version: 3.1.0
 Requires at least: 6.5
-Tested up to: 6.8
+Tested up to: 7.1
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -337,6 +337,44 @@ html.vopen,html.vopen body{overflow:hidden}
 .static.lean .site .fsocial .ic{width:22px;height:22px}
 }
 
+
+/* ---------- round 1 test fixes (Oct 14, 2026) ---------- */
+/* the mural draws itself only when the script runs; without it, and in the editor, it simply shows */
+.hero .mural path{stroke-dasharray:none;stroke-dashoffset:0;transition:none}
+.js .hero .mural path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.9s cubic-bezier(.3,.6,.2,1)}
+.js .hero .mural.on path{stroke-dashoffset:0}
+@media (max-width:900px){.js .hero .mural path{transition-duration:1.1s}}
+@media (prefers-reduced-motion:reduce){.js .hero .mural path{stroke-dashoffset:0;transition:none}html{scroll-behavior:auto}}
+/* the handle and name over a clip sit on a navy chip, readable on any frame */
+.stage .who,.panel .pv .who,.slide .fr .who{background:rgba(15,46,77,.78);padding:6px 10px 6px 6px;right:auto;max-width:calc(100% - 76px)}
+.stage .who span,.panel .pv .who span,.slide .fr .who span{min-width:0;overflow-wrap:anywhere}
+/* the roster caption is not the clip overlay */
+.roster .tile .who{position:static;opacity:1;color:inherit;z-index:auto;background:none}
+/* long names and handles wrap instead of widening the card */
+.panel{min-width:0}.panel h2,.slide .cap strong,.panel .bio{overflow-wrap:anywhere}.slide .cap{min-width:0}
+@media (min-width:901px){.js .panel{justify-content:safe center;overflow-y:auto}}
+/* the pause control for the clips */
+.cpause{flex:none;width:44px;height:44px;display:grid;place-items:center;margin:0 -12px;padding:0;border:0;background:none;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cpause svg{width:14px;height:14px}.cpause .ipl,.cpause[aria-pressed="true"] .ip{display:none}.cpause[aria-pressed="true"] .ipl{display:block}
+.cpause:focus-visible{outline:2px solid var(--blue);outline-offset:-6px}
+/* footer and newsletter small print wrap long addresses */
+.static .site .ffine{grid-template-columns:minmax(0,1fr) auto}
+.site .ffine p,.follow .fine{overflow-wrap:anywhere;min-width:0}
+/* without the script: every story readable, no stepper, no dead menu button */
+html:not(.js) .stories{height:auto!important;min-height:0!important}
+html:not(.js) .stories .pinw{position:static}
+html:not(.js) .stage,html:not(.js) .where{display:none}
+html:not(.js) .panels{height:auto}
+html:not(.js) .panel{position:static;opacity:1;visibility:visible;pointer-events:auto;padding-block:20px}
+@media (max-width:900px){
+ html:not(.js) .top .menu{display:none}
+ /* a closed menu is out of the tab order and away from screen readers */
+ .sheet{visibility:hidden;transition:opacity .2s,transform .25s,visibility 0s linear .25s}
+ .sheet.open{visibility:visible;transition:opacity .2s,transform .25s}
+ .static .site .ffine{grid-template-columns:minmax(0,1fr)}
+ .where .segs.many{pointer-events:none}
+}
+
 /* ---------- WordPress additions (brand/src/build_theme.py) ---------- */
 .wp-site-blocks{padding:0}
 .wp-site-blocks>*{margin-block:0}
@@ -363,3 +401,46 @@ p.k{margin:0}
 .gm-newsletter-missing{margin:0;font-size:14px;color:rgba(255,255,255,.85);border:1px dashed rgba(255,255,255,.4);padding:14px 16px}
 .gm-newsletter-missing a{color:var(--mg)}
 .wp-block-generation-maine-newsletter{min-width:0}
+/* the bar part's own wrapper adds nothing on the page */
+.gm-bar{display:contents}
+/* posts, pages, archives and search: the same bar and footer, readable type, a footer that sits at the bottom */
+.wp-site-blocks{min-height:100vh;display:flex;flex-direction:column}
+.wp-site-blocks>main{flex:1 0 auto}
+main.gm-page{padding-block:clamp(48px,7vw,104px);overflow-x:clip}
+.gm-title{font-family:var(--display);font-weight:800;font-size:clamp(40px,6vw,72px);line-height:1;letter-spacing:-.01em;margin:0 0 clamp(28px,4vw,48px);max-width:20ch;color:var(--navy);overflow-wrap:anywhere}
+main.gm-page .k{margin:0 0 14px;font:400 11px/1 var(--label);letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+.gm-entry>*{margin-block:0;max-width:68ch}
+.gm-entry>*+*{margin-top:1.1em}
+.gm-entry p,.gm-entry li{font-size:18px;line-height:1.6}
+.gm-entry h2{font-size:clamp(26px,3vw,34px);line-height:1.15;margin-top:1.8em}
+.gm-entry h3{font-size:clamp(21px,2.4vw,24px);line-height:1.2;margin-top:1.6em}
+.gm-entry h4,.gm-entry h5,.gm-entry h6{font-size:18px;line-height:1.3;margin-top:1.4em}
+.gm-entry a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+.gm-entry ul,.gm-entry ol{padding-left:1.2em}
+.gm-entry blockquote{border-left:3px solid var(--mg);margin-left:0;padding-left:20px}
+.gm-entry img{max-width:100%;height:auto}
+/* a front-page section placed in a page runs full width, as on the front page */
+.gm-entry>.wp-block-group.block,.gm-entry>.wp-block-group.hero,.gm-entry>.gm-creators{max-width:none;margin-inline:calc(50% - 50vw)}
+.gm-query{max-width:68ch}
+.gm-posts{list-style:none;margin:0;padding:0}
+.gm-posts>li{padding:24px 0;border-top:1px solid rgba(15,46,77,.15)}
+.gm-posts>li:last-child{border-bottom:1px solid rgba(15,46,77,.15)}
+.gm-posts .k{margin:0 0 10px}
+.gm-posts .wp-block-post-title{font-size:clamp(22px,2.6vw,28px);line-height:1.15;margin:0 0 8px;overflow-wrap:anywhere}
+.gm-posts .wp-block-post-title a{color:inherit;text-decoration:none}
+.gm-posts .wp-block-post-title a:hover,.gm-posts .wp-block-post-title a:focus-visible{text-decoration:underline}
+.gm-posts .wp-block-post-excerpt__excerpt{margin:0;font-size:17px;line-height:1.55}
+.wp-block-query-pagination{margin-top:28px;gap:8px 20px;font:400 11px/1 var(--label);letter-spacing:.08em;text-transform:uppercase}
+.wp-block-query-pagination a,.wp-block-query-pagination .page-numbers{display:inline-flex;align-items:center;min-height:44px;color:var(--navy)}
+.wp-block-query-pagination .current{color:var(--blue)}
+.gm-search{margin:0 0 28px;max-width:68ch}
+.gm-search .wp-block-search__input{min-height:48px;border:1px solid rgba(15,46,77,.4);padding:0 14px;font:inherit}
+.gm-search .wp-block-search__button{min-height:48px;margin-left:8px;border:0;border-radius:0;background:var(--navy);color:#fff;padding:0 20px;font:400 11px/1 var(--label);letter-spacing:.1em;text-transform:uppercase}
+main.gm-page .lede{font-size:clamp(18px,2vw,21px);line-height:1.5;max-width:56ch}
+main.gm-page .lede a{color:var(--blue)}
+/* logged in: the viewer covers the admin bar, and anchors and the pinned stage clear the bar plus the admin bar */
+.viewer{z-index:100000}
+@media screen and (min-width:601px){
+ html:has(body.admin-bar){scroll-padding-top:calc(68px + var(--wp-admin--admin-bar--height,32px))}
+ .admin-bar .stories .pinw{top:calc(max(92px,calc(50vh - 330px)) + var(--wp-admin--admin-bar--height,32px))}
+}

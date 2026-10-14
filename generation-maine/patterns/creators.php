@@ -3,19 +3,21 @@
  * Title: Creators
  * Slug: generation-maine/creators
  * Categories: generation-maine
- * Description: The heading, then the Creators block, which reads every published creator. Add and order creators under Creators in the dashboard.
+ * Description: The heading, then the Creators block, which reads every published creator. Add and order creators under Creators in the dashboard. The block cannot be moved or removed here; if a section was deleted, reset the template.
  *
  * @package generation-maine
  */
 ?>
-<!-- wp:group {"tagName":"section","anchor":"creators","className":"block roster stories-head","layout":{"type":"default"}} -->
+<!-- wp:group {"metadata":{"name":"Creators"},"className":"gm-creators","layout":{"type":"default"}} -->
+<div class="wp-block-group gm-creators"><!-- wp:group {"tagName":"section","metadata":{"name":"Creators heading"},"anchor":"creators","className":"block roster stories-head","layout":{"type":"default"}} -->
 <section id="creators" class="wp-block-group block roster stories-head"><!-- wp:group {"className":"w","layout":{"type":"default"}} -->
 <div class="wp-block-group w"><!-- wp:group {"className":"head flush","layout":{"type":"default"}} -->
-<div class="wp-block-group head flush"><!-- wp:heading -->
+<div class="wp-block-group head flush"><!-- wp:heading {"metadata":{"name":"Heading"}} -->
 <h2 class="wp-block-heading">The creators</h2>
 <!-- /wp:heading --></div>
 <!-- /wp:group --></div>
 <!-- /wp:group --></section>
 <!-- /wp:group -->
 
-<!-- wp:generation-maine/creators /-->
+<!-- wp:generation-maine/creators {"lock":{"move":true,"remove":true}} /--></div>
+<!-- /wp:group -->

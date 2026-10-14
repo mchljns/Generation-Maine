@@ -39,7 +39,27 @@ function gm_render_footer() {
 		'{{BUILD}}'   => $build ? '<span class="ph build" aria-label="' . esc_attr__( 'Preview build', 'generation-maine' ) . '">Build ' . esc_html( GM_BUILD ) . '</span>' : '',
 	);
 	$html = strtr( (string) file_get_contents( $file ), $tokens ); // phpcs:ignore WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
-	return str_replace( 'utm_medium=splash', 'utm_medium=site', $html );
+	$html = str_replace( 'utm_medium=splash', 'utm_medium=site', $html );
+
+	// the page links follow the bar: the same targets and labels the editor gave the header, then the newsletter
+	$links = gm_header_links();
+	if ( $links ) {
+		$nav = '';
+		foreach ( $links as $l ) {
+			$nav .= '<a href="' . esc_url( $l[0] ) . '">' . esc_html( $l[1] ) . '</a>';
+		}
+		$nav .= '<a href="#newsletter">' . esc_html__( 'Newsletter', 'generation-maine' ) . '</a>';
+		$html = preg_replace( '/(<nav class="flinks"[^>]*>).*?(<\/nav>)/s', '$1' . str_replace( array( '\\', '$' ), array( '\\\\', '\\$' ), $nav ) . '$2', $html, 1 );
+	}
+
+	// the channel icons open the accounts once their addresses are set; until then they lead to the follow list
+	foreach ( gm_channels() as $c ) {
+		if ( $c['url'] ) {
+			$html = str_replace( '<a href="#follow" aria-label="' . $c['name'] . '">', '<a href="' . esc_url( gm_utm( $c['url'] ) ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr( $c['name'] ) . '">', $html );
+		}
+	}
+	// the wrapper lets the editor style the footer when it is edited on its own
+	return '<div class="gm-foot">' . $html . '</div>';
 }
 
 /**

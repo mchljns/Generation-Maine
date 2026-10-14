@@ -1,5 +1,5 @@
 {
-	"$schema": "https://schemas.wp.org/wp/6.8/theme.json",
+	"$schema": "https://schemas.wp.org/wp/7.1/theme.json",
 	"version": 3,
 	"title": "Generation Maine",
 	"settings": {
@@ -11,6 +11,12 @@
 			"defaultDuotone": false,
 			"custom": false,
 			"customGradient": false,
+			"text": false,
+			"background": false,
+			"link": false,
+			"heading": false,
+			"button": false,
+			"caption": false,
 			"palette": [
 				{
 					"slug": "navy",
@@ -53,6 +59,15 @@
 			"customFontSize": false,
 			"fluid": false,
 			"fontSizes": [],
+			"fontStyle": false,
+			"fontWeight": false,
+			"letterSpacing": false,
+			"lineHeight": false,
+			"textDecoration": false,
+			"textTransform": false,
+			"writingMode": false,
+			"dropCap": false,
+			"textColumns": false,
 			"fontFamilies": [
 				{
 					"slug": "display",

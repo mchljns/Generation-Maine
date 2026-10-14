@@ -32,7 +32,7 @@ import build_splash_lean as L
 
 THEME = os.path.join(ROOT, "generation-maine")
 PAGE = os.path.join(ROOT, "brand", "identity", "splash-lean-a")
-VERSION = "3.0.0"
+VERSION = "3.1.0"
 
 HEADER = """/*
 Theme Name: Generation Maine
@@ -41,7 +41,7 @@ Author: Green Falls
 Description: One-page block theme for Generation Maine, a Maine Policy Institute project. Every piece of copy is a block, every creator is a post, and the channels, newsletter and footer lines live under Settings > Generation Maine. No build step, no plugins.
 Version: %(version)s
 Requires at least: 6.5
-Tested up to: 6.8
+Tested up to: 7.1
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -80,6 +80,49 @@ p.k{margin:0}
 .gm-newsletter-missing{margin:0;font-size:14px;color:rgba(255,255,255,.85);border:1px dashed rgba(255,255,255,.4);padding:14px 16px}
 .gm-newsletter-missing a{color:var(--mg)}
 .wp-block-generation-maine-newsletter{min-width:0}
+/* the bar part's own wrapper adds nothing on the page */
+.gm-bar{display:contents}
+/* posts, pages, archives and search: the same bar and footer, readable type, a footer that sits at the bottom */
+.wp-site-blocks{min-height:100vh;display:flex;flex-direction:column}
+.wp-site-blocks>main{flex:1 0 auto}
+main.gm-page{padding-block:clamp(48px,7vw,104px);overflow-x:clip}
+.gm-title{font-family:var(--display);font-weight:800;font-size:clamp(40px,6vw,72px);line-height:1;letter-spacing:-.01em;margin:0 0 clamp(28px,4vw,48px);max-width:20ch;color:var(--navy);overflow-wrap:anywhere}
+main.gm-page .k{margin:0 0 14px;font:400 11px/1 var(--label);letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+.gm-entry>*{margin-block:0;max-width:68ch}
+.gm-entry>*+*{margin-top:1.1em}
+.gm-entry p,.gm-entry li{font-size:18px;line-height:1.6}
+.gm-entry h2{font-size:clamp(26px,3vw,34px);line-height:1.15;margin-top:1.8em}
+.gm-entry h3{font-size:clamp(21px,2.4vw,24px);line-height:1.2;margin-top:1.6em}
+.gm-entry h4,.gm-entry h5,.gm-entry h6{font-size:18px;line-height:1.3;margin-top:1.4em}
+.gm-entry a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+.gm-entry ul,.gm-entry ol{padding-left:1.2em}
+.gm-entry blockquote{border-left:3px solid var(--mg);margin-left:0;padding-left:20px}
+.gm-entry img{max-width:100%;height:auto}
+/* a front-page section placed in a page runs full width, as on the front page */
+.gm-entry>.wp-block-group.block,.gm-entry>.wp-block-group.hero,.gm-entry>.gm-creators{max-width:none;margin-inline:calc(50% - 50vw)}
+.gm-query{max-width:68ch}
+.gm-posts{list-style:none;margin:0;padding:0}
+.gm-posts>li{padding:24px 0;border-top:1px solid rgba(15,46,77,.15)}
+.gm-posts>li:last-child{border-bottom:1px solid rgba(15,46,77,.15)}
+.gm-posts .k{margin:0 0 10px}
+.gm-posts .wp-block-post-title{font-size:clamp(22px,2.6vw,28px);line-height:1.15;margin:0 0 8px;overflow-wrap:anywhere}
+.gm-posts .wp-block-post-title a{color:inherit;text-decoration:none}
+.gm-posts .wp-block-post-title a:hover,.gm-posts .wp-block-post-title a:focus-visible{text-decoration:underline}
+.gm-posts .wp-block-post-excerpt__excerpt{margin:0;font-size:17px;line-height:1.55}
+.wp-block-query-pagination{margin-top:28px;gap:8px 20px;font:400 11px/1 var(--label);letter-spacing:.08em;text-transform:uppercase}
+.wp-block-query-pagination a,.wp-block-query-pagination .page-numbers{display:inline-flex;align-items:center;min-height:44px;color:var(--navy)}
+.wp-block-query-pagination .current{color:var(--blue)}
+.gm-search{margin:0 0 28px;max-width:68ch}
+.gm-search .wp-block-search__input{min-height:48px;border:1px solid rgba(15,46,77,.4);padding:0 14px;font:inherit}
+.gm-search .wp-block-search__button{min-height:48px;margin-left:8px;border:0;border-radius:0;background:var(--navy);color:#fff;padding:0 20px;font:400 11px/1 var(--label);letter-spacing:.1em;text-transform:uppercase}
+main.gm-page .lede{font-size:clamp(18px,2vw,21px);line-height:1.5;max-width:56ch}
+main.gm-page .lede a{color:var(--blue)}
+/* logged in: the viewer covers the admin bar, and anchors and the pinned stage clear the bar plus the admin bar */
+.viewer{z-index:100000}
+@media screen and (min-width:601px){
+ html:has(body.admin-bar){scroll-padding-top:calc(68px + var(--wp-admin--admin-bar--height,32px))}
+ .admin-bar .stories .pinw{top:calc(max(92px,calc(50vh - 330px)) + var(--wp-admin--admin-bar--height,32px))}
+}
 """
 
 # The editor canvas: no pinning, no hidden-until-JS states, the bars and the dot drawn by CSS since the server adds them on the site.
@@ -96,6 +139,14 @@ EDITOR_ADDITIONS = """
 .k-bars::before{content:"";display:inline-block;vertical-align:-1px;flex:none;width:30px;height:12px;margin-right:10px;background:%(bars)s center/contain no-repeat}
 .about .k-bars::before{background-image:%(bars_blue)s}
 .gm-here::after{content:"";display:inline-block;width:.2em;height:.2em;border-radius:50%%;background:var(--mg);margin-left:.05em}
+/* the bar keeps its labels visible in a narrow canvas (List View or the inserter open); the phone menu is a page feature */
+.top nav,.gm-bar nav{display:flex!important;flex-wrap:wrap}
+.top .cta-wrap,.gm-bar .cta-wrap{display:flex!important}
+.menu,.top .menu,.gm-bar .menu{display:none!important}
+.gm-bar{display:block;position:relative;background:var(--navy);color:#fff}
+.gm-foot{background:#0F2E4D;color:#fff}
+/* WordPress 6.5 wraps the about photo in a resizable box with no height */
+.about .media .ph .components-resizable-box__container{position:absolute!important;inset:0;width:100%%!important;height:100%%!important}
 """
 
 
@@ -144,7 +195,16 @@ def editor_selector(sel):
     if re.match(r"^(\.static)?\.js\b", sel) or sel.startswith("html.vopen") or ".vopen" in sel:
         return []
     sel = re.sub(r"^(\.static\.lean|\.euro\.lean|\.static|\.lean|\.euro)\s+", "", sel)
-    return wp_selector(sel)
+    out = wp_selector(sel)
+    # the bar and the footer are template parts; edited on their own there is no header.top or footer.site around them,
+    # so their own wrappers (.gm-bar, .gm-foot) carry the same rules
+    extra = []
+    for x in out:
+        if re.match(r"^\.top(?=$|[\s.:>\[])", x):
+            extra.append(".gm-bar" + x[4:])
+        if re.match(r"^\.site(?=$|[\s.:>\[])", x):
+            extra.append(".gm-foot" + x[5:])
+    return out + extra
 
 
 def page_css(html):
@@ -273,7 +333,7 @@ function gm_logo( $name, $class = 'lk' ) {
 def theme_json():
     t = L.LEAN_A
     return json.dumps({
-        "$schema": "https://schemas.wp.org/wp/6.8/theme.json",
+        "$schema": "https://schemas.wp.org/wp/7.1/theme.json",
         "version": 3,
         "title": "Generation Maine",
         "settings": {
@@ -281,6 +341,8 @@ def theme_json():
             "useRootPaddingAwareAlignments": False,
             "color": {
                 "defaultPalette": False, "defaultGradients": False, "defaultDuotone": False, "custom": False, "customGradient": False,
+                # the page's colors are fixed: no color controls on blocks or in Styles that could make a heading unreadable
+                "text": False, "background": False, "link": False, "heading": False, "button": False, "caption": False,
                 "palette": [
                     {"slug": "navy", "name": "Navy (bar, footer, type)", "color": t["navy"]},
                     {"slug": "blue", "name": "Blue (hero)", "color": t["blue"]},
@@ -293,6 +355,8 @@ def theme_json():
             "spacing": {"padding": False, "margin": False, "blockGap": False},
             "typography": {
                 "defaultFontSizes": False, "customFontSize": False, "fluid": False, "fontSizes": [],
+                "fontStyle": False, "fontWeight": False, "letterSpacing": False, "lineHeight": False, "textDecoration": False,
+                "textTransform": False, "writingMode": False, "dropCap": False, "textColumns": False,
                 "fontFamilies": [
                     {"slug": "display", "name": "Bricolage Grotesque (headlines)", "fontFamily": "\"Bricolage Grotesque\", system-ui, sans-serif",
                      "fontFace": [{"fontFamily": "Bricolage Grotesque", "fontWeight": "800", "fontStyle": "normal", "fontDisplay": "swap", "src": ["file:./assets/fonts/bricolage-grotesque-800.woff2"]}]},

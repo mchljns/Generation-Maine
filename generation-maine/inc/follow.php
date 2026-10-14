@@ -38,6 +38,22 @@ function gm_channels() {
 }
 
 /**
+ * A handle worked out from an account address, for a channel whose handle field was left empty.
+ *
+ * @param string $url Account address.
+ * @return string
+ */
+function gm_handle_from_url( $url ) {
+	$path = trim( (string) wp_parse_url( $url, PHP_URL_PATH ), '/' );
+	$seg  = $path ? explode( '/', $path ) : array();
+	$last = $seg ? end( $seg ) : '';
+	if ( '' === $last ) {
+		return (string) wp_parse_url( $url, PHP_URL_HOST );
+	}
+	return '@' === $last[0] ? $last : '@' . $last;
+}
+
+/**
  * The rows.
  *
  * @return string HTML
@@ -45,7 +61,7 @@ function gm_channels() {
 function gm_render_follow() {
 	$rows = '';
 	foreach ( gm_channels() as $c ) {
-		$handle = $c['handle'] ? $c['handle'] : ( 'substack' === $c['key'] ? '[name].substack.com' : '[@handle]' );
+		$handle = $c['handle'] ? $c['handle'] : ( $c['url'] ? gm_handle_from_url( $c['url'] ) : ( 'substack' === $c['key'] ? '[name].substack.com' : '[@handle]' ) );
 		$inner  = gm_mark( $c['key'] ) . '<span class="name">' . esc_html( $c['name'] ) . '</span><span class="h">' . esc_html( $handle ) . '</span>';
 		$rows  .= $c['url']
 			? '<a class="row" href="' . esc_url( gm_utm( $c['url'] ) ) . '" target="_blank" rel="noopener">' . $inner . '</a>'

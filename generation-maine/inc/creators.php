@@ -162,12 +162,16 @@ function gm_creator_meta_box_html( $post ) {
 	$clip_id  = (int) get_post_meta( $post->ID, 'gm_clip_id', true );
 	$clip_url = $clip_id ? wp_get_attachment_url( $clip_id ) : '';
 	echo '<p><strong>' . esc_html__( 'Clip', 'generation-maine' ) . '</strong><br>';
-	echo '<span class="description">' . esc_html__( 'A short vertical video (9:16), muted, that loops. Keep it under 10 MB and about ten seconds. Upload one, or paste a direct link to an .mp4 or .webm below.', 'generation-maine' ) . '</span></p>';
+	echo '<span class="description">' . esc_html__( 'A short vertical video (9:16) or GIF, muted, that loops. Keep it under 10 MB and about ten seconds. Choose or upload one, or paste a direct link to an .mp4, .webm or .gif below.', 'generation-maine' ) . '</span></p>';
+	$size = $clip_id ? (int) @filesize( get_attached_file( $clip_id ) ) : 0; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+	$big  = $size > 10 * MB_IN_BYTES;
+	/* translators: %s: file size */
+	echo '<p id="gm_clip_big" class="notice notice-warning inline"' . ( $big ? '' : ' hidden' ) . '><span>' . esc_html( sprintf( __( 'This clip is %s. Visitors download all of it, so a clip under 10 MB loads much faster on a phone.', 'generation-maine' ), size_format( $size, 1 ) ) ) . '</span></p>';
 	echo '<p><input type="hidden" id="gm_clip_id" name="gm_clip_id" value="' . esc_attr( $clip_id ) . '">';
 	echo '<button type="button" class="button" id="gm_clip_pick">' . esc_html__( 'Choose or upload a clip', 'generation-maine' ) . '</button> ';
 	echo '<button type="button" class="button-link" id="gm_clip_clear"' . ( $clip_id ? '' : ' hidden' ) . '>' . esc_html__( 'Remove', 'generation-maine' ) . '</button> ';
 	echo '<span id="gm_clip_name" class="description">' . ( $clip_url ? esc_html( wp_basename( $clip_url ) ) : '' ) . '</span></p>';
-	gm_creator_field( $post->ID, 'gm_clip_url', __( 'Or a clip link', 'generation-maine' ), __( 'Used only when no clip is uploaded.', 'generation-maine' ), 'url', 'https://' );
+	gm_creator_field( $post->ID, 'gm_clip_url', __( 'Or a clip link', 'generation-maine' ), __( 'Used only when no clip is chosen above. Remove the chosen clip to use a link.', 'generation-maine' ), 'url', 'https://' );
 	gm_creator_field( $post->ID, 'gm_clip_len', __( 'Clip length', 'generation-maine' ), __( 'Shown on the clip, for example 0:52. Leave empty to hide it.', 'generation-maine' ), 'text', '0:52' );
 
 	foreach ( gm_creator_link_fields() as $key => $label ) {
@@ -176,15 +180,107 @@ function gm_creator_meta_box_html( $post ) {
 	$ph = (bool) get_post_meta( $post->ID, 'gm_placeholder', true );
 	echo '<p><label><input type="checkbox" name="gm_placeholder" value="1" ' . checked( $ph, true, false ) . '> ';
 	echo esc_html__( 'Placeholder, not a real creator yet', 'generation-maine' ) . '</label></p>';
-	echo '<p class="description">' . esc_html__( 'Order: use the Order field under Page Attributes. Lower numbers come first.', 'generation-maine' ) . '</p>';
-	?>
-	<script>
-	(function(){var pick=document.getElementById('gm_clip_pick'),clr=document.getElementById('gm_clip_clear'),id=document.getElementById('gm_clip_id'),nm=document.getElementById('gm_clip_name');if(!pick||!window.wp||!wp.media){return;}
-	var frame;pick.addEventListener('click',function(){if(!frame){frame=wp.media({title:'Choose a clip',library:{type:'video'},multiple:false,button:{text:'Use this clip'}});frame.on('select',function(){var a=frame.state().get('selection').first().toJSON();id.value=a.id;nm.textContent=a.filename||a.url;clr.hidden=false;});}frame.open();});
-	clr.addEventListener('click',function(){id.value='';nm.textContent='';clr.hidden=true;});})();
-	</script>
-	<?php
+	echo '<p><label for="gm_order"><strong>' . esc_html__( 'Place on the page', 'generation-maine' ) . '</strong></label><br>';
+	echo '<input type="number" id="gm_order" name="gm_order" value="' . esc_attr( (int) $post->menu_order ) . '" step="1" style="width:6em"> ';
+	echo '<input type="hidden" name="gm_order_was" value="' . esc_attr( (int) $post->menu_order ) . '">';
+	echo '<span class="description">' . esc_html__( 'Lower numbers come first. Creators with the same number are in alphabetical order.', 'generation-maine' ) . '</span></p>';
 }
+
+/**
+ * The clip picker on the Creator screen. It needs the media library, which loads after the box is printed, so it runs from
+ * an enqueued script and listens on the document.
+ *
+ * @param string $hook Admin page.
+ */
+function gm_creator_admin_assets( $hook ) {
+	$screen = get_current_screen();
+	if ( ! $screen || 'gm_creator' !== $screen->post_type || ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) {
+		return;
+	}
+	wp_enqueue_media();
+	$limit = 10 * MB_IN_BYTES;
+	$js    = "(function(){var frame;function el(i){return document.getElementById(i);}
+document.addEventListener('click',function(e){
+ if(e.target.closest('#gm_clip_pick')){e.preventDefault();if(!window.wp||!wp.media){return;}
+  if(!frame){frame=wp.media({title:" . wp_json_encode( __( 'Choose a clip', 'generation-maine' ) ) . ",library:{type:['video','image/gif']},multiple:false,button:{text:" . wp_json_encode( __( 'Use this clip', 'generation-maine' ) ) . "}});
+   frame.on('select',function(){var a=frame.state().get('selection').first().toJSON();el('gm_clip_id').value=a.id;el('gm_clip_name').textContent=a.filename||a.url;el('gm_clip_clear').hidden=false;var b=el('gm_clip_big');if(b){var big=(a.filesizeInBytes||0)>" . (int) $limit . ";b.hidden=!big;if(big){b.querySelector('span').textContent=" . wp_json_encode( __( 'This clip is larger than 10 MB. Visitors download all of it, so a smaller clip loads much faster on a phone.', 'generation-maine' ) ) . ";}}});}
+  frame.open();}
+ if(e.target.closest('#gm_clip_clear')){e.preventDefault();el('gm_clip_id').value='0';el('gm_clip_name').textContent='';el('gm_clip_clear').hidden=true;var b=el('gm_clip_big');if(b){b.hidden=true;}}
+});})();";
+	wp_add_inline_script( 'media-editor', $js );
+}
+add_action( 'admin_enqueue_scripts', 'gm_creator_admin_assets' );
+
+/**
+ * Save the place on the page from the box, only when it was changed there (WordPress 6.5 has its own Order field too).
+ *
+ * @param array $data    Post data about to be saved.
+ * @param array $postarr Raw post data.
+ * @return array
+ */
+function gm_creator_order( $data, $postarr ) {
+	if ( 'gm_creator' !== $data['post_type'] || ! isset( $_POST['gm_order'], $_POST['gm_order_was'], $_POST['gm_creator_nonce'] ) ) {
+		return $data;
+	}
+	if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['gm_creator_nonce'] ) ), 'gm_creator_save' ) || empty( $postarr['ID'] ) || ! current_user_can( 'edit_post', (int) $postarr['ID'] ) ) {
+		return $data;
+	}
+	$order = (int) $_POST['gm_order'];
+	if ( (int) $_POST['gm_order_was'] !== $order ) {
+		$data['menu_order'] = $order;
+	}
+	return $data;
+}
+add_filter( 'wp_insert_post_data', 'gm_creator_order', 10, 2 );
+
+/**
+ * The Creators list shows what is on the page and in what order.
+ *
+ * @param array $cols Columns.
+ * @return array
+ */
+function gm_creator_columns( $cols ) {
+	$out = array();
+	foreach ( $cols as $key => $label ) {
+		if ( 'date' === $key ) {
+			$out['gm_order']       = __( 'Place', 'generation-maine' );
+			$out['gm_hometown']    = __( 'Hometown', 'generation-maine' );
+			$out['gm_placeholder'] = __( 'Placeholder', 'generation-maine' );
+		}
+		$out[ $key ] = $label;
+	}
+	return $out;
+}
+add_filter( 'manage_gm_creator_posts_columns', 'gm_creator_columns' );
+
+/**
+ * Column values.
+ *
+ * @param string $col     Column.
+ * @param int    $post_id Creator.
+ */
+function gm_creator_column( $col, $post_id ) {
+	if ( 'gm_order' === $col ) {
+		echo (int) get_post_field( 'menu_order', $post_id );
+	} elseif ( 'gm_hometown' === $col ) {
+		echo esc_html( get_post_meta( $post_id, 'gm_hometown', true ) );
+	} elseif ( 'gm_placeholder' === $col ) {
+		echo get_post_meta( $post_id, 'gm_placeholder', true ) ? esc_html__( 'Yes', 'generation-maine' ) : '';
+	}
+}
+add_action( 'manage_gm_creator_posts_custom_column', 'gm_creator_column', 10, 2 );
+
+/**
+ * The list opens in page order.
+ *
+ * @param WP_Query $q Query.
+ */
+function gm_creator_list_order( $q ) {
+	if ( is_admin() && $q->is_main_query() && 'gm_creator' === $q->get( 'post_type' ) && ! $q->get( 'orderby' ) ) {
+		$q->set( 'orderby', array( 'menu_order' => 'ASC', 'title' => 'ASC' ) );
+	}
+}
+add_action( 'pre_get_posts', 'gm_creator_list_order' );
 
 /**
  * Save the box.
@@ -269,7 +365,8 @@ function gm_get_creators( $limit = 24 ) {
 			'name'        => get_the_title(),
 			'handle'      => get_post_meta( $id, 'gm_handle', true ),
 			'town'        => get_post_meta( $id, 'gm_hometown', true ),
-			'bio'         => wp_strip_all_tags( get_the_content() ),
+			// line breaks and paragraph ends become spaces, so words on either side do not run together
+			'bio'         => trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( preg_replace( '#<br\s*/?>|</p>|</li>|</h[1-6]>#i', ' ', get_the_content() ) ) ) ),
 			'clip'        => $clip ? $clip : '',
 			'len'         => get_post_meta( $id, 'gm_clip_len', true ),
 			'avatar'      => has_post_thumbnail( $id ) ? get_the_post_thumbnail_url( $id, 'thumbnail' ) : '',
@@ -291,7 +388,9 @@ function gm_get_creators( $limit = 24 ) {
  */
 function gm_who( $c, $on ) {
 	$av = $c['avatar'] ? '<img class="av" src="' . esc_url( $c['avatar'] ) . '" alt="" width="36" height="36" loading="lazy">' : gm_avatar_placeholder();
-	return '<div class="who' . ( $on ? ' on' : '' ) . '">' . $av . '<span><b>' . esc_html( $c['handle'] ? $c['handle'] : $c['name'] ) . '</b>' . esc_html( $c['name'] ) . '</span></div>';
+	// the handle on top and the name under it; with no handle, the name once
+	$lines = $c['handle'] ? '<b>' . esc_html( $c['handle'] ) . '</b>' . esc_html( $c['name'] ) : '<b>' . esc_html( $c['name'] ) . '</b>';
+	return '<div class="who' . ( $on ? ' on' : '' ) . '">' . $av . '<span>' . $lines . '</span></div>';
 }
 
 /**
@@ -309,10 +408,19 @@ function gm_clip( $c, $class, $attrs, $alt ) {
 	if ( ! $c['clip'] ) {
 		return '<div class="' . esc_attr( $cls . ' noclip' ) . '"' . $attrs . '></div>';
 	}
-	if ( preg_match( '/\.(gif|png|jpe?g|webp|avif)(\?|$)/i', $c['clip'] ) ) {
-		return '<img class="' . esc_attr( $cls ) . '"' . $attrs . ' data-src="' . esc_url( $c['clip'] ) . '" alt="' . esc_attr( $alt ) . '">';
+	// a still for when the clips are paused: the creator's portrait, if there is one
+	$still = $c['portrait'] ? $c['portrait'] : $c['avatar'];
+	// the editor's preview has no page script to load clips, so it shows the still (or the clip) straight away
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		$attrs .= ' src="' . esc_url( $still ? $still : $c['clip'] ) . '"';
 	}
-	return '<video class="' . esc_attr( $cls ) . '"' . $attrs . ' data-src="' . esc_url( $c['clip'] ) . '" muted loop playsinline preload="none" aria-label="' . esc_attr( $alt ) . '"></video>';
+	if ( preg_match( '/\.(gif|png|jpe?g|webp|avif)(\?|$)/i', $c['clip'] ) ) {
+		return '<img class="' . esc_attr( $cls ) . '"' . $attrs . ' data-src="' . esc_url( $c['clip'] ) . '"' . ( $still ? ' data-still="' . esc_url( $still ) . '"' : '' ) . ' alt="' . esc_attr( $alt ) . '">';
+	}
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST && $still ) {
+		return '<img class="' . esc_attr( $cls ) . '"' . $attrs . ' alt="' . esc_attr( $alt ) . '">';
+	}
+	return '<video class="' . esc_attr( $cls ) . '"' . $attrs . ' data-src="' . esc_url( $c['clip'] ) . '"' . ( $still ? ' poster="' . esc_url( $still ) . '"' : '' ) . ' muted loop playsinline preload="none" aria-label="' . esc_attr( $alt ) . '"></video>';
 }
 
 /**
@@ -325,9 +433,10 @@ function gm_clip( $c, $class, $attrs, $alt ) {
 function gm_render_roster( $creators ) {
 	$out = '';
 	foreach ( $creators as $i => $c ) {
-		$town  = $c['town'] ? $c['town'] : __( 'Maine', 'generation-maine' );
+		/* translators: %s: town */
+		$place = $c['town'] ? sprintf( __( '%s, Maine', 'generation-maine' ), $c['town'] ) : __( 'Maine', 'generation-maine' );
 		$inner = '<span class="ph">' . ( $c['portrait'] ? '<img src="' . esc_url( $c['portrait'] ) . '" alt="" width="300" height="400" loading="lazy">' : '' ) . '</span>'
-			. '<span class="who"><span class="n">' . esc_html( sprintf( '%02d', $i + 1 ) ) . '</span><b>' . esc_html( $c['name'] ) . '</b><span class="town">' . esc_html( $town ) . ', Maine</span></span>';
+			. '<span class="who"><span class="n">' . esc_html( sprintf( '%02d', $i + 1 ) ) . '</span><b>' . esc_html( $c['name'] ) . '</b><span class="town">' . esc_html( $place ) . '</span></span>';
 		$href  = '';
 		if ( ! $c['placeholder'] ) {
 			foreach ( $c['links'] as $l ) {
@@ -368,14 +477,15 @@ function gm_render_creators( $args = array() ) {
 	$stage  = $whos = $panels = $segs = $slides = '';
 	foreach ( $creators as $i => $c ) {
 		$on    = 0 === $i;
-		$town  = $c['town'] ? $c['town'] : __( 'Maine', 'generation-maine' );
-		/* translators: 1: creator name, 2: town */
-		$alt   = sprintf( __( 'Clip by %1$s, %2$s, Maine', 'generation-maine' ), $c['name'], $town );
+		/* translators: %s: town */
+		$town  = $c['town'] ? sprintf( __( '%s, Maine', 'generation-maine' ), $c['town'] ) : __( 'Maine', 'generation-maine' );
+		/* translators: 1: creator name, 2: town and state */
+		$alt   = sprintf( __( 'Clip by %1$s, %2$s', 'generation-maine' ), $c['name'], $town );
 		$len   = $c['len'] ? '<span class="dur">' . esc_html( $c['len'] ) . '</span>' : '';
 		$who   = gm_who( $c, $on );
 		$stage .= gm_clip( $c, $on ? 'on' : '', ' data-i="' . $i . '" data-dur="' . esc_attr( $c['len'] ) . '"', $alt );
 		$whos  .= $who;
-		/* translators: 1: position, 2: creator name, 3: town */
+		/* translators: 1: position, 2: creator name, 3: town and state */
 		$segs  .= '<button type="button" aria-label="' . esc_attr( sprintf( __( 'Creator %1$d, %2$s, %3$s', 'generation-maine' ), $i + 1, $c['name'], $town ) ) . '" data-name="' . esc_attr( $c['name'] ) . '"' . ( $on ? ' class="on"' : '' ) . '></button>';
 		$soc    = '';
 		foreach ( $c['links'] as $key => $l ) {
@@ -385,19 +495,23 @@ function gm_render_creators( $args = array() ) {
 		$open    = sprintf( __( 'Open the clip from %s full size', 'generation-maine' ), $c['name'] );
 		$panels .= '<article class="panel' . ( $on ? ' on' : '' ) . '" id="story-' . ( $i + 1 ) . '" data-i="' . $i . '">'
 			. '<div class="pv" role="button" tabindex="0" aria-label="' . esc_attr( $open ) . '">' . gm_clip( $c, '', '', '' ) . $who . $len . $expand . '</div>'
-			. '<p class="k">' . esc_html( $town ) . ', Maine</p><h2>' . esc_html( $c['name'] ) . '</h2>'
+			. '<p class="k">' . esc_html( $town ) . '</p><h2>' . esc_html( $c['name'] ) . '</h2>'
 			. ( $c['bio'] ? '<p class="bio">' . esc_html( $c['bio'] ) . '</p>' : '' )
 			. ( $soc ? '<div class="soc">' . $soc . '</div>' : '' )
 			. '</article>';
 		$slides .= '<div class="slide" data-i="' . $i . '"><div class="fr">' . gm_clip( $c, '', '', $alt ) . $who . $len . '</div>'
-			. '<div class="cap"><span class="k">' . esc_html( $town ) . ', Maine</span><strong>' . esc_html( $c['name'] ) . '</strong></div></div>';
+			. '<div class="cap"><span class="k">' . esc_html( $town ) . '</span><strong>' . esc_html( $c['name'] ) . '</strong></div></div>';
 	}
 	$count = str_pad( (string) $n, 2, '0', STR_PAD_LEFT );
 	$first = $creators[0]['len'];
 	return '<section class="stories" id="stories" style="--n:' . (int) $n . '"><div class="pinw"><div class="w">'
 		. '<div class="stage"><div class="vid" id="stage">' . $stage . $whos . '<span class="dur" id="dur"' . ( $first ? '' : ' hidden' ) . '>' . esc_html( $first ) . '</span></div></div>'
-		. '<div class="panels" id="panels" role="group" aria-roledescription="carousel" aria-label="' . esc_attr__( 'The creators', 'generation-maine' ) . '" tabindex="0">' . $panels . '</div>'
-		. '<div class="where" id="where"><span class="n" id="wn">01 / ' . esc_html( $count ) . '</span><span class="segs" id="segs">' . $segs . '</span>'
+		. '<div class="panels" id="panels" role="group" aria-roledescription="carousel" aria-label="' . esc_attr__( 'The creators', 'generation-maine' ) . '" aria-live="polite" tabindex="0">' . $panels . '</div>'
+		. '<div class="where" id="where"><span class="n" id="wn">01 / ' . esc_html( $count ) . '</span>'
+		. '<button type="button" class="cpause" id="cpause" aria-pressed="false" aria-label="' . esc_attr__( 'Pause the clips', 'generation-maine' ) . '">'
+		. '<svg class="ip" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg>'
+		. '<svg class="ipl" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.5v11l9-5.5z" fill="currentColor"/></svg></button>'
+		. '<span class="segs' . ( $n > 12 ? ' many' : '' ) . '" id="segs">' . $segs . '</span>'
 		. '<span class="next" id="wnext" data-next="' . esc_attr( $next ) . '" data-last="' . esc_attr( $last ) . '"></span></div>'
 		. '</div></div></section>'
 		. '<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="' . esc_attr__( 'Clip preview', 'generation-maine' ) . '" hidden>'

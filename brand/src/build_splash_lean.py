@@ -350,6 +350,43 @@ a.row:hover .name{color:var(--mg)}
 %(site_css)s
 %(css)s
 %(phone_site)s
+
+/* ---------- round 1 test fixes (Oct 14, 2026) ---------- */
+/* the mural draws itself only when the script runs; without it, and in the editor, it simply shows */
+.hero .mural path{stroke-dasharray:none;stroke-dashoffset:0;transition:none}
+.js .hero .mural path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.9s cubic-bezier(.3,.6,.2,1)}
+.js .hero .mural.on path{stroke-dashoffset:0}
+@media (max-width:900px){.js .hero .mural path{transition-duration:1.1s}}
+@media (prefers-reduced-motion:reduce){.js .hero .mural path{stroke-dashoffset:0;transition:none}html{scroll-behavior:auto}}
+/* the handle and name over a clip sit on a navy chip, readable on any frame */
+.stage .who,.panel .pv .who,.slide .fr .who{background:rgba(15,46,77,.78);padding:6px 10px 6px 6px;right:auto;max-width:calc(100%% - 76px)}
+.stage .who span,.panel .pv .who span,.slide .fr .who span{min-width:0;overflow-wrap:anywhere}
+/* the roster caption is not the clip overlay */
+.roster .tile .who{position:static;opacity:1;color:inherit;z-index:auto;background:none}
+/* long names and handles wrap instead of widening the card */
+.panel{min-width:0}.panel h2,.slide .cap strong,.panel .bio{overflow-wrap:anywhere}.slide .cap{min-width:0}
+@media (min-width:901px){.js .panel{justify-content:safe center;overflow-y:auto}}
+/* the pause control for the clips */
+.cpause{flex:none;width:44px;height:44px;display:grid;place-items:center;margin:0 -12px;padding:0;border:0;background:none;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cpause svg{width:14px;height:14px}.cpause .ipl,.cpause[aria-pressed="true"] .ip{display:none}.cpause[aria-pressed="true"] .ipl{display:block}
+.cpause:focus-visible{outline:2px solid var(--blue);outline-offset:-6px}
+/* footer and newsletter small print wrap long addresses */
+.static .site .ffine{grid-template-columns:minmax(0,1fr) auto}
+.site .ffine p,.follow .fine{overflow-wrap:anywhere;min-width:0}
+/* without the script: every story readable, no stepper, no dead menu button */
+html:not(.js) .stories{height:auto!important;min-height:0!important}
+html:not(.js) .stories .pinw{position:static}
+html:not(.js) .stage,html:not(.js) .where{display:none}
+html:not(.js) .panels{height:auto}
+html:not(.js) .panel{position:static;opacity:1;visibility:visible;pointer-events:auto;padding-block:20px}
+@media (max-width:900px){
+ html:not(.js) .top .menu{display:none}
+ /* a closed menu is out of the tab order and away from screen readers */
+ .sheet{visibility:hidden;transition:opacity .2s,transform .25s,visibility 0s linear .25s}
+ .sheet.open{visibility:visible;transition:opacity .2s,transform .25s}
+ .static .site .ffine{grid-template-columns:minmax(0,1fr)}
+ .where .segs.many{pointer-events:none}
+}
 """
 
 HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><script>document.documentElement.classList.add("js")</script>
@@ -407,13 +444,17 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   // the mural, on Family A: sixteen stripes drawing themselves in
   const m = document.getElementById('mural');
   if (m) {
-    const d = JSON.parse(document.getElementById('maine-data').textContent), ns = 'http://www.w3.org/2000/svg';
+    const de = document.getElementById('maine-data'), d = de ? JSON.parse(de.textContent) : {}, ns = 'http://www.w3.org/2000/svg';
+    // the theme draws the mural on the server; the static page builds it here. Either way the script only animates it.
+    if (!m.querySelector('svg') && d.lines) {
     const svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', '0 0 720 720'); svg.setAttribute('aria-hidden', 'true');
     const defs = document.createElementNS(ns, 'defs'), cp = document.createElementNS(ns, 'clipPath'); cp.setAttribute('id', 'muralclip');
     const cpp = document.createElementNS(ns, 'path'); cpp.setAttribute('d', d.clip); cp.appendChild(cpp); defs.appendChild(cp); svg.appendChild(defs);
     const g = document.createElementNS(ns, 'g'); g.setAttribute('clip-path', 'url(#muralclip)'); svg.appendChild(g);
-    d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || '#FFFFFF'); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); p.style.transitionDelay = (i * (matchMedia('(max-width: 900px)').matches ? 35 : (d.stagger || 35))) + 'ms'; g.appendChild(p); });
-    m.appendChild(svg); requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('on')));
+    d.lines.forEach(([x0, y0, x1, y1, w, c], i) => { const p = document.createElementNS(ns, 'path'); p.setAttribute('d', 'M' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y1); p.setAttribute('stroke', c || '#FFFFFF'); p.setAttribute('stroke-width', w); p.setAttribute('fill', 'none'); p.setAttribute('pathLength', '1'); g.appendChild(p); });
+    m.appendChild(svg); }
+    m.querySelectorAll('g path').forEach((p, i) => { p.style.transitionDelay = (i * (matchMedia('(max-width: 900px)').matches ? 35 : (d.stagger || 35))) + 'ms'; });
+    requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('on')));
   }
   // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Clips are images or videos;
   // either way they carry data-src and load when their card is current or next door.
@@ -422,8 +463,11 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   if (panelsEl && storiesEl) {
   const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('.clip')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
   const panels = [...document.querySelectorAll('.panel')]; let cur = -1;
-  const load = el => { if (el && el.dataset.src && !el.getAttribute('src')) el.src = el.dataset.src; };
-  const playOnly = (els, i) => els.forEach((v, k) => { if (!v || !v.play) return; if (k === i) v.play().catch(() => {}); else v.pause(); });
+  const pauseBtn = document.getElementById('cpause'); let paused = reduced;
+  // a loaded clip shows its moving source, or its still while the clips are paused (a GIF cannot be paused any other way)
+  const setSrc = el => { if (!el || !el.dataset.src || !el.dataset.on) return; const want = paused && el.tagName === 'IMG' ? (el.dataset.still || '') : el.dataset.src; if (!want) el.removeAttribute('src'); else if (el.getAttribute('src') !== want) el.src = want; };
+  const load = el => { if (el && el.dataset.src && !el.dataset.on) { el.dataset.on = '1'; setSrc(el); } };
+  const playOnly = (els, i) => els.forEach((v, k) => { if (!v || !v.play) return; if (k === i && !paused) v.play().catch(() => {}); else v.pause(); });
   // clips load when their card is current or next door, not all nine at once
   const hydrate = i => { const near = (els) => els.filter((e, k) => Math.abs(k - i) <= 1); near(panels.map(p => p.querySelector('.clip'))).forEach(load); if (!phone.matches) near(stageVids).forEach(load); };
   // the section's tint on phones, one per creator, cycling through the family's light fields
@@ -435,11 +479,16 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
     wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? (wnext.dataset.next || 'Next: ') + nx.dataset.name : (wnext.dataset.last || 'Last one'); marks.forEach((m, k) => { if (k === i) m.setAttribute('aria-current', 'true'); else m.removeAttribute('aria-current'); }); tint(i); }
   const stageEl = document.querySelector('.stage');
   const gutter = () => parseFloat(getComputedStyle(panelsEl).paddingLeft) || 0;
-  // the current card is the one whose left edge sits nearest the gutter
-  const nearest = () => { const edge = panelsEl.getBoundingClientRect().left + gutter(); let best = 0, bd = Infinity; panels.forEach((p, k) => { const d = Math.abs(p.getBoundingClientRect().left - edge); if (d < bd) { bd = d; best = k; } }); return best; };
-  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); const r = panels[k].getBoundingClientRect(), c = panelsEl.getBoundingClientRect(); panelsEl.scrollTo({ left: panelsEl.scrollLeft + r.left - c.left - gutter(), behavior: reduced ? 'auto' : 'smooth' }); hydrate(k); };
+  // the current card is the one whose left edge sits nearest the gutter; at the end of the track, where the last cards can
+  // never reach the gutter, it is the card asked for, or the last one
+  let want = -1;
+  const nearest = () => { if (panelsEl.scrollLeft >= panelsEl.scrollWidth - panelsEl.clientWidth - 2) return want >= 0 ? want : panels.length - 1; const edge = panelsEl.getBoundingClientRect().left + gutter(); let best = 0, bd = Infinity; panels.forEach((p, k) => { const d = Math.abs(p.getBoundingClientRect().left - edge); if (d < bd) { bd = d; best = k; } }); return best; };
+  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); want = k; const r = panels[k].getBoundingClientRect(), c = panelsEl.getBoundingClientRect(); panelsEl.scrollTo({ left: panelsEl.scrollLeft + r.left - c.left - gutter(), behavior: reduced ? 'auto' : 'smooth' }); hydrate(k);
+    // at the end of the track there may be nothing left to scroll, so no scroll event comes to update the row
+    if (phone.matches) show(k); };
   const onTrack = () => { if (!phone.matches) return; show(nearest()); };
   panelsEl.addEventListener('scroll', onTrack, { passive: true });
+  ['pointerdown', 'wheel', 'touchstart'].forEach(t => panelsEl.addEventListener(t, () => { want = -1; }, { passive: true }));
   panelsEl.addEventListener('keydown', e => { if (!phone.matches) return; if (e.key === 'ArrowRight') { e.preventDefault(); goTo(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(cur - 1); } });
   const fit = () => { if (!stageEl || phone.matches) { panelsEl.style.height = ''; if (stageEl) stageEl.style.removeProperty('--stageh'); return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
     const top = 84 + 16, room = innerHeight - top - (h + 6) - 14 - 20, colw = stageEl.clientWidth || (innerWidth - 72);
@@ -449,6 +498,12 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   marks.forEach((m, k) => m.addEventListener('click', () => { if (phone.matches) { goTo(k); return; } const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
   addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); onTrack(); hydrate(cur); }); step(); if (cur < 0) show(0); tint(cur);
   if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
+  const allClips = () => [...document.querySelectorAll('#stories .clip, #vtrack .clip')];
+  const setPaused = p => { paused = p; if (pauseBtn) { pauseBtn.setAttribute('aria-pressed', String(p)); pauseBtn.setAttribute('aria-label', p ? 'Play the clips' : 'Pause the clips'); }
+    allClips().forEach(setSrc); const c = cur; cur = -1; show(c < 0 ? 0 : c); };
+  if (pauseBtn) { pauseBtn.addEventListener('click', () => setPaused(!paused)); if (paused) setPaused(true); }
+  // with many creators the phone segments get too thin to tap; swiping and the arrow keys still move the cards
+  if (marks.length > 12) { const segsEl = document.getElementById('segs'); if (segsEl) segsEl.classList.add('many'); }
   // tap to expand: the full frame over the page, one slide per creator
   const viewer = document.getElementById('viewer'), vtrack = document.getElementById('vtrack'), vn = document.getElementById('vn'), vclose = document.getElementById('vclose');
   if (viewer && vtrack) {
@@ -456,12 +511,17 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
     const svids = slides.map(sl => sl.querySelector('video.clip'));
     const vhydrate = i => slides.forEach((sl, k) => { if (Math.abs(k - i) <= 1) load(sl.querySelector('.clip')); });
     const vshow = i => { if (i === vcur) return; vcur = i; vn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0'); vhydrate(i); playOnly(svids, i); };
+    const focusables = () => [...viewer.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])')].filter(x => x.offsetParent !== null);
+    viewer.addEventListener('keydown', e => { if (e.key !== 'Tab') return; const f = focusables(); if (!f.length) return; const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } });
+    document.addEventListener('focusin', e => { if (!viewer.hidden && !viewer.contains(e.target)) vclose.focus({ preventScroll: true }); });
     const vnearest = () => { const c = vtrack.getBoundingClientRect(), cx = c.left + c.width / 2; let best = 0, bd = Infinity; slides.forEach((sl, k) => { const r = sl.getBoundingClientRect(), d = Math.abs(r.left + r.width / 2 - cx); if (d < bd) { bd = d; best = k; } }); return best; };
     const openViewer = i => { if (!phone.matches) return; lastFocus = document.activeElement; vcur = -1; viewer.hidden = false; vtrack.scrollLeft = slides[i].offsetLeft; vshow(i);
+      panels.forEach(p => { const v = p.querySelector('video.clip'); if (v && v.pause) v.pause(); });
       document.documentElement.classList.add('vopen'); requestAnimationFrame(() => viewer.classList.add('in')); vclose.focus({ preventScroll: true });
       try { history.pushState({ gmViewer: true }, ''); pushed = true; } catch (e) { pushed = false; } };
     const closeViewer = (fromHistory) => { if (viewer.hidden) return; viewer.classList.remove('in'); document.documentElement.classList.remove('vopen'); playOnly(svids, -1);
-      const done = () => { viewer.hidden = true; if (vcur >= 0) { goTo(vcur); show(vcur); } if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true }); };
+      const done = () => { viewer.hidden = true; if (vcur >= 0) { goTo(vcur); show(vcur); } const back = vcur >= 0 && panels[vcur] ? panels[vcur].querySelector('.pv') : lastFocus; if (back && back.focus) back.focus({ preventScroll: true }); };
       if (reduced) done(); else setTimeout(done, 220);
       if (pushed && !fromHistory) { pushed = false; history.back(); } else pushed = false; };
     panels.forEach((p, k) => { const pv = p.querySelector('.pv'); if (!pv) return; pv.addEventListener('click', () => openViewer(k)); pv.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openViewer(k); } }); });
@@ -487,13 +547,16 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   // phone menu
   const sheet = document.getElementById('sheet'), menu = document.getElementById('menu');
   if (sheet && menu) {
+  const bar = document.querySelector('.top');
+  if (bar && bar.nextElementSibling !== sheet) bar.after(sheet);
+  sheet.inert = true;
   const sn = sheet.querySelector('nav');
   if (sn && !sn.children.length) document.querySelectorAll('.top nav a').forEach(a => sn.appendChild(a.cloneNode(true)));
   if (!sheet.querySelector('.btn')) { const c = document.querySelector('.top .cta a, .top a.cta'); if (c) { const b = document.createElement('a'); b.className = 'btn b1'; b.href = c.getAttribute('href'); b.textContent = c.textContent; sheet.appendChild(b); } }
-  const setMenu = o => { sheet.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
+  const setMenu = o => { if (o && bar) sheet.style.top = Math.max(0, bar.getBoundingClientRect().bottom) + 'px'; sheet.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); sheet.inert = !o; menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
   menu.addEventListener('click', () => setMenu(!sheet.classList.contains('open')));
   sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
-  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && sheet.classList.contains('open')) { const inside = sheet.contains(document.activeElement); setMenu(false); if (inside) menu.focus(); } });
   }
   // the newsletter form hands the address to Substack, which prefills it
   const f = document.getElementById('nl');
@@ -533,22 +596,22 @@ def stepper_html():
         cr = S.CREATORS[i]
         clip = cr.get("clip", "creator-%d.webm" % (i + 1))
         if clip.endswith((".gif", ".png", ".jpg", ".webp")):
-            stagevids += '<img class="clip%s" data-i="%d" data-dur="%s" data-src="media/%s" alt="">' % (' on' if i == 0 else '', i, dur, clip)
+            stagevids += '<img class="clip%s" data-i="%d" data-dur="%s" data-src="media/%s" data-still="media/portrait-%d.jpg" alt="">' % (' on' if i == 0 else '', i, dur, clip, i + 1)
         else:
             stagevids += '<video data-i="%d" data-dur="%s" src="media/%s" muted loop playsinline preload="%s" aria-label="Placeholder clip, %s, %s, Maine"%s></video>' % (i, dur, clip, "auto" if i < 2 else "metadata", topic, town, ' class="on"' if i == 0 else "")
         who = '<div class="who%s">%s<span><b>%s</b>%s</span></div>' % (' on' if i == 0 else '', S.avatar(), cr["handle"], cr["name"])
         whos += who
         idx += '<button type="button" aria-label="Creator %d, %s, %s" data-name="%s"%s></button>' % (i + 1, cr["name"], town, cr["name"], ' class="on"' if i == 0 else "")
         socials = ''.join('<a href="#follow" aria-label="%s">%s<span>%s</span></a>' % (lbl, S.icon(n), cr["handle"]) for n, lbl in (("instagram", "Instagram"), ("tiktok", "TikTok"), ("youtube", "YouTube")))
-        pv = '<img class="clip" data-src="media/%s" alt="">%s<span class="dur">%s</span><span class="ex" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg></span>' % (clip, who, dur)
-        slides += ('<div class="slide" data-i="%d"><div class="fr"><img class="clip" data-src="media/%s" alt="Placeholder clip, %s, %s, Maine">%s<span class="dur">%s</span></div>'
-                   '<div class="cap"><span class="k">%s, Maine</span><strong>%s</strong></div></div>' % (i, clip, topic, town, who, dur, town, cr["name"])) if clip.endswith((".gif", ".png", ".jpg", ".webp")) else who
+        pv = '<img class="clip" data-src="media/%s" data-still="media/portrait-%d.jpg" alt="">%s<span class="dur">%s</span><span class="ex" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg></span>' % (clip, i + 1, who, dur)
+        slides += ('<div class="slide" data-i="%d"><div class="fr"><img class="clip" data-src="media/%s" data-still="media/portrait-%d.jpg" alt="Placeholder clip, %s, %s, Maine">%s<span class="dur">%s</span></div>'
+                   '<div class="cap"><span class="k">%s, Maine</span><strong>%s</strong></div></div>' % (i, clip, i + 1, topic, town, who, dur, town, cr["name"])) if clip.endswith((".gif", ".png", ".jpg", ".webp")) else who
         panels += ('<article class="panel%s" id="story-%d" data-i="%d"><div class="pv" role="button" tabindex="0" aria-label="Open the clip from %s full size">%s</div><p class="k">%s, Maine</p><h2>%s</h2><p class="bio">%s</p><div class="soc">%s</div></article>'
                    % (" on" if i == 0 else "", i + 1, i, cr["name"], pv, town, cr["name"], cr["bio"], socials))
     return ('<section class="stories" id="stories"><div class="pinw"><div class="w">'
             '<div class="stage"><div class="vid" id="stage">%s%s<span class="dur" id="dur">0:52</span></div></div>'
-            '<div class="panels" id="panels" role="group" aria-roledescription="carousel" aria-label="The creators" tabindex="0">%s</div>'
-            '<div class="where" id="where"><span class="n" id="wn">01 / 09</span><span class="segs" id="segs">%s</span><span class="next" id="wnext"></span></div>'
+            '<div class="panels" id="panels" role="group" aria-roledescription="carousel" aria-label="The creators" aria-live="polite" tabindex="0">%s</div>'
+            '<div class="where" id="where"><span class="n" id="wn">01 / 09</span><button type="button" class="cpause" id="cpause" aria-pressed="false" aria-label="Pause the clips"><svg class="ip" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg><svg class="ipl" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.5v11l9-5.5z" fill="currentColor"/></svg></button><span class="segs" id="segs">%s</span><span class="next" id="wnext"></span></div>'
             '</div></div></section>'
             '<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Clip preview" hidden>'
             '<div class="vbar"><span class="n" id="vn">01 / 09</span><button type="button" class="vclose" id="vclose" aria-label="Close">'

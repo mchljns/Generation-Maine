@@ -49,7 +49,9 @@ function gm_settings_fields() {
 function gm_setting( $key ) {
 	foreach ( gm_settings_fields() as $fields ) {
 		if ( isset( $fields[ $key ] ) ) {
-			return (string) get_option( $key, $fields[ $key ]['default'] );
+			$value = (string) get_option( $key, $fields[ $key ]['default'] );
+			// a cleared line with a default goes back to the default, so the footer is never left with an empty line
+			return '' === trim( $value ) && in_array( $key, array( 'gm_footer_line', 'gm_legal_line' ), true ) ? (string) $fields[ $key ]['default'] : $value;
 		}
 	}
 	return (string) get_option( $key, '' );
@@ -81,7 +83,7 @@ function gm_register_setting_options() {
 					'type'              => 'string',
 					'default'           => $field['default'],
 					'show_in_rest'      => true,
-					'sanitize_callback' => 'subscribe' === $field['type'] ? 'gm_sanitize_subscribe' : ( 'url' === $field['type'] ? 'esc_url_raw' : 'sanitize_text_field' ),
+					'sanitize_callback' => 'subscribe' === $field['type'] ? 'gm_sanitize_subscribe' : ( 'url' === $field['type'] ? gm_url_sanitizer( $key ) : ( false !== strpos( $key, '_handle' ) ? 'gm_sanitize_handle' : 'sanitize_text_field' ) ),
 				)
 			);
 		}
@@ -114,15 +116,85 @@ function gm_register_settings_ui() {
 add_action( 'admin_init', 'gm_register_settings_ui' );
 
 /**
- * Only an https subscribe page, or empty.
+ * One notice per field and save, even though WordPress runs the sanitizer twice on an option's first save.
+ *
+ * @param string $key  Option.
+ * @param string $msg  Message.
+ * @param string $type error or warning.
+ */
+function gm_settings_notice( $key, $msg, $type ) {
+	if ( ! function_exists( 'add_settings_error' ) ) {
+		return;
+	}
+	foreach ( get_settings_errors( $key ) as $e ) {
+		if ( $e['message'] === $msg ) {
+			return;
+		}
+	}
+	add_settings_error( $key, $key . '_' . $type, $msg, $type );
+}
+
+/**
+ * Clean a web address. Plain http becomes https; anything that is not a web address is refused with a notice, and the
+ * value saved before stays in place.
+ *
+ * @param string $key   Option.
+ * @param string $value Raw value.
+ * @return string
+ */
+function gm_clean_url( $key, $value ) {
+	$value = trim( (string) $value );
+	if ( '' === $value ) {
+		return '';
+	}
+	if ( 0 === stripos( $value, 'http://' ) ) {
+		$value = 'https://' . substr( $value, 7 );
+	} elseif ( ! preg_match( '#^[a-z][a-z0-9+.-]*:#i', $value ) && preg_match( '#^[\w-]+(\.[\w-]+)+(/|$)#', $value ) ) {
+		$value = 'https://' . $value;
+	}
+	$clean = esc_url_raw( $value, array( 'https' ) );
+	if ( '' === $clean ) {
+		/* translators: %s: what was typed */
+		gm_settings_notice( $key, sprintf( __( '"%s" is not a web address, so the address saved before was kept.', 'generation-maine' ), wp_strip_all_tags( $value ) ), 'error' );
+		return (string) get_option( $key, '' );
+	}
+	return $clean;
+}
+
+/**
+ * A sanitizer for one url option.
+ *
+ * @param string $key Option.
+ * @return callable
+ */
+function gm_url_sanitizer( $key ) {
+	return static function ( $value ) use ( $key ) {
+		return gm_clean_url( $key, $value );
+	};
+}
+
+/**
+ * A handle shows with its @.
+ *
+ * @param string $value Raw value.
+ * @return string
+ */
+function gm_sanitize_handle( $value ) {
+	$value = trim( sanitize_text_field( (string) $value ) );
+	return '' === $value || '@' === $value[0] ? $value : '@' . $value;
+}
+
+/**
+ * The subscribe page: https, and its path should end in /subscribe (a custom domain is fine).
  *
  * @param string $value Raw value.
  * @return string
  */
 function gm_sanitize_subscribe( $value ) {
-	$value = esc_url_raw( trim( (string) $value ), array( 'https' ) );
-	if ( '' !== $value && false === strpos( $value, '/subscribe' ) && function_exists( 'add_settings_error' ) ) {
-		add_settings_error( 'gm_newsletter_url', 'gm_newsletter_url', __( 'The address should be the publication\'s subscribe page, ending in /subscribe.', 'generation-maine' ) );
+	$value = gm_clean_url( 'gm_newsletter_url', $value );
+	$path  = $value ? (string) wp_parse_url( $value, PHP_URL_PATH ) : '';
+	if ( '' !== $value && ! preg_match( '#/subscribe/?$#', $path ) ) {
+		gm_settings_notice( 'gm_newsletter_url', __( 'Saved. Check the address: it should be the publication\'s subscribe page, ending in /subscribe.', 'generation-maine' ), 'warning' );
 	}
 	return $value;
 }

@@ -5,7 +5,7 @@
 	"title": "Latest Newsletter Posts",
 	"category": "widgets",
 	"icon": "rss",
-	"description": "The latest posts from the Substack publication set under Settings > Newsletter, read from its feed and cached for an hour. Shows placeholders until the address is set.",
+	"description": "The latest posts from the Substack publication set under Settings > Generation Maine, read from its feed and cached for an hour. Shows placeholders until the address is set.",
 	"keywords": [ "newsletter", "substack", "posts", "feed" ],
 	"textdomain": "generation-maine",
 	"attributes": { "count": { "type": "number", "default": 3 } },

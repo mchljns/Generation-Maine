@@ -24,10 +24,12 @@ function gm_seo() {
 			$same_as[] = $c['url'];
 		}
 	}
+	$name = get_bloginfo( 'name' ) ? get_bloginfo( 'name' ) : 'Generation Maine';
 	return apply_filters(
 		'gm_seo',
 		array(
-			'title'       => 'Generation Maine: young Mainers on the rules that shape their lives',
+			'name'        => $name,
+			'title'       => $name . ': young Mainers on the rules that shape their lives',
 			'description' => 'Young Mainers film the rules that shape their lives. Short videos on TikTok, Instagram and YouTube, and the full story by email. A Maine Policy Institute project.',
 			'image'       => get_theme_file_uri( 'assets/img/share-card.jpg' ),
 			'image_alt'   => 'Generation Maine',
@@ -81,12 +83,13 @@ function gm_seo_head() {
 	}
 
 	$tags = array(
-		'og:type'        => 'website',
-		'og:site_name'   => 'Generation Maine',
+		'og:type'        => is_singular( 'post' ) ? 'article' : 'website',
+		'og:site_name'   => $s['name'],
 		'og:locale'      => str_replace( '-', '_', get_bloginfo( 'language' ) ),
 		'og:title'       => $title,
 		'og:description' => $s['description'],
-		'og:url'         => $front ? $url : get_permalink(),
+		// a page with its own address names it; an archive or a search names none rather than the first post in it
+		'og:url'         => $front ? $url : ( is_singular() ? get_permalink() : '' ),
 		'og:image'       => $s['image'],
 		'og:image:width' => '1200',
 		'og:image:height' => '630',
@@ -103,9 +106,9 @@ function gm_seo_head() {
 		$schema = array(
 			'@context'           => 'https://schema.org',
 			'@type'              => 'Organization',
-			'name'               => 'Generation Maine',
+			'name'               => $s['name'],
 			'url'                => $url,
-			'logo'               => get_theme_file_uri( 'assets/img/icon-192.png' ),
+			'logo'               => has_site_icon() ? get_site_icon_url( 512 ) : get_theme_file_uri( 'assets/img/icon-192.png' ),
 			'description'        => $s['description'],
 			'parentOrganization' => array(
 				'@type' => 'Organization',
@@ -116,7 +119,7 @@ function gm_seo_head() {
 		if ( ! empty( $s['same_as'] ) ) {
 			$schema['sameAs'] = array_values( $s['same_as'] );
 		}
-		echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+		echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG ) . '</script>' . "\n";
 	}
 }
 add_action( 'wp_head', 'gm_seo_head', 2 );

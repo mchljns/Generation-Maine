@@ -20,6 +20,7 @@ require_once get_theme_file_path( 'inc/newsletter.php' );
 require_once get_theme_file_path( 'inc/follow.php' );
 require_once get_theme_file_path( 'inc/footer.php' );
 require_once get_theme_file_path( 'inc/seo.php' );
+require_once get_theme_file_path( 'inc/parts.php' );
 
 /**
  * Theme supports. Layout styles are off because the page's own stylesheet lays out every section; the editor gets the
@@ -138,7 +139,37 @@ function gm_render_marks( $html, $block ) {
 		return preg_replace( '/^(\s*<p\b[^>]*>)/', '$1' . gm_bars(), $html, 1 );
 	}
 	if ( 'core/heading' === $block['blockName'] && false !== strpos( $class, ' gm-here ' ) ) {
-		return preg_replace( '/([^\s<>]+)(\s*)(<\/h[1-6]>\s*)$/', '<span class="here">$1<i class="d pulse" aria-hidden="true"></i></span>$2$3', $html, 1 );
+		// a stray line break at the end does not count
+		$html = preg_replace( '#(?:\s|&nbsp;|<br\s*/?>)+(</h[1-6]>\s*)$#i', '$1', $html );
+		// the last word turns gold even inside bold, emphasis or a link; a final period becomes the dot, and a question or an
+		// exclamation keeps its mark and gets no dot
+		return preg_replace_callback(
+			'#([^\s<>]+)((?:\s*</(?:strong|b|em|i|a|span|mark|u|s|code)>)*)(\s*</h[1-6]>\s*)$#i',
+			static function ( $m ) {
+				$word = $m[1];
+				$dot  = '<i class="d pulse" aria-hidden="true"></i>';
+				if ( preg_match( '/[?!]$/', $word ) ) {
+					return '<span class="here">' . $word . '</span>' . $m[2] . $m[3];
+				}
+				if ( strlen( $word ) > 1 && '.' === substr( $word, -1 ) ) {
+					$word = substr( $word, 0, -1 );
+				}
+				return '<span class="here">' . $word . $dot . '</span>' . $m[2] . $m[3];
+			},
+			$html,
+			1
+		);
+	}
+	if ( 'core/group' === $block['blockName'] && $class ) {
+		// the bar and the footer link to these sections by id, so the ids stay whatever an editor does to the anchor field
+		foreach ( array( ' hero ' => 'top', ' about ' => 'about', ' stories-head ' => 'creators', ' follow ' => 'follow', ' nl ' => 'newsletter' ) as $token => $id ) {
+			if ( false !== strpos( $class, $token ) ) {
+				if ( preg_match( '/^(\s*<[a-z]+\b[^>]*?)\sid="[^"]*"/i', $html ) ) {
+					return preg_replace( '/^(\s*<[a-z]+\b[^>]*?)\sid="[^"]*"/i', '$1 id="' . $id . '"', $html, 1 );
+				}
+				return preg_replace( '/^(\s*<[a-z]+\b)/i', '$1 id="' . $id . '"', $html, 1 );
+			}
+		}
 	}
 	return $html;
 }

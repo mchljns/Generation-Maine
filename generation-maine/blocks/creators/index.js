@@ -9,8 +9,8 @@
 				el( InspectorControls, null, el( PanelBody, { title: 'Settings' },
 					el( SelectControl, { label: 'Layout', value: a.layout || 'stepper', options: [ { label: 'Stepper: one pinned clip at a time (phones: a carousel)', value: 'stepper' }, { label: 'Roster: a tile per creator, linking to their feeds', value: 'roster' } ], onChange: function ( v ) { set( { layout: v } ); } } ),
 					el( RangeControl, { label: 'Most creators to show', min: 1, max: 48, value: a.limit, onChange: function ( v ) { set( { limit: v } ); } } ),
-					el( TextControl, { label: 'Label before the next name', help: 'Default: "Next: "', value: a.next, onChange: function ( v ) { set( { next: v } ); } } ),
-					el( TextControl, { label: 'Label on the last creator', help: 'Default: "Last one"', value: a.last, onChange: function ( v ) { set( { last: v } ); } } )
+					'roster' !== a.layout && el( TextControl, { label: 'Label before the next name', help: 'Default: "Next: "', value: a.next, onChange: function ( v ) { set( { next: v } ); } } ),
+					'roster' !== a.layout && el( TextControl, { label: 'Label on the last creator', help: 'Default: "Last one"', value: a.last, onChange: function ( v ) { set( { last: v } ); } } )
 				) ),
 				el( ServerSideRender, { block: 'generation-maine/creators', attributes: a } ) );
 		},
