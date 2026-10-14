@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# WordPress 6.5 on PHP 7.4 in WordPress Playground, with the theme zip from /tmp/claude-0/wptest/pg installed and nine creators seeded.
+#   pg74 start | stop | log      site at http://127.0.0.1:9474, logged in as admin on first visit (admin / password)
+# Each start is a fresh site. PHP notices go to /tmp/claude-0/wptest/pg/mu/debug.log. Responses carry X-Test-PHP with the PHP version.
+D="${WPT_ROOT:-/tmp/claude-0/wptest}/pg"
+case "${1:-}" in
+  start)
+    [ -f $D/pid ] && kill -0 "$(cat $D/pid)" 2>/dev/null && { echo "already running at http://127.0.0.1:9474"; exit 0; }
+    rm -f $D/mu/debug.log
+    cd $D && NODE_USE_ENV_PROXY=1 NODE_NO_WARNINGS=1 setsid nohup ${WPT_ROOT:-/tmp/claude-0/wptest}/playground/node_modules/.bin/wp-playground-cli server --php=7.4 --wp=6.5 --port=9474 --login --blueprint=local74.json --blueprint-may-read-adjacent-files --mount=/home/user/Generation-Maine/brand/identity/splash-lean-a/media:/media --mount=$D/mu:/wordpress/wp-content/mu-plugins > $D/server74.log 2>&1 < /dev/null &
+    echo $! > $D/pid
+    for i in $(seq 1 60); do grep -q "Ready!" $D/server74.log && break; sleep 5; done; tail -1 $D/server74.log ;;
+  stop) [ -f $D/pid ] && kill -- -"$(cat $D/pid)" 2>/dev/null; kill "$(cat $D/pid 2>/dev/null)" 2>/dev/null; rm -f $D/pid; echo stopped ;;
+  log) cat $D/mu/debug.log 2>/dev/null || echo "(no PHP notices logged)" ;;
+  *) sed -n 2,5p "$0" ;;
+esac

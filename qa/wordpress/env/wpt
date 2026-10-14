@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Test WordPress instances for the Generation Maine theme. Each instance is its own copy of WordPress on SQLite with its own port.
+#   wpt new <name> <port> <template>   copy a template (clean71, clean65, seeded71, seeded65) and start it at http://127.0.0.1:<port>
+#   wpt start <name> | stop <name> | rm <name> | list
+#   wpt wp <name> <wp-cli args...>     run WP-CLI against the instance
+#   wpt log <name>                     PHP errors and warnings logged by WordPress (wp-content/debug.log) plus the server log
+#   wpt themelog <name>                only the log lines that come from the theme, or any fatal error (WP 6.5 on PHP 8.4 logs core deprecations; ignore those)
+# Admin login on every instance: admin / adminpass
+set -euo pipefail
+T="${WPT_ROOT:-/tmp/claude-0/wptest}"
+cmd="${1:-list}"; shift || true
+port_of() { cat "$T/inst/$1/port"; }
+start() {
+  local n="$1" p; p=$(port_of "$n")
+  if [ -f "$T/inst/$n/pid" ] && kill -0 "$(cat "$T/inst/$n/pid")" 2>/dev/null; then echo "$n already running on $p"; return; fi
+  PHP_CLI_SERVER_WORKERS=4 setsid nohup php -d upload_max_filesize=64M -d post_max_size=64M -d memory_limit=512M -d max_execution_time=300 -S 127.0.0.1:"$p" -t "$T/inst/$n/core" > "$T/inst/$n/server.log" 2>&1 < /dev/null &
+  echo $! > "$T/inst/$n/pid"
+  for i in $(seq 1 40); do curl -s -o /dev/null "http://127.0.0.1:$p/wp-login.php" && break; sleep 0.25; done
+  echo "$n running at http://127.0.0.1:$p (admin / adminpass)"
+}
+case "$cmd" in
+  new)
+    n="$1"; p="$2"; tpl="$3"; d="$T/inst/$n"
+    [ -e "$d" ] && { echo "instance $n exists; wpt rm $n first"; exit 1; }
+    cp -a "$T/tpl/$tpl" "$d"; echo "$p" > "$d/port"
+    sed -i "s#__WPT_PORT__#$p#g" "$d/core/wp-config.php"; sed -i "s#__WPT_CORE__#$d/core#g" "$d/core/wp-content/db.php"
+    start "$n" ;;
+  start) start "$1" ;;
+  stop) n="$1"; [ -f "$T/inst/$n/pid" ] && kill "$(cat "$T/inst/$n/pid")" 2>/dev/null || true; rm -f "$T/inst/$n/pid"; echo "$n stopped" ;;
+  rm) n="$1"; "$0" stop "$n" >/dev/null; rm -rf "$T/inst/$n"; echo "$n removed" ;;
+  list) for d in "$T"/inst/*/; do [ -d "$d" ] || continue; n=$(basename "$d"); s=stopped; [ -f "$d/pid" ] && kill -0 "$(cat "$d/pid")" 2>/dev/null && s=running; echo "$n $(cat "$d/port") $s"; done ;;
+  wp) n="$1"; shift; p=$(port_of "$n"); HTTP_HOST="127.0.0.1:$p" exec php -d memory_limit=512M "$T/dl/wp-cli.phar" --allow-root --path="$T/inst/$n/core" --url="http://127.0.0.1:$p" "$@" ;;
+  log) n="$1"; echo "== debug.log"; cat "$T/inst/$n/core/wp-content/debug.log" 2>/dev/null || echo "(empty)"; echo "== server.log (errors only)"; grep -iv " \[200\]\| \[30[0-9]\]\| Accepted\| Closing\|Development Server\|^$" "$T/inst/$n/server.log" | tail -40 || true ;;
+  themelog) n="$1"; grep -E "generation-maine|Fatal|Parse error" "$T/inst/$n/core/wp-content/debug.log" 2>/dev/null || echo "(no theme lines)" ;;
+  *) sed -n 2,9p "$0"; exit 1 ;;
+esac
