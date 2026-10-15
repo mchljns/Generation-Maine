@@ -8,7 +8,7 @@
 	"description": "The channels, one row each: Instagram, TikTok, YouTube and Substack. Addresses and handles come from Settings > Generation Maine; a channel without an address shows a placeholder row with no link.",
 	"keywords": [ "follow", "social", "instagram", "tiktok", "youtube", "substack" ],
 	"textdomain": "generation-maine",
-	"supports": { "html": false, "anchor": true },
+	"supports": { "html": false, "anchor": true, "multiple": false },
 	"editorScript": "file:./index.js",
 	"render": "file:./render.php"
 }

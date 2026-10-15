@@ -39,7 +39,8 @@
 		"align": [
 			"full"
 		],
-		"anchor": true
+		"anchor": true,
+		"multiple": false
 	},
 	"editorScript": "file:./index.js",
 	"render": "file:./render.php"

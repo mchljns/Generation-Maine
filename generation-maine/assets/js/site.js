@@ -30,10 +30,11 @@
   const pauseBtn = document.getElementById('cpause'); let paused = reduced;
   // a loaded clip shows its moving source, or its still while the clips are paused (a GIF cannot be paused any other way)
   const setSrc = el => { if (!el || !el.dataset.src || !el.dataset.on) return; const want = paused && el.tagName === 'IMG' ? (el.dataset.still || '') : el.dataset.src; if (!want) el.removeAttribute('src'); else if (el.getAttribute('src') !== want) el.src = want; };
-  const load = el => { if (el && el.dataset.src && !el.dataset.on) { el.dataset.on = '1'; setSrc(el); } };
+  // a video waits with a small poster (browsers load every poster at once) and gets its sharp still when it loads
+  const load = el => { if (el && el.dataset.src && !el.dataset.on) { el.dataset.on = '1'; if (el.tagName === 'VIDEO' && el.dataset.still) el.poster = el.dataset.still; setSrc(el); } };
   const playOnly = (els, i) => els.forEach((v, k) => { if (!v || !v.play) return; if (k === i && !paused) v.play().catch(() => {}); else v.pause(); });
-  // clips load when their card is current or next door, not all nine at once
-  const hydrate = i => { const near = (els) => els.filter((e, k) => Math.abs(k - i) <= 1); near(panels.map(p => p.querySelector('.clip'))).forEach(load); if (!phone.matches) near(stageVids).forEach(load); };
+  // clips load when their card is current or next door, not all nine at once; so do the photos in the stage's stacked headers
+  const hydrate = i => { const near = (els) => els.filter((e, k) => Math.abs(k - i) <= 1); near(panels.map(p => p.querySelector('.clip'))).forEach(load); if (!phone.matches) { near(stageVids).forEach(load); near(whos).forEach(w => { const a = w.querySelector('img.av[data-src]'); if (a) { a.src = a.dataset.src; delete a.dataset.src; } }); } };
   // the section's tint on phones, one per creator, cycling through the family's light fields
   const TINTS = ['#EAF1F8', '#F8F3E2', '#E3ECF6', '#FFFFFF', '#EEF3F9', '#F6EFDC', '#E8EFF7', '#FBF7EA', '#EAF1F8'];
   const headEl = document.getElementById('creators'); const tint = i => { const c = phone.matches ? TINTS[i % TINTS.length] : ''; storiesEl.style.backgroundColor = c; if (headEl) headEl.style.backgroundColor = c; };

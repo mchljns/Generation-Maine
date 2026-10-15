@@ -8,6 +8,10 @@
  *
  * @package generation-maine
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 ?>
 <!-- wp:paragraph {"className":"lede"} -->
 <p class="lede"><?php esc_html_e( 'Generation Maine is a one-page site.', 'generation-maine' ); ?> <a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Go to the home page', 'generation-maine' ); ?></a>.</p>

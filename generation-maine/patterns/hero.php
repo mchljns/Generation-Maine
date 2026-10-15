@@ -3,7 +3,7 @@
  * Title: Hero
  * Slug: generation-maine/hero
  * Categories: generation-maine
- * Description: The opening: the kicker with the family's bars, the headline, one line about the project and one button, beside the Maine mural. The last word of the headline turns gold and gets the pulsing dot on the page. Keep it plain text: no bold or link on the last word.
+ * Description: The opening: the kicker with the family's bars, the headline, one line about the project and one button, beside the Maine mural. The last word of the headline turns gold and gets the pulsing dot on the page, even if it is bold or a link. A final period becomes the dot; a headline that ends in a question mark or an exclamation mark keeps it and gets no dot.
  *
  * @package generation-maine
  */

@@ -161,14 +161,27 @@ function gm_creator_meta_box_html( $post ) {
 
 	$clip_id  = (int) get_post_meta( $post->ID, 'gm_clip_id', true );
 	$clip_url = $clip_id ? wp_get_attachment_url( $clip_id ) : '';
+	// a chosen clip that was deleted from the Media Library counts as none, so the box offers the link and the next save clears it
+	if ( ! $clip_url ) {
+		$clip_id = 0;
+	}
+	// people who cannot upload (Contributors) get the link field only: the library would be empty and an upload would fail
+	$can_upload = current_user_can( 'upload_files' );
 	echo '<p><strong>' . esc_html__( 'Clip', 'generation-maine' ) . '</strong><br>';
-	echo '<span class="description">' . esc_html__( 'A short vertical video (9:16) or GIF, muted, that loops. Keep it under 10 MB and about ten seconds. Choose or upload one, or paste a direct link to an .mp4, .webm or .gif below.', 'generation-maine' ) . '</span></p>';
-	$size = $clip_id ? (int) @filesize( get_attached_file( $clip_id ) ) : 0; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-	$big  = $size > 10 * MB_IN_BYTES;
+	echo '<span class="description">' . ( $can_upload
+		? esc_html__( 'A short vertical video (9:16) or GIF, muted, that loops. Keep it under 10 MB and about ten seconds. Choose or upload one, or paste a direct link to an .mp4, .webm or .gif below.', 'generation-maine' )
+		: esc_html__( 'A short vertical video (9:16) or GIF, muted, that loops. Keep it under 10 MB and about ten seconds. Paste a direct link to an .mp4, .webm or .gif below.', 'generation-maine' ) ) . '</span></p>';
+	// the size is known for a chosen clip and for a link to a file in this site's Media Library; a link elsewhere is not checked
+	$link    = (string) get_post_meta( $post->ID, 'gm_clip_url', true );
+	$file_id = $clip_id ? $clip_id : ( $link ? attachment_url_to_postid( $link ) : 0 );
+	$size    = $file_id ? (int) @filesize( get_attached_file( $file_id ) ) : 0; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+	$big     = $size > 10 * MB_IN_BYTES;
 	/* translators: %s: file size */
 	echo '<p id="gm_clip_big" class="notice notice-warning inline"' . ( $big ? '' : ' hidden' ) . '><span>' . esc_html( sprintf( __( 'This clip is %s. Visitors download all of it, so a clip under 10 MB loads much faster on a phone.', 'generation-maine' ), size_format( $size, 1 ) ) ) . '</span></p>';
 	echo '<p><input type="hidden" id="gm_clip_id" name="gm_clip_id" value="' . esc_attr( $clip_id ) . '">';
-	echo '<button type="button" class="button" id="gm_clip_pick">' . esc_html__( 'Choose or upload a clip', 'generation-maine' ) . '</button> ';
+	echo $can_upload
+		? '<button type="button" class="button" id="gm_clip_pick">' . esc_html__( 'Choose or upload a clip', 'generation-maine' ) . '</button> '
+		: '<span id="gm_clip_noupload" class="description">' . esc_html__( 'Your account cannot upload files. An editor can upload the clip for you.', 'generation-maine' ) . '</span> ';
 	echo '<button type="button" class="button-link" id="gm_clip_clear"' . ( $clip_id ? '' : ' hidden' ) . '>' . esc_html__( 'Remove', 'generation-maine' ) . '</button> ';
 	echo '<span id="gm_clip_name" class="description">' . ( $clip_url ? esc_html( wp_basename( $clip_url ) ) : '' ) . '</span></p>';
 	gm_creator_field( $post->ID, 'gm_clip_url', __( 'Or a clip link', 'generation-maine' ), __( 'Used only when no clip is chosen above. Remove the chosen clip to use a link.', 'generation-maine' ), 'url', 'https://' );
@@ -185,6 +198,19 @@ function gm_creator_meta_box_html( $post ) {
 	echo '<input type="hidden" name="gm_order_was" value="' . esc_attr( (int) $post->menu_order ) . '">';
 	echo '<span class="description">' . esc_html__( 'Lower numbers come first. Creators with the same number are in alphabetical order.', 'generation-maine' ) . '</span></p>';
 }
+
+/**
+ * The block editor saves this box in a second request, and for a post type with no Author panel that request carries no
+ * author, so WordPress would make whoever saved the creator its author. Send the current author along, as Quick Edit does.
+ *
+ * @param WP_Post $post Post being edited.
+ */
+function gm_creator_keep_author( $post ) {
+	if ( 'gm_creator' === $post->post_type ) {
+		echo '<input type="hidden" name="post_author" value="' . esc_attr( (int) $post->post_author ) . '">';
+	}
+}
+add_action( 'block_editor_meta_box_hidden_fields', 'gm_creator_keep_author' );
 
 /**
  * The clip picker on the Creator screen. It needs the media library, which loads after the box is printed, so it runs from
@@ -212,7 +238,34 @@ document.addEventListener('click',function(e){
 add_action( 'admin_enqueue_scripts', 'gm_creator_admin_assets' );
 
 /**
- * Save the place on the page from the box, only when it was changed there (WordPress 6.5 has its own Order field too).
+ * In the block editor the place on the page is the post's own Order. The box's field shows it and changes it in the editor,
+ * which saves it with the post, so the field, WordPress's Order control and Quick Edit always agree; the box no longer sends
+ * it. On WordPress 7 the Meta Boxes drawer also opens at part of the window, not the full height of Creator details, so the
+ * title stays in view until the person drags the drawer to a height of their own.
+ */
+function gm_creator_editor_assets() {
+	$screen = get_current_screen();
+	if ( ! $screen || 'gm_creator' !== $screen->post_type ) {
+		return;
+	}
+	wp_register_script( 'gm-creator-editor', false, array( 'wp-data', 'wp-dom-ready', 'wp-editor', 'wp-preferences' ), null, true ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+	wp_enqueue_script( 'gm-creator-editor' );
+	wp_add_inline_script(
+		'gm-creator-editor',
+		"(function(d){d.dispatch('core/preferences').setDefaults('core/edit-post',{metaBoxesMainOpenHeight:Math.max(240,Math.round(window.innerHeight*.4))});
+wp.domReady(function(){var f=document.getElementById('gm_order'),was=document.querySelector('input[name=\"gm_order_was\"]'),ed=function(){return d.select('core/editor');},last;if(!f){return;}
+ f.removeAttribute('name');if(was){was.removeAttribute('name');}
+ f.addEventListener('input',function(){d.dispatch('core/editor').editPost({menu_order:parseInt(f.value,10)||0});});
+ f.addEventListener('change',function(){f.value=ed().getEditedPostAttribute('menu_order');});
+ d.subscribe(function(){var v=ed().getEditedPostAttribute('menu_order');if(v===last||undefined===v){return;}last=v;if(document.activeElement!==f){f.value=v;}});
+});})(wp.data);"
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'gm_creator_editor_assets' );
+
+/**
+ * Save the place on the page from the box, only when it was changed there. This is for the classic editor, whose page
+ * reloads after each save; the block editor saves the place with the post (see gm_creator_editor_assets()).
  *
  * @param array $data    Post data about to be saved.
  * @param array $postarr Raw post data.
@@ -347,13 +400,25 @@ function gm_get_creators( $limit = 24 ) {
 			'update_post_term_cache' => false,
 		)
 	);
+	// every avatar and clip file in one query, not a few queries per creator
+	$files = array();
+	foreach ( $query->posts as $creator ) {
+		$files[] = (int) get_post_thumbnail_id( $creator );
+		$files[] = (int) get_post_meta( $creator->ID, 'gm_clip_id', true );
+	}
+	_prime_post_caches( array_filter( $files ), false, true );
 	$out = array();
 	while ( $query->have_posts() ) {
 		$query->the_post();
 		$id      = get_the_ID();
+		$thumb   = (int) get_post_thumbnail_id( $id );
 		$clip_id = (int) get_post_meta( $id, 'gm_clip_id', true );
-		$clip    = $clip_id ? wp_get_attachment_url( $clip_id ) : get_post_meta( $id, 'gm_clip_url', true );
-		$links   = array();
+		$clip    = $clip_id ? wp_get_attachment_url( $clip_id ) : '';
+		// a chosen clip that was deleted from the Media Library counts as none, so the clip link is used
+		if ( ! $clip ) {
+			$clip = get_post_meta( $id, 'gm_clip_url', true );
+		}
+		$links = array();
 		foreach ( gm_creator_link_fields() as $key => $label ) {
 			$url = get_post_meta( $id, $key, true );
 			if ( $url ) {
@@ -369,8 +434,11 @@ function gm_get_creators( $limit = 24 ) {
 			'bio'         => trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( preg_replace( '#<br\s*/?>|</p>|</li>|</h[1-6]>#i', ' ', get_the_content() ) ) ) ),
 			'clip'        => $clip ? $clip : '',
 			'len'         => get_post_meta( $id, 'gm_clip_len', true ),
-			'avatar'      => has_post_thumbnail( $id ) ? get_the_post_thumbnail_url( $id, 'thumbnail' ) : '',
-			'portrait'    => has_post_thumbnail( $id ) ? get_the_post_thumbnail_url( $id, 'medium' ) : '',
+			'avatar'      => $thumb ? (string) wp_get_attachment_image_url( $thumb, 'thumbnail' ) : '',
+			'portrait'    => $thumb ? (string) wp_get_attachment_image_url( $thumb, 'medium' ) : '',
+			// the still a paused clip shows: the smallest size at least 1120 px tall, sharp at 2x on the largest place it is
+			// shown (the desktop stage, 315 by 560), or the original when no size is that tall
+			'still'       => $thumb ? (string) wp_get_attachment_image_url( $thumb, array( 0, 1120 ) ) : '',
 			'links'       => $links,
 			'placeholder' => (bool) get_post_meta( $id, 'gm_placeholder', true ),
 		);
@@ -382,15 +450,27 @@ function gm_get_creators( $limit = 24 ) {
 /**
  * The social header that sits on the clip: avatar, handle, name.
  *
- * @param array $c Creator.
- * @param bool  $on Current.
+ * @param array $c     Creator.
+ * @param bool  $on    Current.
+ * @param bool  $defer Leave the avatar to the page script, which loads it as the creator's turn nears (the stage stacks one
+ *                     header per creator and shows only the current one, so the browser would load them all at once).
  * @return string
  */
-function gm_who( $c, $on ) {
-	$av = $c['avatar'] ? '<img class="av" src="' . esc_url( $c['avatar'] ) . '" alt="" width="36" height="36" loading="lazy">' : gm_avatar_placeholder();
-	// the handle on top and the name under it; with no handle, the name once
-	$lines = $c['handle'] ? '<b>' . esc_html( $c['handle'] ) . '</b>' . esc_html( $c['name'] ) : '<b>' . esc_html( $c['name'] ) . '</b>';
+function gm_who( $c, $on, $defer = false ) {
+	$av = $c['avatar'] ? '<img class="av" ' . ( $defer ? 'data-src' : 'src' ) . '="' . esc_url( $c['avatar'] ) . '" alt="" width="36" height="36" loading="lazy">' : gm_avatar_placeholder();
+	// the handle on top and the name under it; with no handle, or a name that is the handle, one line
+	$same  = $c['handle'] && strtolower( ltrim( trim( $c['handle'] ), '@' ) ) === strtolower( ltrim( trim( $c['name'] ), '@' ) );
+	$lines = $c['handle'] && ! $same ? '<b>' . esc_html( $c['handle'] ) . '</b>' . esc_html( $c['name'] ) : '<b>' . esc_html( $c['handle'] ? $c['handle'] : $c['name'] ) . '</b>';
 	return '<div class="who' . ( $on ? ' on' : '' ) . '">' . $av . '<span>' . $lines . '</span></div>';
+}
+
+/**
+ * The still for a creator with no avatar: the placeholder figure on a navy frame, so a paused clip never shows an empty image.
+ *
+ * @return string URL
+ */
+function gm_still_placeholder() {
+	return get_theme_file_uri( 'blocks/creators/still.svg' );
 }
 
 /**
@@ -408,19 +488,21 @@ function gm_clip( $c, $class, $attrs, $alt ) {
 	if ( ! $c['clip'] ) {
 		return '<div class="' . esc_attr( $cls . ' noclip' ) . '"' . $attrs . '></div>';
 	}
-	// a still for when the clips are paused: the creator's portrait, if there is one
-	$still = $c['portrait'] ? $c['portrait'] : $c['avatar'];
-	// the editor's preview has no page script to load clips, so it shows the still (or the clip) straight away
+	// a still for when the clips are paused: the creator's portrait, or the placeholder figure, never an empty image
+	$still = $c['still'] ? $c['still'] : gm_still_placeholder();
+	// the editor's preview has no page script to load clips, so it shows the portrait (or the clip) straight away
 	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-		$attrs .= ' src="' . esc_url( $still ? $still : $c['clip'] ) . '"';
+		$attrs .= ' src="' . esc_url( $c['portrait'] ? $c['portrait'] : $c['clip'] ) . '"';
 	}
 	if ( preg_match( '/\.(gif|png|jpe?g|webp|avif)(\?|$)/i', $c['clip'] ) ) {
-		return '<img class="' . esc_attr( $cls ) . '"' . $attrs . ' data-src="' . esc_url( $c['clip'] ) . '"' . ( $still ? ' data-still="' . esc_url( $still ) . '"' : '' ) . ' alt="' . esc_attr( $alt ) . '">';
+		return '<img class="' . esc_attr( $cls ) . '"' . $attrs . ' data-src="' . esc_url( $c['clip'] ) . '" data-still="' . esc_url( $still ) . '" alt="' . esc_attr( $alt ) . '">';
 	}
-	if ( defined( 'REST_REQUEST' ) && REST_REQUEST && $still ) {
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST && $c['portrait'] ) {
 		return '<img class="' . esc_attr( $cls ) . '"' . $attrs . ' alt="' . esc_attr( $alt ) . '">';
 	}
-	return '<video class="' . esc_attr( $cls ) . '"' . $attrs . ' data-src="' . esc_url( $c['clip'] ) . '"' . ( $still ? ' poster="' . esc_url( $still ) . '"' : '' ) . ' muted loop playsinline preload="none" aria-label="' . esc_attr( $alt ) . '"></video>';
+	// a browser loads every poster at once, so the poster is the small portrait; the page script swaps in the sharp still
+	// when the clip itself loads
+	return '<video class="' . esc_attr( $cls ) . '"' . $attrs . ' data-src="' . esc_url( $c['clip'] ) . '" poster="' . esc_url( $c['portrait'] ? $c['portrait'] : $still ) . '" data-still="' . esc_url( $still ) . '" muted loop playsinline preload="none" aria-label="' . esc_attr( $alt ) . '"></video>';
 }
 
 /**
@@ -444,9 +526,10 @@ function gm_render_roster( $creators ) {
 				break;
 			}
 		}
+		// the tile's own text names it (number, name, town), so neither kind carries a separate label
 		$out .= $href
 			? '<a class="tile roster-tile" href="' . esc_url( gm_utm( $href ) ) . '" target="_blank" rel="noopener">' . $inner . '</a>'
-			: '<div class="tile" aria-label="' . esc_attr( $c['name'] . ', ' . $town . ', Maine' ) . '">' . $inner . '</div>';
+			: '<div class="tile">' . $inner . '</div>';
 	}
 	return '<section class="block roster"><div class="w"><div class="grid">' . $out . '</div></div></section>';
 }
@@ -469,7 +552,10 @@ function gm_render_creators( $args = array() ) {
 		return '<section class="stories gm-empty"><div class="w"><p>' . esc_html__( 'The creators are being cast. Their clips and stories will appear here.', 'generation-maine' )
 			. ( current_user_can( 'edit_posts' ) ? ' <a href="' . esc_url( admin_url( 'post-new.php?post_type=gm_creator' ) ) . '">' . esc_html__( 'Add the first creator.', 'generation-maine' ) . '</a>' : '' ) . '</p></div></section>';
 	}
-	if ( 'roster' === $layout ) {
+	// the stepper's page script finds its parts by fixed ids, so a second stepper on the same page (a duplicated block, say)
+	// shows as a roster instead of a broken copy
+	static $steppers = 0;
+	if ( 'roster' === $layout || ++$steppers > 1 ) {
 		return gm_render_roster( $creators );
 	}
 	$n      = count( $creators );
@@ -484,7 +570,7 @@ function gm_render_creators( $args = array() ) {
 		$len   = $c['len'] ? '<span class="dur">' . esc_html( $c['len'] ) . '</span>' : '';
 		$who   = gm_who( $c, $on );
 		$stage .= gm_clip( $c, $on ? 'on' : '', ' data-i="' . $i . '" data-dur="' . esc_attr( $c['len'] ) . '"', $alt );
-		$whos  .= $who;
+		$whos  .= gm_who( $c, $on, ! $on );
 		/* translators: 1: position, 2: creator name, 3: town and state */
 		$segs  .= '<button type="button" aria-label="' . esc_attr( sprintf( __( 'Creator %1$d, %2$s, %3$s', 'generation-maine' ), $i + 1, $c['name'], $town ) ) . '" data-name="' . esc_attr( $c['name'] ) . '"' . ( $on ? ' class="on"' : '' ) . '></button>';
 		$soc    = '';

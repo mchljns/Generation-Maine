@@ -3,7 +3,7 @@
 	"apiVersion": 3,
 	"name": "generation-maine/part",
 	"title": "Generation Maine Part",
-	"category": "theme",
+	"category": "design",
 	"icon": "admin-site-alt3",
 	"description": "A piece of the page drawn by the theme: the logo link, the phone menu button or the Maine mural.",
 	"textdomain": "generation-maine",

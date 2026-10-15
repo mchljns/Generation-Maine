@@ -117,18 +117,24 @@ add_filter( 'render_block_core/template-part', 'gm_absolute_section_links', 10, 
 
 /**
  * The bar's section links as the editor left them, for the footer and the phone menu: [ [ href, label ], ... ].
- * Read from the header template part, customized or not.
+ * Read from the header template part, customized or not. On a page the bar has already been drawn by the time the footer
+ * asks, so its markup is read from that render (gm_capture_header_links) instead of rendering the part a second time.
  *
+ * @param string|null $rendered The header part as it was just rendered, when called from the capture below.
  * @return array<int,array{0:string,1:string}>
  */
-function gm_header_links() {
+function gm_header_links( $rendered = null ) {
 	static $links = null;
 	if ( null !== $links ) {
 		return $links;
 	}
 	$links = array();
-	$part  = function_exists( 'get_block_template' ) ? get_block_template( get_stylesheet() . '//header', 'wp_template_part' ) : null;
-	$html  = $part && ! empty( $part->content ) ? do_blocks( $part->content ) : '';
+	if ( null !== $rendered ) {
+		$html = $rendered;
+	} else {
+		$part = function_exists( 'get_block_template' ) ? get_block_template( get_stylesheet() . '//header', 'wp_template_part' ) : null;
+		$html = $part && ! empty( $part->content ) ? do_blocks( $part->content ) : '';
+	}
 	if ( $html && preg_match( '/<nav\b[^>]*>(.*?)<\/nav>/s', $html, $nav ) && preg_match_all( '/<a\s[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/s', $nav[1], $found, PREG_SET_ORDER ) ) {
 		foreach ( $found as $a ) {
 			$label = trim( wp_strip_all_tags( $a[2] ) );
@@ -139,3 +145,18 @@ function gm_header_links() {
 	}
 	return $links;
 }
+
+/**
+ * Keep the header part's links from its own render, before section links are made absolute away from the front page.
+ *
+ * @param string $html  Block output.
+ * @param array  $block Block.
+ * @return string
+ */
+function gm_capture_header_links( $html, $block ) {
+	if ( isset( $block['attrs']['slug'] ) && 'header' === $block['attrs']['slug'] ) {
+		gm_header_links( $html );
+	}
+	return $html;
+}
+add_filter( 'render_block_core/template-part', 'gm_capture_header_links', 9, 2 );

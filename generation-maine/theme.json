@@ -68,56 +68,18 @@
 			"writingMode": false,
 			"dropCap": false,
 			"textColumns": false,
-			"fontFamilies": [
-				{
-					"slug": "display",
-					"name": "Bricolage Grotesque (headlines)",
-					"fontFamily": "\"Bricolage Grotesque\", system-ui, sans-serif",
-					"fontFace": [
-						{
-							"fontFamily": "Bricolage Grotesque",
-							"fontWeight": "800",
-							"fontStyle": "normal",
-							"fontDisplay": "swap",
-							"src": [
-								"file:./assets/fonts/bricolage-grotesque-800.woff2"
-							]
-						}
-					]
-				},
-				{
-					"slug": "body",
-					"name": "DM Sans (body)",
-					"fontFamily": "\"DM Sans\", system-ui, sans-serif",
-					"fontFace": [
-						{
-							"fontFamily": "DM Sans",
-							"fontWeight": "100 900",
-							"fontStyle": "normal",
-							"fontDisplay": "swap",
-							"src": [
-								"file:./assets/fonts/dm-sans-var.ttf"
-							]
-						}
-					]
-				},
-				{
-					"slug": "label",
-					"name": "Michroma (labels)",
-					"fontFamily": "Michroma, Eurostile, system-ui, sans-serif",
-					"fontFace": [
-						{
-							"fontFamily": "Michroma",
-							"fontWeight": "400",
-							"fontStyle": "normal",
-							"fontDisplay": "swap",
-							"src": [
-								"file:./assets/fonts/michroma-regular.ttf"
-							]
-						}
-					]
+			"textIndent": false
+		},
+		"shadow": {
+			"defaultPresets": false,
+			"presets": []
+		},
+		"blocks": {
+			"core/button": {
+				"border": {
+					"radius": false
 				}
-			]
+			}
 		}
 	},
 	"styles": {
@@ -135,7 +97,7 @@
 			}
 		},
 		"typography": {
-			"fontFamily": "var(--wp--preset--font-family--body)",
+			"fontFamily": "'DM Sans',system-ui,sans-serif",
 			"lineHeight": "1.55"
 		},
 		"elements": {
@@ -143,13 +105,23 @@
 				"border": {
 					"radius": "0"
 				},
+				"color": {
+					"background": "#FAC800",
+					"text": "#0F2E4D"
+				},
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--label)"
+					"fontFamily": "Michroma,Eurostile,system-ui,sans-serif"
+				},
+				":hover": {
+					"color": {
+						"background": "#FFD633",
+						"text": "#0F2E4D"
+					}
 				}
 			},
 			"heading": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--display)",
+					"fontFamily": "'Bricolage Grotesque',system-ui,sans-serif",
 					"fontWeight": "800"
 				}
 			}

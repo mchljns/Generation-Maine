@@ -7,6 +7,10 @@
  *
  * @package generation-maine
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 ?>
 <!-- wp:group {"tagName":"section","metadata":{"name":"About"},"anchor":"about","className":"block about","layout":{"type":"default"}} -->
 <section id="about" class="wp-block-group block about"><!-- wp:group {"className":"w","layout":{"type":"default"}} -->

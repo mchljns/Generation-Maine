@@ -8,6 +8,7 @@ with the one line, a skip link, a favicon. Outbound links carry a source. No ste
 
   python3 brand/src/build_splash_lean.py          # writes brand/identity/splash-lean-a and splash-lean-b
 """
+import base64
 import json
 import os
 import re
@@ -29,9 +30,28 @@ MPI_NAVY, MPI_BLUE = "#0F2E4D", "#0556A5"
 
 SITE_CSS = lambda css: "\n".join(l for l in css.splitlines() if ".site" in l)
 
+
+def woff2(path):
+    """A TTF font file (path from the repo root) as WOFF2 bytes, with fontTools and brotli. The v2 page inlines these and the
+    theme ships the same files, at well under half the size of the TTF. The font's own date is kept, so a rebuild gives the
+    same bytes."""
+    import io
+    from fontTools.ttLib import TTFont
+    font = TTFont(os.path.join(ROOT, path), recalcTimestamp=False)
+    font.flavor = "woff2"
+    buf = io.BytesIO()
+    font.save(buf)
+    return buf.getvalue()
+
+
+# the three faces the page uses, all WOFF2; {{W2...}} placeholders take a TTF converted by woff2()
+LEAN_A_FONTS = """@font-face{font-family:'Bricolage Grotesque';font-weight:800;font-display:swap;src:url(data:font/woff2;base64,{{F800}}) format('woff2')}
+@font-face{font-family:'DM Sans';font-weight:100 900;font-display:swap;src:url(data:font/woff2;base64,{{W2DM}}) format('woff2')}
+@font-face{font-family:Michroma;font-weight:400;font-display:swap;src:url(data:font/woff2;base64,{{W2MICH}}) format('woff2')}"""
+
 LEAN_A = dict(
     key="v2", out="brand/identity/splash-lean-a", root_class="static lean euro", navy="#0F2E4D", blue="#0556A5", ink="#0F2E4D", paper="#FFFFFF", tint="#EAF1F8",
-    fonts=S.SIGNATURE_FONTS + "@font-face{font-family:Michroma;font-weight:400;font-display:swap;src:url(data:font/ttf;base64,{{FMICH}}) format('truetype')}", font_files={"FMICH": "brand/fonts/michroma/Michroma-Regular.ttf"}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="",
+    fonts=LEAN_A_FONTS, font_files={"W2DM": "generation-maine/assets/fonts/dm-sans-var.ttf", "W2MICH": "brand/fonts/michroma/Michroma-Regular.ttf"}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="",
     display="'Bricolage Grotesque',system-ui,sans-serif", body="'DM Sans',system-ui,sans-serif", label="Michroma,Eurostile,system-ui,sans-serif",
     h1="Young Mainers<br>on building<br>a life <span class=\"here\">here<i class=\"d pulse\" aria-hidden=\"true\"></i></span>", h2_about="What this is", h2_creators="The creators", h2_follow="Where to find it",
     site_css=SITE_CSS(F.STATIC_CSS) + "\n" + SITE_CSS(F.FAMILY_A_CSS % dict(blue="#0556A5", navy="#0F2E4D", mg=MG)),
@@ -466,10 +486,11 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   const pauseBtn = document.getElementById('cpause'); let paused = reduced;
   // a loaded clip shows its moving source, or its still while the clips are paused (a GIF cannot be paused any other way)
   const setSrc = el => { if (!el || !el.dataset.src || !el.dataset.on) return; const want = paused && el.tagName === 'IMG' ? (el.dataset.still || '') : el.dataset.src; if (!want) el.removeAttribute('src'); else if (el.getAttribute('src') !== want) el.src = want; };
-  const load = el => { if (el && el.dataset.src && !el.dataset.on) { el.dataset.on = '1'; setSrc(el); } };
+  // a video waits with a small poster (browsers load every poster at once) and gets its sharp still when it loads
+  const load = el => { if (el && el.dataset.src && !el.dataset.on) { el.dataset.on = '1'; if (el.tagName === 'VIDEO' && el.dataset.still) el.poster = el.dataset.still; setSrc(el); } };
   const playOnly = (els, i) => els.forEach((v, k) => { if (!v || !v.play) return; if (k === i && !paused) v.play().catch(() => {}); else v.pause(); });
-  // clips load when their card is current or next door, not all nine at once
-  const hydrate = i => { const near = (els) => els.filter((e, k) => Math.abs(k - i) <= 1); near(panels.map(p => p.querySelector('.clip'))).forEach(load); if (!phone.matches) near(stageVids).forEach(load); };
+  // clips load when their card is current or next door, not all nine at once; so do the photos in the stage's stacked headers
+  const hydrate = i => { const near = (els) => els.filter((e, k) => Math.abs(k - i) <= 1); near(panels.map(p => p.querySelector('.clip'))).forEach(load); if (!phone.matches) { near(stageVids).forEach(load); near(whos).forEach(w => { const a = w.querySelector('img.av[data-src]'); if (a) { a.src = a.dataset.src; delete a.dataset.src; } }); } };
   // the section's tint on phones, one per creator, cycling through the family's light fields
   const TINTS = ['#EAF1F8', '#F8F3E2', '#E3ECF6', '#FFFFFF', '#EEF3F9', '#F6EFDC', '#E8EFF7', '#FBF7EA', '#EAF1F8'];
   const headEl = document.getElementById('creators'); const tint = i => { const c = phone.matches ? TINTS[i %% TINTS.length] : ''; storiesEl.style.backgroundColor = c; if (headEl) headEl.style.backgroundColor = c; };
@@ -668,7 +689,7 @@ def page(theme):
     css = (CSS % dict(theme, site_css=theme["site_css"], stepper_css=stepper_css() + STEPPER_OVERRIDES, phone_site=PHONE_SITE))
     css = css.replace("{{FONTS}}", theme["fonts"]).replace("{{F800}}", K.font64("generation-maine/assets/fonts/bricolage-grotesque-800.woff2")).replace("{{FINTER}}", K.font64("brand/fonts/inter-var.woff2")).replace("{{FDM}}", K.font64("generation-maine/assets/fonts/dm-sans-var.ttf"))
     for k, v in theme["font_files"].items():
-        css = css.replace("{{%s}}" % k, K.font64(v))
+        css = css.replace("{{%s}}" % k, base64.b64encode(woff2(v)).decode() if k.startswith("W2") else K.font64(v))
     if theme["hero"] == "video":
         plates = "".join('<img class="plate p%d" src="media/plate-%d.jpg" alt="" width="1600" height="900" loading="lazy">' % (i, i) for i in range(1, 6))
         hero_bg = '<div class="bg" aria-hidden="true"><video autoplay muted loop playsinline preload="metadata" poster="media/hero-poster.jpg"><source src="media/hero.webm" type="video/webm"></video><div class="plates">%s</div></div>' % plates

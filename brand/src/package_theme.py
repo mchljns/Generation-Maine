@@ -3,15 +3,16 @@
 
     python3 brand/src/package_theme.py
 
-Agency-internal notes (PROJECT.md) and local tooling (.wp-env.json) stay out of the zip. Entries are sorted and dated so the
-same theme always makes the same zip.
+Agency-internal notes (PROJECT.md) and local tooling (.wp-env.json) stay out of the zip, and so do two files the theme does
+not use: the shell wrapper for the seed script (the README runs bin/seed-creators.php with wp eval-file) and the DM Sans TTF
+the brand builders read (the theme loads the WOFF2). Entries are sorted and dated so the same theme always makes the same zip.
 """
 import os
 import shutil
 import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-SKIP = {".DS_Store", ".wp-env.json", "PROJECT.md"}
+SKIP = {".DS_Store", ".wp-env.json", "PROJECT.md", "seed-creators.sh", "dm-sans-var.ttf"}
 
 
 def main():

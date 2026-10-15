@@ -8,7 +8,7 @@
 	"description": "The signup form. It hands the address to the Substack subscribe page set under Settings > Generation Maine.",
 	"keywords": [ "newsletter", "substack", "email", "subscribe" ],
 	"textdomain": "generation-maine",
-	"supports": { "html": false, "align": [ "wide", "full" ], "anchor": true },
+	"supports": { "html": false, "align": [ "wide", "full" ], "anchor": true, "multiple": false },
 	"editorScript": "file:./index.js",
 	"render": "file:./render.php"
 }
