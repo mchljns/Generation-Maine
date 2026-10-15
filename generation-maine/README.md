@@ -6,12 +6,12 @@ A one-page block theme for GenerationMaine.org, built from the approved v2 page 
 
 | Path | What it does |
 | --- | --- |
-| `theme.json` | The palette (navy, blue, gold, tint, white) and the three fonts: Bricolage Grotesque for headlines, DM Sans for text, Michroma for labels, links and buttons |
-| `style.css` | The page's stylesheet. Generated from the v2 page by `brand/src/build_theme.py` |
-| `assets/css/editor.css` | The same styles for the block editor, so the canvas looks like the page (generated) |
+| `theme.json` | The palette (navy, blue, gold, tint, white), the button colors, and the settings that turn off WordPress's color and type controls |
+| `style.css` | The page's stylesheet and the three fonts: Bricolage Grotesque for headlines, DM Sans for text, Michroma for labels, links and buttons. Generated from the v2 page by `brand/src/build_theme.py` |
+| `assets/css/editor.css` | The same styles for the editor, so the page and posts look as they do on the site (generated) |
 | `assets/js/site.js` | The page's script: the hero mural, the bar, the phone menu, the creators stepper and phone carousel, the tap to expand viewer, the footer draw (generated) |
 | `assets/data/` | The mural lines and the footer markup (generated) |
-| `functions.php` | Loads the styles and script, preloads the fonts, adds the bars and the gold dot to marked blocks, prints the skip link and the phone menu |
+| `functions.php` | Loads the styles and script and preloads the three fonts. Adds the bars and the gold dot to marked blocks. Loads the about photo after the first screen. Prints the skip link and the phone menu. Turns off the font library and the Fit text switch |
 | `inc/settings.php` | **Settings > Generation Maine**: the three channels, the Substack subscribe page, the footer line, the legal line and the contact link |
 | `inc/creators.php` | The Creators post type, its fields, and the two layouts that render them: the stepper (the page's layout) and the roster |
 | `inc/follow.php` | The follow list, one row per channel |
@@ -23,19 +23,21 @@ A one-page block theme for GenerationMaine.org, built from the approved v2 page 
 | `blocks/` | Creators, Follow, Newsletter Signup, Site Footer, Part (the logo, the phone menu button and the mural, drawn by the theme), and Latest Newsletter Posts (not on the page today) |
 | `patterns/` | The page sections: header, hero, about, creators, follow; plus the 404 line and the no-results line |
 | `templates/` | The front page, single posts, pages, archives, search, the fallback index and the 404 page |
-| `assets/fonts/` | The three fonts, self-hosted, with their Open Font License files |
+| `assets/fonts/` | The three fonts as WOFF2, self-hosted, with their Open Font License files. `dm-sans-var.ttf` is the copy of DM Sans the brand builders read; it is left out of the zip |
 | `assets/img/` | The logo, icons, share card and the about photo |
-| `bin/` | A seed script for placeholder creators |
+| `bin/` | A seed script for placeholder creators (`seed-creators.php`). The shell wrapper `seed-creators.sh` stays in the repository and is left out of the zip |
 | `screenshot.png` | The thumbnail under Appearance > Themes (generated) |
 
-Requires WordPress 6.5 or newer and PHP 7.4 or newer. Tested on WordPress 7.2 (alpha) with PHP 8.4. The code avoids PHP 8 only functions.
+Requires WordPress 6.5 or newer and PHP 7.4 or newer. Tested on WordPress 7.1.3 and 6.5.13 with PHP 8.4, and on WordPress 6.5 with PHP 7.4. The code avoids PHP 8 only functions.
+
+theme.json uses schema version 3, which arrived in WordPress 6.6. WordPress 6.5 reads it as it is and skips the few settings it does not know. The page looks the same. The one difference is in the editor: a paragraph's or heading's Typography menu (the three dots) also offers WordPress's four default font sizes. Leave them unset.
 
 ## Install
 
 1. Upload the theme zip under **Appearance > Themes > Add New > Upload Theme**. Use **Live Preview** to review it before activating.
 2. Under **Settings > Reading** leave "Your homepage displays" on "Your latest posts". The theme's front page template shows the page either way.
 3. Under **Settings > Permalinks** choose "Post name".
-4. Under **Settings > Generation Maine** fill in the channels and the Substack subscribe page. Until the subscribe page is set, visitors see no signup form and logged-in admins see a note in its place. A channel with no address shows as a plain row with a placeholder handle, never a dead link. An address typed with `http://` is saved as `https://`. Anything that is not a web address is refused with a red notice, and the address saved before is kept. A handle gets its @ if it is missing, and a channel with an address but no handle shows the handle from the address. A cleared footer line or legal line goes back to its default.
+4. Under **Settings > Generation Maine** fill in the channels and the Substack subscribe page. Until the subscribe page is set, visitors see no signup form and logged-in admins see a note in its place. A channel with no address shows as a plain row with a placeholder handle, never a dead link. An address typed with `http://` is saved as `https://`. The Contact link can also be an email address, written as `mailto:name@example.org`. Anything else is refused with a red notice, and the address saved before is kept (on a new site, the default Contact link). A handle gets its @ if it is missing. A channel with an address but no handle shows the handle from the address. That is the @name in a TikTok or YouTube address, even one copied from a video, or the name in an Instagram address. An address with no handle in it, such as a YouTube /channel/ address, shows the site instead (youtube.com), so fill in the handle for those. A cleared footer line or legal line goes back to its default.
 5. Under **Settings > Privacy** pick the privacy page. The footer links to it; until then "Privacy" is plain text.
 6. Optional: set a Site Icon under **Settings > General**. The theme ships a favicon either way.
 
@@ -45,42 +47,42 @@ Open **Appearance > Editor > Templates > Front Page**. Every section is made of 
 
 In WordPress 7, the hero, About and Follow are pattern sections: click any text to change it. To add a block or change a setting under Advanced, select the section and click **Edit pattern** first, then **Exit pattern** when done. The bar is its own part: click it and choose **Edit original**.
 
-- **The bar:** the three link labels and the button text. The phone menu and the footer copy them, so there is one place to edit them. The links point at the sections by fixed ids. The theme keeps the ids `top`, `about`, `creators`, `follow` and `newsletter` whatever the HTML anchor field says, so the links cannot break. On every other page of the site the same links lead back to the front page.
-- **The hero:** the label, the headline, the lede and one button. The last word of the headline turns gold with the dot after it, even if it is bold or a link. A headline that ends in a question mark or an exclamation mark keeps it and gets no dot. The editor shows the dot but not the gold. Keep the headline under about ten words.
+- **The bar:** the three link labels and the button text. Click a label or the button in the bar to change it, or pick it in List View. The sidebar does not list them; WordPress lists only its own theme blocks there. The phone menu and the footer copy them, so there is one place to edit them. In a narrow editor canvas (List View open, or the Mobile preview) the labels and the button wrap inside the bar, which grows to hold them. On a phone the page itself shows the menu button instead. The links point at the sections by fixed ids. The theme keeps the ids `top`, `about`, `creators`, `follow` and `newsletter` whatever the HTML anchor field says, so the links cannot break. On every other page of the site the same links lead back to the front page.
+- **The hero:** the label, the headline, the lede and one button. The last word of the headline turns gold with the dot after it, even if it is bold or a link. A period at the end becomes the dot, inside or after the bold or link. A headline that ends in a question mark or an exclamation mark keeps it and gets no dot, in the editor as on the page. The editor shows the dot but not the gold. Keep the headline under about ten words.
 - **The bars:** any paragraph with the class `k k-bars` gets the small bars before it. Add the class under Advanced > Additional CSS class(es) (Edit pattern first).
-- **About:** the photo, the label, the aim in one sentence, a note, and the goal. After replacing the photo, write its Alternative text in the image block's sidebar; WordPress leaves it empty.
-- **The creators:** the heading is a block; the stories come from the Creator posts. The Creators block, the Follow List and the Newsletter Signup are locked in place so they cannot be deleted by accident.
+- **About:** the photo, the label, the aim in one sentence, a note, and the goal. After replacing the photo, write its Alternative text in the image block's sidebar; WordPress leaves it empty. The photo loads after the first screen, as on the v2 page, also after it is replaced.
+- **The creators:** the heading is a block; the stories come from the Creator posts. The Creators block, the Follow List and the Newsletter Signup are locked in place so they cannot be deleted by accident. Each can be used once on a page, so the editor offers no Duplicate for them. If a second Creators block gets onto a page anyway, the editor marks it and the page shows it as the roster, not a second stepper.
 - **Follow:** the heading and lede are blocks; the rows come from Settings > Generation Maine.
 - **Newsletter:** the label and heading are blocks; the form comes from Settings > Generation Maine.
 - **Footer:** the line, the legal line and the contact link come from Settings > Generation Maine.
 
-Colors, type, the button shape and the motion are not editable in the page. That is on purpose. They live in `theme.json` and the stylesheet, and the color and type controls are turned off in Styles. If something was changed under Styles anyway, **Styles > Reset styles** undoes it.
+Colors, type, the button shape and the motion are not editable in the page. That is on purpose. They live in `theme.json` and the stylesheet. Styles has no color or font controls and no font library. Blocks have no font, size, border radius or shadow controls. WordPress still lists a few panels the theme cannot remove: Font size presets and Shadows (where new presets can be added), the layout widths and text alignment. Leave them as they are. If something was changed under Styles anyway, **Styles > Reset styles** undoes it.
 
 **Start over:** Templates > Front Page > Actions > Reset puts the page back to the theme's version. The bar is a separate part: also reset it under Patterns > Template Parts > Header. Each template keeps its revisions (View revisions) if you only want to step back.
 
-**Other pages.** Posts, pages, archives, search results and the 404 page use the same bar and footer with plain readable type. The page sections (About, Follow) can also be inserted into a normal page from Patterns > Generation Maine; they run full width there.
+**Other pages.** Posts, pages, archives, search results and the 404 page use the same bar and footer with plain readable type. The editor shows a post or page the same way: the title, then the text in a readable column. A Button block wears the page's gold button, or the outline button with the Outline style. Columns, Buttons and other row blocks lay out as WordPress intends. Archive page numbers are full-size tap targets. The page sections (About, Follow) can also be inserted into a normal page from Patterns > Generation Maine. They run full width there and look as they do on the front page.
 
 ## Add a creator
 
 1. In the dashboard, click **Creators > Add creator**.
-2. **Title** is the creator's name, or their handle if that is how people know them.
+2. **Title** is the creator's name, or their handle if that is how people know them (then the clip shows the handle once).
 3. The text area is their story, two or three sentences in their own words.
-4. **Avatar** (right sidebar, "Set avatar") is a square photo. It shows in a circle on the clip.
-5. **Creator details** sits in the Meta Boxes drawer at the bottom of the editor. It holds the handle, the hometown, the clip and its length, and the Instagram, TikTok and YouTube links. For the clip, click **Choose or upload a clip** and pick a short vertical video or GIF, or paste a direct link into "Or a clip link". A chosen clip wins over a link; click **Remove** to use the link instead. A clip over 10 MB gets a warning.
-6. **Place on the page**, at the bottom of Creator details, sets the order. Lower numbers come first. (Quick Edit in the Creators list has the same field as Order. WordPress 7 also shows a "Parent" row in the sidebar; creators do not use it.)
+4. **Avatar** (right sidebar, "Set avatar") is a square photo. It shows in a circle on the clip. It is also the still a paused clip shows, so a photo at least 1200 px tall stays sharp. With no avatar, the clip header and the paused still show the placeholder figure.
+5. **Creator details** sits in the Meta Boxes drawer at the bottom of the editor. On WordPress 7 the drawer opens over the lower part of the editor. Drag its bar to make it taller or shorter, or click Meta Boxes to close it. It holds the handle, the hometown, the clip and its length, and the Instagram, TikTok and YouTube links. For the clip, click **Choose or upload a clip** and pick a short vertical video or GIF, or paste a direct link into "Or a clip link". A chosen clip wins over a link; click **Remove** to use the link instead. The box warns when the clip is over 10 MB. A chosen clip gets the warning at once. A link to a file in this site's Media Library gets it once you save and open the creator again. A link to another site is not checked.
+6. **Place on the page**, at the bottom of Creator details, sets the order. Lower numbers come first. It is the same number as WordPress's own Order, so a change in either shows in the other. Order is under Post Attributes in the sidebar on WordPress 6.5, under Actions on WordPress 7, and in Quick Edit in the Creators list. WordPress 7 also shows a "Parent" row in the sidebar; creators do not use it.
 7. Publish. The stepper adds the story and the position row renumbers itself.
 
 The Creators list shows each creator's place, hometown and whether they are a placeholder, in page order. Creators have no public pages of their own, though like any published content their name and story can be read through the WordPress REST API. With no creators published, the section shows a short note. A creator marked "Placeholder" renders like any other, so the page can be reviewed before casting. A creator restored from the Trash comes back as a draft; publish it again to put it back on the page. The block shows up to 24 creators (Creators block > Most creators to show); past twelve, the position row on phones is a progress bar and visitors swipe.
 
-Who can do what: Editors and Administrators add, edit and remove any creator. Authors can add and publish their own creators straight onto the home page; Contributors can add creators for review but cannot set an avatar. If creators should always be reviewed, give contributors' accounts to the people adding them.
+Who can do what: Editors and Administrators add, edit and remove any creator. Authors can add and publish their own creators straight onto the home page; Contributors can add creators for review but cannot set an avatar or upload a clip. Their Creator details box has the clip link field only, with a line saying an editor can upload the clip. Saving a creator someone else made keeps them as its author. If creators should always be reviewed, give contributors' accounts to the people adding them.
 
-Clips: 9:16, muted, about ten seconds, under 10 MB. MP4 (H.264) plays everywhere. The page loads a clip only when its story is current or next door, plays the current one and pauses the rest. Visitors can pause all clips with the pause button by the counter; a paused GIF shows the creator's portrait. Visitors who ask their device for reduced motion start with the clips paused. On phones the card shows the top 4:5 of the clip; tapping it opens the full frame.
+Clips: 9:16, muted, about ten seconds, under 10 MB. MP4 (H.264) plays everywhere. The page loads a clip only when its story is current or next door, plays the current one and pauses the rest. Visitors can pause all clips with the pause button by the counter. A paused clip shows the creator's avatar as a still, or the placeholder figure when there is no avatar. Visitors who ask their device for reduced motion start with the clips paused. On phones the card shows the top 4:5 of the clip; tapping it opens the full frame.
 
 ### Placeholder creators
 
 `wp eval-file wp-content/themes/generation-maine/bin/seed-creators.php 9 https://mchljns.github.io/Generation-Maine/v2/media`
 
-This makes nine placeholder creators and imports each one's portrait and clip from the v2 preview into the media library. It then says how many of the 18 files it imported. Leave off the address for creators with no media. Run it with `0` to remove the creators the script made that are still placeholders, in any status, and the media it imported that no other creator uses. It never touches a creator you made yourself, even one marked Placeholder, nor a seeded creator you turned into a real one by unticking Placeholder.
+This makes nine placeholder creators and imports each one's portrait and clip from the v2 preview into the media library. It then says how many of the 18 files it imported. Leave off the address for creators with no media. Run it with `0` to remove the creators the script made that are still placeholders, in any status, and the media it imported that no other creator uses. It never touches a creator you made yourself, even one marked Placeholder, nor a seeded creator you turned into a real one by unticking Placeholder. Placeholders made by theme 3.0.0, which did not mark them, are removed too while their name, handle, hometown, story and media are as that script left them. Delete any you changed by hand.
 
 **Creators belong to the theme.** The Creators menu, its blocks and Settings > Generation Maine exist only while this theme is active. Switching themes hides them; the creators and settings stay in the database and come back when the theme does.
 
@@ -90,13 +92,14 @@ The form sends the visitor's address to the publication's subscribe page on Subs
 
 ## Search engines and sharing
 
-The theme writes the title, description, canonical address, share card and Organization details itself, using the Site Title from Settings > General. If an SEO plugin (Yoast SEO, Rank Math, SEOPress, All in One SEO) is activated, the theme steps aside completely. Set the plugin's homepage title, description and share image before relying on it.
+The theme writes the title, description, canonical address, share card and Organization details itself, using the Site Title from Settings > General. With a static front page and a posts page under Settings > Reading, these belong to the front page only. The posts page gets its own title. If an SEO plugin (Yoast SEO, Rank Math, SEOPress, All in One SEO) is activated, the theme steps aside completely. Set the plugin's homepage title, description and share image before relying on it.
 
 ## Before launch
 
 - The footer shows a small build stamp while the site is in review, so a stale copy can be told from the current one. Turn it off at launch with `add_filter( 'gm_show_build', '__return_false' );` in a small plugin or the child theme.
 - The about photo is a placeholder (Lisbon Street, Lewiston, CC BY 2.0). Replace it, or credit it on the page, before the site is public.
 - Replace the placeholder creators with the real ones.
+- Theme Check (the plugin) lists a few items that are expected for a theme built for one site. The Creators post type, the blocks and the settings screen belong to this theme on purpose. There is no readme.txt; only themes in the WordPress.org directory need one. favicon.ico stays for browsers and apps that do not read SVG icons, and it is printed only until a Site Icon is set. The copyright notice waits on the client's wording.
 
 ## Rebuilding
 
@@ -106,4 +109,4 @@ The theme writes the title, description, canonical address, share card and Organ
 python3 brand/src/build_splash_lean.py && python3 brand/src/build_theme.py && python3 brand/src/package_theme.py
 ```
 
-The PHP, the patterns, the templates and the blocks are written by hand.
+The builders convert DM Sans and Michroma to WOFF2 with fontTools, so the rebuild needs `pip install fonttools brotli` (and Pillow, as before). The PHP, the patterns, the templates and the blocks are written by hand.
