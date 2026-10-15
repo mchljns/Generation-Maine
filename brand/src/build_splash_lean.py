@@ -62,6 +62,8 @@ LEAN_A = dict(
 .lean h1 .d::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:50%;background:var(--mg);opacity:0;animation:pulse 2.4s cubic-bezier(.2,.6,.3,1) infinite 1.4s}
 @keyframes pulse{0%{transform:scale(1);opacity:.6}65%{transform:scale(3);opacity:0}100%{transform:scale(3);opacity:0}}
 @media (prefers-reduced-motion: reduce){.lean h1 .d::after{animation:none}}
+/* the pause control stops the dot too: it is the page's one other loop */
+.js.paused h1 .d::after{animation:none}
 .lean .col b{font-family:var(--body);font-weight:700}
 .lean .hero .k{color:#fff}
 /* Michroma is wide and sits large on the body: labels drop two sizes and loosen less */
@@ -135,7 +137,7 @@ STEPPER_OVERRIDES = """
 .stories{background:var(--tint)}
 .stories .w{max-width:1280px;margin:0 auto;padding-inline:var(--M)}
 .vid,.vid video,.vid img.clip{border-radius:0}.vid{box-shadow:none;background:var(--navy)}
-.vid .dur{border-radius:0;background:rgba(17,35,55,.6)}
+.vid .dur{border-radius:0;background:rgba(15,46,77,.78)}
 .who span{text-shadow:0 1px 2px rgba(0,0,0,.45)}
 .panel .k{color:var(--blue)}
 .where{color:var(--muted)}.where .n{color:var(--ink)}
@@ -177,7 +179,7 @@ STEPPER_OVERRIDES = """
 .viewer.in .slide .fr{transform:none}
 .slide .fr .clip{width:100%;height:100%;object-fit:cover;display:block}
 .slide .fr .who{opacity:1;left:12px;top:12px;right:64px}
-.slide .fr .dur{position:absolute;right:10px;top:10px;font:600 12px/1 var(--body);letter-spacing:.06em;color:#fff;background:rgba(15,46,77,.6);padding:5px 7px}
+.slide .fr .dur{position:absolute;right:10px;top:10px;font:600 12px/1 var(--body);letter-spacing:.06em;color:#fff;background:rgba(15,46,77,.78);padding:5px 7px}
 .slide .cap{display:flex;align-items:baseline;gap:12px;width:min(100%,420px);justify-content:center;text-align:center}
 .slide .cap .k{font:400 11px/1 var(--label);letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.7)}
 .slide .cap strong{font:700 16px/1.2 var(--display);color:#fff}
@@ -185,7 +187,7 @@ STEPPER_OVERRIDES = """
 html.vopen,html.vopen body{overflow:hidden}
 .panel .pv .clip{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block}
 .panel .pv .who{opacity:1;left:10px;top:10px;right:56px}
-.panel .pv .dur{position:absolute;right:8px;top:8px;font:600 12px/1 var(--body);letter-spacing:.06em;color:#fff;background:rgba(15,46,77,.6);padding:5px 7px}
+.panel .pv .dur{position:absolute;right:8px;top:8px;font:600 12px/1 var(--body);letter-spacing:.06em;color:#fff;background:rgba(15,46,77,.78);padding:5px 7px}
 .panel .k{margin-bottom:6px}
 .panel h2{font-size:clamp(28px,8vw,36px);max-width:none}
 .panel .bio{font-size:15px;line-height:1.45;margin:8px 0 12px}
@@ -200,9 +202,10 @@ html.vopen,html.vopen body{overflow:hidden}
 }
 """
 
+# apostrophes in the copy are typographic (&#8217;), as WordPress prints the same words
 GOAL = ("Generation Maine wants young people in Maine to see the rules behind what their lives cost, and to say so in public. "
         "Young Mainers film where they live. Each clip takes one rule, a lease clause, a license fee, a permit, a line on a pay stub, "
-        "and shows what it says and what it costs. The clips go out on the creators' own accounts, where their friends already are. "
+        "and shows what it says and what it costs. The clips go out on the creators&#8217; own accounts, where their friends already are. "
         "The newsletter follows the paperwork behind each one, with the numbers. The more people see the same rule from different towns, "
         "the harder it gets to ignore.")
 FOLLOW = [("instagram", "Instagram", "[@handle]", "#follow"),
@@ -400,6 +403,7 @@ html:not(.js) .stories .pinw{position:static}
 html:not(.js) .stage,html:not(.js) .where{display:none}
 html:not(.js) .panels{height:auto}
 html:not(.js) .panel{position:static;opacity:1;visibility:visible;pointer-events:auto;padding-block:20px}
+html:not(.js) .panel>*{transform:none;opacity:1}
 @media (max-width:900px){
  html:not(.js) .top .menu{display:none}
  /* a closed menu is out of the tab order and away from screen readers */
@@ -441,7 +445,7 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
 </div>%(hero_credit)s</section>
 
 <section class="block about" id="about"><div class="w">
-  <div class="body">%(about_media)s<div class="aim"><span class="k">%(bars)sWhat we hope to achieve</span><p class="big">Everyone who leaves Maine has a reason. We want the people who stay to show what it costs, one rule at a time.</p><p class="note">[CONFIRM: the aim, in Maine Policy Institute's words. This is a draft to edit.]</p><p class="goal">%(cols)s</p></div></div>
+  <div class="body">%(about_media)s<div class="aim"><span class="k">%(bars)sWhat we hope to achieve</span><p class="big">Everyone who leaves Maine has a reason. We want the people who stay to show what it costs, one rule at a time.</p><p class="note">[CONFIRM: the aim, in Maine Policy Institute&#8217;s words. This is a draft to edit.]</p><p class="goal">%(cols)s</p></div></div>
 </div></section>
 
 <section class="block roster stories-head" id="creators"><div class="w">
@@ -501,16 +505,33 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
     wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? (wnext.dataset.next || 'Next: ') + nx.dataset.name : (wnext.dataset.last || 'Last one'); marks.forEach((m, k) => { if (k === i) m.setAttribute('aria-current', 'true'); else m.removeAttribute('aria-current'); }); tint(i); }
   const stageEl = document.querySelector('.stage');
   const gutter = () => parseFloat(getComputedStyle(panelsEl).paddingLeft) || 0;
-  // the current card is the one whose left edge sits nearest the gutter; at the end of the track, where the last cards can
-  // never reach the gutter, it is the card asked for, or the last one
-  let want = -1;
-  const nearest = () => { if (panelsEl.scrollLeft >= panelsEl.scrollWidth - panelsEl.clientWidth - 2) return want >= 0 ? want : panels.length - 1; const edge = panelsEl.getBoundingClientRect().left + gutter(); let best = 0, bd = Infinity; panels.forEach((p, k) => { const d = Math.abs(p.getBoundingClientRect().left - edge); if (d < bd) { bd = d; best = k; } }); return best; };
-  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); want = k; const r = panels[k].getBoundingClientRect(), c = panelsEl.getBoundingClientRect(); panelsEl.scrollTo({ left: panelsEl.scrollLeft + r.left - c.left - gutter(), behavior: reduced ? 'auto' : 'smooth' }); hydrate(k);
+  // where each card comes to rest: its left edge on the gutter. The last cards can never get there, so the end of the track
+  // is shared out evenly between the last few, at least half a card apart (a scroll margin moves each one's snap point), and
+  // a swipe stops at each of them in turn instead of jumping one
+  let rest = [], want = -1, zone = -1;
+  const snaps = () => { const n = panels.length, c = panelsEl.getBoundingClientRect(), max = panelsEl.scrollWidth - panelsEl.clientWidth, x = panelsEl.scrollLeft - c.left - gutter();
+    const home = panels.map(p => p.getBoundingClientRect().left + x), short = n > 1 ? home[n - 1] - max : 0, pitch = n > 1 ? home[1] - home[0] : 1;
+    const m = short > 1 ? Math.min(n - 1, Math.ceil(2 * short / pitch)) : 0, k0 = n - m, from = m ? home[k0 - 1] : 0, end = phone.matches && m > 0;
+    rest = home.map((h, k) => k >= k0 ? from + (max - from) * (k - k0 + 1) / m : h); zone = end ? k0 - 1 : -1;
+    panels.forEach((p, k) => { p.style.scrollMarginLeft = end && k >= k0 ? (home[k] - rest[k]) + 'px' : ''; p.style.scrollSnapStop = end && k >= zone && k < n - 1 ? 'always' : ''; }); };
+  snaps();
+  // the current card is the one resting nearest the scroll position; where cards share one (all of them fit), the one asked for
+  const nearest = () => { const x = panelsEl.scrollLeft; if (want >= 0 && Math.abs(rest[want] - x) < 2) return want; let best = 0, bd = Infinity; rest.forEach((r, k) => { const d = Math.abs(r - x); if (d < bd) { bd = d; best = k; } }); return best; };
+  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); want = k; snaps(); panelsEl.scrollTo({ left: rest[k], behavior: reduced ? 'auto' : 'smooth' }); hydrate(k);
     // at the end of the track there may be nothing left to scroll, so no scroll event comes to update the row
     if (phone.matches) show(k); };
   const onTrack = () => { if (!phone.matches) return; show(nearest()); };
   panelsEl.addEventListener('scroll', onTrack, { passive: true });
   ['pointerdown', 'wheel', 'touchstart'].forEach(t => panelsEl.addEventListener(t, () => { want = -1; }, { passive: true }));
+  // a drag longer than the gap between two of those end points can still carry past one; once the track settles, it comes
+  // back to the card next to where the swipe began
+  let swipeFrom = -1, touching = false, settleT = 0;
+  const settle = () => { const k = nearest(), g = swipeFrom; swipeFrom = -1; if (g < 0 || zone < 0 || !phone.matches) return;
+    if (k > g + 1 && k > zone) goTo(Math.max(g + 1, zone)); else if (k < g - 1 && g - 1 >= zone) goTo(g - 1); };
+  const later = () => { clearTimeout(settleT); settleT = setTimeout(settle, 160); };
+  panelsEl.addEventListener('touchstart', () => { touching = true; swipeFrom = cur; clearTimeout(settleT); }, { passive: true });
+  ['touchend', 'touchcancel'].forEach(t => panelsEl.addEventListener(t, () => { touching = false; later(); }, { passive: true }));
+  panelsEl.addEventListener('scroll', () => { if (swipeFrom >= 0 && !touching) later(); }, { passive: true });
   panelsEl.addEventListener('keydown', e => { if (!phone.matches) return; if (e.key === 'ArrowRight') { e.preventDefault(); goTo(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(cur - 1); } });
   const fit = () => { if (!stageEl || phone.matches) { panelsEl.style.height = ''; if (stageEl) stageEl.style.removeProperty('--stageh'); return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
     const top = 84 + 16, room = innerHeight - top - (h + 6) - 14 - 20, colw = stageEl.clientWidth || (innerWidth - 72);
@@ -518,10 +539,11 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   const step = () => { if (phone.matches) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
   fit(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fit(); step(); }); addEventListener('load', fit);
   marks.forEach((m, k) => m.addEventListener('click', () => { if (phone.matches) { goTo(k); return; } const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
-  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); onTrack(); hydrate(cur); }); step(); if (cur < 0) show(0); tint(cur);
+  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); snaps(); step(); onTrack(); hydrate(cur); }); step(); if (cur < 0) show(0); tint(cur);
   if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
   const allClips = () => [...document.querySelectorAll('#stories .clip, #vtrack .clip')];
-  const setPaused = p => { paused = p; if (pauseBtn) { pauseBtn.setAttribute('aria-pressed', String(p)); pauseBtn.setAttribute('aria-label', p ? 'Play the clips' : 'Pause the clips'); }
+  // one name, "Pause the clips"; aria-pressed says whether they are paused. The headline's dot stops with them.
+  const setPaused = p => { paused = p; document.documentElement.classList.toggle('paused', p); if (pauseBtn) pauseBtn.setAttribute('aria-pressed', String(p));
     allClips().forEach(setSrc); const c = cur; cur = -1; show(c < 0 ? 0 : c); };
   if (pauseBtn) { pauseBtn.addEventListener('click', () => setPaused(!paused)); if (paused) setPaused(true); }
   // with many creators the phone segments get too thin to tap; swiping and the arrow keys still move the cards
@@ -579,6 +601,12 @@ HTML = """<!doctype html><html lang="en" class="%(root_class)s"><head><meta char
   menu.addEventListener('click', () => setMenu(!sheet.classList.contains('open')));
   sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
   addEventListener('keydown', e => { if (e.key === 'Escape' && sheet.classList.contains('open')) { const inside = sheet.contains(document.activeElement); setMenu(false); if (inside) menu.focus(); } });
+  // while the sheet is open, Tab goes round the menu button and the sheet's links; focus that lands behind the sheet closes it
+  addEventListener('keydown', e => { if (e.key !== 'Tab' || !sheet.classList.contains('open')) return; const f = [menu, ...sheet.querySelectorAll('a[href], button')], i = f.indexOf(document.activeElement);
+    if (i < 0) return; const j = i + (e.shiftKey ? -1 : 1); if (j < 0 || j >= f.length) { e.preventDefault(); f[(j + f.length) %% f.length].focus(); } });
+  document.addEventListener('focusin', e => { if (sheet.classList.contains('open') && !sheet.contains(e.target) && !(bar && bar.contains(e.target))) setMenu(false); });
+  // a tablet turned to landscape gets the desktop bar back: the sheet closes and the page scrolls again
+  phone.addEventListener('change', () => { if (!phone.matches && sheet.classList.contains('open')) setMenu(false); });
   }
   // the newsletter form hands the address to Substack, which prefills it
   const f = document.getElementById('nl');

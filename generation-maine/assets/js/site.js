@@ -44,16 +44,33 @@
     wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? (wnext.dataset.next || 'Next: ') + nx.dataset.name : (wnext.dataset.last || 'Last one'); marks.forEach((m, k) => { if (k === i) m.setAttribute('aria-current', 'true'); else m.removeAttribute('aria-current'); }); tint(i); }
   const stageEl = document.querySelector('.stage');
   const gutter = () => parseFloat(getComputedStyle(panelsEl).paddingLeft) || 0;
-  // the current card is the one whose left edge sits nearest the gutter; at the end of the track, where the last cards can
-  // never reach the gutter, it is the card asked for, or the last one
-  let want = -1;
-  const nearest = () => { if (panelsEl.scrollLeft >= panelsEl.scrollWidth - panelsEl.clientWidth - 2) return want >= 0 ? want : panels.length - 1; const edge = panelsEl.getBoundingClientRect().left + gutter(); let best = 0, bd = Infinity; panels.forEach((p, k) => { const d = Math.abs(p.getBoundingClientRect().left - edge); if (d < bd) { bd = d; best = k; } }); return best; };
-  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); want = k; const r = panels[k].getBoundingClientRect(), c = panelsEl.getBoundingClientRect(); panelsEl.scrollTo({ left: panelsEl.scrollLeft + r.left - c.left - gutter(), behavior: reduced ? 'auto' : 'smooth' }); hydrate(k);
+  // where each card comes to rest: its left edge on the gutter. The last cards can never get there, so the end of the track
+  // is shared out evenly between the last few, at least half a card apart (a scroll margin moves each one's snap point), and
+  // a swipe stops at each of them in turn instead of jumping one
+  let rest = [], want = -1, zone = -1;
+  const snaps = () => { const n = panels.length, c = panelsEl.getBoundingClientRect(), max = panelsEl.scrollWidth - panelsEl.clientWidth, x = panelsEl.scrollLeft - c.left - gutter();
+    const home = panels.map(p => p.getBoundingClientRect().left + x), short = n > 1 ? home[n - 1] - max : 0, pitch = n > 1 ? home[1] - home[0] : 1;
+    const m = short > 1 ? Math.min(n - 1, Math.ceil(2 * short / pitch)) : 0, k0 = n - m, from = m ? home[k0 - 1] : 0, end = phone.matches && m > 0;
+    rest = home.map((h, k) => k >= k0 ? from + (max - from) * (k - k0 + 1) / m : h); zone = end ? k0 - 1 : -1;
+    panels.forEach((p, k) => { p.style.scrollMarginLeft = end && k >= k0 ? (home[k] - rest[k]) + 'px' : ''; p.style.scrollSnapStop = end && k >= zone && k < n - 1 ? 'always' : ''; }); };
+  snaps();
+  // the current card is the one resting nearest the scroll position; where cards share one (all of them fit), the one asked for
+  const nearest = () => { const x = panelsEl.scrollLeft; if (want >= 0 && Math.abs(rest[want] - x) < 2) return want; let best = 0, bd = Infinity; rest.forEach((r, k) => { const d = Math.abs(r - x); if (d < bd) { bd = d; best = k; } }); return best; };
+  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); want = k; snaps(); panelsEl.scrollTo({ left: rest[k], behavior: reduced ? 'auto' : 'smooth' }); hydrate(k);
     // at the end of the track there may be nothing left to scroll, so no scroll event comes to update the row
     if (phone.matches) show(k); };
   const onTrack = () => { if (!phone.matches) return; show(nearest()); };
   panelsEl.addEventListener('scroll', onTrack, { passive: true });
   ['pointerdown', 'wheel', 'touchstart'].forEach(t => panelsEl.addEventListener(t, () => { want = -1; }, { passive: true }));
+  // a drag longer than the gap between two of those end points can still carry past one; once the track settles, it comes
+  // back to the card next to where the swipe began
+  let swipeFrom = -1, touching = false, settleT = 0;
+  const settle = () => { const k = nearest(), g = swipeFrom; swipeFrom = -1; if (g < 0 || zone < 0 || !phone.matches) return;
+    if (k > g + 1 && k > zone) goTo(Math.max(g + 1, zone)); else if (k < g - 1 && g - 1 >= zone) goTo(g - 1); };
+  const later = () => { clearTimeout(settleT); settleT = setTimeout(settle, 160); };
+  panelsEl.addEventListener('touchstart', () => { touching = true; swipeFrom = cur; clearTimeout(settleT); }, { passive: true });
+  ['touchend', 'touchcancel'].forEach(t => panelsEl.addEventListener(t, () => { touching = false; later(); }, { passive: true }));
+  panelsEl.addEventListener('scroll', () => { if (swipeFrom >= 0 && !touching) later(); }, { passive: true });
   panelsEl.addEventListener('keydown', e => { if (!phone.matches) return; if (e.key === 'ArrowRight') { e.preventDefault(); goTo(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(cur - 1); } });
   const fit = () => { if (!stageEl || phone.matches) { panelsEl.style.height = ''; if (stageEl) stageEl.style.removeProperty('--stageh'); return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
     const top = 84 + 16, room = innerHeight - top - (h + 6) - 14 - 20, colw = stageEl.clientWidth || (innerWidth - 72);
@@ -61,10 +78,11 @@
   const step = () => { if (phone.matches) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
   fit(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fit(); step(); }); addEventListener('load', fit);
   marks.forEach((m, k) => m.addEventListener('click', () => { if (phone.matches) { goTo(k); return; } const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
-  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); step(); onTrack(); hydrate(cur); }); step(); if (cur < 0) show(0); tint(cur);
+  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); snaps(); step(); onTrack(); hydrate(cur); }); step(); if (cur < 0) show(0); tint(cur);
   if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
   const allClips = () => [...document.querySelectorAll('#stories .clip, #vtrack .clip')];
-  const setPaused = p => { paused = p; if (pauseBtn) { pauseBtn.setAttribute('aria-pressed', String(p)); pauseBtn.setAttribute('aria-label', p ? 'Play the clips' : 'Pause the clips'); }
+  // one name, "Pause the clips"; aria-pressed says whether they are paused. The headline's dot stops with them.
+  const setPaused = p => { paused = p; document.documentElement.classList.toggle('paused', p); if (pauseBtn) pauseBtn.setAttribute('aria-pressed', String(p));
     allClips().forEach(setSrc); const c = cur; cur = -1; show(c < 0 ? 0 : c); };
   if (pauseBtn) { pauseBtn.addEventListener('click', () => setPaused(!paused)); if (paused) setPaused(true); }
   // with many creators the phone segments get too thin to tap; swiping and the arrow keys still move the cards
@@ -122,6 +140,12 @@
   menu.addEventListener('click', () => setMenu(!sheet.classList.contains('open')));
   sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
   addEventListener('keydown', e => { if (e.key === 'Escape' && sheet.classList.contains('open')) { const inside = sheet.contains(document.activeElement); setMenu(false); if (inside) menu.focus(); } });
+  // while the sheet is open, Tab goes round the menu button and the sheet's links; focus that lands behind the sheet closes it
+  addEventListener('keydown', e => { if (e.key !== 'Tab' || !sheet.classList.contains('open')) return; const f = [menu, ...sheet.querySelectorAll('a[href], button')], i = f.indexOf(document.activeElement);
+    if (i < 0) return; const j = i + (e.shiftKey ? -1 : 1); if (j < 0 || j >= f.length) { e.preventDefault(); f[(j + f.length) % f.length].focus(); } });
+  document.addEventListener('focusin', e => { if (sheet.classList.contains('open') && !sheet.contains(e.target) && !(bar && bar.contains(e.target))) setMenu(false); });
+  // a tablet turned to landscape gets the desktop bar back: the sheet closes and the page scrolls again
+  phone.addEventListener('change', () => { if (!phone.matches && sheet.classList.contains('open')) setMenu(false); });
   }
   // the newsletter form hands the address to Substack, which prefills it
   const f = document.getElementById('nl');

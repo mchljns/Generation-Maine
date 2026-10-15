@@ -72,11 +72,11 @@ Colors, type, the button shape and the motion are not editable in the page. That
 6. **Place on the page**, at the bottom of Creator details, sets the order. Lower numbers come first. It is the same number as WordPress's own Order, so a change in either shows in the other. Order is under Post Attributes in the sidebar on WordPress 6.5, under Actions on WordPress 7, and in Quick Edit in the Creators list. WordPress 7 also shows a "Parent" row in the sidebar; creators do not use it.
 7. Publish. The stepper adds the story and the position row renumbers itself.
 
-The Creators list shows each creator's place, hometown and whether they are a placeholder, in page order. Creators have no public pages of their own, though like any published content their name and story can be read through the WordPress REST API. With no creators published, the section shows a short note. A creator marked "Placeholder" renders like any other, so the page can be reviewed before casting. A creator restored from the Trash comes back as a draft; publish it again to put it back on the page. The block shows up to 24 creators (Creators block > Most creators to show); past twelve, the position row on phones is a progress bar and visitors swipe.
+The Creators list shows each creator's place, hometown and whether they are a placeholder, in page order. Creators have no public pages of their own, though like any published content their name and story can be read through the WordPress REST API. With no creators published, the section shows a short note. A creator marked "Placeholder" renders like any other, so the page can be reviewed before casting. A creator restored from the Trash comes back as a draft; publish it again to put it back on the page. The block shows up to 24 creators (Creators block > Most creators to show); past twelve, the position row on phones is a progress bar and visitors swipe. Up to twelve, the row has one segment per creator. The segments are 44 px tall but narrower on phones (28 to 40 px wide with nine creators on a 390 px screen). That passes the 24 px minimum in WCAG 2.5.8 but is below the 44 px the rest of the page uses. Visitors can also swipe the cards one at a time, or focus the cards and use the arrow keys.
 
 Who can do what: Editors and Administrators add, edit and remove any creator. Authors can add and publish their own creators straight onto the home page; Contributors can add creators for review but cannot set an avatar or upload a clip. Their Creator details box has the clip link field only, with a line saying an editor can upload the clip. Saving a creator someone else made keeps them as its author. If creators should always be reviewed, give contributors' accounts to the people adding them.
 
-Clips: 9:16, muted, about ten seconds, under 10 MB. MP4 (H.264) plays everywhere. The page loads a clip only when its story is current or next door, plays the current one and pauses the rest. Visitors can pause all clips with the pause button by the counter. A paused clip shows the creator's avatar as a still, or the placeholder figure when there is no avatar. Visitors who ask their device for reduced motion start with the clips paused. On phones the card shows the top 4:5 of the clip; tapping it opens the full frame.
+Clips: 9:16, muted, about ten seconds, under 10 MB. MP4 (H.264) plays everywhere. The page loads a clip only when its story is current or next door, plays the current one and pauses the rest. Visitors can pause all clips with the pause button by the counter. A paused clip shows the creator's avatar as a still, or the placeholder figure when there is no avatar. The pulsing dot in the headline stops too. Visitors who ask their device for reduced motion start with the clips paused. On phones the card shows the top 4:5 of the clip; tapping it opens the full frame.
 
 ### Placeholder creators
 
@@ -94,12 +94,16 @@ The form sends the visitor's address to the publication's subscribe page on Subs
 
 The theme writes the title, description, canonical address, share card and Organization details itself, using the Site Title from Settings > General. With a static front page and a posts page under Settings > Reading, these belong to the front page only. The posts page gets its own title. If an SEO plugin (Yoast SEO, Rank Math, SEOPress, All in One SEO) is activated, the theme steps aside completely. Set the plugin's homepage title, description and share image before relying on it.
 
+## Compared with the v2 preview
+
+The front page matches the v2 preview apart from a few expected differences. The header links have slightly taller click areas (40 px against 35 px), because WordPress wraps each link in a paragraph block. Until the channels and the Substack page are set in Settings > Generation Maine, the stories have no social row and Follow has no signup form. Both are shorter on phones, and the desktop story text sits about 16 px lower. The placeholder creators show their portraits in the handle chips, where the preview shows a silhouette.
+
 ## Before launch
 
 - The footer shows a small build stamp while the site is in review, so a stale copy can be told from the current one. Turn it off at launch with `add_filter( 'gm_show_build', '__return_false' );` in a small plugin or the child theme.
 - The about photo is a placeholder (Lisbon Street, Lewiston, CC BY 2.0). Replace it, or credit it on the page, before the site is public.
 - Replace the placeholder creators with the real ones.
-- Theme Check (the plugin) lists a few items that are expected for a theme built for one site. The Creators post type, the blocks and the settings screen belong to this theme on purpose. There is no readme.txt; only themes in the WordPress.org directory need one. favicon.ico stays for browsers and apps that do not read SVG icons, and it is printed only until a Site Icon is set. The copyright notice waits on the client's wording.
+- Theme Check (the plugin) lists a few items that are expected for a theme built for one site. The Creators post type, the blocks and the settings screen belong to this theme on purpose. There is no readme.txt. Only themes in the WordPress.org directory need one. favicon.ico stays for browsers and apps that do not read SVG icons, and it is printed only until a Site Icon is set. The copyright notice waits on the client's wording.
 
 ## Rebuilding
 

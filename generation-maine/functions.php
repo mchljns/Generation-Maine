@@ -97,14 +97,19 @@ function gm_enqueue() {
 add_action( 'wp_enqueue_scripts', 'gm_enqueue' );
 
 /**
- * The hero mural's data, read by the page script.
+ * The hero mural's timing, read by the page script. The mural itself is drawn on the server (gm_part_mural), so only the
+ * delay between its lines is printed, not the geometry.
  */
 function gm_mural_data() {
 	$file = get_theme_file_path( 'assets/data/mural.json' );
 	if ( ! file_exists( $file ) ) {
 		return;
 	}
-	echo '<script id="maine-data" type="application/json">' . file_get_contents( $file ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
+	$data = json_decode( (string) file_get_contents( $file ), true ); // phpcs:ignore WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
+	if ( empty( $data['stagger'] ) ) {
+		return;
+	}
+	echo '<script id="maine-data" type="application/json">' . wp_json_encode( array( 'stagger' => absint( $data['stagger'] ) ) ) . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action( 'wp_footer', 'gm_mural_data', 1 );
 
