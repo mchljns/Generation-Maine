@@ -361,9 +361,10 @@ html.vopen,html.vopen body{overflow:hidden}
 .cpause{flex:none;width:44px;height:44px;display:grid;place-items:center;margin:0 -12px;padding:0;border:0;background:none;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .cpause svg{width:14px;height:14px}.cpause .ipl,.cpause[aria-pressed="true"] .ip{display:none}.cpause[aria-pressed="true"] .ipl{display:block}
 .cpause:focus-visible{outline:2px solid var(--blue);outline-offset:-6px}
-/* footer and newsletter small print wrap long addresses */
+/* footer lines, newsletter small print and follow handles wrap long addresses */
 .static .site .ffine{grid-template-columns:minmax(0,1fr) auto}
-.site .ffine p,.follow .fine{overflow-wrap:anywhere;min-width:0}
+.site .ffine p,.follow .fine,.site .fbody .lede{overflow-wrap:anywhere;min-width:0}
+.follow .row .h{white-space:normal;overflow-wrap:anywhere;min-width:0}
 /* without the script: every story readable, no stepper, no dead menu button */
 html:not(.js) .stories{height:auto!important;min-height:0!important}
 html:not(.js) .stories .pinw{position:static}

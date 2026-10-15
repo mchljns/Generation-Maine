@@ -35,7 +35,7 @@ function gm_settings_fields() {
 		'footer'     => array(
 			'gm_footer_line'  => array( 'label' => __( 'Line beside the footer mark', 'generation-maine' ), 'default' => __( 'Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.', 'generation-maine' ), 'type' => 'text', 'help' => '' ),
 			'gm_legal_line'   => array( 'label' => __( 'Legal line', 'generation-maine' ), 'default' => __( 'Generation Maine. [CONFIRM: legal name, address and contact]', 'generation-maine' ), 'type' => 'text', 'help' => __( 'Shown after the copyright sign and the year, which the page fills in.', 'generation-maine' ) ),
-			'gm_contact_url'  => array( 'label' => __( 'Contact link', 'generation-maine' ), 'default' => 'https://mainepolicy.org/contact/', 'type' => 'url', 'help' => __( 'Where "Contact" in the footer goes. The privacy link uses the page set under Settings > Privacy.', 'generation-maine' ) ),
+			'gm_contact_url'  => array( 'label' => __( 'Contact link', 'generation-maine' ), 'default' => 'https://mainepolicy.org/contact/', 'type' => 'url', 'help' => __( 'Where "Contact" in the footer goes: a web page, or an email address written as mailto:name@example.org. The privacy link uses the page set under Settings > Privacy.', 'generation-maine' ) ),
 		),
 	);
 }
@@ -136,7 +136,7 @@ function gm_settings_notice( $key, $msg, $type ) {
 
 /**
  * Clean a web address. Plain http becomes https; anything that is not a web address is refused with a notice, and the
- * value saved before stays in place.
+ * value saved before stays in place. The Contact link may also be an email address (mailto:).
  *
  * @param string $key   Option.
  * @param string $value Raw value.
@@ -147,16 +147,28 @@ function gm_clean_url( $key, $value ) {
 	if ( '' === $value ) {
 		return '';
 	}
-	if ( 0 === stripos( $value, 'http://' ) ) {
-		$value = 'https://' . substr( $value, 7 );
-	} elseif ( ! preg_match( '#^[a-z][a-z0-9+.-]*:#i', $value ) && preg_match( '#^[\w-]+(\.[\w-]+)+(/|$)#', $value ) ) {
-		$value = 'https://' . $value;
+	if ( 'gm_contact_url' === $key && 0 === stripos( $value, 'mailto:' ) ) {
+		// the address before any ?subject= has to be a real email address
+		$value = 'mailto:' . substr( $value, 7 );
+		$addr  = explode( '?', substr( $value, 7 ), 2 );
+		$clean = is_email( rawurldecode( $addr[0] ) ) ? esc_url_raw( $value, array( 'mailto' ) ) : '';
+	} else {
+		if ( 0 === stripos( $value, 'http://' ) ) {
+			$value = 'https://' . substr( $value, 7 );
+		} elseif ( ! preg_match( '#^[a-z][a-z0-9+.-]*:#i', $value ) && preg_match( '#^[\w-]+(\.[\w-]+)+(/|$)#', $value ) ) {
+			$value = 'https://' . $value;
+		}
+		$clean = esc_url_raw( $value, array( 'https' ) );
 	}
-	$clean = esc_url_raw( $value, array( 'https' ) );
 	if ( '' === $clean ) {
-		/* translators: %s: what was typed */
-		gm_settings_notice( $key, sprintf( __( '"%s" is not a web address, so the address saved before was kept.', 'generation-maine' ), wp_strip_all_tags( $value ) ), 'error' );
-		return (string) get_option( $key, '' );
+		$msg = 'gm_contact_url' === $key
+			/* translators: %s: what was typed */
+			? __( '"%s" is not a web address or an email address, so the address saved before was kept.', 'generation-maine' )
+			/* translators: %s: what was typed */
+			: __( '"%s" is not a web address, so the address saved before was kept.', 'generation-maine' );
+		gm_settings_notice( $key, sprintf( $msg, wp_strip_all_tags( $value ) ), 'error' );
+		// no second argument, so an option never saved keeps its registered default (the Contact link has one)
+		return (string) get_option( $key );
 	}
 	return $clean;
 }

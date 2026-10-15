@@ -50,16 +50,25 @@ function gm_seo_plugin_active() {
 }
 
 /**
- * Front page title.
+ * True on the front page. With a static front page, the posts page is a page of its own, not the front page.
+ *
+ * @return bool
+ */
+function gm_seo_is_front() {
+	return is_front_page() || ( is_home() && ! get_option( 'page_for_posts' ) );
+}
+
+/**
+ * Front page title. A value returned here skips WordPress's own escaping, so it is escaped here.
  *
  * @param string $title Title WordPress would use.
  * @return string
  */
 function gm_document_title( $title ) {
-	if ( gm_seo_plugin_active() || ! ( is_front_page() || is_home() ) ) {
+	if ( gm_seo_plugin_active() || ! gm_seo_is_front() ) {
 		return $title;
 	}
-	return gm_seo()['title'];
+	return esc_html( gm_seo()['title'] );
 }
 add_filter( 'pre_get_document_title', 'gm_document_title' );
 
@@ -72,7 +81,7 @@ function gm_seo_head() {
 	}
 	$s     = gm_seo();
 	$url   = home_url( '/' );
-	$front = is_front_page() || is_home();
+	$front = gm_seo_is_front();
 	$title = $front ? $s['title'] : wp_get_document_title();
 
 	if ( $front ) {
@@ -103,16 +112,20 @@ function gm_seo_head() {
 	echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
 
 	if ( $front ) {
+		// JSON is not HTML: the Site Title is stored with & and ' as entities, so they are decoded (JSON_HEX_TAG keeps it safe)
+		$text   = static function ( $v ) {
+			return html_entity_decode( (string) $v, ENT_QUOTES, 'UTF-8' );
+		};
 		$schema = array(
 			'@context'           => 'https://schema.org',
 			'@type'              => 'Organization',
-			'name'               => $s['name'],
+			'name'               => $text( $s['name'] ),
 			'url'                => $url,
 			'logo'               => has_site_icon() ? get_site_icon_url( 512 ) : get_theme_file_uri( 'assets/img/icon-192.png' ),
-			'description'        => $s['description'],
+			'description'        => $text( $s['description'] ),
 			'parentOrganization' => array(
 				'@type' => 'Organization',
-				'name'  => $s['parent_name'],
+				'name'  => $text( $s['parent_name'] ),
 				'url'   => $s['parent_url'],
 			),
 		);

@@ -38,19 +38,27 @@ function gm_channels() {
 }
 
 /**
- * A handle worked out from an account address, for a channel whose handle field was left empty.
+ * A handle worked out from an account address, for a channel whose handle field was left empty. TikTok and YouTube put the
+ * @handle first and a tab or a video after it; Instagram puts the bare name first. An address with no handle in it (a
+ * YouTube channel id, an Instagram post) shows the site's address instead, for example youtube.com.
  *
  * @param string $url Account address.
+ * @param string $key Channel: instagram, tiktok or youtube.
  * @return string
  */
-function gm_handle_from_url( $url ) {
+function gm_handle_from_url( $url, $key = '' ) {
 	$path = trim( (string) wp_parse_url( $url, PHP_URL_PATH ), '/' );
-	$seg  = $path ? explode( '/', $path ) : array();
-	$last = $seg ? end( $seg ) : '';
-	if ( '' === $last ) {
-		return (string) wp_parse_url( $url, PHP_URL_HOST );
+	$seg  = '' === $path ? array() : array_map( 'rawurldecode', explode( '/', $path ) );
+	foreach ( $seg as $s ) {
+		if ( strlen( $s ) > 1 && '@' === $s[0] ) {
+			return $s;
+		}
 	}
-	return '@' === $last[0] ? $last : '@' . $last;
+	// an Instagram name: letters, numbers, periods and underscores, and not a post, a reel, stories or another Instagram page
+	if ( 'instagram' === $key && $seg && preg_match( '/^[A-Za-z0-9._]{1,30}$/', $seg[0] ) && ! in_array( strtolower( $seg[0] ), array( 'p', 'reel', 'reels', 'tv', 'stories', 'explore', 'accounts', 'direct' ), true ) ) {
+		return '@' . $seg[0];
+	}
+	return preg_replace( '/^www\./', '', (string) wp_parse_url( $url, PHP_URL_HOST ) );
 }
 
 /**
@@ -61,7 +69,7 @@ function gm_handle_from_url( $url ) {
 function gm_render_follow() {
 	$rows = '';
 	foreach ( gm_channels() as $c ) {
-		$handle = $c['handle'] ? $c['handle'] : ( $c['url'] ? gm_handle_from_url( $c['url'] ) : ( 'substack' === $c['key'] ? '[name].substack.com' : '[@handle]' ) );
+		$handle = $c['handle'] ? $c['handle'] : ( $c['url'] ? gm_handle_from_url( $c['url'], $c['key'] ) : ( 'substack' === $c['key'] ? '[name].substack.com' : '[@handle]' ) );
 		$inner  = gm_mark( $c['key'] ) . '<span class="name">' . esc_html( $c['name'] ) . '</span><span class="h">' . esc_html( $handle ) . '</span>';
 		$rows  .= $c['url']
 			? '<a class="row" href="' . esc_url( gm_utm( $c['url'] ) ) . '" target="_blank" rel="noopener">' . $inner . '</a>'
