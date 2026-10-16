@@ -35,4 +35,4 @@ Each round's findings, with steps, evidence and causes, are in `rounds/`: `findi
 
 ## Deployed
 
-Theme 3.2.0, build bd9243a, went to gh-pages in commit 8e917a4 on Oct 16, 2026: the v2 page (https://mchljns.github.io/Generation-Maine/v2/) and the test link's zip (https://mchljns.github.io/Generation-Maine/test/).
+Theme 3.2.0, build bd9243a, went to gh-pages in commit 8e917a4 on Oct 16, 2026: the v2 page (https://mchljns.github.io/Generation-Maine/v2/) and the test link's zip (https://mchljns.github.io/Generation-Maine/test/). Verified live at 12:33 UTC after the cache window: every address form of the v2 page serves sha1 54f3ae94, the zip serves c4063ca2 with build bd9243a, and the test link opens WordPress Playground with the theme (footer Build bd9243a) and nine creators in 16 seconds.
