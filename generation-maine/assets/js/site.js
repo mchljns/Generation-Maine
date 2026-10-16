@@ -63,10 +63,11 @@
   panelsEl.addEventListener('scroll', onTrack, { passive: true });
   ['pointerdown', 'wheel', 'touchstart'].forEach(t => panelsEl.addEventListener(t, () => { want = -1; }, { passive: true }));
   // a drag longer than the gap between two of those end points can still carry past one; once the track settles, it comes
-  // back to the card next to where the swipe began
+  // back to the card next to where the swipe began. Going back, only a swipe that passed one card and stopped in the end
+  // stretch comes back; a longer one, or one that left the stretch, stays where it stopped
   let swipeFrom = -1, touching = false, settleT = 0;
   const settle = () => { const k = nearest(), g = swipeFrom; swipeFrom = -1; if (g < 0 || zone < 0 || !phone.matches) return;
-    if (k > g + 1 && k > zone) goTo(Math.max(g + 1, zone)); else if (k < g - 1 && g - 1 >= zone) goTo(g - 1); };
+    if (k > g + 1 && k > zone) goTo(Math.max(g + 1, zone)); else if (k === g - 2 && k >= zone) goTo(g - 1); };
   const later = () => { clearTimeout(settleT); settleT = setTimeout(settle, 160); };
   panelsEl.addEventListener('touchstart', () => { touching = true; swipeFrom = cur; clearTimeout(settleT); }, { passive: true });
   ['touchend', 'touchcancel'].forEach(t => panelsEl.addEventListener(t, () => { touching = false; later(); }, { passive: true }));
@@ -143,9 +144,13 @@
   // while the sheet is open, Tab goes round the menu button and the sheet's links; focus that lands behind the sheet closes it
   addEventListener('keydown', e => { if (e.key !== 'Tab' || !sheet.classList.contains('open')) return; const f = [menu, ...sheet.querySelectorAll('a[href], button')], i = f.indexOf(document.activeElement);
     if (i < 0) return; const j = i + (e.shiftKey ? -1 : 1); if (j < 0 || j >= f.length) { e.preventDefault(); f[(j + f.length) % f.length].focus(); } });
-  document.addEventListener('focusin', e => { if (sheet.classList.contains('open') && !sheet.contains(e.target) && !(bar && bar.contains(e.target))) setMenu(false); });
-  // a tablet turned to landscape gets the desktop bar back: the sheet closes and the page scrolls again
-  phone.addEventListener('change', () => { if (!phone.matches && sheet.classList.contains('open')) setMenu(false); });
+  let held = null;
+  document.addEventListener('focusin', e => { held = e.target; if (sheet.classList.contains('open') && !sheet.contains(e.target) && !(bar && bar.contains(e.target))) setMenu(false); });
+  // a tablet turned to landscape gets the desktop bar back: the sheet closes and the page scrolls again. Focus in the sheet
+  // (or on the menu button) drops to the page as they hide, often before this runs, so the last element focused says where
+  // it was: it goes to the same link in the bar, or to the bar's first link
+  phone.addEventListener('change', () => { if (phone.matches || !sheet.classList.contains('open')) return; const a = document.activeElement === document.body ? held : document.activeElement, i = [...sheet.querySelectorAll('a')].indexOf(a); setMenu(false);
+    if (i >= 0 || a === menu) { const to = [...document.querySelectorAll('.top nav a, .top .cta a, .top a.cta')][i] || document.querySelector('.top nav a'); if (to) to.focus(); } });
   }
   // the newsletter form hands the address to Substack, which prefills it
   const f = document.getElementById('nl');
