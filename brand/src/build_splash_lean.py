@@ -53,7 +53,7 @@ LEAN_A = dict(
     key="v2", out="brand/identity/splash-lean-a", root_class="static lean euro", navy="#0F2E4D", blue="#0556A5", ink="#0F2E4D", paper="#FFFFFF", tint="#EAF1F8",
     fonts=LEAN_A_FONTS, font_files={"W2DM": "generation-maine/assets/fonts/dm-sans-var.ttf", "W2MICH": "brand/fonts/michroma/Michroma-Regular.ttf"}, logo=F.LOGO_A, mural=F.MURAL_A, hero="mural", credits="",
     display="'Bricolage Grotesque',system-ui,sans-serif", body="'DM Sans',system-ui,sans-serif", label="Michroma,Eurostile,system-ui,sans-serif",
-    h1="Young Mainers<br>on building<br>a life <span class=\"here\">here<i class=\"d pulse\" aria-hidden=\"true\"></i></span>", h2_about="What this is", h2_creators="The creators", h2_follow="Where to find it",
+    h1="Young Mainers<br>on building<br>a life <span class=\"here\">here&#8288;<i class=\"d pulse\" aria-hidden=\"true\"></i></span>", h2_about="What this is", h2_creators="The creators", h2_follow="Where to find it",
     site_css=SITE_CSS(F.STATIC_CSS) + "\n" + SITE_CSS(F.FAMILY_A_CSS % dict(blue="#0556A5", navy="#0F2E4D", mg=MG)),
     css="""
 .lean h1,.lean h2,.lean .h2{font-family:var(--display);font-weight:800;letter-spacing:-.01em}

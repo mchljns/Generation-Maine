@@ -186,14 +186,21 @@ function gm_url_sanitizer( $key ) {
 }
 
 /**
- * A handle shows with its @.
+ * A handle shows with one @ and no spaces, however it was typed (a space after the @, two @ signs, the full-width @ that
+ * some keyboards type, U+FF20). A lone @ is no handle, so the page falls back to the handle in the address.
  *
  * @param string $value Raw value.
  * @return string
  */
 function gm_sanitize_handle( $value ) {
-	$value = trim( sanitize_text_field( (string) $value ) );
-	return '' === $value || '@' === $value[0] ? $value : '@' . $value;
+	$value = sanitize_text_field( (string) $value );
+	$clean = preg_replace( array( '/[\s\p{Z}\x{200B}-\x{200D}\x{2060}\x{FEFF}]+/u', '/^[@\x{FF20}]+/u' ), '', $value );
+	// text that is not valid UTF-8 cannot be read this way; it keeps the old rule
+	if ( null === $clean ) {
+		$value = trim( $value );
+		return '' === $value || '@' === $value[0] ? $value : '@' . $value;
+	}
+	return '' === $clean ? '' : '@' . $clean;
 }
 
 /**
@@ -273,3 +280,27 @@ function gm_utm( $url ) {
 	}
 	return add_query_arg( array( 'utm_source' => 'generationmaine', 'utm_medium' => 'site' ), $url );
 }
+
+/**
+ * A name, a handle or an address, printed as it was typed. WordPress's typography filter runs over the whole page and would
+ * turn the x of 4x4 into a times sign and -- into a dash; it leaves the inside of <bdi> alone (gm_no_texturize()). <bdi>
+ * also keeps a name written right to left from turning the text around it.
+ *
+ * @param string $text Name, handle or address.
+ * @return string HTML
+ */
+function gm_bdi( $text ) {
+	return '<bdi>' . esc_html( $text ) . '</bdi>';
+}
+
+/**
+ * The typography filter skips <bdi>, as it skips <code>.
+ *
+ * @param string[] $tags Elements it leaves alone.
+ * @return string[]
+ */
+function gm_no_texturize( $tags ) {
+	$tags[] = 'bdi';
+	return $tags;
+}
+add_filter( 'no_texturize_tags', 'gm_no_texturize' );

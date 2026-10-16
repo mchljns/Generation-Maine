@@ -24,7 +24,8 @@ function gm_channels() {
 			'key'    => $key,
 			'name'   => $name,
 			'url'    => gm_setting( 'gm_' . $key . '_url' ),
-			'handle' => gm_setting( 'gm_' . $key . '_handle' ),
+			// cleaned again here, so a handle saved before the rules for spaces and a lone @ shows as a new save would keep it
+			'handle' => gm_sanitize_handle( gm_setting( 'gm_' . $key . '_handle' ) ),
 		);
 	}
 	$home  = gm_newsletter_home();
@@ -40,7 +41,7 @@ function gm_channels() {
 /**
  * A handle worked out from an account address, for a channel whose handle field was left empty. TikTok and YouTube put the
  * @handle first and a tab or a video after it; Instagram puts the bare name first. An address with no handle in it (a
- * YouTube channel id, an Instagram post) shows the site's address instead, for example youtube.com.
+ * YouTube channel id, an Instagram post or share link) shows the site's address instead, for example youtube.com.
  *
  * @param string $url Account address.
  * @param string $key Channel: instagram, tiktok or youtube.
@@ -54,8 +55,11 @@ function gm_handle_from_url( $url, $key = '' ) {
 			return $s;
 		}
 	}
-	// an Instagram name: letters, numbers, periods and underscores, and not a post, a reel, stories or another Instagram page
-	if ( 'instagram' === $key && $seg && preg_match( '/^[A-Za-z0-9._]{1,30}$/', $seg[0] ) && ! in_array( strtolower( $seg[0] ), array( 'p', 'reel', 'reels', 'tv', 'stories', 'explore', 'accounts', 'direct' ), true ) ) {
+	// an Instagram name: letters, numbers, periods and underscores, alone or before a profile tab or one of the account's
+	// posts, and not one of Instagram's own pages (a post, a reel, stories, a share link)
+	if ( 'instagram' === $key && $seg && preg_match( '/^[A-Za-z0-9._]{1,30}$/', $seg[0] )
+		&& ( 1 === count( $seg ) || in_array( strtolower( $seg[1] ), array( 'reels', 'tagged', 'saved', 'guides', 'p', 'reel', 'tv' ), true ) )
+		&& ! in_array( strtolower( $seg[0] ), array( 'p', 'reel', 'reels', 'tv', 'stories', 'explore', 'accounts', 'direct', 's', 'share', 'about', 'legal', 'developer', 'web' ), true ) ) {
 		return '@' . $seg[0];
 	}
 	return preg_replace( '/^www\./', '', (string) wp_parse_url( $url, PHP_URL_HOST ) );
@@ -70,7 +74,7 @@ function gm_render_follow() {
 	$rows = '';
 	foreach ( gm_channels() as $c ) {
 		$handle = $c['handle'] ? $c['handle'] : ( $c['url'] ? gm_handle_from_url( $c['url'], $c['key'] ) : ( 'substack' === $c['key'] ? '[name].substack.com' : '[@handle]' ) );
-		$inner  = gm_mark( $c['key'] ) . '<span class="name">' . esc_html( $c['name'] ) . '</span><span class="h">' . esc_html( $handle ) . '</span>';
+		$inner  = gm_mark( $c['key'] ) . '<span class="name">' . esc_html( $c['name'] ) . '</span><span class="h">' . gm_bdi( $handle ) . '</span>';
 		$rows  .= $c['url']
 			? '<a class="row" href="' . esc_url( gm_utm( $c['url'] ) ) . '" target="_blank" rel="noopener">' . $inner . '</a>'
 			: '<div class="row">' . $inner . '</div>';

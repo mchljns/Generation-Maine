@@ -320,9 +320,10 @@ add_filter( 'render_block', 'gm_render_marks', 10, 2 );
 
 /**
  * The hero headline: the last word in gold with the pulsing dot after it. The word is found past any trailing space, line
- * break or no-break space, and inside bold, emphasis or a link. A final period becomes the dot, inside or outside the tag;
- * a question mark or an exclamation mark stays and gets no dot. The markup is walked tag by tag from the end instead of
- * matched with one pattern, so no length of spacing can make it fail; anything it cannot read is shown unchanged.
+ * break or no-break space, and inside bold, emphasis or a link. A final period becomes the dot, inside or outside the tag
+ * and inside quote marks ("home." gets the dot after the quote); a question mark, an exclamation mark or an ellipsis stays
+ * and gets no dot. The markup is walked tag by tag from the end instead of matched with one pattern, so no length of
+ * spacing can make it fail; anything it cannot read is shown unchanged.
  *
  * @param string $html Heading block HTML.
  * @return string
@@ -335,15 +336,48 @@ function gm_mark_here( $html ) {
 	if ( $last < 2 || '' !== trim( $parts[ $last ] ) || ! preg_match( '#^</h[1-6]>$#i', $parts[ $last - 1 ] ) ) {
 		return $html;
 	}
+	// bold, emphasis and links can sit inside the word or around it
+	$inline = '#^</?(?:strong|b|em|i|a|span|mark|u|s|code)\b#i';
+	// first the last visible character, past spacing, stray line breaks and closing quote marks (outside the bold or link
+	// too): a single period goes, as the dot takes its place; anything else stays
 	$dot    = true;
-	$read   = false;
+	$quoted = false;
+	for ( $i = $last - 2; $i >= 0; $i-- ) {
+		$text = $parts[ $i ];
+		if ( 1 === $i % 2 ) {
+			if ( preg_match( $inline, $text ) ) {
+				continue;
+			}
+			if ( ! $quoted && preg_match( '#^<br\b#i', $text ) ) {
+				$parts[ $i ] = '';
+				continue;
+			}
+			break;
+		}
+		$end         = $quoted ? strlen( $text ) : gm_trim_gap( $text, strlen( $text ) );
+		$text        = substr( $text, 0, $end );
+		$parts[ $i ] = $text;
+		for ( $q = gm_quote_before( $text, $end ); $q; $q = gm_quote_before( $text, $end ) ) {
+			$end   -= $q;
+			$quoted = true;
+		}
+		if ( $end < 1 ) {
+			continue;
+		}
+		if ( '.' === $text[ $end - 1 ] && ( $end < 2 || '.' !== $text[ $end - 2 ] ) ) {
+			$parts[ $i ] = substr( $text, 0, gm_trim_gap( $text, $end - 1 ) ) . substr( $text, $end );
+		} elseif ( preg_match( '/(?:[?!.]|\xE2\x80\xA6|&hellip;|&#0*8230;|&#x0*2026;)$/i', substr( $text, max( 0, $end - 12 ), min( $end, 12 ) ) ) ) {
+			$dot = false;
+		}
+		break;
+	}
+	// then the word, back to the space before it
 	$pieces = array();
 	for ( $i = $last - 2; $i >= 0; $i-- ) {
 		$text = $parts[ $i ];
 		if ( 1 === $i % 2 ) {
-			// bold, emphasis and links can sit inside the word or around it; a stray line break after the word is dropped;
-			// a line break before it, or any other tag, ends it
-			if ( preg_match( '#^</?(?:strong|b|em|i|a|span|mark|u|s|code)\b#i', $text ) ) {
+			// a stray line break after the word is dropped; a line break before it, or any other tag, ends it
+			if ( '' === $text || preg_match( $inline, $text ) ) {
 				continue;
 			}
 			if ( ! $pieces && preg_match( '#^<br\b#i', $text ) ) {
@@ -354,15 +388,7 @@ function gm_mark_here( $html ) {
 		}
 		$end = strlen( $text );
 		if ( ! $pieces ) {
-			$end = gm_trim_gap( $text, $end );
-			if ( ! $read && $end > 0 ) {
-				$read = true;
-				if ( '.' === $text[ $end - 1 ] ) {
-					$end = gm_trim_gap( $text, $end - 1 );
-				} elseif ( '?' === $text[ $end - 1 ] || '!' === $text[ $end - 1 ] ) {
-					$dot = false;
-				}
-			}
+			$end         = gm_trim_gap( $text, $end );
 			$text        = substr( $text, 0, $end );
 			$parts[ $i ] = $text;
 		}
@@ -381,11 +407,12 @@ function gm_mark_here( $html ) {
 	if ( ! $pieces ) {
 		return $html;
 	}
-	// a word split by a tag is gold on both sides; the dot follows its last letter
+	// a word split by a tag is gold on both sides; the dot follows its last letter, held to it by a word joiner so it never
+	// wraps onto a line of its own
 	foreach ( $pieces as $n => $p ) {
 		list( $i, $start, $end ) = $p;
 		$parts[ $i ] = substr( $parts[ $i ], 0, $start ) . '<span class="here">' . substr( $parts[ $i ], $start, $end - $start )
-			. ( 0 === $n && $dot ? '<i class="d pulse" aria-hidden="true"></i>' : '' ) . '</span>' . substr( $parts[ $i ], $end );
+			. ( 0 === $n && $dot ? '&#8288;<i class="d pulse" aria-hidden="true"></i>' : '' ) . '</span>' . substr( $parts[ $i ], $end );
 	}
 	return implode( '', $parts );
 }
@@ -414,6 +441,26 @@ function gm_gap_before( $text, $at ) {
 }
 
 /**
+ * Length of the closing quote mark that ends at byte $at of $text, or 0: straight, curly or angled, typed or as an entity.
+ *
+ * @param string $text Text between tags.
+ * @param int    $at   Byte offset.
+ * @return int
+ */
+function gm_quote_before( $text, $at ) {
+	if ( $at < 1 ) {
+		return 0;
+	}
+	if ( '"' === $text[ $at - 1 ] || "'" === $text[ $at - 1 ] ) {
+		return 1;
+	}
+	if ( preg_match( '/(?:\xE2\x80[\x98\x99\x9C\x9D\xB9\xBA]|\xC2[\xAB\xBB]|&(?:quot|apos|[lr](?:s?aquo|[sd]quo)|#0*(?:34|39|171|187|8216|8217|8220|8221|8249|8250)|#x0*(?:22|27|ab|bb|2018|2019|201c|201d|2039|203a));)$/i', substr( $text, max( 0, $at - 12 ), min( $at, 12 ) ), $m ) ) {
+		return strlen( $m[0] );
+	}
+	return 0;
+}
+
+/**
  * Where $text ends once the spacing before byte $end is left out.
  *
  * @param string $text Text between tags.
@@ -429,24 +476,46 @@ function gm_trim_gap( $text, $end ) {
 
 /**
  * The editor draws the dot with CSS (assets/css/editor.css), which cannot read the headline's last character. A headline
- * that ends in a question mark or an exclamation mark gets the class gm-nodot in the canvas, so the dot is left out there
- * as it is on the page.
+ * that ends in a question mark, an exclamation mark or an ellipsis, also inside quote marks, gets the class gm-nodot in the
+ * canvas, so the dot is left out there as it is on the page. Spaces and line breaks after the last word are taken out when
+ * the headline is left, as the page leaves them out, so the dot follows the word in the canvas too; while the headline is
+ * being written they stay, so a next word can follow them.
  */
 function gm_editor_here_mark() {
-	wp_register_script( 'generation-maine-editor', false, array( 'wp-hooks', 'wp-compose', 'wp-element' ), GM_BUILD_HASH, true );
+	wp_register_script( 'generation-maine-editor', false, array( 'wp-hooks', 'wp-compose', 'wp-element', 'wp-data', 'wp-rich-text', 'wp-block-editor' ), GM_BUILD_HASH, true );
 	wp_enqueue_script( 'generation-maine-editor' );
 	wp_add_inline_script(
 		'generation-maine-editor',
 		'( function ( wp ) {
-	var el = wp.element.createElement;
+	var el = wp.element.createElement, rt = wp.richText;
 	wp.hooks.addFilter( "editor.BlockListBlock", "generation-maine/here-mark", wp.compose.createHigherOrderComponent( function ( BlockListBlock ) {
 		return function ( props ) {
 			var a = props.attributes || {};
-			if ( "core/heading" !== props.name || ! /(^|\s)gm-here(\s|$)/.test( a.className || "" ) ) {
+			var here = "core/heading" === props.name && /(^|\s)gm-here(\s|$)/.test( a.className || "" );
+			var was = wp.element.useRef( props.isSelected );
+			wp.element.useEffect( function () {
+				var left = was.current && ! props.isSelected;
+				was.current = props.isSelected;
+				if ( ! here || ! left ) {
+					return;
+				}
+				var v = rt.create( { html: String( a.content || "" ) } ), end = v.text.replace( /\s+$/, "" ).length;
+				if ( end === v.text.length ) {
+					return;
+				}
+				var html = rt.toHTMLString( { value: rt.slice( v, 0, end ) } ), be = wp.data.dispatch( "core/block-editor" );
+				// part of the edit that left them, not a step of its own in Undo
+				if ( be.__unstableMarkNextChangeAsNotPersistent ) {
+					be.__unstableMarkNextChangeAsNotPersistent();
+				}
+				props.setAttributes( { content: rt.RichTextData && rt.RichTextData.fromHTMLString ? rt.RichTextData.fromHTMLString( html ) : html } );
+			}, [ props.isSelected ] );
+			if ( ! here ) {
 				return el( BlockListBlock, props );
 			}
-			var text = String( a.content || "" ).replace( /<[^>]*>/g, "" ).replace( /&nbsp;|&#160;/g, " " ).trim();
-			if ( ! /[?!]$/.test( text ) ) {
+			// the last visible character, past spaces and closing quote marks
+			var text = rt.create( { html: String( a.content || "" ) } ).text.replace( /[\s"\'\u2018\u2019\u201c\u201d\u00ab\u00bb\u2039\u203a]+$/, "" );
+			if ( ! /([?!\u2026]|\.\.)$/.test( text ) ) {
 				return el( BlockListBlock, props );
 			}
 			return el( BlockListBlock, Object.assign( {}, props, { className: ( props.className ? props.className + " " : "" ) + "gm-nodot" } ) );

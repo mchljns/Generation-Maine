@@ -65,7 +65,7 @@ function gm_register_creators() {
 	);
 
 	$fields = array(
-		'gm_handle'   => 'sanitize_text_field',
+		'gm_handle'   => 'gm_sanitize_handle',
 		'gm_hometown' => 'sanitize_text_field',
 		'gm_clip_url' => 'esc_url_raw',
 		'gm_clip_len' => 'sanitize_text_field',
@@ -215,13 +215,17 @@ function gm_creator_meta_box_html( $post ) {
 	echo '<span class="description">' . ( $can_upload
 		? esc_html__( 'A short vertical video (9:16) or GIF, muted, that loops. Keep it under 10 MB and about ten seconds. Choose or upload one, or paste a direct link to an .mp4, .webm or .gif below.', 'generation-maine' )
 		: esc_html__( 'A short vertical video (9:16) or GIF, muted, that loops. Keep it under 10 MB and about ten seconds. Paste a direct link to an .mp4, .webm or .gif below.', 'generation-maine' ) ) . '</span></p>';
-	// the size is known for a chosen clip and for a link to a file in this site's Media Library; a link elsewhere is not checked
-	$link    = (string) get_post_meta( $post->ID, 'gm_clip_url', true );
-	$file_id = $clip_id ? $clip_id : ( $link ? attachment_url_to_postid( $link ) : 0 );
-	$size    = $file_id ? (int) @filesize( get_attached_file( $file_id ) ) : 0; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-	$big     = $size > 10 * MB_IN_BYTES;
+	// the size is known for a chosen clip and for a link to a file in this site's Media Library, with or without a query string
+	// after it; a link elsewhere is not checked. The link's own warning rides along, for the picker script to show when the
+	// chosen clip is removed and the link is still the one saved.
+	$link      = (string) get_post_meta( $post->ID, 'gm_clip_url', true );
+	$link_id   = $link ? attachment_url_to_postid( (string) preg_replace( '/[?#].*$/', '', $link ) ) : 0;
+	$link_size = $link_id ? (int) @filesize( get_attached_file( $link_id ) ) : 0; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+	$size      = $clip_id ? (int) @filesize( get_attached_file( $clip_id ) ) : $link_size; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 	/* translators: %s: file size */
-	echo '<p id="gm_clip_big" class="notice notice-warning inline"' . ( $big ? '' : ' hidden' ) . '><span>' . esc_html( sprintf( __( 'This clip is %s. Visitors download all of it, so a clip under 10 MB loads much faster on a phone.', 'generation-maine' ), size_format( $size, 1 ) ) ) . '</span></p>';
+	$warn = __( 'This clip is %s. Visitors download all of it, so a clip under 10 MB loads much faster on a phone.', 'generation-maine' );
+	echo '<p id="gm_clip_big" class="notice notice-warning inline"' . ( $size > 10 * MB_IN_BYTES ? '' : ' hidden' )
+		. ' data-link="' . esc_attr( $link_size > 10 * MB_IN_BYTES ? sprintf( $warn, size_format( $link_size, 1 ) ) : '' ) . '"><span>' . esc_html( sprintf( $warn, size_format( $size, 1 ) ) ) . '</span></p>';
 	echo '<p><input type="hidden" id="gm_clip_id" name="gm_clip_id" value="' . esc_attr( $clip_id ) . '">';
 	echo $can_upload
 		? '<button type="button" class="button" id="gm_clip_pick">' . esc_html__( 'Choose or upload a clip', 'generation-maine' ) . '</button> '
@@ -268,14 +272,18 @@ function gm_creator_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
+	// with no clip chosen, the warning follows the link: it shows only while the link is the one the box opened with and that
+	// one is over 10 MB; a changed link is checked when the creator is opened again
 	$limit = 10 * MB_IN_BYTES;
 	$js    = "(function(){var frame;function el(i){return document.getElementById(i);}
+function link(){var b=el('gm_clip_big'),u=el('gm_clip_url');if(!b||el('gm_clip_id').value!=='0'){return;}var m=b.getAttribute('data-link')||'',on=!!m&&!!u&&u.value.trim()===u.defaultValue.trim();b.hidden=!on;if(on){b.querySelector('span').textContent=m;}}
+document.addEventListener('input',function(e){if(e.target.id==='gm_clip_url'){link();}});
 document.addEventListener('click',function(e){
  if(e.target.closest('#gm_clip_pick')){e.preventDefault();if(!window.wp||!wp.media){return;}
   if(!frame){frame=wp.media({title:" . wp_json_encode( __( 'Choose a clip', 'generation-maine' ) ) . ",library:{type:['video','image/gif']},multiple:false,button:{text:" . wp_json_encode( __( 'Use this clip', 'generation-maine' ) ) . "}});
    frame.on('select',function(){var a=frame.state().get('selection').first().toJSON();el('gm_clip_id').value=a.id;el('gm_clip_name').textContent=a.filename||a.url;el('gm_clip_clear').hidden=false;var b=el('gm_clip_big');if(b){var big=(a.filesizeInBytes||0)>" . (int) $limit . ";b.hidden=!big;if(big){b.querySelector('span').textContent=" . wp_json_encode( __( 'This clip is larger than 10 MB. Visitors download all of it, so a smaller clip loads much faster on a phone.', 'generation-maine' ) ) . ";}}});}
   frame.open();}
- if(e.target.closest('#gm_clip_clear')){e.preventDefault();el('gm_clip_id').value='0';el('gm_clip_name').textContent='';el('gm_clip_clear').hidden=true;var b=el('gm_clip_big');if(b){b.hidden=true;}}
+ if(e.target.closest('#gm_clip_clear')){e.preventDefault();el('gm_clip_id').value='0';el('gm_clip_name').textContent='';el('gm_clip_clear').hidden=true;var b=el('gm_clip_big');if(b){b.hidden=true;}link();}
 });})();";
 	wp_add_inline_script( 'media-editor', $js );
 }
@@ -402,7 +410,10 @@ function gm_creator_save( $post_id ) {
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
 		return;
 	}
-	foreach ( array( 'gm_handle', 'gm_hometown', 'gm_clip_len' ) as $key ) {
+	if ( isset( $_POST['gm_handle'] ) ) {
+		update_post_meta( $post_id, 'gm_handle', gm_sanitize_handle( wp_unslash( $_POST['gm_handle'] ) ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- gm_sanitize_handle() runs sanitize_text_field()
+	}
+	foreach ( array( 'gm_hometown', 'gm_clip_len' ) as $key ) {
 		if ( isset( $_POST[ $key ] ) ) {
 			update_post_meta( $post_id, $key, sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) );
 		}
@@ -479,8 +490,10 @@ function gm_get_creators( $limit = 24 ) {
 		}
 		$out[] = array(
 			'id'          => $id,
-			'name'        => get_the_title(),
-			'handle'      => get_post_meta( $id, 'gm_handle', true ),
+			// the title as typed: get_the_title() has been through the typography filter, which turns the x of 4x4 into a times sign
+			'name'        => get_post_field( 'post_title', $id, 'raw' ),
+			// cleaned again here, so a handle saved before the rules for spaces and a lone @ shows as a new save would keep it
+			'handle'      => gm_sanitize_handle( get_post_meta( $id, 'gm_handle', true ) ),
 			'town'        => get_post_meta( $id, 'gm_hometown', true ),
 			// line breaks and paragraph ends become spaces, so words on either side do not run together
 			'bio'         => trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( preg_replace( '#<br\s*/?>|</p>|</li>|</h[1-6]>#i', ' ', get_the_content() ) ) ) ),
@@ -511,8 +524,8 @@ function gm_get_creators( $limit = 24 ) {
 function gm_who( $c, $on, $defer = false ) {
 	$av = $c['avatar'] ? '<img class="av" ' . ( $defer ? 'data-src' : 'src' ) . '="' . esc_url( $c['avatar'] ) . '" alt="" width="36" height="36" loading="lazy">' : gm_avatar_placeholder();
 	// the handle on top and the name under it; with no handle, or a name that is the handle, one line
-	$same  = $c['handle'] && strtolower( ltrim( trim( $c['handle'] ), '@' ) ) === strtolower( ltrim( trim( $c['name'] ), '@' ) );
-	$lines = $c['handle'] && ! $same ? '<b>' . esc_html( $c['handle'] ) . '</b>' . esc_html( $c['name'] ) : '<b>' . esc_html( $c['handle'] ? $c['handle'] : $c['name'] ) . '</b>';
+	$same  = $c['handle'] && strtolower( ltrim( trim( $c['handle'] ), '@' ) ) === strtolower( ltrim( trim( html_entity_decode( $c['name'], ENT_QUOTES, 'UTF-8' ) ), '@' ) );
+	$lines = $c['handle'] && ! $same ? '<b>' . gm_bdi( $c['handle'] ) . '</b>' . gm_bdi( $c['name'] ) : '<b>' . gm_bdi( $c['handle'] ? $c['handle'] : $c['name'] ) . '</b>';
 	return '<div class="who' . ( $on ? ' on' : '' ) . '">' . $av . '<span>' . $lines . '</span></div>';
 }
 
@@ -570,7 +583,7 @@ function gm_render_roster( $creators ) {
 		/* translators: %s: town */
 		$place = $c['town'] ? sprintf( __( '%s, Maine', 'generation-maine' ), $c['town'] ) : __( 'Maine', 'generation-maine' );
 		$inner = '<span class="ph">' . ( $c['portrait'] ? '<img src="' . esc_url( $c['portrait'] ) . '" alt="" width="300" height="400" loading="lazy">' : '' ) . '</span>'
-			. '<span class="who"><span class="n">' . esc_html( sprintf( '%02d', $i + 1 ) ) . '</span><b>' . esc_html( $c['name'] ) . '</b><span class="town">' . esc_html( $place ) . '</span></span>';
+			. '<span class="who"><span class="n">' . esc_html( sprintf( '%02d', $i + 1 ) ) . '</span><b>' . gm_bdi( $c['name'] ) . '</b><span class="town">' . esc_html( $place ) . '</span></span>';
 		$href  = '';
 		if ( ! $c['placeholder'] ) {
 			foreach ( $c['links'] as $l ) {
@@ -627,18 +640,18 @@ function gm_render_creators( $args = array() ) {
 		$segs  .= '<button type="button" aria-label="' . esc_attr( sprintf( __( 'Creator %1$d, %2$s, %3$s', 'generation-maine' ), $i + 1, $c['name'], $town ) ) . '" data-name="' . esc_attr( $c['name'] ) . '"' . ( $on ? ' class="on"' : '' ) . '></button>';
 		$soc    = '';
 		foreach ( $c['links'] as $key => $l ) {
-			$soc .= '<a href="' . esc_url( gm_utm( $l['url'] ) ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr( $l['label'] ) . '">' . gm_mark( $key ) . '<span>' . esc_html( $c['handle'] ? $c['handle'] : $l['label'] ) . '</span></a>';
+			$soc .= '<a href="' . esc_url( gm_utm( $l['url'] ) ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr( $l['label'] ) . '">' . gm_mark( $key ) . '<span>' . ( $c['handle'] ? gm_bdi( $c['handle'] ) : esc_html( $l['label'] ) ) . '</span></a>';
 		}
 		/* translators: %s: creator name */
 		$open    = sprintf( __( 'Open the clip from %s full size', 'generation-maine' ), $c['name'] );
 		$panels .= '<article class="panel' . ( $on ? ' on' : '' ) . '" id="story-' . ( $i + 1 ) . '" data-i="' . $i . '">'
 			. '<div class="pv" role="button" tabindex="0" aria-label="' . esc_attr( $open ) . '">' . gm_clip( $c, '', '', '' ) . $who . $len . $expand . '</div>'
-			. '<p class="k">' . esc_html( $town ) . '</p><h2>' . esc_html( $c['name'] ) . '</h2>'
+			. '<p class="k">' . esc_html( $town ) . '</p><h2>' . gm_bdi( $c['name'] ) . '</h2>'
 			. ( $c['bio'] ? '<p class="bio">' . esc_html( $c['bio'] ) . '</p>' : '' )
 			. ( $soc ? '<div class="soc">' . $soc . '</div>' : '' )
 			. '</article>';
 		$slides .= '<div class="slide" data-i="' . $i . '"><div class="fr">' . gm_clip( $c, '', '', $alt ) . $who . $len . '</div>'
-			. '<div class="cap"><span class="k">' . esc_html( $town ) . '</span><strong>' . esc_html( $c['name'] ) . '</strong></div></div>';
+			. '<div class="cap"><span class="k">' . esc_html( $town ) . '</span><strong>' . gm_bdi( $c['name'] ) . '</strong></div></div>';
 	}
 	$count = str_pad( (string) $n, 2, '0', STR_PAD_LEFT );
 	$first = $creators[0]['len'];

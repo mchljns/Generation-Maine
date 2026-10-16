@@ -7,4 +7,4 @@
 
 define( 'GM_THEME_VERSION', '3.2.0' );
 define( 'GM_BUILD_HASH', '31259db' );
-define( 'GM_BUILD', '31259db Oct 16 03:57 UTC' );
+define( 'GM_BUILD', '31259db Oct 16 04:06 UTC' );
