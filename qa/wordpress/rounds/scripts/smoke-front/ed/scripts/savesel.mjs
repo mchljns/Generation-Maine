@@ -1,0 +1,37 @@
+// Type a trailing line break in the headline and save with Ctrl+S while the headline is still selected; reload and look.
+import { launch, login, save, openTemplate, watch } from './lib.mjs';
+const [base, tag, v65s] = process.argv.slice(2);
+const v65 = v65s === '1';
+const browser = await launch();
+const { page } = await login(browser, base, { w: 1440, h: 900 });
+const log = []; watch(page, log); const out = {};
+await openTemplate(page, base, v65);
+let f = await (await page.$('iframe[name="editor-canvas"]')).contentFrame();
+const K = page.keyboard;
+const stored = () => page.evaluate(() => { const s = wp.data.select('core/block-editor'); const id = s.getClientIdsWithDescendants().find(id => s.getBlockName(id) === 'core/heading' && / gm-here /.test(' ' + (s.getBlock(id).attributes.className || '') + ' ')); return String(s.getBlock(id).attributes.content); });
+await f.locator('h1').first().click(); await page.waitForTimeout(300);
+await K.press('Control+a'); await K.press('Delete');
+await K.type('Young Mainers', { delay: 5 }); await K.press('Shift+Enter'); await K.type('on staying here', { delay: 5 }); await K.press('Shift+Enter');
+await page.waitForTimeout(500);
+await K.press('Control+s'); await page.waitForTimeout(1500);
+const p2 = page.locator('.entities-saved-states__panel').getByRole('button', { name: /^Save$/ }); if (await p2.count()) await p2.first().click();
+await page.waitForFunction(() => wp.data.select('core').__experimentalGetDirtyEntityRecords().length === 0, null, { timeout: 30000 }).catch(() => { out.saveTimeout = true; });
+out.afterSave = await stored();
+out.dirtyAfterSave = await page.evaluate(() => wp.data.select('core').__experimentalGetDirtyEntityRecords().map(r => r.name));
+f = await openTemplate(page, base, v65);
+out.reloaded = await stored();
+out.canvasH = await f.evaluate(() => Math.round(document.querySelector('h1').getBoundingClientRect().height));
+await f.locator('h1').first().screenshot({ path: `/tmp/claude-0/wptest/work/smoke-front/ed/shots/${tag}-savesel-reloaded.png` });
+await f.locator('h1').first().click(); await page.waitForTimeout(300); await f.locator('.hero .lede').first().click(); await page.waitForTimeout(900);
+out.afterLeave = await stored();
+out.canvasH2 = await f.evaluate(() => Math.round(document.querySelector('h1').getBoundingClientRect().height));
+out.dirtyAfterLeave = await page.evaluate(() => wp.data.select('core').__experimentalGetDirtyEntityRecords().map(r => r.name));
+const c2 = await browser.newContext({ viewport: { width: 1440, height: 900 } }); const p = await c2.newPage(); await p.goto(base + '/', { waitUntil: 'networkidle' });
+out.front = await p.evaluate(() => document.querySelector('h1').innerHTML);
+// put it back: save the trimmed text
+await page.locator('.editor-header__settings button, .edit-site-header-edit-mode__actions button', { hasText: /^Save$/ }).first().click(); await page.waitForTimeout(1200);
+const p3 = page.locator('.entities-saved-states__panel').getByRole('button', { name: /^Save$/ }); if (await p3.count()) await p3.first().click();
+await page.waitForTimeout(2500);
+save(`${tag}-savesel.json`, { out, log });
+console.log(JSON.stringify(out, null, 1));
+await browser.close();

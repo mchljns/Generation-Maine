@@ -1,0 +1,15 @@
+import { launch, login } from './lib.mjs';
+const [base, url, pid] = process.argv.slice(2);
+const browser = await launch();
+const M = () => [...document.querySelectorAll('.t-con, .t-conr')].map(g => { const r = g.getBoundingClientRect(); const p = g.querySelector('p').getBoundingClientRect(); return { cls: g.className.split(' ').find(c => c.startsWith('t-')), group: [Math.round(r.left), Math.round(r.width)], p: [Math.round(p.left - r.left), Math.round(p.width)] }; });
+const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+await p.goto(url, { waitUntil: 'networkidle' });
+const front = await p.evaluate(M);
+const { page } = await login(browser, base);
+await page.goto(`${base}/wp-admin/post.php?post=${pid}&action=edit`, { waitUntil: 'domcontentloaded' });
+await page.waitForFunction(() => window.wp && wp.data && wp.data.select('core/editor').getCurrentPostId(), null, { timeout: 90000 });
+await page.waitForTimeout(4000);
+const fr = await (await page.$('iframe[name="editor-canvas"]')).contentFrame();
+const editor = await fr.evaluate(M);
+console.log(JSON.stringify({ front, editor }));
+await browser.close();

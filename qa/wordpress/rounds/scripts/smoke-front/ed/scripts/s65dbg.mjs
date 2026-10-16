@@ -1,0 +1,13 @@
+import { launch, login, shot, openTemplate } from './lib.mjs';
+const [base] = process.argv.slice(2);
+const browser = await launch();
+const { page } = await login(browser, base, { w: 1440, h: 1000 });
+await openTemplate(page, base, true);
+await page.getByRole('button', { name: /^Styles$/ }).first().click(); await page.waitForTimeout(2000);
+await shot(page, 's65-styles-dbg');
+console.log(JSON.stringify(await page.locator('.interface-complementary-area').first().evaluate(e => [...e.querySelectorAll('button, [role=button], a')].map(b => b.tagName + '|' + (b.getAttribute('role') || '') + '|' + (b.getAttribute('aria-label') || '') + '|' + b.innerText.trim().replace(/\s+/g, ' ')))));
+const sc = page.locator('.interface-complementary-area').first();
+console.log('count1', await sc.getByRole('button', { name: /^(Aa )?Typography( styles)?$/ }).count());
+console.log('count2', await page.getByRole('button', { name: /Typography/ }).count());
+console.log('count3', await page.getByRole('button', { name: 'Typography styles' }).count());
+await browser.close();

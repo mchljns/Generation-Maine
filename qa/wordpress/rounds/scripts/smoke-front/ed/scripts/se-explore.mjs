@@ -1,0 +1,20 @@
+// Site Editor: open the Front Page template, record dirty state, List View rows and the block tree.
+import { launch, login, save, shot, openTemplate, openListView, lvRows, tree, watch } from './lib.mjs';
+const [base, tag, v65, slug = 'front-page', type = 'wp_template'] = process.argv.slice(2);
+const browser = await launch();
+const { page } = await login(browser, base, { w: 1440, h: 900 });
+const log = []; watch(page, log);
+const f = await openTemplate(page, base, v65 === '1', slug, type);
+const dirty = await page.evaluate(() => wp.data.select('core').__experimentalGetDirtyEntityRecords().map(r => r.kind + ':' + r.name + ':' + r.key));
+await openListView(page);
+await page.waitForTimeout(800);
+const rows = await lvRows(page);
+const t = await tree(page);
+await shot(page, `${tag}-${slug}-listview`);
+const invalid = await page.evaluate(() => { const s = wp.data.select('core/block-editor'); let n = 0, bad = []; const walk = ids => ids.forEach(id => { const b = s.getBlock(id); n++; if (b.isValid === false) bad.push(b.name); walk(s.getBlockOrder(id)); }); walk(s.getBlockOrder('')); return { n, bad }; });
+save(`${tag}-${slug}-explore.json`, { dirty, rows, tree: t, invalid, log });
+console.log('dirty', dirty, 'invalid', JSON.stringify(invalid));
+console.log(rows.map(r => '  '.repeat(r.level - 1) + r.label).join('\n'));
+console.log(t);
+console.log(log.filter(l => !/CERT/.test(l)).join('\n'));
+await browser.close();
