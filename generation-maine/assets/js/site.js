@@ -56,20 +56,27 @@
   snaps();
   // the current card is the one resting nearest the scroll position; where cards share one (all of them fit), the one asked for
   const nearest = () => { const x = panelsEl.scrollLeft; if (want >= 0 && Math.abs(rest[want] - x) < 2) return want; let best = 0, bd = Infinity; rest.forEach((r, k) => { const d = Math.abs(r - x); if (d < bd) { bd = d; best = k; } }); return best; };
-  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); want = k; snaps(); panelsEl.scrollTo({ left: rest[k], behavior: reduced ? 'auto' : 'smooth' }); hydrate(k);
+  // while a scroll the page started runs (a tap on the row, an arrow key, the settle step below), the row stays on the card
+  // it goes to instead of counting through the cards it passes; a touch or the wheel ends that, and so does the scroll's end
+  let glide = 0;
+  const goTo = k => { k = Math.min(panels.length - 1, Math.max(0, k)); want = k; snaps(); glide = Math.abs(panelsEl.scrollLeft - rest[k]) >= 2 ? performance.now() : 0; panelsEl.scrollTo({ left: rest[k], behavior: reduced ? 'auto' : 'smooth' }); hydrate(k);
     // at the end of the track there may be nothing left to scroll, so no scroll event comes to update the row
     if (phone.matches) show(k); };
-  const onTrack = () => { if (!phone.matches) return; show(nearest()); };
+  const onTrack = () => { if (!phone.matches) return; if (glide && want >= 0 && performance.now() - glide < 1500 && Math.abs(panelsEl.scrollLeft - rest[want]) >= 2) return; glide = 0; show(nearest()); };
   panelsEl.addEventListener('scroll', onTrack, { passive: true });
-  ['pointerdown', 'wheel', 'touchstart'].forEach(t => panelsEl.addEventListener(t, () => { want = -1; }, { passive: true }));
+  panelsEl.addEventListener('scrollend', () => { glide = 0; onTrack(); }, { passive: true });
+  ['pointerdown', 'wheel', 'touchstart'].forEach(t => panelsEl.addEventListener(t, () => { want = -1; glide = 0; }, { passive: true }));
   // a drag longer than the gap between two of those end points can still carry past one; once the track settles, it comes
-  // back to the card next to where the swipe began. Going back, only a swipe that passed one card and stopped in the end
-  // stretch comes back; a longer one, or one that left the stretch, stays where it stopped
-  let swipeFrom = -1, touching = false, settleT = 0;
+  // back to the card next to where the swipe began. Only a swipe that passed one card inside the end stretch comes back, and
+  // only when the finger itself took the track there, give or take half a gap: a fling that flew on, or a longer drag, stays
+  // where it stopped
+  let swipeFrom = -1, touching = false, settleT = 0, from = 0, fx = 0, lx = 0;
   const settle = () => { const k = nearest(), g = swipeFrom; swipeFrom = -1; if (g < 0 || zone < 0 || !phone.matches) return;
-    if (k > g + 1 && k > zone) goTo(Math.max(g + 1, zone)); else if (k === g - 2 && k >= zone) goTo(g - 1); };
+    const j = k > g ? g + 1 : g - 1, f = from + fx - lx;
+    if (Math.abs(k - g) === 2 && Math.min(g, k) >= zone && Math.abs(f - rest[k]) < Math.abs(rest[k] - rest[j]) / 2) goTo(j); };
   const later = () => { clearTimeout(settleT); settleT = setTimeout(settle, 160); };
-  panelsEl.addEventListener('touchstart', () => { touching = true; swipeFrom = cur; clearTimeout(settleT); }, { passive: true });
+  panelsEl.addEventListener('touchstart', e => { touching = true; swipeFrom = cur; from = panelsEl.scrollLeft; fx = lx = e.touches[0] ? e.touches[0].clientX : 0; clearTimeout(settleT); }, { passive: true });
+  panelsEl.addEventListener('touchmove', e => { if (e.touches[0]) lx = e.touches[0].clientX; }, { passive: true });
   ['touchend', 'touchcancel'].forEach(t => panelsEl.addEventListener(t, () => { touching = false; later(); }, { passive: true }));
   panelsEl.addEventListener('scroll', () => { if (swipeFrom >= 0 && !touching) later(); }, { passive: true });
   panelsEl.addEventListener('keydown', e => { if (!phone.matches) return; if (e.key === 'ArrowRight') { e.preventDefault(); goTo(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(cur - 1); } });
@@ -97,7 +104,7 @@
     const vshow = i => { if (i === vcur) return; vcur = i; vn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0'); vhydrate(i); playOnly(svids, i); };
     const focusables = () => [...viewer.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])')].filter(x => x.offsetParent !== null);
     viewer.addEventListener('keydown', e => { if (e.key !== 'Tab') return; const f = focusables(); if (!f.length) return; const first = f[0], last = f[f.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); } });
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus({ preventScroll: true }); } else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus({ preventScroll: true }); } });
     document.addEventListener('focusin', e => { if (!viewer.hidden && !viewer.contains(e.target)) vclose.focus({ preventScroll: true }); });
     const vnearest = () => { const c = vtrack.getBoundingClientRect(), cx = c.left + c.width / 2; let best = 0, bd = Infinity; slides.forEach((sl, k) => { const r = sl.getBoundingClientRect(), d = Math.abs(r.left + r.width / 2 - cx); if (d < bd) { bd = d; best = k; } }); return best; };
     const openViewer = i => { if (!phone.matches) return; lastFocus = document.activeElement; vcur = -1; viewer.hidden = false; vtrack.scrollLeft = slides[i].offsetLeft; vshow(i);
@@ -140,17 +147,17 @@
   const setMenu = o => { if (o && bar) sheet.style.top = Math.max(0, bar.getBoundingClientRect().bottom) + 'px'; sheet.classList.toggle('open', o); sheet.setAttribute('aria-hidden', String(!o)); sheet.inert = !o; menu.setAttribute('aria-expanded', String(o)); document.body.style.overflow = o ? 'hidden' : ''; };
   menu.addEventListener('click', () => setMenu(!sheet.classList.contains('open')));
   sheet.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
-  addEventListener('keydown', e => { if (e.key === 'Escape' && sheet.classList.contains('open')) { const inside = sheet.contains(document.activeElement); setMenu(false); if (inside) menu.focus(); } });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && sheet.classList.contains('open')) { const inside = sheet.contains(document.activeElement); setMenu(false); if (inside) menu.focus({ preventScroll: true }); } });
   // while the sheet is open, Tab goes round the menu button and the sheet's links; focus that lands behind the sheet closes it
   addEventListener('keydown', e => { if (e.key !== 'Tab' || !sheet.classList.contains('open')) return; const f = [menu, ...sheet.querySelectorAll('a[href], button')], i = f.indexOf(document.activeElement);
-    if (i < 0) return; const j = i + (e.shiftKey ? -1 : 1); if (j < 0 || j >= f.length) { e.preventDefault(); f[(j + f.length) % f.length].focus(); } });
+    if (i < 0) return; const j = i + (e.shiftKey ? -1 : 1); if (j < 0 || j >= f.length) { e.preventDefault(); f[(j + f.length) % f.length].focus({ preventScroll: true }); } });
   let held = null;
   document.addEventListener('focusin', e => { held = e.target; if (sheet.classList.contains('open') && !sheet.contains(e.target) && !(bar && bar.contains(e.target))) setMenu(false); });
   // a tablet turned to landscape gets the desktop bar back: the sheet closes and the page scrolls again. Focus in the sheet
   // (or on the menu button) drops to the page as they hide, often before this runs, so the last element focused says where
   // it was: it goes to the same link in the bar, or to the bar's first link
   phone.addEventListener('change', () => { if (phone.matches || !sheet.classList.contains('open')) return; const a = document.activeElement === document.body ? held : document.activeElement, i = [...sheet.querySelectorAll('a')].indexOf(a); setMenu(false);
-    if (i >= 0 || a === menu) { const to = [...document.querySelectorAll('.top nav a, .top .cta a, .top a.cta')][i] || document.querySelector('.top nav a'); if (to) to.focus(); } });
+    if (i >= 0 || a === menu) { const to = [...document.querySelectorAll('.top nav a, .top .cta a, .top a.cta')][i] || document.querySelector('.top nav a'); if (to) to.focus({ preventScroll: true }); } });
   }
   // the newsletter form hands the address to Substack, which prefills it
   const f = document.getElementById('nl');

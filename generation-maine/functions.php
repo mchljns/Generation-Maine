@@ -407,14 +407,37 @@ function gm_mark_here( $html ) {
 	if ( ! $pieces ) {
 		return $html;
 	}
-	// a word split by a tag is gold on both sides; the dot follows its last letter, held to it by a word joiner so it never
-	// wraps onto a line of its own
+	// a word split by a tag is gold on both sides; the dot follows its last letter, and the two share a span that does not
+	// wrap (.hero h1 .nw), so the dot never goes onto a line of its own
 	foreach ( $pieces as $n => $p ) {
 		list( $i, $start, $end ) = $p;
-		$parts[ $i ] = substr( $parts[ $i ], 0, $start ) . '<span class="here">' . substr( $parts[ $i ], $start, $end - $start )
-			. ( 0 === $n && $dot ? '&#8288;<i class="d pulse" aria-hidden="true"></i>' : '' ) . '</span>' . substr( $parts[ $i ], $end );
+		$word = substr( $parts[ $i ], $start, $end - $start );
+		if ( 0 === $n && $dot ) {
+			$cut  = gm_last_char( $word );
+			$word = substr( $word, 0, $cut ) . '<span class="nw">' . substr( $word, $cut ) . '<i class="d pulse" aria-hidden="true"></i></span>';
+		}
+		$parts[ $i ] = substr( $parts[ $i ], 0, $start ) . '<span class="here">' . $word . '</span>' . substr( $parts[ $i ], $end );
 	}
 	return implode( '', $parts );
+}
+
+/**
+ * Where the last character of $text begins: one character with any marks that combine with it, or one entity, together
+ * with the closing quote marks after it (core's wptexturize reads a quote mark that starts a text as an opening one).
+ *
+ * @param string $text The gold word's last piece.
+ * @return int Byte offset.
+ */
+function gm_last_char( $text ) {
+	$at = strlen( $text );
+	for ( $q = gm_quote_before( $text, $at ); $q && $q < $at; $q = gm_quote_before( $text, $at ) ) {
+		$at -= $q;
+	}
+	if ( preg_match( '/(?:&(?:#[0-9]+|#x[0-9a-f]+|[a-z][a-z0-9]*);|\X)\z/iu', substr( $text, 0, $at ), $m ) ) {
+		return $at - strlen( $m[0] );
+	}
+	// not UTF-8: a byte is a character
+	return max( 0, $at - 1 );
 }
 
 /**
