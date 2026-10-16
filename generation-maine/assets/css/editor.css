@@ -489,11 +489,12 @@ main.gm-page .lede a:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators
 .panel+.panel{display:none}
 .k-bars::before{content:"";display:inline-block;vertical-align:-1px;flex:none;width:30px;height:12px;margin-right:10px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 12'%3E%3Cpath d='M4 12 L8 0 h5 L9 12z' fill='%23FFFFFF'/%3E%3Cpath d='M12 12 L16 0 h5 L17 12z' fill='%23FFFFFF'/%3E%3Cpath d='M20 12 L24 0 h5 L25 12z' fill='%23FAC800'/%3E%3C/svg%3E") center/contain no-repeat}
 .about .k-bars::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 12'%3E%3Cpath d='M4 12 L8 0 h5 L9 12z' fill='%230556A5'/%3E%3Cpath d='M12 12 L16 0 h5 L17 12z' fill='%230556A5'/%3E%3Cpath d='M20 12 L24 0 h5 L25 12z' fill='%23FAC800'/%3E%3C/svg%3E")}
-/* WordPress 7 draws the outline of an editable block in a selected pattern section with the same ::after; the dot steps aside
-   while that outline shows */
-.gm-here:not(.has-editable-outline)::after{content:"";display:inline-block;width:.2em;height:.2em;border-radius:50%;background:var(--mg);margin-left:.05em}
+.gm-here::after{content:"";display:inline-block;width:.2em;height:.2em;border-radius:50%;background:var(--mg);margin-left:.05em}
 /* a headline ending in ? or ! gets no dot on the page; the editor script marks it gm-nodot (functions.php) */
-.gm-here.gm-nodot:not(.has-editable-outline)::after{content:none}
+.gm-here.gm-nodot::after{content:none}
+/* WordPress 7 draws the outline of an editable block in a selected pattern section with the same ::after: while the section is
+   selected, the dot's size and color step aside so the outline draws as WordPress means it to */
+.is-selected .gm-here.has-editable-outline::after{content:"";width:auto;height:auto;margin:0;background:none;border-radius:0}
 /* the bar keeps its labels and its button in a narrow canvas (List View, the inserter or the Mobile preview open): they wrap
    inside the bar, which grows to hold them; the phone menu is a page feature */
 .top nav,.gm-bar nav{display:flex!important;flex-wrap:wrap}

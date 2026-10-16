@@ -189,11 +189,12 @@ EDITOR_ADDITIONS = """
 .panel+.panel{display:none}
 .k-bars::before{content:"";display:inline-block;vertical-align:-1px;flex:none;width:30px;height:12px;margin-right:10px;background:%(bars)s center/contain no-repeat}
 .about .k-bars::before{background-image:%(bars_blue)s}
-/* WordPress 7 draws the outline of an editable block in a selected pattern section with the same ::after; the dot steps aside
-   while that outline shows */
-.gm-here:not(.has-editable-outline)::after{content:"";display:inline-block;width:.2em;height:.2em;border-radius:50%%;background:var(--mg);margin-left:.05em}
+.gm-here::after{content:"";display:inline-block;width:.2em;height:.2em;border-radius:50%%;background:var(--mg);margin-left:.05em}
 /* a headline ending in ? or ! gets no dot on the page; the editor script marks it gm-nodot (functions.php) */
-.gm-here.gm-nodot:not(.has-editable-outline)::after{content:none}
+.gm-here.gm-nodot::after{content:none}
+/* WordPress 7 draws the outline of an editable block in a selected pattern section with the same ::after: while the section is
+   selected, the dot's size and color step aside so the outline draws as WordPress means it to */
+.is-selected .gm-here.has-editable-outline::after{content:"";width:auto;height:auto;margin:0;background:none;border-radius:0}
 /* the bar keeps its labels and its button in a narrow canvas (List View, the inserter or the Mobile preview open): they wrap
    inside the bar, which grows to hold them; the phone menu is a page feature */
 .top nav,.gm-bar nav{display:flex!important;flex-wrap:wrap}
