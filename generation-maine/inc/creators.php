@@ -141,7 +141,9 @@ function gm_creator_rest_users( $args ) {
 add_filter( 'rest_user_query', 'gm_creator_rest_users' );
 
 /**
- * The same test for one account, /wp/v2/users/<id>, which WordPress checks on its own.
+ * The same test for one account, /wp/v2/users/<id>, which WordPress checks on its own. It goes by the handler WordPress
+ * matched, not the address as typed: WordPress matches routes in any letter case (/WP/V2/Users/2), answers HEAD with the
+ * GET handler, and reads the account from an id in the query string ahead of the one in the address, as this test does.
  *
  * @param mixed           $response Result so far; null to go on.
  * @param array           $handler  Route handler.
@@ -149,10 +151,11 @@ add_filter( 'rest_user_query', 'gm_creator_rest_users' );
  * @return mixed
  */
 function gm_creator_rest_user( $response, $handler, $request ) {
-	if ( null !== $response || 'GET' !== $request->get_method() || ! preg_match( '#^/wp/v2/users/(\d+)$#', $request->get_route(), $m ) ) {
+	$cb = isset( $handler['callback'] ) ? $handler['callback'] : null;
+	if ( null !== $response || ! is_array( $cb ) || ! isset( $cb[0], $cb[1] ) || ! ( $cb[0] instanceof WP_REST_Users_Controller ) || 'get_item' !== $cb[1] ) {
 		return $response;
 	}
-	$id    = (int) $m[1];
+	$id    = (int) $request['id'];
 	$types = array_diff( get_post_types( array( 'show_in_rest' => true ), 'names' ), array( 'gm_creator' ) );
 	if ( get_user_by( 'id', $id ) && get_current_user_id() !== $id && ! current_user_can( 'edit_others_posts' ) && ! current_user_can( 'edit_user', $id ) && ! count_user_posts( $id, $types ) ) {
 		return new WP_Error( 'rest_user_cannot_view', __( 'Sorry, you are not allowed to list users.', 'generation-maine' ), array( 'status' => rest_authorization_required_code() ) );
@@ -295,7 +298,10 @@ add_action( 'admin_enqueue_scripts', 'gm_creator_admin_assets' );
  * it. On WordPress 7 the Meta Boxes drawer also opens at part of the window, not the full height of Creator details, so the
  * title stays in view until the person drags the drawer to a height of their own. The box's other fields are saved by its own
  * request, which the editor sends only when it knows the post has changed. So a field changed there (a clip chosen or removed
- * too) is passed to the editor as the post's meta: Ctrl+S then saves it, and leaving the editor warns, as for the title.
+ * too) is passed to the editor as the post's meta: Ctrl+S then saves it, and leaving the editor warns, as for the title. It is
+ * kept out of the editor's Undo, which could change only the editor's copy and never the box. The box's fields have the
+ * browser's own Ctrl+Z instead, as WordPress 7 gives every meta box (on 6.5 the editor took those keys), and the editor then
+ * gets the undone value like any other change.
  */
 function gm_creator_editor_assets() {
 	$screen = get_current_screen();
@@ -315,8 +321,9 @@ wp.domReady(function(){var f=document.getElementById('gm_order'),was=document.qu
  var box=document.getElementById('gm_creator_details'),told={},val=function(i){return 'checkbox'===i.type?i.checked:('gm_clip_id'===i.name?parseInt(i.value,10)||0:i.value);};
  var sync=function(){var m=ed().getEditedPostAttribute('meta'),e={},n=0;if(!m){return;}
   box.querySelectorAll('input[name]').forEach(function(i){var k=i.name,v=val(i);if(k in m&&v!==told[k]){e[k]=told[k]=v;n++;}});
-  if(n){d.dispatch('core/editor').editPost({meta:e});}};
+  if(n){d.dispatch('core/editor').editPost({meta:e},{undoIgnore:true});}};
  if(!box){return;}box.querySelectorAll('input[name]').forEach(function(i){told[i.name]=val(i);});
+ box.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&/^[yz]$/i.test(e.key)){e.stopPropagation();}});
  box.addEventListener('input',sync);box.addEventListener('change',sync);document.addEventListener('click',function(){setTimeout(sync,0);});
 });})(wp.data);"
 	);
@@ -647,7 +654,8 @@ function gm_render_creators( $args = array() ) {
 		$panels .= '<article class="panel' . ( $on ? ' on' : '' ) . '" id="story-' . ( $i + 1 ) . '" data-i="' . $i . '">'
 			. '<div class="pv" role="button" tabindex="0" aria-label="' . esc_attr( $open ) . '">' . gm_clip( $c, '', '', '' ) . $who . $len . $expand . '</div>'
 			. '<p class="k">' . esc_html( $town ) . '</p><h2>' . gm_bdi( $c['name'] ) . '</h2>'
-			. ( $c['bio'] ? '<p class="bio">' . esc_html( $c['bio'] ) . '</p>' : '' )
+			// the story as typed, like the name: inside <bdi> the typography filter leaves '--' and the x of 4x4 alone
+			. ( $c['bio'] ? '<p class="bio">' . gm_bdi( $c['bio'] ) . '</p>' : '' )
 			. ( $soc ? '<div class="soc">' . $soc . '</div>' : '' )
 			. '</article>';
 		$slides .= '<div class="slide" data-i="' . $i . '"><div class="fr">' . gm_clip( $c, '', '', $alt ) . $who . $len . '</div>'
