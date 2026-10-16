@@ -434,6 +434,7 @@ main.gm-page :is(a,button,input,.wp-block-button__link):focus-visible:not(:where
 :where(main.gm-page .is-vertical.is-content-justification-right:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators) *))){align-items:flex-end}
 :where(main.gm-page .is-vertical.is-content-justification-stretch:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators) *))){align-items:stretch}
 :where(main.gm-page .is-layout-grid:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators) *))){display:grid;grid-template-columns:repeat(auto-fill,minmax(min(12rem,100%),1fr));gap:.5em}
+:where(main.gm-page .is-layout-grid:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators) *)))>*{margin:0}
 :where(main.gm-page .wp-block-columns:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators) *))){gap:2em}
 /* a Gallery sizes its images to leave the gap WordPress sets from --wp--style--gallery-gap-default, so its gap is that value;
    the editor, which would show the gallery as a column, shows the same row. A Row's alignment and a Grid's columns are printed
@@ -486,9 +487,11 @@ main.gm-page .lede a:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators
 .panel+.panel{display:none}
 .k-bars::before{content:"";display:inline-block;vertical-align:-1px;flex:none;width:30px;height:12px;margin-right:10px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 12'%3E%3Cpath d='M4 12 L8 0 h5 L9 12z' fill='%23FFFFFF'/%3E%3Cpath d='M12 12 L16 0 h5 L17 12z' fill='%23FFFFFF'/%3E%3Cpath d='M20 12 L24 0 h5 L25 12z' fill='%23FAC800'/%3E%3C/svg%3E") center/contain no-repeat}
 .about .k-bars::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 12'%3E%3Cpath d='M4 12 L8 0 h5 L9 12z' fill='%230556A5'/%3E%3Cpath d='M12 12 L16 0 h5 L17 12z' fill='%230556A5'/%3E%3Cpath d='M20 12 L24 0 h5 L25 12z' fill='%23FAC800'/%3E%3C/svg%3E")}
-.gm-here::after{content:"";display:inline-block;width:.2em;height:.2em;border-radius:50%;background:var(--mg);margin-left:.05em}
+/* WordPress 7 draws the outline of an editable block in a selected pattern section with the same ::after; the dot steps aside
+   while that outline shows */
+.gm-here:not(.has-editable-outline)::after{content:"";display:inline-block;width:.2em;height:.2em;border-radius:50%;background:var(--mg);margin-left:.05em}
 /* a headline ending in ? or ! gets no dot on the page; the editor script marks it gm-nodot (functions.php) */
-.gm-here.gm-nodot::after{content:none}
+.gm-here.gm-nodot:not(.has-editable-outline)::after{content:none}
 /* the bar keeps its labels and its button in a narrow canvas (List View, the inserter or the Mobile preview open): they wrap
    inside the bar, which grows to hold them; the phone menu is a page feature */
 .top nav,.gm-bar nav{display:flex!important;flex-wrap:wrap}
@@ -533,6 +536,7 @@ main.gm-page .lede a:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators
 :where(.is-root-container.wp-block-post-content .is-vertical.is-content-justification-right:not(:where(.is-root-container.wp-block-post-content :is(.block,.hero,.stories,.gm-creators) *))){align-items:flex-end}
 :where(.is-root-container.wp-block-post-content .is-vertical.is-content-justification-stretch:not(:where(.is-root-container.wp-block-post-content :is(.block,.hero,.stories,.gm-creators) *))){align-items:stretch}
 :where(.is-root-container.wp-block-post-content .is-layout-grid:not(:where(.is-root-container.wp-block-post-content :is(.block,.hero,.stories,.gm-creators) *))){display:grid;grid-template-columns:repeat(auto-fill,minmax(min(12rem,100%),1fr));gap:.5em}
+:where(.is-root-container.wp-block-post-content .is-layout-grid:not(:where(.is-root-container.wp-block-post-content :is(.block,.hero,.stories,.gm-creators) *)))>*{margin:0}
 :where(.is-root-container.wp-block-post-content .wp-block-columns:not(:where(.is-root-container.wp-block-post-content :is(.block,.hero,.stories,.gm-creators) *))){gap:2em}
 :where(.is-root-container.wp-block-post-content .wp-block-gallery:not(:where(.is-root-container.wp-block-post-content :is(.block,.hero,.stories,.gm-creators) *))){--wp--style--gallery-gap-default:16px}
 .is-root-container.wp-block-post-content .wp-block-gallery.has-nested-images.is-layout-flex:not(:where(.is-root-container.wp-block-post-content :is(.block,.hero,.stories,.gm-creators) *)){display:flex;gap:var(--wp--style--unstable-gallery-gap,16px)}

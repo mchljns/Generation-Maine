@@ -133,6 +133,7 @@ main.gm-page :is(a,button,input,.wp-block-button__link):focus-visible$OUT{outlin
 :where(main.gm-page .is-vertical.is-content-justification-right$OUT){align-items:flex-end}
 :where(main.gm-page .is-vertical.is-content-justification-stretch$OUT){align-items:stretch}
 :where(main.gm-page .is-layout-grid$OUT){display:grid;grid-template-columns:repeat(auto-fill,minmax(min(12rem,100%),1fr));gap:.5em}
+:where(main.gm-page .is-layout-grid$OUT)>*{margin:0}
 :where(main.gm-page .wp-block-columns$OUT){gap:2em}
 /* a Gallery sizes its images to leave the gap WordPress sets from --wp--style--gallery-gap-default, so its gap is that value;
    the editor, which would show the gallery as a column, shows the same row. A Row's alignment and a Grid's columns are printed
@@ -188,9 +189,11 @@ EDITOR_ADDITIONS = """
 .panel+.panel{display:none}
 .k-bars::before{content:"";display:inline-block;vertical-align:-1px;flex:none;width:30px;height:12px;margin-right:10px;background:%(bars)s center/contain no-repeat}
 .about .k-bars::before{background-image:%(bars_blue)s}
-.gm-here::after{content:"";display:inline-block;width:.2em;height:.2em;border-radius:50%%;background:var(--mg);margin-left:.05em}
+/* WordPress 7 draws the outline of an editable block in a selected pattern section with the same ::after; the dot steps aside
+   while that outline shows */
+.gm-here:not(.has-editable-outline)::after{content:"";display:inline-block;width:.2em;height:.2em;border-radius:50%%;background:var(--mg);margin-left:.05em}
 /* a headline ending in ? or ! gets no dot on the page; the editor script marks it gm-nodot (functions.php) */
-.gm-here.gm-nodot::after{content:none}
+.gm-here.gm-nodot:not(.has-editable-outline)::after{content:none}
 /* the bar keeps its labels and its button in a narrow canvas (List View, the inserter or the Mobile preview open): they wrap
    inside the bar, which grows to hold them; the phone menu is a page feature */
 .top nav,.gm-bar nav{display:flex!important;flex-wrap:wrap}

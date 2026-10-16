@@ -450,6 +450,7 @@ main.gm-page :is(a,button,input,.wp-block-button__link):focus-visible:not(:where
 :where(main.gm-page .is-vertical.is-content-justification-right:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators) *))){align-items:flex-end}
 :where(main.gm-page .is-vertical.is-content-justification-stretch:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators) *))){align-items:stretch}
 :where(main.gm-page .is-layout-grid:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators) *))){display:grid;grid-template-columns:repeat(auto-fill,minmax(min(12rem,100%),1fr));gap:.5em}
+:where(main.gm-page .is-layout-grid:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators) *)))>*{margin:0}
 :where(main.gm-page .wp-block-columns:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators) *))){gap:2em}
 /* a Gallery sizes its images to leave the gap WordPress sets from --wp--style--gallery-gap-default, so its gap is that value;
    the editor, which would show the gallery as a column, shows the same row. A Row's alignment and a Grid's columns are printed
