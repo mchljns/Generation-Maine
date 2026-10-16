@@ -6,7 +6,8 @@
  * Remove: wp eval-file bin/seed-creators.php 0   (deletes the creators this script made that are still placeholders, and the
  *         media it imported that no other creator uses. A creator you made yourself is never touched, even if it is marked
  *         Placeholder; neither is a seeded creator you turned into a real one by unticking Placeholder. Creators made by the
- *         theme 3.0.0 script, which did not mark them, count as made by this script while they are unchanged.)
+ *         theme 3.0.0 script, which did not mark them, go to the Trash instead, and only while every field and their media
+ *         are as that script left them.)
  *
  * [media] is a folder on this server or a web address holding portrait-1.jpg … portrait-9.jpg and creator-1.gif … creator-9.gif,
  * for example the v2 preview's media folder: https://mchljns.github.io/Generation-Maine/v2/media
@@ -80,41 +81,48 @@ $gm_towns = array( 'Skowhegan', 'Presque Isle', 'Biddeford', 'Machias', 'Lewisto
 
 /**
  * Whether a creator is one the theme 3.0.0 script made and nobody has changed. That script marked its creators Placeholder
- * but not gm_seeded, so they are known by what it wrote: a seed's exact name, handle, hometown and story, still marked
- * Placeholder, with no avatar or clip other than media the script imported. A creator a person made never matches all of it.
+ * but not gm_seeded, so they are known by everything it wrote. The creator at place N is still published and marked
+ * Placeholder, with the name, story, handle, hometown and clip length the script gives place N, and no other field filled
+ * in (no clip link, no channel links). When that run imported media, it still has the avatar and the clip the script
+ * imported for it; when it did not, it has no avatar or clip at all.
  *
- * @param int   $id      Creator.
- * @param array $entries Entries of creators-placeholder.json.
- * @param array $towns   Towns the script used past the end of the list.
+ * @param int   $id        Creator.
+ * @param array $entries   Entries of creators-placeholder.json.
+ * @param array $towns     Towns the script used past the end of the list.
+ * @param bool  $had_media Whether that run imported media.
  * @return bool
  */
-function gm_seed_is_old( $id, $entries, $towns ) {
+function gm_seed_is_old( $id, $entries, $towns, $had_media ) {
 	$norm = static function ( $s ) {
 		return trim( preg_replace( '/\s+/', ' ', html_entity_decode( wp_strip_all_tags( (string) $s ), ENT_QUOTES, 'UTF-8' ) ) );
 	};
 	$post = get_post( $id );
-	if ( ! $post || ! get_post_meta( $id, 'gm_placeholder', true ) || get_post_meta( $id, 'gm_seeded', true ) ) {
+	if ( ! $post || 'publish' !== $post->post_status || $post->menu_order < 0 || ! get_post_meta( $id, 'gm_placeholder', true ) || get_post_meta( $id, 'gm_seeded', true ) ) {
 		return false;
 	}
-	foreach ( array( '_thumbnail_id', 'gm_clip_id' ) as $key ) {
-		$file = (int) get_post_meta( $id, $key, true );
-		if ( $file && ! get_post_meta( $file, 'gm_seeded', true ) ) {
+	foreach ( (array) get_post_meta( $id ) as $key => $values ) {
+		if ( 0 === strpos( $key, 'gm_' ) && ! in_array( $key, array( 'gm_handle', 'gm_hometown', 'gm_clip_len', 'gm_clip_id', 'gm_placeholder' ), true ) && '' !== implode( '', (array) $values ) ) {
 			return false;
 		}
 	}
-	$handle = get_post_meta( $id, 'gm_handle', true );
-	$town   = get_post_meta( $id, 'gm_hometown', true );
-	foreach ( $entries as $c ) {
-		if ( isset( $c['name'], $c['handle'], $c['town'], $c['bio'] ) && $norm( $post->post_title ) === $norm( $c['name'] ) && $handle === $c['handle'] && $town === $c['town'] && $norm( $post->post_content ) === $norm( $c['bio'] ) ) {
-			return true;
+	foreach ( array( '_thumbnail_id', 'gm_clip_id' ) as $key ) {
+		$file = (int) get_post_meta( $id, $key, true );
+		$ours = $file && get_post_meta( $file, 'gm_seeded', true ) && (int) get_post_field( 'post_parent', $file ) === $id;
+		if ( $had_media ? ! $ours : $file ) {
+			return false;
 		}
 	}
-	// past the end of the list the script wrote fixed placeholder text
-	return '[Creator name]' === $norm( $post->post_title ) && '@handle' === $handle && in_array( $town, $towns, true )
-		&& $norm( $post->post_content ) === $norm( '[Two or three sentences in the creator\'s words.]' );
+	// what the script wrote at this place (the same as the loop at the end of this file)
+	$i = (int) $post->menu_order;
+	$c = isset( $entries[ $i ] ) ? $entries[ $i ] : array();
+	return $norm( $post->post_title ) === $norm( isset( $c['name'] ) ? $c['name'] : '[Creator name]' )
+		&& $norm( $post->post_content ) === $norm( isset( $c['bio'] ) ? $c['bio'] : '[Two or three sentences in the creator\'s words.]' )
+		&& get_post_meta( $id, 'gm_handle', true ) === ( isset( $c['handle'] ) ? $c['handle'] : '@handle' )
+		&& get_post_meta( $id, 'gm_hometown', true ) === ( isset( $c['town'] ) ? $c['town'] : $towns[ $i % count( $towns ) ] )
+		&& get_post_meta( $id, 'gm_clip_len', true ) === ( isset( $c['len'] ) ? $c['len'] : '' );
 }
 
-// Creators made by the theme 3.0.0 script, unchanged, get the mark this script now sets, so they are removed below too.
+// Creators the theme 3.0.0 script may have made: marked Placeholder, but not with the mark this script sets.
 $gm_statuses  = array_keys( get_post_stati() );
 $gm_old_seeds = get_posts(
 	array(
@@ -134,9 +142,31 @@ $gm_old_seeds = get_posts(
 		),
 	)
 );
+// That run imported media if any of these creators still has a file it marked.
+$gm_had_media = false;
 foreach ( $gm_old_seeds as $gm_id ) {
-	if ( gm_seed_is_old( $gm_id, $gm_list, $gm_towns ) ) {
-		update_post_meta( $gm_id, 'gm_seeded', 1 );
+	$gm_had_media = $gm_had_media || get_posts(
+		array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
+			'post_parent' => $gm_id,
+			'numberposts' => 1,
+			'fields'      => 'ids',
+			'meta_key'    => 'gm_seeded', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+		)
+	);
+}
+// Those still as the 3.0.0 script left them go to the Trash, not away for good, since they are known only by their content.
+// Their media stays while they are there; a later run removes it once the Trash is emptied.
+$gm_trashed = 0;
+$gm_left    = 0;
+foreach ( $gm_old_seeds as $gm_id ) {
+	if ( gm_seed_is_old( $gm_id, $gm_list, $gm_towns, $gm_had_media ) ) {
+		if ( EMPTY_TRASH_DAYS && wp_trash_post( $gm_id ) ) {
+			++$gm_trashed;
+		} else {
+			++$gm_left;
+		}
 	}
 }
 
@@ -226,7 +256,9 @@ for ( $gm_i = 0; $gm_i < $gm_count; $gm_i++ ) {
 }
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
-	$gm_note = $gm_kept ? sprintf( ' Kept %d seeded media item(s) that a creator still uses.', $gm_kept ) : '';
+	$gm_note = ( $gm_trashed ? sprintf( ' Moved %d placeholder creator(s) made by theme 3.0.0 to the Trash. Restore any you want to keep.%s', $gm_trashed, $gm_had_media ? ' Their media stays until you empty the Trash and run this again.' : '' ) : '' )
+		. ( $gm_left ? sprintf( ' Left %d placeholder creator(s) made by theme 3.0.0 in place, because this site has no Trash. Delete them by hand.', $gm_left ) : '' )
+		. ( $gm_kept ? sprintf( ' Kept %d seeded media item(s) that a creator still uses.', $gm_kept ) : '' );
 	if ( 0 === $gm_count ) {
 		WP_CLI::success( sprintf( 'Removed %d placeholder creator(s) made by this script.%s', $gm_removed, $gm_note ) );
 	} elseif ( '' === $gm_media ) {

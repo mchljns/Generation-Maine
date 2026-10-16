@@ -118,6 +118,50 @@ function gm_register_creators() {
 add_action( 'init', 'gm_register_creators' );
 
 /**
+ * Creators have no public pages, so owning one does not make an account public. Through the REST API WordPress shows
+ * visitors every account with published content of any type the API serves, creators included. For anyone who cannot edit
+ * other people's creators, the users list leaves creators out of that test; authors of posts and pages are listed as before.
+ *
+ * @param array $args WP_User_Query arguments of the users route.
+ * @return array
+ */
+function gm_creator_rest_users( $args ) {
+	if ( empty( $args['has_published_posts'] ) || current_user_can( 'edit_others_posts' ) ) {
+		return $args;
+	}
+	$types = true === $args['has_published_posts'] ? get_post_types( array( 'show_in_rest' => true ), 'names' ) : (array) $args['has_published_posts'];
+	$types = array_values( array_diff( $types, array( 'gm_creator' ) ) );
+	if ( $types ) {
+		$args['has_published_posts'] = $types;
+	} else {
+		$args['include'] = array( 0 ); // only creators were asked for: list nobody
+	}
+	return $args;
+}
+add_filter( 'rest_user_query', 'gm_creator_rest_users' );
+
+/**
+ * The same test for one account, /wp/v2/users/<id>, which WordPress checks on its own.
+ *
+ * @param mixed           $response Result so far; null to go on.
+ * @param array           $handler  Route handler.
+ * @param WP_REST_Request $request  Request.
+ * @return mixed
+ */
+function gm_creator_rest_user( $response, $handler, $request ) {
+	if ( null !== $response || 'GET' !== $request->get_method() || ! preg_match( '#^/wp/v2/users/(\d+)$#', $request->get_route(), $m ) ) {
+		return $response;
+	}
+	$id    = (int) $m[1];
+	$types = array_diff( get_post_types( array( 'show_in_rest' => true ), 'names' ), array( 'gm_creator' ) );
+	if ( get_user_by( 'id', $id ) && get_current_user_id() !== $id && ! current_user_can( 'edit_others_posts' ) && ! current_user_can( 'edit_user', $id ) && ! count_user_posts( $id, $types ) ) {
+		return new WP_Error( 'rest_user_cannot_view', __( 'Sorry, you are not allowed to list users.', 'generation-maine' ), array( 'status' => rest_authorization_required_code() ) );
+	}
+	return $response;
+}
+add_filter( 'rest_request_before_callbacks', 'gm_creator_rest_user', 10, 3 );
+
+/**
  * The details box on the Creator screen.
  */
 function gm_creator_meta_box() {
@@ -241,7 +285,9 @@ add_action( 'admin_enqueue_scripts', 'gm_creator_admin_assets' );
  * In the block editor the place on the page is the post's own Order. The box's field shows it and changes it in the editor,
  * which saves it with the post, so the field, WordPress's Order control and Quick Edit always agree; the box no longer sends
  * it. On WordPress 7 the Meta Boxes drawer also opens at part of the window, not the full height of Creator details, so the
- * title stays in view until the person drags the drawer to a height of their own.
+ * title stays in view until the person drags the drawer to a height of their own. The box's other fields are saved by its own
+ * request, which the editor sends only when it knows the post has changed. So a field changed there (a clip chosen or removed
+ * too) is passed to the editor as the post's meta: Ctrl+S then saves it, and leaving the editor warns, as for the title.
  */
 function gm_creator_editor_assets() {
 	$screen = get_current_screen();
@@ -258,6 +304,12 @@ wp.domReady(function(){var f=document.getElementById('gm_order'),was=document.qu
  f.addEventListener('input',function(){d.dispatch('core/editor').editPost({menu_order:parseInt(f.value,10)||0});});
  f.addEventListener('change',function(){f.value=ed().getEditedPostAttribute('menu_order');});
  d.subscribe(function(){var v=ed().getEditedPostAttribute('menu_order');if(v===last||undefined===v){return;}last=v;if(document.activeElement!==f){f.value=v;}});
+ var box=document.getElementById('gm_creator_details'),told={},val=function(i){return 'checkbox'===i.type?i.checked:('gm_clip_id'===i.name?parseInt(i.value,10)||0:i.value);};
+ var sync=function(){var m=ed().getEditedPostAttribute('meta'),e={},n=0;if(!m){return;}
+  box.querySelectorAll('input[name]').forEach(function(i){var k=i.name,v=val(i);if(k in m&&v!==told[k]){e[k]=told[k]=v;n++;}});
+  if(n){d.dispatch('core/editor').editPost({meta:e});}};
+ if(!box){return;}box.querySelectorAll('input[name]').forEach(function(i){told[i.name]=val(i);});
+ box.addEventListener('input',sync);box.addEventListener('change',sync);document.addEventListener('click',function(){setTimeout(sync,0);});
 });})(wp.data);"
 	);
 }
