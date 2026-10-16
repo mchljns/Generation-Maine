@@ -78,9 +78,10 @@ WP_ADDITIONS = """
 @media (max-width:900px){.top .cta-wrap{display:none}}
 /* kickers are paragraphs: the page's span had no margins */
 p.k{margin:0}
-/* core buttons wear the page's button styles */
+/* core buttons wear the page's button styles. A Button's Width (25 to 100%) takes the gap between buttons off its share, read
+   from the block gap, so the block gap here is the buttons' own gap */
 .wp-block-button>.wp-block-button__link{border-radius:0;box-shadow:none}
-.wp-block-buttons{gap:18px}
+.wp-block-buttons{gap:18px;--wp--style--block-gap:18px}
 /* section heads that sit directly on the section below */
 .block .head.flush{margin-bottom:0}
 /* the about photo is a core image block */
@@ -114,8 +115,9 @@ main.gm-page :is(a,button,input,.wp-block-button__link):focus-visible$OUT{outlin
 .gm-entry cite$OUT{font-style:normal}
 .gm-entry>hr{margin-inline:0}
 .gm-entry img$OUT{max-width:100%;height:auto}
-/* a front-page section placed in a page runs full width with no gap above it, as on the front page */
-.gm-entry>.wp-block-group.block,.gm-entry>.wp-block-group.hero,.gm-entry>.gm-creators{max-width:none;margin-inline:calc(50% - 50vw);margin-block:0}
+/* a front-page section placed in a page runs full width with no gap above it, as on the front page; so does the Creators block
+   placed on its own (its roster or stepper section on the page, its block wrapper in the editor) */
+.gm-entry>.wp-block-group.block,.gm-entry>.wp-block-group.hero,.gm-entry>.gm-creators,.gm-entry>section.block,.gm-entry>section.stories,.gm-entry>.wp-block-generation-maine-creators{max-width:none;margin-inline:calc(50% - 50vw);margin-block:0}
 /* WordPress's layout styles are off, since the page's stylesheet lays out every section. Posts, pages and archives get back the
    core rules their blocks need: flex rows (buttons, pagination, row and stack groups), their justification, grids and column
    gaps. Like core's, these rules have no specificity, so a block's own styles win. */
@@ -132,6 +134,11 @@ main.gm-page :is(a,button,input,.wp-block-button__link):focus-visible$OUT{outlin
 :where(main.gm-page .is-vertical.is-content-justification-stretch$OUT){align-items:stretch}
 :where(main.gm-page .is-layout-grid$OUT){display:grid;grid-template-columns:repeat(auto-fill,minmax(min(12rem,100%),1fr));gap:.5em}
 :where(main.gm-page .wp-block-columns$OUT){gap:2em}
+/* a Gallery sizes its images to leave the gap WordPress sets from --wp--style--gallery-gap-default, so its gap is that value;
+   the editor, which would show the gallery as a column, shows the same row. A Row's alignment and a Grid's columns are printed
+   per block (functions.php gm_layout_values) */
+:where(main.gm-page .wp-block-gallery$OUT){--wp--style--gallery-gap-default:16px}
+main.gm-page .wp-block-gallery.has-nested-images.is-layout-flex$OUT{display:flex;gap:var(--wp--style--unstable-gallery-gap,16px)}
 .gm-query{max-width:68ch}
 .gm-posts{list-style:none;margin:0;padding:0}
 .gm-posts>li{padding:24px 0;border-top:1px solid rgba(15,46,77,.15)}
@@ -154,8 +161,11 @@ main.gm-page :is(a,button,input,.wp-block-button__link):focus-visible$OUT{outlin
 .gm-search .wp-block-search__button{min-height:48px;margin-left:8px;border:0;border-radius:0;background:var(--navy);color:#fff;padding:0 20px;font:400 11px/1 var(--label);letter-spacing:.1em;text-transform:uppercase}
 main.gm-page .lede$OUT{font-size:clamp(18px,2vw,21px);line-height:1.5;max-width:56ch}
 main.gm-page .lede a$OUT{color:var(--blue)}
-/* the roster's number and town are not the clip overlay's name and handle: the overlay's one-line rules stop here */
+/* the roster's number and town are not the clip overlay's name and handle: the overlay's one-line rules stop here. The number
+   stays on one line; a long name wraps inside the tile */
 .roster .tile .who span{display:block;white-space:normal;overflow:visible;text-shadow:none;overflow-wrap:anywhere}
+.roster .tile .who .n{white-space:nowrap}
+.roster .tile .who b{min-width:0;overflow-wrap:anywhere}
 @media (max-width:700px){.roster .tile .who .town{grid-column:1/-1}}
 /* logged in: the viewer covers the admin bar, and anchors and the pinned stage clear the bar plus the admin bar */
 .viewer{z-index:100000}
@@ -187,6 +197,8 @@ EDITOR_ADDITIONS = """
 .top .cta-wrap,.gm-bar .cta-wrap{display:flex!important}
 .top .cta>.wp-block-button__link,.gm-bar .cta>.wp-block-button__link{display:inline-flex!important}
 .top .w,.gm-bar .w{flex-wrap:wrap;height:auto;min-height:68px;padding-block:12px}
+/* the Header part edited on its own has no header.top around it: its link paragraphs lose their margins here too */
+.gm-bar nav p{margin:0}
 .menu,.top .menu,.gm-bar .menu,.gm-part-menu{display:none!important}
 /* the post and page editor has no template around the content: the title and the text sit in the page's column (the rules for
    the title and the text follow, copied from the page's) */
@@ -426,7 +438,8 @@ def theme_json():
         },
         "styles": {
             "color": {"background": "#FFFFFF", "text": t["navy"]},
-            "spacing": {"blockGap": "0", "padding": {"top": "0", "right": "0", "bottom": "0", "left": "0"}},
+            # with a unit: WordPress reads the block gap inside calc() (button widths, gallery columns), where a bare 0 is invalid
+            "spacing": {"blockGap": "0px", "padding": {"top": "0", "right": "0", "bottom": "0", "left": "0"}},
             "typography": {"fontFamily": t["body"], "lineHeight": "1.55"},
             "elements": {
                 # a button added to a post or page wears the page's first button: gold, navy label

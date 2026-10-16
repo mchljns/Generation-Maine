@@ -50,6 +50,130 @@ function gm_editor_settings( $settings ) {
 add_filter( 'block_editor_settings_all', 'gm_editor_settings' );
 
 /**
+ * Fonts saved in Styles do not apply: a font installed and switched on under Appearance > Fonts (WordPress 7), or a face picked
+ * in Styles under theme 3.1.0, which offered the three faces as presets that no longer exist. Either would bring back font
+ * pickers and change the editor but not the page. They are left out wherever the styles are read, so nothing needs a reset;
+ * the next save in Styles stores the styles without them.
+ *
+ * @param WP_Theme_JSON_Data $theme_json The user's global styles.
+ * @return WP_Theme_JSON_Data
+ */
+function gm_user_fonts( $theme_json ) {
+	$data  = $theme_json->get_data();
+	$clean = gm_without_fonts( $data );
+	return $clean === $data ? $theme_json : new WP_Theme_JSON_Data( $clean, 'custom' );
+}
+add_filter( 'wp_theme_json_data_user', 'gm_user_fonts' );
+
+/**
+ * The same for Styles in the Site Editor, which reads the saved styles and their revisions over the REST API.
+ *
+ * @param WP_REST_Response|WP_Error|mixed $response Response.
+ * @param array                           $handler  Route handler.
+ * @param WP_REST_Request                 $request  Request.
+ * @return WP_REST_Response|WP_Error|mixed
+ */
+function gm_rest_user_fonts( $response, $handler, $request ) {
+	if ( ! $response instanceof WP_REST_Response || ! preg_match( '#^/wp/v2/global-styles/\d+(/revisions(/\d+)?)?$#', $request->get_route() ) ) {
+		return $response;
+	}
+	$data  = $response->get_data();
+	$items = isset( $data[0] ) ? $data : array( $data );
+	foreach ( $items as $i => $item ) {
+		foreach ( array( 'settings', 'styles' ) as $key ) {
+			if ( isset( $item[ $key ] ) && is_array( $item[ $key ] ) ) {
+				$clean               = gm_without_fonts( array( $key => $item[ $key ] ) );
+				$items[ $i ][ $key ] = empty( $clean[ $key ] ) ? new stdClass() : $clean[ $key ];
+			}
+		}
+	}
+	$response->set_data( isset( $data[0] ) ? $items : $items[0] );
+	return $response;
+}
+add_filter( 'rest_request_after_callbacks', 'gm_rest_user_fonts', 10, 3 );
+
+/**
+ * Global styles without font families or font choices (a font, and the weight and style picked with it; the theme offers no
+ * weight or style control of its own).
+ *
+ * @param array $data Global styles: settings and styles.
+ * @return array
+ */
+function gm_without_fonts( $data ) {
+	if ( isset( $data['settings'] ) && is_array( $data['settings'] ) ) {
+		$blocks = isset( $data['settings']['blocks'] ) && is_array( $data['settings']['blocks'] ) ? array_keys( $data['settings']['blocks'] ) : array();
+		foreach ( array_merge( array( null ), $blocks ) as $name ) {
+			$set = null === $name ? $data['settings'] : $data['settings']['blocks'][ $name ];
+			if ( isset( $set['typography'] ) && is_array( $set['typography'] ) && isset( $set['typography']['fontFamilies'] ) ) {
+				unset( $set['typography']['fontFamilies'] );
+				if ( ! $set['typography'] ) {
+					unset( $set['typography'] );
+				}
+				if ( null === $name ) {
+					$data['settings'] = $set;
+				} else {
+					$data['settings']['blocks'][ $name ] = $set;
+				}
+			}
+		}
+	}
+	if ( isset( $data['styles'] ) && is_array( $data['styles'] ) ) {
+		$data['styles'] = gm_without_font_choice( $data['styles'] );
+	}
+	return $data;
+}
+
+/**
+ * A styles tree without a font choice, at the root and in every element, block, variation and state below it.
+ *
+ * @param array $styles Styles.
+ * @return array
+ */
+function gm_without_font_choice( $styles ) {
+	foreach ( $styles as $key => $value ) {
+		if ( ! is_array( $value ) || ! $value ) {
+			continue;
+		}
+		if ( 'typography' === $key ) {
+			unset( $value['fontFamily'], $value['fontWeight'], $value['fontStyle'] );
+		}
+		$value = gm_without_font_choice( $value );
+		// a group left empty by this goes too
+		if ( $value ) {
+			$styles[ $key ] = $value;
+		} else {
+			unset( $styles[ $key ] );
+		}
+	}
+	return $styles;
+}
+
+/**
+ * No Fonts screen: WordPress 7 adds Appearance > Fonts, and a Fonts button on the theme's details, to install and switch on
+ * fonts that this theme does not use. A saved link to the screen gets a short note instead.
+ */
+function gm_no_fonts_screen() {
+	remove_submenu_page( 'themes.php', 'font-library.php' );
+}
+add_action( 'admin_menu', 'gm_no_fonts_screen', 99 );
+
+/**
+ * The note on the Fonts screen.
+ */
+function gm_fonts_screen_note() {
+	wp_die(
+		esc_html__( 'Generation Maine uses its own three fonts, so the font library is turned off.', 'generation-maine' ),
+		esc_html__( 'Fonts', 'generation-maine' ),
+		array(
+			'response'  => 403,
+			'link_url'  => admin_url( 'themes.php' ),
+			'link_text' => esc_html__( 'Back to Themes', 'generation-maine' ),
+		)
+	);
+}
+add_action( 'load-font-library.php', 'gm_fonts_screen_note' );
+
+/**
  * No Fit text switch on paragraphs and headings (newer WordPress versions have one): theme.json cannot turn it off, and it
  * would resize the page's type.
  *
@@ -332,6 +456,120 @@ function gm_editor_here_mark() {
 	);
 }
 add_action( 'enqueue_block_editor_assets', 'gm_editor_here_mark' );
+
+/**
+ * Posts and pages get back what a block's own layout settings add, as WordPress prints them when its layout styles are on: a
+ * Row's or a Stack's alignment, a Grid's columns, minimum column width and rows. Layout styles are off for the whole theme
+ * (gm_setup), because the page's stylesheet lays out every section; the rules here stop at the front page and at a front-page
+ * section placed in a post, as the reading styles do. Gaps stay the theme's (build_theme.py WP_ADDITIONS).
+ *
+ * @param string $html  Block HTML.
+ * @param array  $block Block.
+ * @return string
+ */
+function gm_layout_values( $html, $block ) {
+	$layout = isset( $block['attrs']['layout'] ) && is_array( $block['attrs']['layout'] ) ? $block['attrs']['layout'] : array();
+	$type   = isset( $layout['type'] ) ? $layout['type'] : '';
+	if ( ! in_array( $type, array( 'flex', 'grid' ), true ) || ! doing_filter( 'the_content' ) || ! function_exists( 'wp_get_layout_style' ) || ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
+		return $html;
+	}
+	$class = 'gm-layout-' . substr( md5( (string) wp_json_encode( $layout ) ), 0, 10 );
+	$css   = wp_get_layout_style( 'main.gm-page .' . $class . ':not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators) *))', $layout, false, null, false, '0.5em' );
+	if ( ! $css ) {
+		return $html;
+	}
+	// the class goes where WordPress puts the layout's own classes, the first element carrying them
+	$name = explode( '/', $block['blockName'] );
+	$name = 'wp-block-' . ( 'core' === $name[0] ? end( $name ) : implode( '-', $name ) ) . '-is-layout-' . $type;
+	$tags = new WP_HTML_Tag_Processor( $html );
+	while ( $tags->next_tag() ) {
+		if ( $tags->has_class( $name ) ) {
+			$tags->add_class( $class );
+			return $tags->get_updated_html();
+		}
+	}
+	return $html;
+}
+add_filter( 'render_block', 'gm_layout_values', 11, 2 );
+
+/**
+ * The same values in the post editor, which leaves them out for the same reason: set on the block as WordPress would set them.
+ * Templates and front-page sections are left as they are. A block's own size in a row or a grid (Fit, Grow, Fixed, column and
+ * row span) shows everywhere, as it does on the page, where WordPress prints it whatever the layout styles.
+ */
+function gm_editor_layout_values() {
+	wp_register_script( 'generation-maine-layout', false, array( 'wp-hooks', 'wp-compose', 'wp-element', 'wp-data' ), GM_BUILD_HASH, true );
+	wp_enqueue_script( 'generation-maine-layout' );
+	wp_add_inline_script(
+		'generation-maine-layout',
+		'( function ( wp ) {
+	var el = wp.element.createElement;
+	var JUSTIFY = { left: "flex-start", right: "flex-end", center: "center", "space-between": "space-between" };
+	var ALIGN = { top: "flex-start", center: "center", bottom: "flex-end", stretch: "stretch" };
+	var STACK_JUSTIFY = { left: "flex-start", right: "flex-end", center: "center", stretch: "stretch" };
+	var STACK_ALIGN = { top: "flex-start", center: "center", bottom: "flex-end", "space-between": "space-between" };
+	var SECTION = /(^|\s)(block|hero|stories|gm-creators)(\s|$)/;
+	function box( l ) {
+		var s = {}, n = l.columnCount, min = l.minimumColumnWidth, fill = l.autoFit ? "auto-fit" : "auto-fill";
+		if ( "flex" === l.type ) {
+			if ( "nowrap" === l.flexWrap ) { s.flexWrap = "nowrap"; }
+			if ( "vertical" === l.orientation ) {
+				s.flexDirection = "column";
+				s.alignItems = STACK_JUSTIFY[ l.justifyContent ] || "flex-start";
+				if ( STACK_ALIGN[ l.verticalAlignment ] ) { s.justifyContent = STACK_ALIGN[ l.verticalAlignment ]; }
+			} else {
+				if ( JUSTIFY[ l.justifyContent ] ) { s.justifyContent = JUSTIFY[ l.justifyContent ]; }
+				if ( ALIGN[ l.verticalAlignment ] ) { s.alignItems = ALIGN[ l.verticalAlignment ]; }
+			}
+		} else if ( "grid" === l.type ) {
+			s.gridTemplateColumns = n && min ? "repeat(" + fill + ", minmax(max(min(" + min + ", 100%), (100% - (0.5em * (" + n + " - 1))) /" + n + "), 1fr))"
+				: n ? "repeat(" + n + ", minmax(0, 1fr))" : "repeat(" + fill + ", minmax(min(" + ( min || "12rem" ) + ", 100%), 1fr))";
+			if ( n && l.rowCount ) { s.gridTemplateRows = "repeat(" + l.rowCount + ", minmax(1rem, auto))"; }
+		}
+		return s;
+	}
+	function child( c ) {
+		var s = {};
+		if ( ( "fixed" === c.selfStretch || "fixedNoShrink" === c.selfStretch ) && c.flexSize ) {
+			s.flexBasis = c.flexSize;
+			s.boxSizing = "border-box";
+			if ( "fixedNoShrink" === c.selfStretch ) { s.flexShrink = "0"; }
+		} else if ( "fill" === c.selfStretch ) {
+			s.flexGrow = "1";
+		}
+		if ( c.columnStart || c.columnSpan ) { s.gridColumn = c.columnStart && c.columnSpan ? c.columnStart + " / span " + c.columnSpan : c.columnStart ? String( c.columnStart ) : "span " + c.columnSpan; }
+		if ( c.rowStart || c.rowSpan ) { s.gridRow = c.rowStart && c.rowSpan ? c.rowStart + " / span " + c.rowSpan : c.rowStart ? String( c.rowStart ) : "span " + c.rowSpan; }
+		return s;
+	}
+	wp.hooks.addFilter( "editor.BlockListBlock", "generation-maine/layout-values", wp.compose.createHigherOrderComponent( function ( BlockListBlock ) {
+		return function ( props ) {
+			var a = props.attributes || {};
+			var has = !! ( a.layout && ( "flex" === a.layout.type || "grid" === a.layout.type ) );
+			var apply = wp.data.useSelect( function ( select ) {
+				var editor = select( "core/editor" ), type = has && editor && editor.getCurrentPostType();
+				if ( ! type || /^wp_(template|template_part|navigation)$/.test( type ) ) {
+					return false;
+				}
+				var s = select( "core/block-editor" ), ids = s.getBlockParents( props.clientId, true );
+				for ( var i = 0; i < ids.length && "core/post-content" !== s.getBlockName( ids[ i ] ); i++ ) {
+					if ( SECTION.test( ( s.getBlockAttributes( ids[ i ] ) || {} ).className || "" ) ) {
+						return false;
+					}
+				}
+				return true;
+			}, [ has, props.clientId ] );
+			var s = Object.assign( apply ? box( a.layout ) : {}, child( ( a.style && a.style.layout ) || {} ) );
+			if ( ! Object.keys( s ).length ) {
+				return el( BlockListBlock, props );
+			}
+			var w = props.wrapperProps || {};
+			return el( BlockListBlock, Object.assign( {}, props, { wrapperProps: Object.assign( {}, w, { style: Object.assign( {}, w.style, s ) } ) } ) );
+		};
+	}, "withLayoutValues" ) );
+} )( window.wp );'
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'gm_editor_layout_values' );
 
 /**
  * The about photo loads as on the v2 page: lazily, decoded off the main thread, with its width and height, so the browser

@@ -65,12 +65,18 @@ function gm_part_mural() {
 }
 
 /**
- * Render one part by name.
+ * Render one part by name. Each part shows once per page: a duplicated Logo, Phone menu button or Maine mural (the editor
+ * marks the copy) renders nothing, so the page never carries two menus or two mural ids.
  *
  * @param string $name logo, menu or mural.
  * @return string HTML
  */
 function gm_render_part( $name ) {
+	static $done = array();
+	if ( isset( $done[ $name ] ) ) {
+		return '';
+	}
+	$done[ $name ] = true;
 	switch ( $name ) {
 		case 'logo':
 			return gm_part_logo();

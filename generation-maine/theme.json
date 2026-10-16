@@ -88,7 +88,7 @@
 			"text": "#0F2E4D"
 		},
 		"spacing": {
-			"blockGap": "0",
+			"blockGap": "0px",
 			"padding": {
 				"top": "0",
 				"right": "0",
