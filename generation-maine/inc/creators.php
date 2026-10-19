@@ -731,8 +731,11 @@ function gm_render_creators( $args = array() ) {
 		foreach ( $c['links'] as $key => $l ) {
 			$soc .= '<a href="' . esc_url( gm_utm( $l['url'] ) ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr( $l['label'] ) . '">' . gm_mark( $key ) . '<span>' . ( $c['handle'] ? gm_bdi( $c['handle'] ) : esc_html( $l['label'] ) ) . '</span></a>';
 		}
-		/* translators: %s: creator name */
-		$open    = sprintf( __( 'Open the clip from %s full size', 'generation-maine' ), $c['name'] );
+		// the label starts with the words shown on the tile (handle, name, length), as screen readers and voice control expect,
+		// then says what a tap does
+		$shown   = trim( preg_replace( '/\s+/u', ' ', html_entity_decode( wp_strip_all_tags( $who . $len ), ENT_QUOTES, 'UTF-8' ) ) );
+		/* translators: 1: the words shown on the clip (handle, name, length), 2: creator name */
+		$open    = '' !== $shown ? sprintf( __( '%1$s. Open the clip full size', 'generation-maine' ), $shown ) : sprintf( __( 'Open the clip from %2$s full size', 'generation-maine' ), $shown, $c['name'] );
 		$panels .= '<article class="panel' . ( $on ? ' on' : '' ) . '" id="story-' . ( $i + 1 ) . '" data-i="' . $i . '">'
 			. '<div class="pv" role="button" tabindex="0" aria-label="' . esc_attr( $open ) . '">' . gm_clip( $c, '', '', '' ) . $who . $len . $expand . '</div>'
 			. '<p class="k">' . esc_html( $town ) . '</p><h2>' . gm_bdi( $c['name'] ) . '</h2>'
