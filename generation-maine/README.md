@@ -45,6 +45,8 @@ theme.json uses schema version 3, which arrived in WordPress 6.6. WordPress 6.5 
 
 Open **Pages > Home** (the dashboard's "Start here" box links to it). Click any text and type, click a button to change its words or link, or click the photo to replace it. Then click **Save**. Every section is made of normal blocks, named in the List View (Kicker, Headline, Lede, Aim, Note, Goal and so on).
 
+To take a line off the page, such as the About section's draft note, clear all of its text: on the front page an empty paragraph or heading prints nothing.
+
 The four sections (Hero, About, Creators, Follow) are locked: their text, buttons and photo can be changed, but sections and blocks cannot be moved, deleted or restyled by accident. An administrator can unlock one from the block's menu (the lock icon) to change its structure. A block added between two sections, such as a Custom HTML block for an embed, is not locked.
 
 The bar at the top is shared by every page, so it stays in the Site Editor: **Appearance > Editor > Patterns > Template Parts > Header** (or open any template, click the bar and choose **Edit original**).

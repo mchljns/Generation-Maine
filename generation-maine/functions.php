@@ -667,6 +667,22 @@ function gm_editor_layout_values() {
 add_action( 'enqueue_block_editor_assets', 'gm_editor_layout_values' );
 
 /**
+ * On the front page, a paragraph or heading left empty prints nothing, so staff can take a line off the page (the About
+ * section's note, a kicker) by clearing its text. The sections are locked, so the block itself cannot be deleted there.
+ *
+ * @param string $html  Block HTML.
+ * @param array  $block Block.
+ * @return string
+ */
+function gm_drop_empty_text( $html, $block ) {
+	if ( ! is_front_page() || ! in_array( $block['blockName'], array( 'core/paragraph', 'core/heading' ), true ) ) {
+		return $html;
+	}
+	return '' === trim( str_replace( '&nbsp;', '', wp_strip_all_tags( $html ) ) ) ? '' : $html;
+}
+add_filter( 'render_block', 'gm_drop_empty_text', 9, 2 );
+
+/**
  * The about photo loads as on the v2 page: lazily, decoded off the main thread, with its width and height, so the browser
  * fetches it after the first screen instead of next to the fonts. WordPress adds none of these to an image placed straight
  * in a template. A photo picked from the Media Library gets its width and height from WordPress; the theme's own photo
