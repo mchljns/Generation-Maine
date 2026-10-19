@@ -5,10 +5,28 @@
 	"title": "Follow List",
 	"category": "widgets",
 	"icon": "share",
-	"description": "The channels, one row each: Instagram, TikTok, YouTube and Substack. Addresses and handles come from Settings > Generation Maine; a channel without an address shows a placeholder row with no link.",
-	"keywords": [ "follow", "social", "instagram", "tiktok", "youtube", "substack" ],
+	"description": "The channels, one row each: Instagram, TikTok, YouTube and Substack. Click the list to edit each channel's link and handle in the sidebar; they are also under Settings > Generation Maine. A channel without an address shows a placeholder row with no link.",
+	"keywords": [
+		"follow",
+		"social",
+		"instagram",
+		"tiktok",
+		"youtube",
+		"substack"
+	],
 	"textdomain": "generation-maine",
-	"supports": { "html": false, "anchor": true, "multiple": false },
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"multiple": false,
+		"contentRole": true
+	},
 	"editorScript": "file:./index.js",
-	"render": "file:./render.php"
+	"render": "file:./render.php",
+	"attributes": {
+		"preview": {
+			"type": "object",
+			"default": {}
+		}
+	}
 }

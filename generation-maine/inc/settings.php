@@ -59,6 +59,10 @@ function gm_settings_fields() {
  * @return string
  */
 function gm_setting( $key ) {
+	$preview = gm_setting_preview();
+	if ( isset( $preview[ $key ] ) ) {
+		return $preview[ $key ];
+	}
 	foreach ( gm_settings_fields() as $fields ) {
 		if ( isset( $fields[ $key ] ) ) {
 			$value = (string) get_option( $key, $fields[ $key ]['default'] );
@@ -67,6 +71,34 @@ function gm_setting( $key ) {
 		}
 	}
 	return (string) get_option( $key, '' );
+}
+
+/**
+ * Values the editor shows before they are saved: the Follow List's sidebar sends the channel fields being typed, so the rows
+ * in the editor match them (blocks/follow/render.php). Only those fields, cleaned as a save would clean them, and never stored.
+ *
+ * @param array|null $set Values to preview, or null to read.
+ * @return array<string,string>
+ */
+function gm_setting_preview( $set = null ) {
+	static $preview = array();
+	if ( is_array( $set ) ) {
+		$preview = array();
+		foreach ( array( 'instagram', 'tiktok', 'youtube' ) as $c ) {
+			if ( isset( $set[ 'gm_' . $c . '_url' ] ) && is_string( $set[ 'gm_' . $c . '_url' ] ) ) {
+				$url = trim( $set[ 'gm_' . $c . '_url' ] );
+				$preview[ 'gm_' . $c . '_url' ] = '' === $url ? '' : esc_url_raw( 0 === stripos( $url, 'http://' ) ? 'https://' . substr( $url, 7 ) : ( preg_match( '#^https?://#i', $url ) ? $url : 'https://' . $url ), array( 'https' ) );
+			}
+			if ( isset( $set[ 'gm_' . $c . '_handle' ] ) && is_string( $set[ 'gm_' . $c . '_handle' ] ) ) {
+				$preview[ 'gm_' . $c . '_handle' ] = gm_sanitize_handle( $set[ 'gm_' . $c . '_handle' ] );
+			}
+		}
+		if ( isset( $set['gm_newsletter_url'] ) && is_string( $set['gm_newsletter_url'] ) ) {
+			$url = trim( $set['gm_newsletter_url'] );
+			$preview['gm_newsletter_url'] = '' === $url ? '' : esc_url_raw( preg_match( '#^https?://#i', $url ) ? $url : 'https://' . $url, array( 'https' ) );
+		}
+	}
+	return $preview;
 }
 
 /**
@@ -95,6 +127,8 @@ function gm_register_setting_options() {
 				$key,
 				array(
 					'type'              => 'string',
+					// the name WordPress shows when it asks to save these from the page editor
+					'label'             => $field['label'],
 					'default'           => $field['default'],
 					// code is for administrators on this screen, not for the REST API
 					'show_in_rest'      => 'code' !== $field['type'],
