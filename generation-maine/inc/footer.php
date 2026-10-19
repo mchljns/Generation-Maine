@@ -52,12 +52,16 @@ function gm_render_footer() {
 		$html = preg_replace( '/(<nav class="flinks"[^>]*>).*?(<\/nav>)/s', '$1' . str_replace( array( '\\', '$' ), array( '\\\\', '\\$' ), $nav ) . '$2', $html, 1 );
 	}
 
-	// the channel icons open the accounts once their addresses are set; until then they lead to the follow list
+	// one icon per platform switched on (Settings > Generation Maine, or the follow list on the Home page), in the same order.
+	// An icon opens the account once its address is set; until then it leads to the follow list.
+	$icons = '';
 	foreach ( gm_channels() as $c ) {
-		if ( $c['url'] ) {
-			$html = str_replace( '<a href="#follow" aria-label="' . $c['name'] . '">', '<a href="' . esc_url( gm_utm( $c['url'] ) ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr( $c['name'] ) . '">', $html );
-		}
+		$icons .= ( $c['url']
+			? '<a href="' . esc_url( gm_utm( $c['url'] ) ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr( $c['name'] ) . '">'
+			: '<a href="#follow" aria-label="' . esc_attr( $c['name'] ) . '">' )
+			. gm_mark( $c['key'] ) . '<span>' . esc_html( $c['name'] ) . '</span></a>';
 	}
+	$html = preg_replace( '#(<div class="fsocial">).*?(</div>)#s', '$1' . str_replace( array( '\\', '$' ), array( '\\\\', '\\$' ), $icons ) . '$2', $html, 1 );
 	// the wrapper lets the editor style the footer when it is edited on its own
 	return '<div class="gm-foot">' . $html . '</div>';
 }

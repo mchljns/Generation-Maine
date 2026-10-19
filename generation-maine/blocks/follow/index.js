@@ -1,62 +1,54 @@
 /* Follow List editor script. Plain JS, no build step: the editor shows the same server-rendered rows.
- * The sidebar edits the channel addresses and handles in place. They are site settings (shared with the footer icons, the
- * search listing and Settings > Generation Maine), so WordPress saves them with the page: Save lists them under "Site". */
+ * Selecting the list opens "Edit the channels" under it: a switch per platform (on the page or not), and a link and a
+ * handle for each one that is on. They are site settings (shared with the footer icons, the search listing and
+ * Settings > Generation Maine), so WordPress saves them with the page: Save lists them under "Site". The rows preview
+ * what is typed before it is saved. The platforms come from gm_platforms() (window.gmPlatforms). */
 ( function ( wp ) {
 	var el = wp.element.createElement;
-	var TextControl = wp.components.TextControl, PanelBody = wp.components.PanelBody, Notice = wp.components.Notice;
-	var CHANNELS = [ [ 'instagram', 'Instagram', 'https://www.instagram.com/generationmaine/' ], [ 'tiktok', 'TikTok', 'https://www.tiktok.com/@generationmaine' ], [ 'youtube', 'YouTube', 'https://www.youtube.com/@generationmaine' ] ];
+	var TextControl = wp.components.TextControl, ToggleControl = wp.components.ToggleControl, PanelBody = wp.components.PanelBody;
+	var PLATFORMS = window.gmPlatforms || [];
+	var useSetting = function ( key ) {
+		return wp.coreData.useEntityProp( 'root', 'site', key );
+	};
 	wp.blocks.registerBlockType( 'generation-maine/follow', {
 		edit: function ( props ) {
 			var site = {}, preview = {};
 			// the same hooks in the same order on every render
-			CHANNELS.forEach( function ( c ) {
-				[ 'url', 'handle' ].forEach( function ( f ) {
-					var key = 'gm_' + c[ 0 ] + '_' + f, prop = wp.coreData.useEntityProp( 'root', 'site', key );
-					site[ key ] = prop;
-					if ( undefined !== prop[ 0 ] ) {
-						preview[ key ] = prop[ 0 ];
+			PLATFORMS.forEach( function ( p ) {
+				( 'substack' === p.key ? [ 'show' ] : [ 'show', 'url', 'handle' ] ).forEach( function ( f ) {
+					var key = 'gm_' + p.key + '_' + f;
+					site[ key ] = useSetting( key );
+					if ( undefined !== site[ key ][ 0 ] ) {
+						preview[ key ] = site[ key ][ 0 ];
 					}
 				} );
 			} );
-			site.gm_newsletter_url = wp.coreData.useEntityProp( 'root', 'site', 'gm_newsletter_url' );
+			site.gm_newsletter_url = useSetting( 'gm_newsletter_url' );
 			if ( undefined !== site.gm_newsletter_url[ 0 ] ) {
 				preview.gm_newsletter_url = site.gm_newsletter_url[ 0 ];
 			}
-			var allowed = undefined !== site.gm_instagram_url[ 0 ];
-			var field = function ( key, label, help, ph ) {
+			var allowed = PLATFORMS.length && undefined !== site[ 'gm_' + PLATFORMS[ 0 ].key + '_show' ][ 0 ];
+			var text = function ( key, label, help, ph ) {
 				return el( TextControl, { key: key, label: label, help: help, placeholder: ph, value: site[ key ][ 0 ] || '', onChange: site[ key ][ 1 ], __nextHasNoMarginBottom: true, __next40pxDefaultSize: true } );
 			};
-			var panels = allowed
-				? CHANNELS.map( function ( c ) {
-					return el( PanelBody, { key: c[ 0 ], title: c[ 1 ], initialOpen: true },
-						field( 'gm_' + c[ 0 ] + '_url', 'Link to the account', 'Paste the address from the browser.', c[ 2 ] ),
-						el( 'div', { style: { height: 12 } } ),
-						field( 'gm_' + c[ 0 ] + '_handle', 'Handle', 'As it shows on the account, with the @.', '@generationmaine' ) );
-				} ).concat( [ el( PanelBody, { key: 'substack', title: 'Substack', initialOpen: true },
-					field( 'gm_newsletter_url', 'Subscribe page', 'The newsletter\'s subscribe page, ending in /subscribe. The signup form uses it too.', 'https://name.substack.com/subscribe' ) ) ] )
-				: [ el( PanelBody, { key: 'note', title: 'Channels' }, el( 'p', null, 'An administrator sets the links and handles here or under Settings > Generation Maine.' ) ) ];
-			// inside the Home page's locked section WordPress shows no block sidebar, so the fields also open on the page itself
+			var platform = function ( p ) {
+				var show = site[ 'gm_' + p.key + '_show' ], on = '1' === show[ 0 ];
+				return el( 'div', { key: p.key, style: { padding: '12px 0', borderTop: '1px solid #e0e0e0' } },
+					el( ToggleControl, { label: el( 'strong', null, p.name ), help: on ? 'On the page' : 'Not on the page', checked: on, onChange: function ( v ) { show[ 1 ]( v ? '1' : '0' ); }, __nextHasNoMarginBottom: true } ),
+					on && el( 'div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12, marginTop: 10 } },
+						'substack' === p.key
+							? text( 'gm_newsletter_url', 'Subscribe page', 'Ends in /subscribe. The signup form uses it too.', 'https://name.substack.com/subscribe' )
+							: [ text( 'gm_' + p.key + '_url', 'Link to the account', '', p.example ), text( 'gm_' + p.key + '_handle', 'Handle', 'As it shows on the account. Leave empty to show it from the link.', '@generationmaine' ) ] ) );
+			};
+			var help = 'Switch a platform on to add it to this list and the footer icons, or off to take it off. The rows above update as you type. Click Save at the top to publish; WordPress then asks you to confirm the "Site" changes too.';
 			var box = props.isSelected && el( 'div', { className: 'gm-follow-edit', style: { background: '#fff', color: '#1e1e1e', borderRadius: 8, padding: 20, margin: '16px 0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', fontSize: 13, letterSpacing: 'normal', textTransform: 'none' } },
-				el( 'p', { style: { margin: '0 0 12px', fontSize: 15, fontWeight: 600 } }, 'Edit the channel links and handles' ),
+				el( 'p', { style: { margin: '0 0 4px', fontSize: 15, fontWeight: 600 } }, 'Edit the channels' ),
 				allowed
-					? el( 'div', null,
-						el( 'div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 } },
-							CHANNELS.map( function ( c ) {
-								return el( 'div', { key: c[ 0 ] },
-									el( 'p', { style: { margin: '0 0 6px', fontWeight: 600 } }, c[ 1 ] ),
-									field( 'gm_' + c[ 0 ] + '_url', 'Link to the account', '', c[ 2 ] ),
-									el( 'div', { style: { height: 8 } } ),
-									field( 'gm_' + c[ 0 ] + '_handle', 'Handle, with the @', '', '@generationmaine' ) );
-							} ),
-							el( 'div', { key: 'substack' },
-								el( 'p', { style: { margin: '0 0 6px', fontWeight: 600 } }, 'Substack' ),
-								field( 'gm_newsletter_url', 'Subscribe page', 'Ends in /subscribe. The signup form uses it too.', 'https://name.substack.com/subscribe' ) ) ),
-						el( 'p', { style: { margin: '12px 0 0', color: '#757575' } }, 'The rows above update as you type. Click Save at the top to publish. WordPress may ask you to confirm saving "Site" settings too: leave it ticked. These links also feed the footer icons.' ) )
+					? el( 'div', null, el( 'p', { style: { margin: '0 0 8px', color: '#757575' } }, help ), PLATFORMS.map( platform ) )
 					: el( 'p', { style: { margin: 0 } }, 'An administrator sets these under Settings > Generation Maine.' ) );
 			return el( 'div', wp.blockEditor.useBlockProps(),
 				el( wp.blockEditor.InspectorControls, null,
-					allowed && el( 'div', { style: { padding: '0 16px' } }, el( Notice, { status: 'info', isDismissible: false }, 'These links and handles are shared with the footer icons. Click Save to publish them; WordPress lists them under "Site" when it asks what to save.' ) ),
-					panels ),
+					el( PanelBody, { title: 'Channels' }, el( 'p', null, allowed ? 'Click the list on the page to switch platforms on or off and edit their links and handles.' : 'An administrator sets these under Settings > Generation Maine.' ) ) ),
 				el( wp.serverSideRender, { block: 'generation-maine/follow', attributes: { preview: preview } } ),
 				box );
 		},

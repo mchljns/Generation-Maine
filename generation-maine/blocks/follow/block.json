@@ -5,7 +5,7 @@
 	"title": "Follow List",
 	"category": "widgets",
 	"icon": "share",
-	"description": "The channels, one row each: Instagram, TikTok, YouTube and Substack. Click the list to edit each channel's link and handle in the sidebar; they are also under Settings > Generation Maine. A channel without an address shows a placeholder row with no link.",
+	"description": "The channels switched on, one row each (Instagram, TikTok, YouTube, X, Facebook, Threads, Bluesky, LinkedIn, Substack). Click the list to switch platforms on or off and edit their links and handles; they are also under Settings > Generation Maine. A channel without an address shows a placeholder row with no link.",
 	"keywords": [
 		"follow",
 		"social",

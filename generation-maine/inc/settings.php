@@ -19,15 +19,25 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array<string,array<string,array{label:string,default:string,type:string,help:string}>>
  */
 function gm_settings_fields() {
-	return array(
-		'channels'   => array(
-			'gm_instagram_url'    => array( 'label' => __( 'Instagram address', 'generation-maine' ), 'default' => '', 'type' => 'url', 'help' => __( 'For example https://www.instagram.com/generationmaine/', 'generation-maine' ) ),
-			'gm_instagram_handle' => array( 'label' => __( 'Instagram handle', 'generation-maine' ), 'default' => '', 'type' => 'text', 'help' => __( 'With the @, as it shows on the account.', 'generation-maine' ) ),
-			'gm_tiktok_url'       => array( 'label' => __( 'TikTok address', 'generation-maine' ), 'default' => '', 'type' => 'url', 'help' => '' ),
-			'gm_tiktok_handle'    => array( 'label' => __( 'TikTok handle', 'generation-maine' ), 'default' => '', 'type' => 'text', 'help' => '' ),
-			'gm_youtube_url'      => array( 'label' => __( 'YouTube address', 'generation-maine' ), 'default' => '', 'type' => 'url', 'help' => '' ),
-			'gm_youtube_handle'   => array( 'label' => __( 'YouTube handle', 'generation-maine' ), 'default' => '', 'type' => 'text', 'help' => '' ),
-		),
+	static $fields = null;
+	if ( null !== $fields ) {
+		return $fields;
+	}
+	// one switch, address and handle per platform (gm_platforms()); Substack's address is the subscribe page below
+	$channels = array();
+	foreach ( gm_platforms() as $key => $p ) {
+		/* translators: %s: platform name */
+		$channels[ 'gm_' . $key . '_show' ] = array( 'label' => sprintf( __( 'Show %s', 'generation-maine' ), $p['name'] ), 'default' => $p['on'] ? '1' : '0', 'type' => 'toggle', 'help' => 'substack' === $key ? __( 'The Substack row in the follow list and the footer icon. The signup form is set below.', 'generation-maine' ) : '' );
+		if ( 'substack' === $key ) {
+			continue;
+		}
+		/* translators: %s: platform name */
+		$channels[ 'gm_' . $key . '_url' ] = array( 'label' => sprintf( __( '%s address', 'generation-maine' ), $p['name'] ), 'default' => '', 'type' => 'url', 'help' => sprintf( /* translators: %s: example address */ __( 'For example %s', 'generation-maine' ), $p['example'] ) );
+		/* translators: %s: platform name */
+		$channels[ 'gm_' . $key . '_handle' ] = array( 'label' => sprintf( __( '%s handle', 'generation-maine' ), $p['name'] ), 'default' => '', 'type' => 'text', 'help' => __( 'As it shows on the account. Leave empty to show it from the address.', 'generation-maine' ) );
+	}
+	$fields = array(
+		'channels'   => $channels,
 		'newsletter' => array(
 			'gm_newsletter_url'  => array( 'label' => __( 'Substack subscribe page', 'generation-maine' ), 'default' => '', 'type' => 'subscribe', 'help' => __( 'The publication\'s subscribe page, for example https://name.substack.com/subscribe. The Substack row in the follow list uses the same address. Until it is set, visitors see no signup form and you see a note in its place.', 'generation-maine' ) ),
 			'gm_newsletter_note' => array( 'label' => __( 'Small print under the form', 'generation-maine' ), 'default' => __( 'Runs on Substack. Unsubscribe in one click.', 'generation-maine' ), 'type' => 'text', 'help' => '' ),
@@ -50,6 +60,7 @@ function gm_settings_fields() {
 			'gm_code_body' => array( 'label' => __( 'Code at the end of the page', 'generation-maine' ), 'default' => '', 'type' => 'code', 'help' => __( 'Printed just before </body> on every page of the site, for scripts that should load after the page. To put an embed in one spot on a page instead, add a Custom HTML block there in the page editor.', 'generation-maine' ) ),
 		),
 	);
+	return $fields;
 }
 
 /**
@@ -84,7 +95,10 @@ function gm_setting_preview( $set = null ) {
 	static $preview = array();
 	if ( is_array( $set ) ) {
 		$preview = array();
-		foreach ( array( 'instagram', 'tiktok', 'youtube' ) as $c ) {
+		foreach ( array_keys( gm_platforms() ) as $c ) {
+			if ( isset( $set[ 'gm_' . $c . '_show' ] ) ) {
+				$preview[ 'gm_' . $c . '_show' ] = gm_sanitize_toggle( $set[ 'gm_' . $c . '_show' ] );
+			}
 			if ( isset( $set[ 'gm_' . $c . '_url' ] ) && is_string( $set[ 'gm_' . $c . '_url' ] ) ) {
 				$url = trim( $set[ 'gm_' . $c . '_url' ] );
 				$preview[ 'gm_' . $c . '_url' ] = '' === $url ? '' : esc_url_raw( 0 === stripos( $url, 'http://' ) ? 'https://' . substr( $url, 7 ) : ( preg_match( '#^https?://#i', $url ) ? $url : 'https://' . $url ), array( 'https' ) );
@@ -108,7 +122,7 @@ function gm_setting_preview( $set = null ) {
  */
 function gm_settings_sections() {
 	return array(
-		'channels'   => array( __( 'Channels', 'generation-maine' ), __( 'The follow list on the page and the site\'s search listing read these. Leave a channel empty until the account exists; the page shows a placeholder in its row.', 'generation-maine' ) ),
+		'channels'   => array( __( 'Channels', 'generation-maine' ), __( 'The follow list, the footer icons and the site\'s search listing read these. Tick Show to put a platform on the page, untick it to take it off. A platform that is shown with no address yet shows a placeholder in its row. These are also on the Home page: click the follow list there.', 'generation-maine' ) ),
 		'newsletter' => array( __( 'Newsletter', 'generation-maine' ), __( 'The signup form sends the address to Substack, which sends the confirmation email and keeps the list. Nothing is stored on this site.', 'generation-maine' ) ),
 		'seo'        => array( __( 'Search and sharing', 'generation-maine' ), __( 'What search engines and social posts show for the home page.', 'generation-maine' ) ),
 		'footer'     => array( __( 'Footer', 'generation-maine' ), '' ),
@@ -158,10 +172,23 @@ function gm_setting_sanitizer( $key, $type ) {
 	if ( 'code' === $type ) {
 		return 'gm_sanitize_code';
 	}
+	if ( 'toggle' === $type ) {
+		return 'gm_sanitize_toggle';
+	}
 	if ( 'textarea' === $type ) {
 		return 'sanitize_textarea_field';
 	}
 	return false !== strpos( $key, '_handle' ) ? 'gm_sanitize_handle' : 'sanitize_text_field';
+}
+
+/**
+ * A switch is saved as "1" or "0".
+ *
+ * @param mixed $value Raw value.
+ * @return string
+ */
+function gm_sanitize_toggle( $value ) {
+	return in_array( $value, array( true, 1, '1', 'on', 'true' ), true ) ? '1' : '0';
 }
 
 /**
@@ -332,6 +359,9 @@ function gm_settings_field( $args ) {
 		if ( $code && ! gm_can_save_code() ) {
 			printf( '<p class="description"><strong>%s</strong></p>', esc_html__( 'Your account cannot save scripts, so they will be taken out. Ask an administrator.', 'generation-maine' ) );
 		}
+	} elseif ( 'toggle' === $field['type'] ) {
+		// the hidden 0 is sent when the box is unticked, so unticking saves
+		printf( '<input type="hidden" name="%1$s" value="0"><label><input type="checkbox" id="%1$s" name="%1$s" value="1" %2$s> %3$s</label>', esc_attr( $key ), checked( '1', $value, false ), esc_html__( 'On the page', 'generation-maine' ) );
 	} elseif ( 'image' === $field['type'] ) {
 		printf(
 			'<div class="gm-image-field"><img src="" alt="" style="display:none;max-width:300px;height:auto;margin:0 0 8px;border:1px solid #dcdcde"><br><button type="button" class="button gm-image-pick">%1$s</button> <button type="button" class="button-link gm-image-clear">%2$s</button><input type="hidden" id="%3$s" name="%3$s" value="%4$s"></div>',
