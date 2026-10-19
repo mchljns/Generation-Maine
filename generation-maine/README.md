@@ -115,7 +115,7 @@ The front page matches the v2 preview apart from a few expected differences. The
 
 ## Before launch
 
-- The footer shows a small build stamp while the site is in review, so a stale copy can be told from the current one. Turn it off at launch with `add_filter( 'gm_show_build', '__return_false' );` in a small plugin or the child theme.
+- The footer's build stamp is off. For a review round where a stale copy must be told from the current one, turn it on with `add_filter( 'gm_show_build', '__return_true' );` in a small plugin or the child theme.
 - The about photo is a placeholder (Lisbon Street, Lewiston, CC BY 2.0). Replace it, or credit it on the page, before the site is public.
 - Replace the placeholder creators with the real ones.
 - Theme Check (the plugin) lists a few items that are expected for a theme built for one site. The Creators post type, the blocks and the settings screen belong to this theme on purpose. There is no readme.txt. Only themes in the WordPress.org directory need one. favicon.ico stays for browsers and apps that do not read SVG icons, and it is printed only until a Site Icon is set. The copyright notice waits on the client's wording.

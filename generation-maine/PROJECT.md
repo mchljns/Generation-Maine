@@ -32,4 +32,4 @@
 2. Collect the `[CONFIRM]` answers and enter them under Settings > Generation Maine.
 3. After a confirmed backup and the client's go-ahead, publish the theme.
 4. Add creators as they are recruited and remove the placeholders.
-5. At launch, turn off the build stamp and replace or credit the about photo.
+5. At launch, replace or credit the about photo. (The build stamp is off from theme 3.5.1.)

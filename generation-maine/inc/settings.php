@@ -52,7 +52,7 @@ function gm_settings_fields() {
 		),
 		'footer'     => array(
 			'gm_footer_line'  => array( 'label' => __( 'Line beside the footer mark', 'generation-maine' ), 'default' => __( 'Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.', 'generation-maine' ), 'type' => 'text', 'help' => '' ),
-			'gm_legal_line'   => array( 'label' => __( 'Legal line', 'generation-maine' ), 'default' => __( 'Generation Maine. [CONFIRM: legal name, address and contact]', 'generation-maine' ), 'type' => 'text', 'help' => __( 'Shown after the copyright sign and the year, which the page fills in.', 'generation-maine' ) ),
+			'gm_legal_line'   => array( 'label' => __( 'Legal line', 'generation-maine' ), 'default' => __( 'Generation Maine.', 'generation-maine' ), 'type' => 'text', 'help' => __( 'Shown after the copyright sign and the year, which the page fills in.', 'generation-maine' ) ),
 			'gm_contact_url'  => array( 'label' => __( 'Contact link', 'generation-maine' ), 'default' => 'https://mainepolicy.org/contact/', 'type' => 'url', 'help' => __( 'Where "Contact" in the footer goes: a web page, or an email address written as mailto:name@example.org. The privacy link uses the page set under Settings > Privacy.', 'generation-maine' ) ),
 		),
 		'code'       => array(

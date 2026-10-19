@@ -24,17 +24,17 @@ function gm_render_footer() {
 	$privacy = get_privacy_policy_url();
 	$contact = gm_setting( 'gm_contact_url' );
 	/**
-	 * Whether to show the preview build stamp in the footer. On while the site is in review; turn it off at launch with
-	 * add_filter( 'gm_show_build', '__return_false' ).
+	 * Whether to show the preview build stamp in the footer. Off; for a review round where a stale copy must be told from
+	 * the current one, turn it on with add_filter( 'gm_show_build', '__return_true' ).
 	 */
-	$build  = apply_filters( 'gm_show_build', true );
+	$build  = apply_filters( 'gm_show_build', false );
 	$tokens = array(
 		'{{LINE}}'    => esc_html( gm_setting( 'gm_footer_line' ) ),
 		'{{YEAR}}'    => esc_html( wp_date( 'Y' ) ),
 		'{{LEGAL}}'   => esc_html( gm_setting( 'gm_legal_line' ) ),
 		'{{PRIVACY}}' => $privacy
 			? '<a href="' . esc_url( $privacy ) . '">' . esc_html__( 'Privacy', 'generation-maine' ) . '</a>'
-			: '<span class="ph" title="' . esc_attr__( '[CONFIRM: privacy policy page]', 'generation-maine' ) . '">' . esc_html__( 'Privacy', 'generation-maine' ) . '</span>',
+			: '<span class="ph">' . esc_html__( 'Privacy', 'generation-maine' ) . '</span>',
 		'{{CONTACT}}' => $contact ? '<a href="' . esc_url( gm_utm( $contact ) ) . '" rel="noopener">' . esc_html__( 'Contact', 'generation-maine' ) . '</a>' : '',
 		'{{BUILD}}'   => $build ? '<span class="ph build" aria-label="' . esc_attr__( 'Preview build', 'generation-maine' ) . '">Build ' . esc_html( GM_BUILD ) . '</span>' : '',
 	);
