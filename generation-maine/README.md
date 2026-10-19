@@ -107,7 +107,7 @@ The dashboard opens with a **Generation Maine: start here** box linking to the H
 
 ## Search engines and sharing
 
-The theme writes the title, description, canonical address, share card and Organization details itself, using the Site Title from Settings > General. **Settings > Generation Maine > Search and sharing** changes the title, the description (with a character count) and the share image (Choose image picks it from the Media Library). Empty fields use the theme's own. With a static front page and a posts page under Settings > Reading, these belong to the front page only. The posts page gets its own title. If an SEO plugin (Yoast SEO, Rank Math, SEOPress, All in One SEO) is activated, the theme steps aside completely. Set the plugin's homepage title, description and share image before relying on it.
+The theme writes the title, description, canonical address, share card and Organization details itself, using the Site Title from Settings > General. **Settings > Generation Maine > Search and sharing** changes the title, the description (with a character count) and the share image (Choose image picks it from the Media Library). Empty fields use the theme's own. With a static front page and a posts page under Settings > Reading, these belong to the front page only. The posts page gets its own title. If an SEO plugin (Yoast SEO, Rank Math, SEOPress, All in One SEO) is activated, the theme steps aside completely. Set the plugin's homepage title, description and share image before relying on it. While one is active, the Search and sharing fields under Settings > Generation Maine are hidden and a note points to the plugin's box on the Home page, so there is only one place to set them.
 
 ## Compared with the v2 preview
 

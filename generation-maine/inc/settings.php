@@ -168,6 +168,11 @@ function gm_register_settings_ui() {
 			},
 			'generation_maine'
 		);
+		// with an SEO plugin the theme steps aside (gm_seo_plugin_active()), so its fields would do nothing; say where to go instead
+		if ( 'seo' === $section && gm_seo_plugin_active() ) {
+			add_settings_field( 'gm_seo_plugin', '', 'gm_seo_plugin_note', 'generation_maine', 'gm_seo' );
+			continue;
+		}
 		foreach ( $fields as $key => $field ) {
 			add_settings_field( $key, $field['label'], 'gm_settings_field', 'generation_maine', 'gm_' . $section, array( 'key' => $key, 'field' => $field, 'label_for' => $key ) );
 		}
@@ -307,6 +312,18 @@ function gm_settings_field( $args ) {
 	}
 	if ( $field['help'] ) {
 		printf( '<p class="description">%s</p>', esc_html( $field['help'] ) );
+	}
+}
+
+/**
+ * In place of the search fields while an SEO plugin is active.
+ */
+function gm_seo_plugin_note() {
+	$home = 'page' === get_option( 'show_on_front' ) ? (int) get_option( 'page_on_front' ) : 0;
+	echo '<p><strong>' . esc_html__( 'An SEO plugin (such as Yoast SEO) is handling this.', 'generation-maine' ) . '</strong> ';
+	echo esc_html__( 'Set the title, description and share image for the front page in the plugin\'s box at the bottom of the Home page editor.', 'generation-maine' ) . '</p>';
+	if ( $home ) {
+		echo '<p><a class="button" href="' . esc_url( (string) get_edit_post_link( $home ) ) . '">' . esc_html__( 'Edit the Home page', 'generation-maine' ) . '</a></p>';
 	}
 }
 

@@ -38,7 +38,7 @@ function gm_dashboard_widget_html() {
 		$items[] = array( admin_url( 'edit.php?post_type=gm_creator' ), __( 'Creators', 'generation-maine' ), __( 'Add a creator with their photo, clip and links. Untick "Show on the home page" to take one off the page without deleting them.', 'generation-maine' ) );
 	}
 	if ( current_user_can( 'manage_options' ) ) {
-		$items[] = array( gm_settings_url(), __( 'Settings > Generation Maine', 'generation-maine' ), __( 'The channel links, the newsletter, what Google and social posts show, and the footer lines.', 'generation-maine' ) );
+		$items[] = array( gm_settings_url(), __( 'Settings > Generation Maine', 'generation-maine' ), ( gm_seo_plugin_active() ? __( 'The channel links, the newsletter and the footer lines. What Google and social posts show is in the Yoast SEO box on the Home page.', 'generation-maine' ) : __( 'The channel links, the newsletter, what Google and social posts show, and the footer lines.', 'generation-maine' ) ) );
 	}
 	echo '<ul style="margin:0">';
 	foreach ( $items as $item ) {
