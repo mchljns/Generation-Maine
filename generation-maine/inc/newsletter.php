@@ -29,12 +29,17 @@ function gm_newsletter_home() {
  * @return string HTML
  */
 function gm_render_newsletter_form() {
+	$embed = gm_setting( 'gm_newsletter_embed' );
+	if ( '' !== $embed ) {
+		// Substack's own box, pasted under Settings > Generation Maine by an administrator (gm_can_save_code())
+		return '<div class="gm-newsletter-embed">' . $embed . '</div>';
+	}
 	$url = gm_setting( 'gm_newsletter_url' );
 	if ( '' === $url ) {
 		return current_user_can( 'manage_options' )
 			? '<p class="gm-newsletter-missing">' . sprintf(
 				/* translators: %s: link to the settings page */
-				esc_html__( 'Only you can see this. The signup form appears once a Substack subscribe page is set under %s.', 'generation-maine' ),
+				esc_html__( 'Only you can see this. The signup form appears once a Substack subscribe page or a Substack embed is set under %s.', 'generation-maine' ),
 				'<a href="' . esc_url( gm_settings_url() ) . '">' . esc_html__( 'Settings > Generation Maine', 'generation-maine' ) . '</a>'
 			) . '</p>'
 			: '';
@@ -51,8 +56,8 @@ function gm_render_newsletter_form() {
 	}
 	return '<form id="nl" action="' . esc_url( gm_utm( $url ) ) . '" method="get" target="_blank" rel="noopener">' . $hidden
 		. '<label for="em" style="position:absolute;left:-9999px">' . esc_html__( 'Email', 'generation-maine' ) . '</label>'
-		. '<input id="em" name="email" type="email" placeholder="you@example.com" autocomplete="email" required inputmode="email">'
-		. '<button class="btn b1" type="submit">' . esc_html__( 'Sign up', 'generation-maine' ) . '</button>'
+		. '<input id="em" name="email" type="email" placeholder="' . esc_attr( gm_setting( 'gm_newsletter_placeholder' ) ) . '" autocomplete="email" required inputmode="email">'
+		. '<button class="btn b1" type="submit">' . esc_html( gm_setting( 'gm_newsletter_button' ) ) . '</button>'
 		. ( $note ? '<p class="fine">' . esc_html( $note ) . '</p>' : '' )
 		. '</form>';
 }

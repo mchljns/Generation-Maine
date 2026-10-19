@@ -8,7 +8,7 @@
  * @package generation-maine
  */
 ?>
-<!-- wp:group {"tagName":"section","metadata":{"name":"Follow"},"anchor":"follow","className":"block follow","layout":{"type":"default"}} -->
+<!-- wp:group {"templateLock":"contentOnly","lock":{"move":true,"remove":true},"tagName":"section","metadata":{"name":"Follow"},"anchor":"follow","className":"block follow","layout":{"type":"default"}} -->
 <section id="follow" class="wp-block-group block follow"><!-- wp:group {"className":"w","layout":{"type":"default"}} -->
 <div class="wp-block-group w"><!-- wp:group {"className":"head","layout":{"type":"default"}} -->
 <div class="wp-block-group head"><!-- wp:heading {"metadata":{"name":"Heading"}} -->

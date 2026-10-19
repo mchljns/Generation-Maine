@@ -31,11 +31,23 @@ function gm_settings_fields() {
 		'newsletter' => array(
 			'gm_newsletter_url'  => array( 'label' => __( 'Substack subscribe page', 'generation-maine' ), 'default' => '', 'type' => 'subscribe', 'help' => __( 'The publication\'s subscribe page, for example https://name.substack.com/subscribe. The Substack row in the follow list uses the same address. Until it is set, visitors see no signup form and you see a note in its place.', 'generation-maine' ) ),
 			'gm_newsletter_note' => array( 'label' => __( 'Small print under the form', 'generation-maine' ), 'default' => __( 'Runs on Substack. Unsubscribe in one click.', 'generation-maine' ), 'type' => 'text', 'help' => '' ),
+			'gm_newsletter_button'      => array( 'label' => __( 'Button text', 'generation-maine' ), 'default' => __( 'Sign up', 'generation-maine' ), 'type' => 'text', 'help' => '' ),
+			'gm_newsletter_placeholder' => array( 'label' => __( 'Hint in the email field', 'generation-maine' ), 'default' => 'you@example.com', 'type' => 'text', 'help' => '' ),
+			'gm_newsletter_embed'       => array( 'label' => __( 'Substack embed (optional)', 'generation-maine' ), 'default' => '', 'type' => 'code', 'help' => __( 'To use Substack\'s own signup box instead of the theme\'s form, paste the embed code from Substack (Settings > Growth features > Embed, an <iframe>). It takes the form\'s place on the page. Leave empty to keep the theme\'s form.', 'generation-maine' ) ),
+		),
+		'seo'        => array(
+			'gm_seo_title'       => array( 'label' => __( 'Title in search results', 'generation-maine' ), 'default' => '', 'type' => 'text', 'help' => __( 'Leave empty for "Generation Maine: young Mainers on the rules that shape their lives". Ignored when an SEO plugin is active.', 'generation-maine' ) ),
+			'gm_seo_description' => array( 'label' => __( 'Description in search results and shares', 'generation-maine' ), 'default' => '', 'type' => 'textarea', 'help' => __( 'One or two sentences, under about 160 characters. Leave empty for the theme\'s line.', 'generation-maine' ) ),
+			'gm_seo_image'       => array( 'label' => __( 'Share image', 'generation-maine' ), 'default' => '', 'type' => 'image', 'help' => __( 'The picture shown when the page is shared on social media or in a text message. Best at 1200 by 630 pixels. Leave empty for the theme\'s share card.', 'generation-maine' ) ),
 		),
 		'footer'     => array(
 			'gm_footer_line'  => array( 'label' => __( 'Line beside the footer mark', 'generation-maine' ), 'default' => __( 'Young Mainers on the rules that shape their lives. Short videos and a newsletter, made in Maine.', 'generation-maine' ), 'type' => 'text', 'help' => '' ),
 			'gm_legal_line'   => array( 'label' => __( 'Legal line', 'generation-maine' ), 'default' => __( 'Generation Maine. [CONFIRM: legal name, address and contact]', 'generation-maine' ), 'type' => 'text', 'help' => __( 'Shown after the copyright sign and the year, which the page fills in.', 'generation-maine' ) ),
 			'gm_contact_url'  => array( 'label' => __( 'Contact link', 'generation-maine' ), 'default' => 'https://mainepolicy.org/contact/', 'type' => 'url', 'help' => __( 'Where "Contact" in the footer goes: a web page, or an email address written as mailto:name@example.org. The privacy link uses the page set under Settings > Privacy.', 'generation-maine' ) ),
+		),
+		'code'       => array(
+			'gm_code_head' => array( 'label' => __( 'Code in the page head', 'generation-maine' ), 'default' => '', 'type' => 'code', 'help' => __( 'Printed in <head> on every page of the site: analytics tags, a site verification tag, a script a service asks for. Only administrators can change it.', 'generation-maine' ) ),
+			'gm_code_body' => array( 'label' => __( 'Code at the end of the page', 'generation-maine' ), 'default' => '', 'type' => 'code', 'help' => __( 'Printed just before </body> on every page of the site, for scripts that should load after the page. To put an embed in one spot on a page instead, add a Custom HTML block there in the page editor.', 'generation-maine' ) ),
 		),
 	);
 }
@@ -51,7 +63,7 @@ function gm_setting( $key ) {
 		if ( isset( $fields[ $key ] ) ) {
 			$value = (string) get_option( $key, $fields[ $key ]['default'] );
 			// a cleared line with a default goes back to the default, so the footer is never left with an empty line
-			return '' === trim( $value ) && in_array( $key, array( 'gm_footer_line', 'gm_legal_line' ), true ) ? (string) $fields[ $key ]['default'] : $value;
+			return '' === trim( $value ) && in_array( $key, array( 'gm_footer_line', 'gm_legal_line', 'gm_newsletter_button', 'gm_newsletter_placeholder' ), true ) ? (string) $fields[ $key ]['default'] : $value;
 		}
 	}
 	return (string) get_option( $key, '' );
@@ -66,7 +78,9 @@ function gm_settings_sections() {
 	return array(
 		'channels'   => array( __( 'Channels', 'generation-maine' ), __( 'The follow list on the page and the site\'s search listing read these. Leave a channel empty until the account exists; the page shows a placeholder in its row.', 'generation-maine' ) ),
 		'newsletter' => array( __( 'Newsletter', 'generation-maine' ), __( 'The signup form sends the address to Substack, which sends the confirmation email and keeps the list. Nothing is stored on this site.', 'generation-maine' ) ),
+		'seo'        => array( __( 'Search and sharing', 'generation-maine' ), __( 'What search engines and social posts show for the home page.', 'generation-maine' ) ),
 		'footer'     => array( __( 'Footer', 'generation-maine' ), '' ),
+		'code'       => array( __( 'Code and embeds', 'generation-maine' ), __( 'For code a service gives you to paste into the site. Code here runs on every page, so paste only code from a service you trust.', 'generation-maine' ) ),
 	);
 }
 
@@ -82,8 +96,9 @@ function gm_register_setting_options() {
 				array(
 					'type'              => 'string',
 					'default'           => $field['default'],
-					'show_in_rest'      => true,
-					'sanitize_callback' => 'subscribe' === $field['type'] ? 'gm_sanitize_subscribe' : ( 'url' === $field['type'] ? gm_url_sanitizer( $key ) : ( false !== strpos( $key, '_handle' ) ? 'gm_sanitize_handle' : 'sanitize_text_field' ) ),
+					// code is for administrators on this screen, not for the REST API
+					'show_in_rest'      => 'code' !== $field['type'],
+					'sanitize_callback' => gm_setting_sanitizer( $key, $field['type'] ),
 				)
 			);
 		}
@@ -91,6 +106,51 @@ function gm_register_setting_options() {
 }
 add_action( 'admin_init', 'gm_register_setting_options' );
 add_action( 'rest_api_init', 'gm_register_setting_options' );
+
+/**
+ * How each kind of setting is cleaned.
+ *
+ * @param string $key  Option.
+ * @param string $type Field type.
+ * @return callable
+ */
+function gm_setting_sanitizer( $key, $type ) {
+	if ( 'subscribe' === $type ) {
+		return 'gm_sanitize_subscribe';
+	}
+	if ( 'url' === $type || 'image' === $type ) {
+		return gm_url_sanitizer( $key );
+	}
+	if ( 'code' === $type ) {
+		return 'gm_sanitize_code';
+	}
+	if ( 'textarea' === $type ) {
+		return 'sanitize_textarea_field';
+	}
+	return false !== strpos( $key, '_handle' ) ? 'gm_sanitize_handle' : 'sanitize_text_field';
+}
+
+/**
+ * True for administrators WordPress trusts with scripts. Editors on a single site may post unfiltered HTML too, so the
+ * settings capability is checked as well.
+ *
+ * @return bool
+ */
+function gm_can_save_code() {
+	return current_user_can( 'manage_options' ) && current_user_can( 'unfiltered_html' );
+}
+
+/**
+ * Code fields keep scripts and iframes as pasted for administrators WordPress trusts with them (gm_can_save_code()).
+ * Anyone else gets the code with scripts and other unsafe markup taken out.
+ *
+ * @param string $value Raw value.
+ * @return string
+ */
+function gm_sanitize_code( $value ) {
+	$value = trim( (string) $value );
+	return gm_can_save_code() ? $value : wp_kses_post( $value );
+}
 
 /**
  * The sections and fields on Settings > Generation Maine.
@@ -226,8 +286,25 @@ function gm_sanitize_subscribe( $value ) {
 function gm_settings_field( $args ) {
 	$key   = $args['key'];
 	$field = $args['field'];
-	$type  = 'text' === $field['type'] ? 'text' : 'url';
-	printf( '<input type="%1$s" id="%2$s" name="%2$s" value="%3$s" class="regular-text">', esc_attr( $type ), esc_attr( $key ), esc_attr( get_option( $key, $field['default'] ) ) );
+	$value = (string) get_option( $key, $field['default'] );
+	if ( 'code' === $field['type'] || 'textarea' === $field['type'] ) {
+		$code = 'code' === $field['type'];
+		printf( '<textarea id="%1$s" name="%1$s" rows="%2$d" class="large-text%3$s"%4$s>%5$s</textarea>', esc_attr( $key ), $code ? 6 : 3, $code ? ' code' : '', $code ? ' spellcheck="false"' : '', esc_textarea( $value ) );
+		if ( $code && ! gm_can_save_code() ) {
+			printf( '<p class="description"><strong>%s</strong></p>', esc_html__( 'Your account cannot save scripts, so they will be taken out. Ask an administrator.', 'generation-maine' ) );
+		}
+	} elseif ( 'image' === $field['type'] ) {
+		printf(
+			'<div class="gm-image-field"><img src="" alt="" style="display:none;max-width:300px;height:auto;margin:0 0 8px;border:1px solid #dcdcde"><br><button type="button" class="button gm-image-pick">%1$s</button> <button type="button" class="button-link gm-image-clear">%2$s</button><input type="hidden" id="%3$s" name="%3$s" value="%4$s"></div>',
+			esc_html__( 'Choose image', 'generation-maine' ),
+			esc_html__( 'Use the theme\'s share card', 'generation-maine' ),
+			esc_attr( $key ),
+			esc_attr( $value )
+		);
+	} else {
+		$type = 'text' === $field['type'] ? 'text' : 'url';
+		printf( '<input type="%1$s" id="%2$s" name="%2$s" value="%3$s" class="regular-text">', esc_attr( $type ), esc_attr( $key ), esc_attr( $value ) );
+	}
 	if ( $field['help'] ) {
 		printf( '<p class="description">%s</p>', esc_html( $field['help'] ) );
 	}

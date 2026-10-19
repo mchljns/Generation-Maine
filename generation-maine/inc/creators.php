@@ -103,6 +103,19 @@ function gm_register_creators() {
 	);
 	register_post_meta(
 		'gm_creator',
+		'gm_on_home',
+		array(
+			'type'          => 'boolean',
+			'single'        => true,
+			'default'       => true,
+			'show_in_rest'  => true,
+			'auth_callback' => static function () {
+				return current_user_can( 'edit_posts' );
+			},
+		)
+	);
+	register_post_meta(
+		'gm_creator',
 		'gm_placeholder',
 		array(
 			'type'          => 'boolean',
@@ -241,6 +254,10 @@ function gm_creator_meta_box_html( $post ) {
 	foreach ( gm_creator_link_fields() as $key => $label ) {
 		gm_creator_field( $post->ID, $key, $label, '', 'url', 'https://' );
 	}
+	$on = (bool) get_post_meta( $post->ID, 'gm_on_home', true );
+	echo '<p><label><input type="checkbox" name="gm_on_home" value="1" ' . checked( $on, true, false ) . '> <strong>';
+	echo esc_html__( 'Show on the home page', 'generation-maine' ) . '</strong></label><br><span class="description">';
+	echo esc_html__( 'Untick to take the creator off the page and keep the post for later. Creators never get a page of their own, so search engines cannot list them.', 'generation-maine' ) . '</span></p>';
 	$ph = (bool) get_post_meta( $post->ID, 'gm_placeholder', true );
 	echo '<p><label><input type="checkbox" name="gm_placeholder" value="1" ' . checked( $ph, true, false ) . '> ';
 	echo esc_html__( 'Placeholder, not a real creator yet', 'generation-maine' ) . '</label></p>';
@@ -363,6 +380,7 @@ function gm_creator_columns( $cols ) {
 	$out = array();
 	foreach ( $cols as $key => $label ) {
 		if ( 'date' === $key ) {
+			$out['gm_on_home']     = __( 'On the page', 'generation-maine' );
 			$out['gm_order']       = __( 'Place', 'generation-maine' );
 			$out['gm_hometown']    = __( 'Hometown', 'generation-maine' );
 			$out['gm_placeholder'] = __( 'Placeholder', 'generation-maine' );
@@ -380,7 +398,9 @@ add_filter( 'manage_gm_creator_posts_columns', 'gm_creator_columns' );
  * @param int    $post_id Creator.
  */
 function gm_creator_column( $col, $post_id ) {
-	if ( 'gm_order' === $col ) {
+	if ( 'gm_on_home' === $col ) {
+		echo get_post_meta( $post_id, 'gm_on_home', true ) ? esc_html__( 'Yes', 'generation-maine' ) : esc_html__( 'Hidden', 'generation-maine' );
+	} elseif ( 'gm_order' === $col ) {
 		echo (int) get_post_field( 'menu_order', $post_id );
 	} elseif ( 'gm_hometown' === $col ) {
 		echo esc_html( get_post_meta( $post_id, 'gm_hometown', true ) );
@@ -401,6 +421,55 @@ function gm_creator_list_order( $q ) {
 	}
 }
 add_action( 'pre_get_posts', 'gm_creator_list_order' );
+
+/**
+ * Bulk actions on the Creators list: show the ticked creators on the home page, or take them off it.
+ *
+ * @param array $actions Actions.
+ * @return array
+ */
+function gm_creator_bulk_actions( $actions ) {
+	$actions['gm_show'] = __( 'Show on the home page', 'generation-maine' );
+	$actions['gm_hide'] = __( 'Take off the home page', 'generation-maine' );
+	return $actions;
+}
+add_filter( 'bulk_actions-edit-gm_creator', 'gm_creator_bulk_actions' );
+
+/**
+ * Run a bulk action.
+ *
+ * @param string $to     Where to go after.
+ * @param string $action Action.
+ * @param int[]  $ids    Creators.
+ * @return string
+ */
+function gm_creator_bulk_run( $to, $action, $ids ) {
+	if ( ! in_array( $action, array( 'gm_show', 'gm_hide' ), true ) ) {
+		return $to;
+	}
+	$n = 0;
+	foreach ( $ids as $id ) {
+		if ( current_user_can( 'edit_post', (int) $id ) ) {
+			update_post_meta( (int) $id, 'gm_on_home', 'gm_show' === $action );
+			++$n;
+		}
+	}
+	return add_query_arg( 'gm_bulk', $n, $to );
+}
+add_filter( 'handle_bulk_actions-edit-gm_creator', 'gm_creator_bulk_run', 10, 3 );
+
+/**
+ * The note after a bulk action.
+ */
+function gm_creator_bulk_notice() {
+	if ( ! isset( $_GET['gm_bulk'] ) || 'edit-gm_creator' !== get_current_screen()->id ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return;
+	}
+	$n = absint( $_GET['gm_bulk'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	/* translators: %d: number of creators */
+	echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( sprintf( _n( '%d creator updated.', '%d creators updated.', $n, 'generation-maine' ), $n ) ) . '</p></div>';
+}
+add_action( 'admin_notices', 'gm_creator_bulk_notice' );
 
 /**
  * Save the box.
@@ -434,6 +503,7 @@ function gm_creator_save( $post_id ) {
 		update_post_meta( $post_id, 'gm_clip_id', absint( $_POST['gm_clip_id'] ) );
 	}
 	update_post_meta( $post_id, 'gm_placeholder', ! empty( $_POST['gm_placeholder'] ) );
+	update_post_meta( $post_id, 'gm_on_home', ! empty( $_POST['gm_on_home'] ) );
 }
 add_action( 'save_post_gm_creator', 'gm_creator_save' );
 
@@ -465,6 +535,18 @@ function gm_get_creators( $limit = 24 ) {
 			'orderby'                => array(
 				'menu_order' => 'ASC',
 				'title'      => 'ASC',
+			),
+			// a creator saved before the switch existed has no value yet, and shows, as the switch's default says
+			'meta_query'             => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'relation' => 'OR',
+				array(
+					'key'     => 'gm_on_home',
+					'compare' => 'NOT EXISTS',
+				),
+				array(
+					'key'   => 'gm_on_home',
+					'value' => '1',
+				),
 			),
 			'no_found_rows'          => true,
 			'update_post_term_cache' => false,

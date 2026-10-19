@@ -24,14 +24,17 @@ function gm_seo() {
 			$same_as[] = $c['url'];
 		}
 	}
-	$name = get_bloginfo( 'name' ) ? get_bloginfo( 'name' ) : 'Generation Maine';
+	$name  = get_bloginfo( 'name' ) ? get_bloginfo( 'name' ) : 'Generation Maine';
+	$title = trim( gm_setting( 'gm_seo_title' ) );
+	$desc  = trim( gm_setting( 'gm_seo_description' ) );
+	$image = trim( gm_setting( 'gm_seo_image' ) );
 	return apply_filters(
 		'gm_seo',
 		array(
 			'name'        => $name,
-			'title'       => $name . ': young Mainers on the rules that shape their lives',
-			'description' => 'Young Mainers film the rules that shape their lives. Short videos on TikTok, Instagram and YouTube, and the full story by email. A Maine Policy Institute project.',
-			'image'       => get_theme_file_uri( 'assets/img/share-card.jpg' ),
+			'title'       => '' !== $title ? $title : $name . ': young Mainers on the rules that shape their lives',
+			'description' => '' !== $desc ? $desc : 'Young Mainers film the rules that shape their lives. Short videos on TikTok, Instagram and YouTube, and the full story by email. A Maine Policy Institute project.',
+			'image'       => '' !== $image ? $image : get_theme_file_uri( 'assets/img/share-card.jpg' ),
 			'image_alt'   => 'Generation Maine',
 			'parent_name' => 'Maine Policy Institute',
 			'parent_url'  => 'https://mainepolicy.org/',

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<!-- wp:group {"tagName":"section","metadata":{"name":"About"},"anchor":"about","className":"block about","layout":{"type":"default"}} -->
+<!-- wp:group {"templateLock":"contentOnly","lock":{"move":true,"remove":true},"tagName":"section","metadata":{"name":"About"},"anchor":"about","className":"block about","layout":{"type":"default"}} -->
 <section id="about" class="wp-block-group block about"><!-- wp:group {"className":"w","layout":{"type":"default"}} -->
 <div class="wp-block-group w"><!-- wp:group {"className":"body","layout":{"type":"default"}} -->
 <div class="wp-block-group body"><!-- wp:group {"className":"media","layout":{"type":"default"}} -->

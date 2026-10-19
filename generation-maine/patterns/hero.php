@@ -8,7 +8,7 @@
  * @package generation-maine
  */
 ?>
-<!-- wp:group {"tagName":"section","metadata":{"name":"Hero"},"anchor":"top","className":"hero","layout":{"type":"default"}} -->
+<!-- wp:group {"templateLock":"contentOnly","lock":{"move":true,"remove":true},"tagName":"section","metadata":{"name":"Hero"},"anchor":"top","className":"hero","layout":{"type":"default"}} -->
 <section id="top" class="wp-block-group hero"><!-- wp:group {"className":"w","layout":{"type":"default"}} -->
 <div class="wp-block-group w"><!-- wp:group {"layout":{"type":"default"}} -->
 <div class="wp-block-group"><!-- wp:paragraph {"metadata":{"name":"Kicker"},"className":"k k-bars rise"} -->

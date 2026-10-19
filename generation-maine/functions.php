@@ -21,6 +21,9 @@ require_once get_theme_file_path( 'inc/follow.php' );
 require_once get_theme_file_path( 'inc/footer.php' );
 require_once get_theme_file_path( 'inc/seo.php' );
 require_once get_theme_file_path( 'inc/parts.php' );
+require_once get_theme_file_path( 'inc/home.php' );
+require_once get_theme_file_path( 'inc/code.php' );
+require_once get_theme_file_path( 'inc/admin.php' );
 
 /**
  * Theme supports. Layout styles are off because the page's own stylesheet lays out every section; the editor gets the
@@ -678,7 +681,8 @@ function gm_about_photo( $html, $block ) {
 	if ( false === strpos( $class, ' about ' ) || false === stripos( $html, '<img' ) || ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
 		return $html;
 	}
-	$in_post = doing_filter( 'the_content' );
+	// the Home page's content is the front page, where the photo loads after the first screen as on the v2 page
+	$in_post = doing_filter( 'the_content' ) && ! is_front_page();
 	$tags    = new WP_HTML_Tag_Processor( $html );
 	while ( $tags->next_tag( 'img' ) ) {
 		if ( null === $tags->get_attribute( 'width' ) && null === $tags->get_attribute( 'height' ) ) {
