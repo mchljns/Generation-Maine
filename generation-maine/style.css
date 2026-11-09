@@ -3,7 +3,7 @@ Theme Name: Generation Maine
 Theme URI: https://generationmaine.org
 Author: Green Falls
 Description: One-page block theme for Generation Maine, a Maine Policy Institute project. Every piece of copy is a block, every creator is a post, and the channels, newsletter and footer lines live under Settings > Generation Maine. No build step, no plugins.
-Version: 3.6.1
+Version: 3.6.2
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -517,3 +517,5 @@ main.gm-page .lede a:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators
 /* the about photo on phones and tablets: a taller frame than 4:3, kept toward the top, so a tall photo keeps its subject */
 @media (max-width:900px){.about .media .ph{aspect-ratio:1/1}.about .media .ph img{object-position:50% 20%}}
 @media (max-width:600px){.about .media .ph{aspect-ratio:4/5}.about .media .ph img{object-position:50% 25%}}
+/* 3.6.2: a phone or open foldable held sideways keeps the about photo within the screen's height */
+@media (max-width:900px) and (orientation:landscape){.about .media .ph{max-width:min(100%,80svh)}}
