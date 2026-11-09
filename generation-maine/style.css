@@ -3,7 +3,7 @@ Theme Name: Generation Maine
 Theme URI: https://generationmaine.org
 Author: Green Falls
 Description: One-page block theme for Generation Maine, a Maine Policy Institute project. Every piece of copy is a block, every creator is a post, and the channels, newsletter and footer lines live under Settings > Generation Maine. No build step, no plugins.
-Version: 3.5.3
+Version: 3.6.0
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -493,3 +493,11 @@ main.gm-page .lede a:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators
  html:has(body.admin-bar){scroll-padding-top:calc(68px + var(--wp-admin--admin-bar--height,32px))}
  .admin-bar .stories .pinw{top:calc(max(92px,calc(50vh - 330px)) + var(--wp-admin--admin-bar--height,32px))}
 }
+/* 3.6.0: the creators move with the arrows and the bar, not with the page's scroll, so the section is one screen tall */
+@media (min-width:901px){.stories{height:auto;min-height:0}.stories .pinw{position:static}}
+.carr{flex:none;width:44px;height:44px;display:grid;place-items:center;padding:0;border:1.5px solid currentColor;border-radius:50%;background:none;color:var(--navy);cursor:pointer;transition:background .2s,color .2s,opacity .2s;-webkit-tap-highlight-color:transparent}
+.carr svg{width:16px;height:16px}
+.carr:hover:not(:disabled){background:var(--navy);color:#fff}
+.carr:disabled{opacity:.3;cursor:default}
+.carr:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (max-width:900px){.carr{width:40px;height:40px}}

@@ -20,12 +20,12 @@
     m.querySelectorAll('g path').forEach((p, i) => { p.style.transitionDelay = (i * (matchMedia('(max-width: 900px)').matches ? 35 : (d.stagger || 35))) + 'ms'; });
     requestAnimationFrame(() => requestAnimationFrame(() => m.classList.add('on')));
   }
-  // The stage: one pinned clip that changes as each story panel reaches the middle of the screen. Clips are images or videos;
+  // The stage: one clip that changes with the story beside it. Clips are images or videos;
   // either way they carry data-src and load when their card is current or next door.
   const phone = matchMedia('(max-width: 900px)');
   const panelsEl = document.getElementById('panels'), storiesEl = document.getElementById('stories');
   if (panelsEl && storiesEl) {
-  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('.clip')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
+  const stage = document.getElementById('stage'), stageVids = stage ? [...stage.querySelectorAll('.clip')] : [], whos = stage ? [...stage.querySelectorAll('.who')] : [], marks = [...document.querySelectorAll('#segs button')], cprev = document.getElementById('cprev'), cnext = document.getElementById('cnext'), dur = document.getElementById('dur'), wn = document.getElementById('wn'), wnext = document.getElementById('wnext');
   const panels = [...document.querySelectorAll('.panel')]; let cur = -1;
   const pauseBtn = document.getElementById('cpause'); let paused = reduced;
   // a loaded clip shows its moving source, or its still while the clips are paused (a GIF cannot be paused any other way)
@@ -41,7 +41,7 @@
   function show(i) { if (i === cur) return; const back = i < cur; panels.forEach((p, k) => { p.classList.toggle('on', k === i); p.classList.toggle('prev', back ? k > i : k < i); }); cur = i; hydrate(i);
     stageVids.forEach((v, k) => v.classList.toggle('on', k === i)); playOnly(phone.matches ? [] : stageVids, i); playOnly(phone.matches ? panels.map(p => p.querySelector('video.clip')) : [], i); if (phone.matches) stageVids.forEach(v => v.pause && v.pause()); else panels.forEach(p => { const v = p.querySelector('video.clip'); if (v) v.pause(); });
     whos.forEach((w, k) => w.classList.toggle('on', k === i)); marks.forEach((m, k) => { m.classList.toggle('on', k === i); m.classList.toggle('done', k < i); }); if (dur && stageVids[i]) { dur.textContent = stageVids[i].dataset.dur || ''; dur.hidden = !stageVids[i].dataset.dur; }
-    wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? (wnext.dataset.next || 'Next: ') + nx.dataset.name : (wnext.dataset.last || 'Last one'); marks.forEach((m, k) => { if (k === i) m.setAttribute('aria-current', 'true'); else m.removeAttribute('aria-current'); }); tint(i); }
+    wn.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(panels.length).padStart(2, '0'); const nx = marks[i + 1]; wnext.textContent = nx ? (wnext.dataset.next || 'Next: ') + nx.dataset.name : (wnext.dataset.last || 'Last one'); marks.forEach((m, k) => { if (k === i) m.setAttribute('aria-current', 'true'); else m.removeAttribute('aria-current'); }); if (cprev) cprev.disabled = i <= 0; if (cnext) cnext.disabled = i >= panels.length - 1; tint(i); }
   const stageEl = document.querySelector('.stage');
   const gutter = () => parseFloat(getComputedStyle(panelsEl).paddingLeft) || 0;
   // where each card comes to rest: its left edge on the gutter. The last cards can never get there, so the end of the track
@@ -79,14 +79,17 @@
   panelsEl.addEventListener('touchmove', e => { if (e.touches[0]) lx = e.touches[0].clientX; }, { passive: true });
   ['touchend', 'touchcancel'].forEach(t => panelsEl.addEventListener(t, () => { touching = false; later(); }, { passive: true }));
   panelsEl.addEventListener('scroll', () => { if (swipeFrom >= 0 && !touching) later(); }, { passive: true });
-  panelsEl.addEventListener('keydown', e => { if (!phone.matches) return; if (e.key === 'ArrowRight') { e.preventDefault(); goTo(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(cur - 1); } });
+  // the arrows, the bar and the arrow keys move one creator at a time: on phones the track scrolls, on wide screens the
+  // story changes in place, so the page itself scrolls past the section like any other
+  const move = k => { k = Math.min(panels.length - 1, Math.max(0, k)); if (phone.matches) goTo(k); else show(k); };
+  panelsEl.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { e.preventDefault(); move(cur + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); move(cur - 1); } });
+  if (cprev) cprev.addEventListener('click', () => move(cur - 1)); if (cnext) cnext.addEventListener('click', () => move(cur + 1));
   const fit = () => { if (!stageEl || phone.matches) { panelsEl.style.height = ''; if (stageEl) stageEl.style.removeProperty('--stageh'); return; } if (matchMedia('(min-width: 901px)').matches) { panelsEl.style.height = ''; stageEl.style.removeProperty('--stageh'); return; } let h = 0; panels.forEach(p => { h = Math.max(h, p.scrollHeight); }); panelsEl.style.height = (h + 6) + 'px';
     const top = 84 + 16, room = innerHeight - top - (h + 6) - 14 - 20, colw = stageEl.clientWidth || (innerWidth - 72);
     const sh = Math.round(Math.max(240, Math.min(colw * 16 / 9, room))); stageEl.style.setProperty('--stageh', sh + 'px'); document.querySelector('.where').style.height = sh + 'px'; };
-  const step = () => { if (phone.matches) return; const total = storiesEl.offsetHeight - innerHeight; const t = Math.min(1, Math.max(0, (scrollY - storiesEl.offsetTop) / total)); show(Math.min(panels.length - 1, Math.floor(t * panels.length))); };
-  fit(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fit(); step(); }); addEventListener('load', fit);
-  marks.forEach((m, k) => m.addEventListener('click', () => { if (phone.matches) { goTo(k); return; } const total = storiesEl.offsetHeight - innerHeight; scrollTo({ top: storiesEl.offsetTop + (k + .5) / panels.length * total }); }));
-  addEventListener('scroll', step, { passive: true }); addEventListener('resize', () => { fit(); snaps(); step(); onTrack(); hydrate(cur); }); step(); if (cur < 0) show(0); tint(cur);
+  fit(); if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit); addEventListener('load', fit);
+  marks.forEach((m, k) => m.addEventListener('click', () => move(k)));
+  addEventListener('resize', () => { fit(); snaps(); onTrack(); hydrate(cur); }); if (cur < 0) show(0); tint(cur);
   if (reduced) stageVids.forEach(v => { if (v.play) v.controls = true; });
   const allClips = () => [...document.querySelectorAll('#stories .clip, #vtrack .clip')];
   // one name, "Pause the clips"; aria-pressed says whether they are paused. The headline's dot stops with them.

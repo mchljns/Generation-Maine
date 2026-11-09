@@ -689,8 +689,8 @@ function gm_render_roster( $creators ) {
 }
 
 /**
- * Render the creators. Stepper (the page's layout): on wide screens one pinned clip changes as each story reaches the middle
- * of the screen; on phones the stories are a left to right carousel, and a tap opens the clip full size. Roster: a grid of tiles.
+ * Render the creators. Stepper (the page's layout): on wide screens one clip and story at a time, changed with the arrows
+ * or the progress bar, so the page scrolls past the section freely; on phones the stories are a left to right carousel, and a tap opens the clip full size. Roster: a grid of tiles.
  * With no creators it shows a short note. The markup matches the v2 page, so its stylesheet and script apply unchanged.
  *
  * @param array $args Optional. 'layout' (stepper|roster), 'limit' (int), 'next' (string), 'last' (string).
@@ -755,7 +755,11 @@ function gm_render_creators( $args = array() ) {
 		. '<button type="button" class="cpause" id="cpause" aria-pressed="false" aria-label="' . esc_attr__( 'Pause the clips', 'generation-maine' ) . '">'
 		. '<svg class="ip" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg>'
 		. '<svg class="ipl" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.5v11l9-5.5z" fill="currentColor"/></svg></button>'
+		. '<button type="button" class="carr" id="cprev" aria-label="' . esc_attr__( 'Previous creator', 'generation-maine' ) . '" disabled>'
+		. '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
 		. '<span class="segs' . ( $n > 12 ? ' many' : '' ) . '" id="segs">' . $segs . '</span>'
+		. '<button type="button" class="carr" id="cnext" aria-label="' . esc_attr__( 'Next creator', 'generation-maine' ) . '"' . ( $n > 1 ? '' : ' disabled' ) . '>'
+		. '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>'
 		. '<span class="next" id="wnext" data-next="' . esc_attr( $next ) . '" data-last="' . esc_attr( $last ) . '"></span></div>'
 		. '</div></div></section>'
 		. '<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="' . esc_attr__( 'Clip preview', 'generation-maine' ) . '" hidden>'
