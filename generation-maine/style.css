@@ -3,7 +3,7 @@ Theme Name: Generation Maine
 Theme URI: https://generationmaine.org
 Author: Green Falls
 Description: One-page block theme for Generation Maine, a Maine Policy Institute project. Every piece of copy is a block, every creator is a post, and the channels, newsletter and footer lines live under Settings > Generation Maine. No build step, no plugins.
-Version: 3.6.0
+Version: 3.6.1
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -501,3 +501,19 @@ main.gm-page .lede a:not(:where(.gm-entry :is(.block,.hero,.stories,.gm-creators
 .carr:disabled{opacity:.3;cursor:default}
 .carr:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 @media (max-width:900px){.carr{width:40px;height:40px}}
+/* 3.6.1: the follow channels sit in a grid, three across on wide screens and two on phones, so the list stays short */
+.follow .list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 32px;border-top:0}
+.follow .row{grid-template-columns:28px minmax(0,1fr);gap:8px 14px;align-items:start;padding:22px 0;border-bottom:0;border-top:1px solid rgba(255,255,255,.22)}
+.follow .row .ic{grid-row:1/3;margin-top:2px}
+.follow .row .name{font-size:clamp(22px,2vw,28px)}
+.follow .row .h{grid-column:2;justify-self:start;margin-top:0}
+@media (max-width:900px){
+ .follow .list{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+ .follow .row{grid-template-columns:20px minmax(0,1fr);gap:6px 10px;padding:16px 0}
+ .follow .row .ic{width:20px;height:20px;grid-row:1/3}
+ .follow .row .name{font-size:19px}
+ .follow .row .h,.euro .follow .row .h{font:500 13px/1.3 var(--body);letter-spacing:0}
+}
+/* the about photo on phones and tablets: a taller frame than 4:3, kept toward the top, so a tall photo keeps its subject */
+@media (max-width:900px){.about .media .ph{aspect-ratio:1/1}.about .media .ph img{object-position:50% 20%}}
+@media (max-width:600px){.about .media .ph{aspect-ratio:4/5}.about .media .ph img{object-position:50% 25%}}
