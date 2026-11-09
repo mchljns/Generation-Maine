@@ -59,7 +59,8 @@ function gm_register_creators() {
 			'query_var'           => false,
 			'menu_icon'           => 'dashicons-video-alt2',
 			'menu_position'       => 5,
-			'supports'            => array( 'title', 'editor', 'thumbnail', 'page-attributes', 'custom-fields' ),
+			// revisions keep each saved name and story, so an edit can be undone from the editor's Revisions panel
+			'supports'            => array( 'title', 'editor', 'thumbnail', 'page-attributes', 'custom-fields', 'revisions' ),
 			'template'            => array( array( 'core/paragraph', array( 'placeholder' => __( 'Two or three sentences in your own words: who you are, what you do, how long you have lived here.', 'generation-maine' ) ) ) ),
 		)
 	);

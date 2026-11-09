@@ -5,6 +5,6 @@
  * @package generation-maine
  */
 
-define( 'GM_THEME_VERSION', '3.6.3' );
-define( 'GM_BUILD_HASH', 'd92a7b1' );
+define( 'GM_THEME_VERSION', '3.6.4' );
+define( 'GM_BUILD_HASH', 'e4b7c25' );
 define( 'GM_BUILD', 'c84e0b6 Oct 19 UTC' );

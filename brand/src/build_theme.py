@@ -33,7 +33,7 @@ import build_splash_lean as L
 
 THEME = os.path.join(ROOT, "generation-maine")
 PAGE = os.path.join(ROOT, "brand", "identity", "splash-lean-a")
-VERSION = "3.6.3"
+VERSION = "3.6.4"
 
 HEADER = """/*
 Theme Name: Generation Maine
